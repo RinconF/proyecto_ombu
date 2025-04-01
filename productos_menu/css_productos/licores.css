@@ -1,0 +1,151 @@
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Estilos del header */
+header .container {
+  width: auto;
+  display: flex;
+  align-items: flex-start;
+}
+
+header .sashaL {
+  max-height: 7em;
+  border-radius: 100%;
+}
+
+/* Estilos generales del body */
+body {
+  font-family: "Work Sans", sans-serif;
+  background-image: linear-gradient(rgb(231, 220, 217), rgb(0, 0, 0));
+  color: #EEEEEE;
+  width: 100vw;
+  height: 100vh;
+  margin: auto;
+  overflow-y: auto; /* Permitir desplazamiento si es necesario */
+}
+
+/* Ajuste de main */
+main {
+  display: flex;
+  flex-direction: column;
+  gap: 120px;
+  width: 100%;
+  height: auto; /* Permitir que crezca */
+  overflow-y: auto; /* Mantener el scroll si es necesario */
+}
+
+/* Estilos del título */
+.title {
+  font-size: xx-large;
+  font-weight: 800;
+  width: 100%;
+  text-align: center;
+}
+
+/* Secciones */
+.section {
+  width: 100%;
+  min-height: 100vh; /* Que al menos tenga el tamaño de la pantalla */
+  padding-top: 20px;
+}
+
+/* Contenedor de tarjetas */
+.cards-container {
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 20px;
+  margin-top: 50px;
+  gap: 70px 40px;
+  flex-wrap: wrap;
+}
+
+/* Tarjetas */
+.card {
+  background-color: #22222A;
+  width: 300px;
+  height: 210px;
+  padding: 50px 20px 15px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  gap: 20px;
+  border-radius: 16px;
+}
+
+/* Contenedor de imágenes en la tarjeta */
+.img-container {
+  position: absolute;
+  width: 115px;
+  height: 115px;
+  border-radius: 100%;
+  overflow: hidden;
+  bottom: 150px;
+  filter: drop-shadow(0 6px 6px #2eb8f8);
+}
+
+.img-container > img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Contenido principal de la tarjeta */
+.main-card {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.main-card > span {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.main-card > p {
+  font-size: 15px;
+  padding-top: 8px;
+}
+
+/* Limitar la cantidad de texto mostrado */
+.truncated-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: clip;
+}
+
+/* Pie de la tarjeta */
+.footer-card {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.footer-card > button {
+  background-color: #20AB47;
+  padding: 4px 20px;
+  border: none;
+  border-radius: 16px;
+  font-weight: 600;
+  color: #EEEEEE;
+  cursor: pointer;
+}
+
+.footer-card > button:hover {
+  background-color: #EEEEEE;
+  color: #22222A;
+}
+
+.footer-card > span {
+  font-size: 18px;
+  font-weight: 800;
+}

@@ -1,0 +1,367 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;1,400&display=swap');
+
+        /* Estilos generales */
+        * {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            position: relative;
+            min-height: 100vh;
+            width: 100%;
+            background: #1A3330;
+        }
+
+        /* Estilos para el header fijo */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #1A3330;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px 0;
+        }
+
+        /* Contenedor del logo */
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        /* Estilos para el logo */
+        .logo {
+            max-width: 150px;
+            height: auto;
+        }
+
+        /* Estilos para la barra de navegación */
+        .bar_nav {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            padding: 0;
+            margin: 0;
+            flex-wrap: wrap;
+        }
+
+        .bar_nav li {
+            margin: 0 15px;
+        }
+
+        .bar_nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        /* Estilos para títulos */
+        h1.titulo {
+            color: white;
+            font-size: 5rem;
+            margin-bottom: 20px;
+            text-align: center;
+            margin-top: 150px;
+        }
+
+        h2.subtitulo {
+            color: #03045e;
+            font-size: 1.8rem;
+            background-color: rgba(254, 224, 189, 0.7);
+            border: 1px solid black;
+            border-radius: 20px;
+            width: 280px;
+            padding: 10px;
+            margin: 0 auto 20px;
+            text-align: center;
+        }
+
+        /* Contenedor del carrusel */
+        #cursor-container {
+            position: relative;
+            width: 100%;
+            max-width: 960px;
+            margin: 20px auto;
+            padding: 0 10px;
+        }
+
+        #cursor {
+            display: flex;
+            flex-direction: row;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            gap: 10px;
+            padding: 10px 0;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* Estilos para los elementos del carrusel */
+        .card-item {
+            position: relative;
+            flex: 0 0 180px;
+            height: 250px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            transition: transform 0.3s, border 0.3s;
+        }
+
+        .card-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-item:hover {
+            transform: scale(1.05); /* Efecto al pasar el mouse */
+        }
+
+        /* Estilos para el overlay que aparece al pasar el mouse */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card-item:hover .overlay {
+            opacity: 1;
+        }
+
+        .overlay p {
+            color: white;
+            font-size: 18px;
+            text-align: center;
+            margin: 0;
+        }
+
+        /* Estilos para las flechas de navegación */
+        #left-arrow, #right-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: black;
+            color: white;
+            border: 2px solid white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        #left-arrow {
+            left: 10px;
+        }
+
+        #right-arrow {
+            right: 10px;
+        }
+
+        /* Ocultar la barra de desplazamiento del carrusel */
+        #cursor::-webkit-scrollbar {
+            display: none;
+        }
+
+        #cursor {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Estilos para las secciones */
+        section {
+            padding: 20px;
+            color: white;
+            text-align: center;
+        }
+
+        /* Estilos para el footer */
+        footer {
+            width: 100%;
+            background-color: #1A3330;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .empresa {
+            margin-bottom: 20px;
+        }
+
+        .empresa h3 {
+            color: white;
+            font-size: 24px;
+        }
+
+        .empresa p {
+            color: white;
+            font-size: 16px;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .icon {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Colores de fondo para cada ícono social */
+        .facebook { background-color: #1A3330; }
+        .twitter { background-color: #1A3330; }
+        .instagram { background-color: #1A3330; }
+
+        /* Efecto de levantamiento al pasar el cursor */
+        .icon:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Media Queries para Responsividad */
+        @media (max-width: 768px) {
+            h1.titulo {
+                font-size: 3rem;
+                margin-top: 120px;
+            }
+
+            h2.subtitulo {
+                font-size: 1.5rem;
+                width: 200px;
+            }
+
+            .logo {
+                max-width: 120px;
+            }
+
+            .bar_nav li {
+                margin: 0 10px;
+            }
+
+            .bar_nav a {
+                font-size: 16px;
+            }
+
+            #cursor-container {
+                max-width: 100%;
+                padding: 0 5px;
+            }
+
+            #cursor {
+                width: 100%;
+            }
+
+            .card-item {
+                flex: 0 0 150px;
+                height: 200px;
+            }
+
+            .overlay p {
+                font-size: 14px;
+            }
+
+            #left-arrow, #right-arrow {
+                width: 30px;
+                height: 30px;
+                font-size: 18px;
+            }
+
+            .empresa h3 {
+                font-size: 20px;
+            }
+
+            .empresa p {
+                font-size: 14px;
+            }
+
+            .icon {
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1.titulo {
+                font-size: 2rem;
+                margin-top: 100px;
+            }
+
+            h2.subtitulo {
+                font-size: 1.2rem;
+                width: 180px;
+            }
+
+            .logo {
+                max-width: 100px;
+            }
+
+            .bar_nav {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .bar_nav li {
+                margin: 5px 0;
+            }
+
+            .bar_nav a {
+                font-size: 14px;
+            }
+
+            .card-item {
+                flex: 0 0 120px;
+                height: 160px;
+            }
+
+            .overlay p {
+                font-size: 12px;
+            }
+
+            #left-arrow, #right-arrow {
+                width: 25px;
+                height: 25px;
+                font-size: 16px;
+            }
+
+            .empresa h3 {
+                font-size: 18px;
+            }
+
+            .empresa p {
+                font-size: 12px;
+            }
+
+            .icon {
+                width: 35px;
+                height: 35px;
+            }
+        }

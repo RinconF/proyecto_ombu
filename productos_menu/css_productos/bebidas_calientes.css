@@ -1,0 +1,170 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  header .container {
+    width: autox;
+    display: flex;
+    align-items: left;
+}
+
+header .sashaL {
+    max-height: 7em;
+    border-radius: 100%;
+}
+
+  body {
+    font-family: "Work Sans", sans-serif;
+    background-image:linear-gradient(rgb(231, 220, 217), rgb(0, 0, 0));
+    color: #EEEEEE;
+    width: 100vw;
+    height: 100vh;
+    margin: auto;
+    overflow: hidden;
+  }
+  
+  main {
+   display: flex;
+   flex-direction: column;
+   gap: 120px;
+   width: 100%;
+   height: 100vh;
+   overflow-y: scroll;
+  }
+  
+  .title {
+    font-size: xx-large;
+    font-weight: 800;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .section {
+    width: 100%;
+    height: 100%;
+    padding-top: 20px;
+  }
+  
+  .cards-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px 0 20px;
+    margin-top: 50px;
+    gap: 70px 40px;
+    flex-wrap: wrap;
+  }
+  
+  .card {
+    background-color: #22222A;
+    width: 300px;
+    height: 210px;
+    padding: 50px 20px 15px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    gap: 20px;
+    border-radius: 16px;
+    
+  }
+  
+  .img-container {
+    position: absolute;
+    width: 115px;
+    height: 115px;
+    border-radius: 100%;
+    overflow: hidden;
+    bottom: 150px;
+    filter: drop-shadow(0 6px 6px #2eb8f8)
+  }
+  
+  .img-container > img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  
+  .main-card {
+    margin-top: 10px;
+    text-align: center;
+  }
+  
+  .main-card > span {
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  .main-card > p {
+    font-size: 15px;
+    padding-top: 8px;
+  }
+  
+  .truncated-text{
+    display:-webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow:clip;
+  }
+  
+  .footer-card {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+  }
+  
+  .footer-card > button {
+    background-color: #20AB47;
+    padding: 4px 20px;
+    border: none;
+    border-radius: 16px;
+    font-weight: 600;
+    color: #EEEEEE;
+    cursor: pointer;
+  }
+  
+  .footer-card > button:hover {
+    background-color: #EEEEEE;
+    color: #22222A;
+  }
+  
+  .footer-card > span  {
+    font-size: 18;
+    font-weight: 800;
+  }
+
+.breadcrumb{
+  color: rgb(255, 255, 255);
+  list-style: none;
+  text-align: left;
+  display: flex;
+  padding: 0;
+  
+}
+
+.breadcrumb a{
+  color: rgb(255, 255, 255);
+  text-decoration: none;
+}
+
+/* Añadir el ">" entre los enlaces */
+.breadcrumb .breadcrumb-item a::after {
+  content: " >"; 
+  padding: 0 5px; 
+}
+
+/* Eliminar el ">" del último enlace */
+.breadcrumb .breadcrumb-item:last-child a::after {
+  content: "";
+}
+
+/* Evitar que el ">" se añada al item de la derecha si no tiene enlace */
+.breadcrumb .breadcrumb-item.active::after {
+  content: "";
+}

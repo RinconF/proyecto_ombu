@@ -33,3 +33,18 @@ cards.forEach(card => {
         }
     });
 });
+
+//reduccion de la barra de navegacion
+
+window.onscroll = function() {
+    reduceNavbar();
+};
+
+function reduceNavbar() {
+    const navbar = document.getElementById("navbar");
+    if (window.scrollY > 50) {  // Cuando el desplazamiento es mayor a 50px
+        navbar.classList.add("scrolled"); // Añadir la clase para reducir el header
+    } else {
+        navbar.classList.remove("scrolled"); // Quitar la clase cuando el scroll vuelve al principio
+    }
+}

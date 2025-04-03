@@ -1,10 +1,3 @@
-
-
-
-
-
-
-
 document.addEventListener("DOMContentLoaded", () => {
     // Variables globales
     let cart = [];
@@ -471,7 +464,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-    //    SCRIPT PARA EL   MENU DESPLEGABLE EN ESCRITORIO  (OARA QUE APAREZCA Y DESAPAREZCA AL SUBIR  Y BAJAR)
+    //    SCRIPT PARA EL   MENU DESPLEGABLE EN ESCRITORIO  (OARA QUE APAREZCA Y DESAPAREZCA AL SUBIR  Y BAJAR) SCROLL
 
   document.addEventListener("DOMContentLoaded", () => {
     const menuContainer = document.querySelector(".menu-container");

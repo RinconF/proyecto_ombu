@@ -176,6 +176,9 @@ main {
   color: #EEEEEE;
   cursor: pointer;
   transition: all 0.2s ease;
+  position: relative;
+  left: 100px;
+
 }
 
 .footer-card > button:hover {

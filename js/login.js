@@ -8,6 +8,7 @@ const errorMessage = document.getElementById('errorMessage');
 // Ocultar el mensaje de error inicialmente
 errorMessage.style.display = 'none';
 
+
 // Manejar el envío del formulario
 loginForm.addEventListener('submit', function(event) {
   event.preventDefault(); // Evitar que el formulario se envíe

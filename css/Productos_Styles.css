@@ -10,7 +10,6 @@ header .container {
   align-items: left;
 }
 
-
 header .sashaL {
   max-height: 7em;
   border-radius: 100%;
@@ -78,7 +77,7 @@ main {
     grid-template-columns: 1fr;
   }
 }
- 
+
  /* ESITLOS PARA LAS CARTAS (PRODUCTOS) */
 
 .card {
@@ -149,6 +148,7 @@ main {
   color: #cccccc;
 }
 
+
   /* Para que no se salga el texto dentro de las cards  */
 
 .truncated-text {
@@ -177,6 +177,9 @@ main {
   color: #EEEEEE;
   cursor: pointer;
   transition: all 0.2s ease;
+  position: relative;
+  left: 100px;
+
 }
 
 .footer-card > button:hover {

@@ -1,0 +1,37 @@
+
+.content {
+    background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco semitransparente */
+    padding: 40px;
+    border-radius: 15px;
+    max-width: 600px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Sombra suave */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Borde sutil */
+}
+
+h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 3em;
+    font-weight: 700;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+    color: #e74c3c; /* Color rojo vibrante para el título */
+}
+
+p {
+    font-size: 1.1em;
+    line-height: 1.8;
+    font-weight: 300;
+    color: #ffffff; /* Color de texto más suave */
+}
+
+strong {
+    font-weight: 400;
+    color: #e74c3c; /* Color rojo para resaltar */
+}
+
+/* Efecto hover para el contenido */
+.content:hover {
+    transform: scale(1.02); /* Ligero zoom al pasar el mouse */
+    transition: transform 0.3s ease;
+}

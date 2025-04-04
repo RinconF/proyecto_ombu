@@ -303,7 +303,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
         
-        alert('¡Gracias por su compra! Total: ' + cartTotalAmount.textContent);
+        alert('  Total: ' + cartTotalAmount.textContent);
         cart = [];
         updateCartDisplay();
         closeCart();

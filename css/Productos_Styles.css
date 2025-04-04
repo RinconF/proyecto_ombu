@@ -10,7 +10,6 @@ header .container {
   align-items: left;
 }
 
-
 header .sashaL {
   max-height: 7em;
   border-radius: 100%;
@@ -33,7 +32,13 @@ main {
   width: 100%;
   height: 100vh;
   overflow-y: auto;
+  background-image: url('/imagenes/logos\ o\ otros/ombu_fondo.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center center;
   background-color: #000000;
+  
 }
 
 .title {
@@ -78,7 +83,7 @@ main {
     grid-template-columns: 1fr;
   }
 }
- 
+
  /* ESITLOS PARA LAS CARTAS (PRODUCTOS) */
 
 .card {
@@ -95,7 +100,7 @@ main {
   gap: 20px;
   border-radius: 16px;
   cursor: pointer;
-  border: 1px solid rgb(48, 114, 41);
+  border: 1px solid rgb(255, 255, 255);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   margin: 0 auto;
 }
@@ -149,6 +154,7 @@ main {
   color: #cccccc;
 }
 
+
   /* Para que no se salga el texto dentro de las cards  */
 
 .truncated-text {
@@ -177,6 +183,9 @@ main {
   color: #EEEEEE;
   cursor: pointer;
   transition: all 0.2s ease;
+  position: relative;
+  left: 100px;
+
 }
 
 .footer-card > button:hover {

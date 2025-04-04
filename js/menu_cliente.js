@@ -121,6 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+
 // JavaScript para el menú hamburguesa
 
 document.addEventListener('DOMContentLoaded', function() {

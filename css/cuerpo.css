@@ -1,167 +1,215 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:wght@700&display=swap');
 
-/* Estilos generales */
+/* Reset y estilos base */
 * {
-    font-family: 'Poppins', sans-serif;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
 }
-
 
 body {
-    position: relative;
-    min-height: 100vh;
-    width: 100%;
     background: #1A3330;
+    color: white;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
 }
 
-/* Estilos para el header fijo */
+/* Variables de colores */
+:root {
+    --primary-color: #1A3330;
+    --text-light: #ffffff;
+    --accent-color: #e74c3c;
+    --dark-bg: #000000;
+    --card-bg: rgba(254, 224, 189, 0.7);
+}
+
+/* Estilos de la barra de navegación */
 header {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    background-color: #1A3330;
+    background-color: var(--dark-bg);
     z-index: 1000;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 10px 0;
-    background-color: rgb(0, 0, 0);
+    transition: all 0.3s ease-in-out;
 }
 
-
-/* Contenedor del logo */
 .logo-container {
     display: flex;
     justify-content: center;
     margin-bottom: 10px;
 }
 
-/* Estilos para el logo */
 .logo {
-    max-width: 150px;
+    width: 150px;
     height: auto;
     border-radius: 50%;
-    transition: max-width 0.3s; /* Transición para el cambio de tamaño del logo */
+    transition: all 0.3s ease;
 }
 
-/* Estilos para la barra de navegación */
 .bar_nav {
     list-style: none;
     display: flex;
     justify-content: center;
-    padding: 0;
-    margin: 0;
     flex-wrap: wrap;
+    gap: 15px;
+    padding: 0;
 }
 
 .bar_nav li {
-    margin: 0 35px;
-
+    margin: 0 10px;
 }
 
-
 .bar_nav a {
-    color: rgb(255, 255, 255);
+    color: var(--text-light);
     text-decoration: none;
     font-size: 18px;
     padding: 10px 20px;
-    border-radius: 10%;
-    transition: font-size 0.3s; /* Transición para el cambio de tamaño de los enlaces */
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    display: block;
 }
 
-.bar_nav a:hover{
-    background-color:  #1A3330;
+.bar_nav a:hover {
+    background-color: var(--primary-color);
+    transform: translateY(-3px);
 }
 
-
-/* Estilo cuando la barra de navegación se reduce */
 header.scrolled {
-    padding: 10px 0;  /* Reducir el padding */
-    background-color: rgb(0, 0, 0);  /* Fondo ligeramente más claro */
+    padding: 5px 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 header.scrolled .logo {
-    max-width: 40px;  /* Reducir el tamaño del logo */
+    width: 60px;
 }
 
 header.scrolled .bar_nav a {
-    font-size: 14px;  /* Reducir el tamaño de la fuente de los enlaces */
+    font-size: 16px;
+    padding: 8px 16px;
 }
 
-/* Estilos para títulos */
+/* Contenido principal */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+section {
+    padding: 80px 20px;
+    scroll-margin-top: 100px;
+}
+
+/* Estilos de encabezados */
 h1.titulo {
-    color: white;
-    font-size: 5rem;
-    margin-bottom: 20px;
+    font-family: 'Playfair Display', serif;
+    color: var(--text-light);
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    margin-bottom: 30px;
     text-align: center;
-    margin-top: 200px;
+    padding-top: 100px;
+    animation: fadeIn 1s ease-in;
+}
+
+h2 {
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    margin-bottom: 30px;
+    text-align: center;
+    color: var(--text-light);
 }
 
 h2.subtitulo {
     color: #03045e;
-    font-size: 1.8rem;
-    background-color: rgba(254, 224, 189, 0.7);
+    background-color: var(--card-bg);
     border: 1px solid black;
     border-radius: 20px;
-    width: 280px;
-    padding: 10px;
-    margin: 0 auto 20px;
-    text-align: center;
+    width: fit-content;
+    padding: 10px 30px;
+    margin: 0 auto 40px;
+    font-weight: 600;
 }
 
+/* Sección de inicio */
+#inicio {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(rgba(26, 51, 48, 0.9), rgba(26, 51, 48, 0.95));
+    position: relative;
+}
 
-/* Contenedor del carrusel */
+/* Estilos para el carrusel de productos */
+#productos {
+    padding-top: 100px;
+    background-color: var(--primary-color);
+}
+
 #cursor-container {
     position: relative;
     width: 100%;
-    max-width: 960px;
-    margin: 20px auto;
-    padding: 0 10px;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 50px;
 }
 
 #cursor {
     display: flex;
-    flex-direction: row;
     overflow-x: auto;
     scroll-behavior: smooth;
-    gap: 10px;
-    padding: 10px 0;
+    gap: 20px;
+    padding: 20px 0;
     width: 100%;
-    margin: 0 auto;
+    scrollbar-width: none;
 }
 
-/* Estilos para los elementos del carrusel */
+#cursor::-webkit-scrollbar {
+    display: none;
+}
+
 .card-item {
     position: relative;
-    flex: 0 0 180px;
-    height: 250px;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
+    flex: 0 0 220px;
+    height: 300px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     cursor: pointer;
-    transition: transform 0.3s, border 0.3s;
+    transition: all 0.3s ease;
 }
 
 .card-item img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 0.5s ease;
 }
 
 .card-item:hover {
-    transform: scale(1.05); /* Efecto al pasar el mouse */
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
 }
 
-/* Estilos para el overlay que aparece al pasar el mouse */
+.card-item:hover img {
+    transform: scale(1.1);
+}
+
 .overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.6);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -175,9 +223,14 @@ h2.subtitulo {
 
 .overlay p {
     color: white;
-    font-size: 18px;
+    font-size: 20px;
+    font-weight: 600;
     text-align: center;
     margin: 0;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    width: 80%;
 }
 
 /* Estilos para las flechas de navegación */
@@ -185,267 +238,295 @@ h2.subtitulo {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: black;
-    color: white;
+    background: var(--dark-bg);
+    color: var(--text-light);
     border: 2px solid white;
     border-radius: 50%;
     width: 40px;
     height: 40px;
     font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
     z-index: 10;
+    transition: all 0.3s ease;
+}
+
+#left-arrow:hover, #right-arrow:hover {
+    background: var(--primary-color);
+    transform: translateY(-50%) scale(1.1);
 }
 
 #left-arrow {
-    left: 10px;
+    left: 5px;
 }
 
 #right-arrow {
-    right: 10px;
+    right: 5px;
 }
 
-/* Ocultar la barra de desplazamiento del carrusel */
-#cursor::-webkit-scrollbar {
-    display: none;
+/* Sobre nosotros */
+#sobre-nosotros {
+    background-color: rgba(26, 51, 48, 0.95);
+    padding: 80px 20px;
 }
 
-#cursor {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+.content-block {
+    max-width: 800px;
+    margin: 0 auto 50px;
+    padding: 30px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
 }
 
-/* Estilos para las secciones */
-section {
-    padding: 20px;
-    color: white;
-    text-align: center;
+.content-block:hover {
+    transform: translateY(-5px);
 }
 
-/* Estilos para el footer */
-footer {
-    width: 100%;
-    background-color: #ffffff;
-    padding: 20px 0;
-    text-align: center;
-    display: flex; /* Cambié de 'flexbox' a 'flex' */
-    justify-content: space-between; /* Esto coloca el contenido a los lados */
-    align-items: center; /* Centra verticalmente */
-    flex-wrap: wrap; /* Para que los elementos se ajusten cuando sea necesario */
-}
-
-/* Estilos para el contenido de la información */
-#contacto {
-    flex-grow: 1; /* Esto hace que el contenido ocupe más espacio hacia el centro */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center; /* Centra el contenido verticalmente */
-    margin-right: 20px; /* Esto proporciona un pequeño margen entre la información y la imagen */
-}
-
-#contacto h2{
-    color: black;
-    text-align: center;
-    
-}
-
-.empresa {
+.content-block h3 {
+    color: var(--accent-color);
+    font-size: clamp(1.5rem, 3vw, 2rem);
     margin-bottom: 20px;
+    font-family: 'Playfair Display', serif;
+}
+
+.content-block p {
+    margin-bottom: 15px;
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    line-height: 1.8;
+}
+
+/* Quiénes somos */
+#quienes-somos {
+    background-color: var(--primary-color);
+    padding: 80px 20px;
+}
+
+#quienes-somos p {
+    max-width: 800px;
+    margin: 0 auto;
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    line-height: 1.8;
+}
+
+/* Footer y contacto */
+footer {
+    background-color: #ffffff;
+    color: black;
+    padding: 40px 20px;
+    position: relative;
+}
+
+footer .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.footer-content {
+    flex: 1;
+    min-width: 300px;
+}
+
+.footer-image {
+    flex: 0 0 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer-image img {
+    max-width: 180px;
+    height: auto;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+}
+
+.footer-image img:hover {
+    transform: scale(1.05);
+}
+
+#contacto h2 {
+    color: black;
+    margin-bottom: 30px;
 }
 
 .empresa h3 {
-    color: rgb(0, 0, 0);
-    font-size: 24px;
+    color: #000;
+    font-size: clamp(1.3rem, 2.5vw, 1.5rem);
+    margin-bottom: 15px;
 }
 
 .empresa p {
-    color: rgb(0, 0, 0);
-    font-size: 16px;
+    color: #333;
+    font-size: clamp(0.9rem, 1.5vw, 1rem);
+    line-height: 1.6;
+    margin-bottom: 25px;
 }
 
 .social-icons {
     display: flex;
-    justify-content: flex-start;
     gap: 15px;
-    flex-wrap: wrap;
-    border-color: black;
+    margin-top: 20px;
+    justify-content: center;
 }
 
 .icon {
-    display: inline-block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 50px;
     height: 50px;
-    border-radius: 20px;
-    overflow: hidden;
-    transition: transform 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    background-color: #f5f5f5;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
 }
 
 .icon img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-color: black;
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
 }
 
-/* Colores de fondo para cada ícono social */
-.facebook { 
-    background-color: #ffffff; 
-
-}
-.twitter { 
-    background-color: #ffffff; 
-}
-
-
-.instagram { 
-    background-color: #ffffff; 
-
-}
-
-/* Efecto de levantamiento al pasar el cursor */
 .icon:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 16px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    background-color: #ececec;
 }
 
-/* Estilos para la imagen en el pie de página */
-.footer-image {
-    display: flex;
-    justify-content: center; /* Alinea la imagen a la derecha */
-    align-items: center; /* Alinea la imagen verticalmente */
-    flex: 1; /* Esto permite que la imagen ocupe todo el espacio restante */
+/* Animaciones */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-.footer-image img {
-    max-width: 200px; /* Ajusta el tamaño máximo de la imagen */
-    height: auto; /* Mantén la proporción de la imagen */
-    object-fit: contain; /* Asegura que la imagen se ajuste bien */
-    border-radius: 50%;
+/* Media Queries */
+@media (max-width: 992px) {
+    .card-item {
+        flex: 0 0 200px;
+        height: 280px;
+    }
 }
 
-/* Media Queries para Responsividad */
 @media (max-width: 768px) {
-    h1.titulo {
-        font-size: 3rem;
-        margin-top: 120px;
+    section {
+        padding: 60px 15px;
     }
-
-    h2.subtitulo {
-        font-size: 1.5rem;
-        width: 200px;
+    
+    .bar_nav {
+        gap: 5px;
     }
-
-    .logo {
-        max-width: 120px;
-    }
-
+    
     .bar_nav li {
-        margin: 0 10px;
+        margin: 0 5px;
     }
-
+    
     .bar_nav a {
         font-size: 16px;
+        padding: 8px 15px;
     }
-
-    #cursor-container {
-        max-width: 100%;
-        padding: 0 5px;
+    
+    .card-item {
+        flex: 0 0 180px;
+        height: 250px;
     }
-
-    #cursor {
+    
+    footer .container {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .footer-content, .footer-image {
+        flex: 1;
         width: 100%;
     }
+}
 
+@media (max-width: 576px) {
+    header {
+        padding: 10px 0;
+    }
+    
+    .logo {
+        width: 100px;
+    }
+    
+    .bar_nav {
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+    }
+    
+    .bar_nav li {
+        margin: 3px 0;
+        width: 100%;
+        text-align: center;
+    }
+    
+    .bar_nav a {
+        font-size: 14px;
+        padding: 6px 12px;
+        border-radius: 5px;
+    }
+    
+    h1.titulo {
+        font-size: 2.5rem;
+        padding-top: 150px;
+    }
+    
+    h2.subtitulo {
+        font-size: 1.5rem;
+        padding: 8px 20px;
+    }
+    
+    #cursor-container {
+        padding: 0 30px;
+        margin: 20px auto;
+    }
+    
     .card-item {
-        flex: 0 0 150px;
+        flex: 0 0 140px;
         height: 200px;
     }
-
+    
     .overlay p {
-        font-size: 14px;
+        font-size: 16px;
     }
-
+    
     #left-arrow, #right-arrow {
         width: 30px;
         height: 30px;
         font-size: 18px;
     }
-
-    .empresa h3 {
-        font-size: 20px;
+    
+    .content-block {
+        padding: 20px;
     }
-
-    .empresa p {
-        font-size: 14px;
-    }
-
-    .icon {
-        width: 40px;
-        height: 40px;
+    
+    .social-icons {
+        justify-content: center;
     }
 }
 
-@media (max-width: 480px) {
-    h1.titulo {
-        font-size: 2rem;
-        margin-top: 100px;
-    }
-
-    h2.subtitulo {
-        font-size: 1.2rem;
-        width: 180px;
-    }
-
-    .logo {
-        max-width: 100px;
-    }
-
-    .bar_nav {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .bar_nav li {
-        margin: 5px 0;
-    }
-
-    .bar_nav a {
-        font-size: 14px;
-    }
-
-    .card-item {
-        flex: 0 0 120px;
-        height: 160px;
-    }
-
-    .overlay p {
-        font-size: 12px;
-    }
-
-    #left-arrow, #right-arrow {
-        width: 25px;
-        height: 25px;
-        font-size: 16px;
-    }
-
-    .empresa h3 {
-        font-size: 18px;
-    }
-
-    .empresa p {
-        font-size: 12px;
-    }
-
-    .icon {
-        width: 35px;
-        height: 35px;
-    }
+/* Accesibilidad y enfoque */
+a:focus, button:focus {
+    outline: 2px solid var(--accent-color);
 }
 
-#sobre-nosotros h2{
-    font-size: 4vw;
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
 }
-
-
-

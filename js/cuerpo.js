@@ -36,15 +36,36 @@ cards.forEach(card => {
 
 //reduccion de la barra de navegacion
 
+// window.onscroll = function() {
+//     reduceNavbar();
+// };
+
+// function reduceNavbar() {
+//     const navbar = document.getElementById("navbar");
+//     if (window.scrollY > 50) {  // Cuando el desplazamiento es mayor a 50px
+//         navbar.classList.add("scrolled"); // Añadir la clase para reducir el header
+//     } else {
+//         navbar.classList.remove("scrolled"); // Quitar la clase cuando el scroll vuelve al principio
+//     }
+// }
+
+
+// Obtener el elemento del encabezado
+const navbar = document.getElementById('navbar');
+
+// Función para reducir el encabezado al hacer scroll
 window.onscroll = function() {
-    reduceNavbar();
+    if (window.scrollY > 50) {
+        navbar.classList.add('shrink');  // Agrega la clase 'shrink' si el scroll es mayor a 50px
+    } else {
+        navbar.classList.remove('shrink');  // Elimina la clase 'shrink' cuando el scroll es menor a 50px
+    }
 };
 
-function reduceNavbar() {
-    const navbar = document.getElementById("navbar");
-    if (window.scrollY > 50) {  // Cuando el desplazamiento es mayor a 50px
-        navbar.classList.add("scrolled"); // Añadir la clase para reducir el header
-    } else {
-        navbar.classList.remove("scrolled"); // Quitar la clase cuando el scroll vuelve al principio
-    }
-}
+// Función para mostrar/ocultar el menú al hacer clic en el botón de hamburguesa
+const menuToggle = document.getElementById('menuToggle');
+const mainMenu = document.getElementById('mainMenu');
+
+menuToggle.addEventListener('click', () => {
+    mainMenu.classList.toggle('show');
+});

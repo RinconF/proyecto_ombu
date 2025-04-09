@@ -1,3 +1,4 @@
+
 * {
   margin: 0;
   padding: 0;
@@ -32,7 +33,7 @@ main {
   width: 100%;
   height: 100vh;
   overflow-y: auto;
-  background-image: url('/imagenes/logos\ o\ otros/ombu_fondo.jpg');
+  background-image: url('/imagenes/logos_o_otros/ombu_fondo.jpg');
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;

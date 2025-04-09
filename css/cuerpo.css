@@ -22,13 +22,13 @@ header {
     top: 0;
     left: 0;
     width: 100%;
-    background-color: #1A3330;
     z-index: 1000;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 10px 0;
-    background-color: rgb(0, 0, 0);
+    background-color: #000000;
+    
 }
 
 
@@ -77,18 +77,46 @@ header {
 }
 
 
-/* Estilo cuando la barra de navegación se reduce */
-header.scrolled {
-    padding: 10px 0;  /* Reducir el padding */
-    background-color: rgb(0, 0, 0);  /* Fondo ligeramente más claro */
+
+
+/* Estilos cuando el header se reduce al hacer scroll */
+.navbar-hd.shrink {
+    padding: 10px; /* Reduce el padding */
+    background-color: #000000; /* Opcional: cambiar color de fondo */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Opcional: agregar sombra */
 }
 
-header.scrolled .logo {
-    max-width: 40px;  /* Reducir el tamaño del logo */
+.menu a {
+    opacity: 1;
+    transition: opacity 0.3s ease;
 }
 
-header.scrolled .bar_nav a {
-    font-size: 14px;  /* Reducir el tamaño de la fuente de los enlaces */
+.menu.show a {
+    opacity: ;
+}
+
+.menu a:nth-child(1) {
+    transition-delay: 0.1s;
+}
+
+.menu a:nth-child(2) {
+    transition-delay: 0.2s;
+}
+
+.menu a:nth-child(3) {
+    transition-delay: 0.3s;
+}
+
+.menu a:nth-child(4) {
+    transition-delay: 0.4s;
+}
+
+.menu a:nth-child(5) {
+    transition-delay: 0.5s;
+}
+
+.menu a:nth-child(6) {
+    transition-delay: 0.6s;
 }
 
 /* Estilos para títulos */
@@ -224,15 +252,31 @@ section {
 /* Estilos para el footer */
 footer {
     width: 100%;
-    background-color: #ffffff;
-    padding: 20px 0;
     text-align: center;
-    display: flex; /* Cambié de 'flexbox' a 'flex' */
-    justify-content: space-between; /* Esto coloca el contenido a los lados */
+    display: flex; 
+    justify-content: center; /* Esto coloca el contenido a los lados */
+    gap: 10%;
     align-items: center; /* Centra verticalmente */
-    flex-wrap: wrap; /* Para que los elementos se ajusten cuando sea necesario */
+    background-image: url(/imagenes/logos_o_otros/footer-\ image-free.jpg);
+    background-size: cover;  /* Ajusta la imagen para que cubra el área sin deformarse */
+    background-position: center;  /* Centra la imagen en el fondo */
+    background-repeat: no-repeat;  /* Evita que la imagen se repita si es más pequeña que el contenedor */
+        
+
 }
 
+<<<<<<< Updated upstream
+=======
+.footer-content {
+    display: flex;
+    justify-content:center; /* Distribuye los elementos de izquierda a derecha */
+    align-items: center;
+    flex-wrap: wrap; /* Asegura que los elementos se ajusten en pantallas pequeñas */
+    padding: 0 20px;
+    gap: 10%;
+}
+
+>>>>>>> Stashed changes
 /* Estilos para el contenido de la información */
 #contacto {
     flex-grow: 1; /* Esto hace que el contenido ocupe más espacio hacia el centro */
@@ -244,24 +288,11 @@ footer {
 }
 
 #contacto h2{
-    color: black;
+    color: rgb(255, 255, 255);
     text-align: center;
     
 }
 
-.empresa {
-    margin-bottom: 20px;
-}
-
-.empresa h3 {
-    color: rgb(0, 0, 0);
-    font-size: 24px;
-}
-
-.empresa p {
-    color: rgb(0, 0, 0);
-    font-size: 16px;
-}
 
 .social-icons {
     display: flex;
@@ -443,9 +474,254 @@ footer {
     }
 }
 
+<<<<<<< Updated upstream
 #sobre-nosotros h2{
     font-size: 4vw;
+=======
+/*seccion sobre nosotros*/
+#sobre-nosotros{
+    margin: 0;
+    padding: 0;
+    
+} 
+
+
+
+.quienes-somos{
+
+    background-image: url("/imagenes/img_index/ombu_fondo_gris.jfif");
+    background-size: cover;
+    background-position: center;  /* Mueve la imagen más a la derecha */
+    background-repeat: no-repeat;
+    margin: 0;  /* Elimina los márgenes */
+    padding: 5%; /* Agregar o eliminar un poco de padding */
+    width: 100%; /* Asegura que ocupe todo el ancho disponible */
+    height: 100%; /* Asegura que ocupe toda la altura del contenedor */
+    align-items: center;  /* Centra verticalmente los elementos */
+    text-align: center;
+
+}
+
+
+.quienes_somos_txt {
+
+    flex: 0 0 50%;  /* El texto ocupa el 50% del ancho del div */
+    padding-left: 20px;  /* Espaciado entre la imagen y el texto */
+    text-align: center;
+    color: rgb(220, 220, 220);
+}
+
+.quienes_somos_txt h2 {
+    font-size: 2rem; /* Tamaño grande para el título */
+    margin-bottom: 10px; /* Espacio entre el título y el párrafo */
+    text-align: center; 
+}
+
+.quienes_somos_txt p {
+    font-size: 1rem;
+    line-height: 1.6;  /* Mejora la legibilidad */
+    color: #ffffff;  /* Un color más oscuro para el texto */
+>>>>>>> Stashed changes
 }
 
 
 
+<<<<<<< Updated upstream
+=======
+.icon-whatsapp img{
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+}
+
+/*mapa*/
+#ub-c{
+    background-color: rgb(255, 255, 255);
+}
+
+#ub-c h1{
+    color: black;
+}
+
+.m-ag{
+    display: flex;
+    justify-content: center;
+    gap: 10%;
+}
+
+
+.mapa iframe {
+    width: 400px;
+    height: 300px;
+    border: 0;
+    border-radius: 8px;
+}   
+
+.empresa {
+    margin-bottom: 20px;
+}
+
+.empresa h3 {
+    color: rgb(0, 0, 0);
+    font-size: 24px;
+}
+
+.empresa p {
+    color: rgb(0, 0, 0);
+    font-size: 16px;
+}
+
+    
+/* Media Queries para pantallas pequeñas (mapa) */
+@media screen and (max-width: 768px) {
+    #ub-c h1 {
+        font-size: 1.5rem; /* Reduce el tamaño del título en pantallas pequeñas */
+    }
+
+    .m-ag {
+        gap: 5%; /* Reduce el espacio entre los elementos */
+        flex-direction: column; /* Apila los elementos en pantallas pequeñas */
+        align-items: center;
+    }
+
+    .empresa {
+        width: 90%; /* Hace que el contenedor de la empresa ocupe el 90% del ancho en pantallas pequeñas */
+        text-align: center; /* Centra el texto de la empresa */
+    }
+
+    .empresa p {
+        font-size: 0.9rem; /* Ajusta el tamaño de la fuente en pantallas pequeñas */
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .mapa iframe {
+        height: 250px; /* Reduce el tamaño del mapa en pantallas muy pequeñas */
+    }
+
+    .empresa {
+        font-size: 0.9rem;
+    }
+
+    #ub-c h1 {
+        font-size: 1.2rem; /* Ajusta el tamaño del título en pantallas muy pequeñas */
+    }
+}
+
+/*Reservas*/
+
+#reservas{
+    background-image: url(/imagenes/logos_o_otros/imagen-gastro-ia.jfif);
+    background-size: cover;
+    background-position: 10% center;  
+    background-repeat: no-repeat;  
+    height: 200px; /* Ajusta la altura que desees */
+    width: 100%; /* Asegura que ocupe el ancho completo */
+}
+
+#reservas h1{
+    color: rgb(255, 255, 255);
+}
+
+.btn-reservas{
+    padding: 8px 16px; 
+    font-size: 14px; 
+    background-color: #000000; 
+    color: white; 
+    border: none; 
+    border-radius: 4px; 
+    cursor: pointer; /* El cursor se convierte en una mano al pasar por encima */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Efectos de transición */
+}
+
+/*footer*/
+
+footer h2{
+    color: white;
+}
+
+footer label{
+    color: white;
+}
+
+#formulario-contactanos{
+    background-color: black;
+    padding: 10px;
+}
+
+#btn-form-enviar{
+    padding: 8px 16px; 
+    font-size: 10px;
+    border-radius: 10px;
+    border-color: white;
+    cursor: pointer;
+    background-color: #1A3330;
+    color: rgb(255, 255, 255);
+}
+
+/* Estilo para dispositivos móviles */
+@media screen and (max-width: 768px) {
+    footer {
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+    }
+
+    .footer-image img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .social-icons {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .social-icons .icon img {
+        width: 30px; /* Tamaño más pequeño para iconos en móviles */
+    }
+
+    /* Formulario de contacto: reducir tamaño de campos */
+    form {
+        width: 100%;
+        padding: 10px;
+    }
+
+    label, input, textarea {
+        width: 100%;
+        font-size: 14px;
+    }
+
+    #btn-form-enviar {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+    }
+}
+
+/* Estilo para dispositivos muy pequeños (teléfonos pequeños) */
+@media screen and (max-width: 480px) {
+    #reservas {
+        height: 150px; /* Reduce la altura en pantallas pequeñas */
+    }
+
+    footer {
+        padding: 5px;
+    }
+
+    .social-icons {
+        gap: 10px;
+    }
+
+    .social-icons .icon img {
+        width: 25px; /* Ajusta tamaño de iconos */
+    }
+
+    #btn-form-enviar {
+        padding: 10px;
+        font-size: 14px;
+    }
+}
+
+>>>>>>> Stashed changes

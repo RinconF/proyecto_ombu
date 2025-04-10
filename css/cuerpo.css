@@ -1,11 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;1,400&display=swap');
 
-/* Estilos generales */
+/* ------------------------------------------------------- Reset y estilos base -----------------------------------------------------*/
 * {
-    font-family: 'Poppins', sans-serif;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
 }
 
 
@@ -16,7 +16,16 @@ body {
     background: #1A3330;
 }
 
-/* Estilos para el header fijo */
+/* ---------------------------------------------------  Variables de colores --------------------------------------------------  */
+:root {
+    --primary-color: #1A3330;
+    --text-light: #ffffff;
+    --accent-color: #e74c3c;
+    --dark-bg: #000000;
+    --card-bg: rgba(254, 224, 189, 0.7);
+}
+
+/*  --------------------------------------------------- Estilos para el header fijo ---------------------------------------------------*/
 header {
     position: fixed;
     top: 0;
@@ -32,22 +41,22 @@ header {
 }
 
 
-/* Contenedor del logo */
-.logo-container {
+/* --------------------------------------------------- Contenedor del logo --------------------------------------------------- */
+/* .logo-container {
     display: flex;
     justify-content: center;
     margin-bottom: 10px;
-}
+} */
 
-/* Estilos para el logo */
-.logo {
+/* --------------------------------------------------- Estilos para el logo --------------------------------------------------- */
+/* .logo {
     max-width: 150px;
     height: auto;
     border-radius: 50%;
-    transition: max-width 0.3s; /* Transición para el cambio de tamaño del logo */
-}
+    transition: max-width 0.3s; 
+} */
 
-/* Estilos para la barra de navegación */
+/* --------------------------------------------------- Estilos para la barra de navegación --------------------------------------------------- */
 .bar_nav {
     list-style: none;
     display: flex;
@@ -79,7 +88,7 @@ header {
 
 
 
-/* Estilos cuando el header se reduce al hacer scroll */
+/* ----------------------------------- Estilos cuando el header se reduce al hacer scroll ---------------------------------------- */
 .navbar-hd.shrink {
     padding: 10px; /* Reduce el padding */
     background-color: #000000; /* Opcional: cambiar color de fondo */
@@ -92,7 +101,7 @@ header {
 }
 
 .menu.show a {
-    opacity: ;
+    opacity: 1;
 }
 
 .menu a:nth-child(1) {
@@ -119,77 +128,98 @@ header {
     transition-delay: 0.6s;
 }
 
-/* Estilos para títulos */
+/*  --------------------------------------------------- Estilos para títulos --------------------------------------------------- */
+
 h1.titulo {
-    color: white;
-    font-size: 5rem;
-    margin-bottom: 20px;
+    font-family: 'Playfair Display', serif;
+    color: var(--text-light);
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    margin-top: 60px;
+    margin-bottom: 10px;
     text-align: center;
-    margin-top: 200px;
+    padding-top: 100px;
+    animation: fadeIn 1s ease-in;
+}
+
+h2 {
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    margin-bottom: 30px;
+    text-align: center;
+    color: var(--text-light);
 }
 
 h2.subtitulo {
-    color: #03045e;
-    font-size: 1.8rem;
-    background-color: rgba(254, 224, 189, 0.7);
-    border: 1px solid black;
-    border-radius: 20px;
-    width: 280px;
-    padding: 10px;
-    margin: 0 auto 20px;
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    margin-bottom: 30px;
     text-align: center;
+    color: var(--text-light);
 }
 
 
-/* Contenedor del carrusel */
+
+
+/*  ------------------------------------------ Estilos para el carrusel de productos ------------------------------------------ */
+#productos {
+    padding-top: 10px;
+    background-color: var(--primary-color);
+}
+
 #cursor-container {
     position: relative;
     width: 100%;
-    max-width: 960px;
-    margin: 20px auto;
-    padding: 0 10px;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 50px;
 }
 
 #cursor {
     display: flex;
-    flex-direction: row;
     overflow-x: auto;
     scroll-behavior: smooth;
-    gap: 10px;
-    padding: 10px 0;
+    gap: 20px;
+    padding: 20px 0;
     width: 100%;
-    margin: 0 auto;
+    scrollbar-width: none;
 }
 
-/* Estilos para los elementos del carrusel */
+#cursor::-webkit-scrollbar {
+    display: none;
+}
+
 .card-item {
     position: relative;
-    flex: 0 0 180px;
-    height: 250px;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
+    flex: 0 0 220px;
+    height: 300px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     cursor: pointer;
-    transition: transform 0.3s, border 0.3s;
+    transition: all 0.3s ease;
 }
 
 .card-item img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 0.5s ease;
 }
 
 .card-item:hover {
-    transform: scale(1.05); /* Efecto al pasar el mouse */
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
 }
 
-/* Estilos para el overlay que aparece al pasar el mouse */
+.card-item:hover img {
+    transform: scale(1.1);
+}
+
 .overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.6);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -203,36 +233,49 @@ h2.subtitulo {
 
 .overlay p {
     color: white;
-    font-size: 18px;
+    font-size: 20px;
+    font-weight: 600;
     text-align: center;
     margin: 0;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    width: 80%;
 }
 
-/* Estilos para las flechas de navegación */
+/* ------------------------------------------------ Estilos para las flechas de navegación ------------------------------------ */
 #left-arrow, #right-arrow {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: black;
-    color: white;
+    background: var(--dark-bg);
+    color: var(--text-light);
     border: 2px solid white;
     border-radius: 50%;
     width: 40px;
     height: 40px;
     font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
     z-index: 10;
+    transition: all 0.3s ease;
+}
+
+#left-arrow:hover, #right-arrow:hover {
+    background: var(--primary-color);
+    transform: translateY(-50%) scale(1.1);
 }
 
 #left-arrow {
-    left: 10px;
+    left: 5px;
 }
 
 #right-arrow {
-    right: 10px;
+    right: 5px;
 }
-
-/* Ocultar la barra de desplazamiento del carrusel */
+/*  -----------------------------------------Ocultar la barra de desplazamiento del carrusel ---------------------------------------- */
 #cursor::-webkit-scrollbar {
     display: none;
 }
@@ -242,14 +285,160 @@ h2.subtitulo {
     scrollbar-width: none;
 }
 
-/* Estilos para las secciones */
+/*  ---------------------------------------------------Estilos para las secciones --------------------------------------------------- */
 section {
     padding: 20px;
     color: white;
     text-align: center;
 }
 
-/* Estilos para el footer */
+/* --------------------------------------------------- Reservas  ---------------------------------------------------*/
+
+#reservas{
+    background-image: url(/imagenes/logos_o_otros/imagen-gastro-ia.jfif);
+    background-size: cover;
+    background-position: 10% center;  
+    background-repeat: no-repeat;  
+    height: 200px; /* Ajusta la altura que desees */
+    width: 100%; /* Asegura que ocupe el ancho completo */
+}
+
+#reservas h1{
+    color: rgb(255, 255, 255);
+}
+
+.btn-reservas{
+    padding: 8px 16px; 
+    font-size: 14px; 
+    background-color: #000000; 
+    color: white; 
+    border: none; 
+    border-radius: 4px; 
+    cursor: pointer; /* El cursor se convierte en una mano al pasar por encima */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Efectos de transición */
+}
+
+
+
+/* ---------------------------------------------------seccion sobre nosotros ---------------------------------------------------*/
+
+#sobre-nosotros {
+    background-image: url('/imagenes/img_index/ombu_fondo_gris.jfif');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 80px 20px;
+    font-size: 100%;
+}
+
+.container{
+    display: flex;
+    gap: 10px;
+}
+
+.content-block {
+    max-width: 800px;
+    margin: 0 auto 50px;
+    padding: 30px;
+    background-color: rgba(18, 84, 76, 0.3);
+
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.content-block:hover {
+    transform: translateY(-5px);
+}
+
+.content-block h3 {
+    color: var(--accent-color);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    margin-bottom: 20px;
+    font-family: 'Playfair Display', serif;
+}
+
+.content-block p {
+    margin-bottom: 15px;
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    line-height: 1.8;
+    text-align: justify;
+}
+
+
+/* ------------------------------------------------------------ mapa  ---------------------------------------------------*/
+#ub-c{
+    background-color: rgb(255, 255, 255);
+}
+
+#ub-c h1{
+    color: black;
+}
+
+#ub-c h2{
+    color: black;
+}
+
+.m-ag{
+    display: flex;
+    justify-content: center;
+    gap: 10%;
+    text-align: justify;
+}
+
+
+.mapa iframe {
+    width: 500px;
+    height: 500px;
+    margin: 20px 10px 10px 10px;
+    padding: 0;
+}   
+
+.empresa {
+    display: flex;
+    flex-direction: column; /* Hace que los elementos se apilen verticalmente */
+    justify-content: center; /* Centra los elementos verticalmente */
+    align-items: center; /* Centra los elementos horizontalmente */
+    margin-bottom: 20px;
+    text-align: center; /* Centra el texto dentro de los elementos */
+}
+.empresa h3 {
+    color: rgb(0, 0, 0);
+    font-size: 24px;
+    text-align: center;
+}
+
+.empresa p {
+    color: rgb(0, 0, 0);
+    font-size: 16px;
+}
+
+
+/*  --------------------------------------------------- whatsapp ---------------------------------------------------*/
+
+.icon-whatsapp img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    position: fixed;
+    bottom: 20px;  /* Asegura que el ícono esté cerca del borde inferior */
+    left: 20px;    /* Asegura que el ícono esté cerca del borde izquierdo */
+    z-index: 100;  /* Asegura que el ícono esté por encima de otros elementos */
+    border-radius: 50%;  /* Hace que el ícono tenga bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Agrega sombra para hacerlo más visible */
+    cursor: pointer; /* Cambia el cursor para indicar que es interactivo */
+}
+
+.icon-whatsapp {
+    display: block; /* Asegura que el enlace sea un bloque para facilitar la interacción */
+}
+
+.boton-whatsapp {
+    position: relative;
+    display: block;
+}
+
+/* --------------------------------------------------- Estilos para el footer  --------------------------------------------------- */
 footer {
     width: 100%;
     text-align: center;
@@ -258,15 +447,14 @@ footer {
     gap: 10%;
     align-items: center; /* Centra verticalmente */
     background-image: url(/imagenes/logos_o_otros/footer-\ image-free.jpg);
-    background-size: cover;  /* Ajusta la imagen para que cubra el área sin deformarse */
     background-position: center;  /* Centra la imagen en el fondo */
     background-repeat: no-repeat;  /* Evita que la imagen se repita si es más pequeña que el contenedor */
         
 
 }
 
-<<<<<<< Updated upstream
-=======
+
+
 .footer-content {
     display: flex;
     justify-content:center; /* Distribuye los elementos de izquierda a derecha */
@@ -276,8 +464,7 @@ footer {
     gap: 10%;
 }
 
->>>>>>> Stashed changes
-/* Estilos para el contenido de la información */
+/* --------------------------------------------------- Estilos para el contenido de la información  ---------------------------------------------------*/
 #contacto {
     flex-grow: 1; /* Esto hace que el contenido ocupe más espacio hacia el centro */
     display: flex;
@@ -319,7 +506,7 @@ footer {
     border-color: black;
 }
 
-/* Colores de fondo para cada ícono social */
+/* --------------------------------------------------- Colores de fondo para cada ícono social  ---------------------------------------------------*/
 .facebook { 
     background-color: #ffffff; 
 
@@ -334,13 +521,13 @@ footer {
 
 }
 
-/* Efecto de levantamiento al pasar el cursor */
+/* --------------------------------------------------- Efecto de levantamiento al pasar el cursor --------------------------------------------------- */
 .icon:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 16px rgba(0, 0, 0, 0.2);
 }
 
-/* Estilos para la imagen en el pie de página */
+/*  ---------------------------------------------------Estilos para la imagen en el pie de página  ---------------------------------------------------*/
 .footer-image {
     display: flex;
     justify-content: center; /* Alinea la imagen a la derecha */
@@ -353,9 +540,41 @@ footer {
     height: auto; /* Mantén la proporción de la imagen */
     object-fit: contain; /* Asegura que la imagen se ajuste bien */
     border-radius: 50%;
+    margin-left: 10vw;
 }
 
-/* Media Queries para Responsividad */
+
+footer h2{
+    color: white;
+}
+
+footer label{
+    color: white;
+}
+
+#formulario-contactanos{
+    background-color: black;
+    padding: 10px;
+}
+
+#btn-form-enviar{
+    padding: 8px 16px; 
+    font-size: 10px;
+    border-radius: 10px;
+    border-color: white;
+    cursor: pointer;
+    background-color: #1A3330;
+    color: rgb(255, 255, 255);
+}
+
+/*  --------------------------------------------------- Animaciones --------------------------------------------------- */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+/*  ---------------------------------------------------Media Queries para Responsividad  ---------------------------------------------------*/
 @media (max-width: 768px) {
     h1.titulo {
         font-size: 3rem;
@@ -474,105 +693,10 @@ footer {
     }
 }
 
-<<<<<<< Updated upstream
-#sobre-nosotros h2{
-    font-size: 4vw;
-=======
-/*seccion sobre nosotros*/
-#sobre-nosotros{
-    margin: 0;
-    padding: 0;
-    
-} 
 
-
-
-.quienes-somos{
-
-    background-image: url("/imagenes/img_index/ombu_fondo_gris.jfif");
-    background-size: cover;
-    background-position: center;  /* Mueve la imagen más a la derecha */
-    background-repeat: no-repeat;
-    margin: 0;  /* Elimina los márgenes */
-    padding: 5%; /* Agregar o eliminar un poco de padding */
-    width: 100%; /* Asegura que ocupe todo el ancho disponible */
-    height: 100%; /* Asegura que ocupe toda la altura del contenedor */
-    align-items: center;  /* Centra verticalmente los elementos */
-    text-align: center;
-
-}
-
-
-.quienes_somos_txt {
-
-    flex: 0 0 50%;  /* El texto ocupa el 50% del ancho del div */
-    padding-left: 20px;  /* Espaciado entre la imagen y el texto */
-    text-align: center;
-    color: rgb(220, 220, 220);
-}
-
-.quienes_somos_txt h2 {
-    font-size: 2rem; /* Tamaño grande para el título */
-    margin-bottom: 10px; /* Espacio entre el título y el párrafo */
-    text-align: center; 
-}
-
-.quienes_somos_txt p {
-    font-size: 1rem;
-    line-height: 1.6;  /* Mejora la legibilidad */
-    color: #ffffff;  /* Un color más oscuro para el texto */
->>>>>>> Stashed changes
-}
-
-
-
-<<<<<<< Updated upstream
-=======
-.icon-whatsapp img{
-    width: 60px;
-    height: 60px;
-    object-fit: contain;
-}
-
-/*mapa*/
-#ub-c{
-    background-color: rgb(255, 255, 255);
-}
-
-#ub-c h1{
-    color: black;
-}
-
-.m-ag{
-    display: flex;
-    justify-content: center;
-    gap: 10%;
-}
-
-
-.mapa iframe {
-    width: 400px;
-    height: 300px;
-    border: 0;
-    border-radius: 8px;
-}   
-
-.empresa {
-    margin-bottom: 20px;
-}
-
-.empresa h3 {
-    color: rgb(0, 0, 0);
-    font-size: 24px;
-}
-
-.empresa p {
-    color: rgb(0, 0, 0);
-    font-size: 16px;
-}
 
     
-/* Media Queries para pantallas pequeñas (mapa) */
+/*  ---------------------------------------------------Media Queries para pantallas pequeñas (mapa) --------------------------------------------------- */
 @media screen and (max-width: 768px) {
     #ub-c h1 {
         font-size: 1.5rem; /* Reduce el tamaño del título en pantallas pequeñas */
@@ -608,58 +732,8 @@ footer {
     }
 }
 
-/*Reservas*/
 
-#reservas{
-    background-image: url(/imagenes/logos_o_otros/imagen-gastro-ia.jfif);
-    background-size: cover;
-    background-position: 10% center;  
-    background-repeat: no-repeat;  
-    height: 200px; /* Ajusta la altura que desees */
-    width: 100%; /* Asegura que ocupe el ancho completo */
-}
-
-#reservas h1{
-    color: rgb(255, 255, 255);
-}
-
-.btn-reservas{
-    padding: 8px 16px; 
-    font-size: 14px; 
-    background-color: #000000; 
-    color: white; 
-    border: none; 
-    border-radius: 4px; 
-    cursor: pointer; /* El cursor se convierte en una mano al pasar por encima */
-    transition: background-color 0.3s ease, transform 0.2s ease; /* Efectos de transición */
-}
-
-/*footer*/
-
-footer h2{
-    color: white;
-}
-
-footer label{
-    color: white;
-}
-
-#formulario-contactanos{
-    background-color: black;
-    padding: 10px;
-}
-
-#btn-form-enviar{
-    padding: 8px 16px; 
-    font-size: 10px;
-    border-radius: 10px;
-    border-color: white;
-    cursor: pointer;
-    background-color: #1A3330;
-    color: rgb(255, 255, 255);
-}
-
-/* Estilo para dispositivos móviles */
+/* --------------------------------------------------- Estilo para dispositivos móviles --------------------------------------------------- */
 @media screen and (max-width: 768px) {
     footer {
         flex-direction: column;
@@ -700,7 +774,7 @@ footer label{
     }
 }
 
-/* Estilo para dispositivos muy pequeños (teléfonos pequeños) */
+/*  ---------------------------------------------------Estilo para dispositivos muy pequeños (teléfonos pequeños) --------------------------------------------------- */
 @media screen and (max-width: 480px) {
     #reservas {
         height: 150px; /* Reduce la altura en pantallas pequeñas */
@@ -724,4 +798,3 @@ footer label{
     }
 }
 
->>>>>>> Stashed changes

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Gastro Bar</title>
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: Arial, sans-serif; /* Fuente principal */
+            margin: 0; /* Elimina el margen predeterminado */
+            padding: 0; /* Elimina el padding predeterminado */
+            background-color: #f4f4f9; /* Color de fondo de la página */
+            color: #333; /* Color del texto principal */
+        }
+
+        
+        /* Contenedor principal del dashboard */
+        .dashboard {
+            padding: 20px; /* Espaciado interno */
+        }
+
+        /* Contenedor de tarjetas de resumen */
+        .summary-cards {
+            display: flex; /* Usa flexbox para alinear las tarjetas horizontalmente */
+            gap: 20px; /* Espacio entre las tarjetas */
+            margin-bottom: 20px; /* Margen inferior */
+        }
+
+        /* Estilos para cada tarjeta */
+        .card {
+            background-color: #fff; /* Fondo blanco */
+            padding: 20px; /* Espaciado interno */
+            border-radius: 8px; /* Bordes redondeados */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave */
+            flex: 1; /* Las tarjetas ocupan el mismo espacio */
+            text-align: center; /* Texto centrado */
+        }
+
+        /* Estilos para el título de la tarjeta */
+        .card h3 {
+            margin: 0; /* Elimina el margen predeterminado */
+            font-size: 1.2rem; /* Tamaño de fuente */
+            color: #555; /* Color del texto */
+        }
+
+        /* Estilos para el contenido de la tarjeta */
+        .card p {
+            font-size: 2rem; /* Tamaño de fuente grande */
+            margin: 10px 0; /* Margen superior e inferior */
+            color: #333; /* Color del texto */
+        }
+
+        /* Contenedor de gráficos */
+        .charts {
+            display: flex; /* Usa flexbox para alinear los gráficos horizontalmente */
+            gap: 20px; /* Espacio entre los gráficos */
+            margin-bottom: 20px; /* Margen inferior */
+        }
+
+        /* Estilos para cada contenedor de gráfico */
+        .chart-container {
+            background-color: #fff; /* Fondo blanco */
+            padding: 20px; /* Espaciado interno */
+            border-radius: 8px; /* Bordes redondeados */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave */
+            flex: 1; /* Los gráficos ocupan el mismo espacio */
+        }
+    </style>
+    <!-- Incluye la librería Chart.js para gráficos -->
+    <script src="{% static \'https://cdn.jsdelivr.net/npm/chart.js\' %}"></script>
+</head>
+<body>
+    <!-- Contenedor principal del dashboard -->
+    <div class="dashboard">
+        <!-- Tarjetas de resumen -->
+        <div class="summary-cards">
+            <div class="card">
+                <h3>Ventas Totales</h3>
+                <p>$12,345</p>
+            </div>
+            <div class="card">
+                <h3>Pedidos Hoy</h3>
+                <p>45</p>
+            </div>
+            <div class="card">
+                <h3>Clientes Nuevos</h3>
+                <p>12</p>
+            </div>
+            <div class="card">
+                <h3>Inventario</h3>
+                <p>1,234</p>
+            </div>
+        </div>
+
+        <!-- Gráficos -->
+        <div class="charts">
+            <div class="chart-container">
+                <canvas id="salesChart"></canvas> <!-- Canvas para el gráfico de ventas -->
+            </div>
+            <div class="chart-container">
+                <canvas id="ordersChart"></canvas> <!-- Canvas para el gráfico de pedidos -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Script para los gráficos -->
+    <script>
+        // Gráfico de ventas mensuales
+        const salesChart = new Chart(document.getElementById('salesChart'), {
+            type: 'line', // Tipo de gráfico (línea)
+            data: {
+                labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'], // Etiquetas del eje X
+                datasets: [{
+                    label: 'Ventas Mensuales', // Leyenda del gráfico
+                    data: [12000, 15000, 13000, 17000, 16000, 18000], // Datos del gráfico
+                    borderColor: '#36a2eb', // Color de la línea
+                    fill: false, // Sin relleno debajo de la línea
+                }]
+            },
+            options: {
+                responsive: true, // Gráfico responsivo
+                plugins: {
+                    legend: {
+                        position: 'top', // Posición de la leyenda
+                    }
+                }
+            }
+        });
+
+        // Gráfico de pedidos diarios
+        const ordersChart = new Chart(document.getElementById('ordersChart'), {
+            type: 'bar', // Tipo de gráfico (barras)
+            data: {
+                labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'], // Etiquetas del eje X
+                datasets: [{
+                    label: 'Pedidos Diarios', // Leyenda del gráfico
+                    data: [45, 60, 50, 70, 65, 80, 90], // Datos del gráfico
+                    backgroundColor: '#4bc0c0', // Color de las barras
+                }]
+            },
+            options: {
+                responsive: true, // Gráfico responsivo
+                plugins: {
+                    legend: {
+                        position: 'top', // Posición de la leyenda
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

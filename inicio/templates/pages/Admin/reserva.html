@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static \'css/reservas.css\' %}">
+    <title>Reserva - SAHA ROOFTOP</title>
+</head>
+<body>
+    <div class="titulo">
+        <h1>OMBU RESERVAS</h1>
+    </div>
+    <p>Bienvenido a las reservas del gastro bar Saha Rooftop, donde la pasión por la cocina se encuentra con un ambiente único y acogedor.</br> Nos encantaría que te unas a nosotros para una experiencia única.</p>
+    <p><strong>Contactos de reserva</strong></p>
+    <h2>Evento de reserva</h2> <!-- Provisional -->
+    
+
+    <div class="container">
+        <form>
+            <input type="radio" id="radio1" name="evento"> Cumpleaños
+            <br>
+            <input type="radio" id="radio2" name="evento"> Despedida
+            <br>
+            <input type="radio" id="radio3" name="evento"> Comida familiar
+            <br>
+            <input type="radio" id="radio4" name="evento"> Aniversario
+            <br>
+            <input type="radio" id="radio5" name="evento"> Fiesta sorpresa
+            <br>
+            <input type="radio" id="radio6" name="evento"> Fiesta de graduación
+            <br>
+            <input type="radio" id="radio7" name="evento"> Reunión con amigos
+            <br>
+            <input type="radio" id="radio8" name="evento"> Evento corporativo
+            <br>
+            <input type="radio" id="radio9" name="evento"> Otro
+            <br>
+            <input type="button" value="Verificar" onclick="verificarRB()"> <!-- Botón de verificar -->
+        </form>
+    </div>
+
+    <div class="verifica">
+        <form>
+            <div>
+                <label for="personas">¿Para cuántas personas es la reserva?</label>
+                <input type="text" id="personas">
+            </div>
+            <div>
+                <input type="button" value="Enviar" onclick="leercantidad()">
+            </div>
+            <div>
+                <label for="nombre">Escriba su nombre</label>
+                <input type="text" id="nombre">
+            </div>
+            <div>
+                <input type="button" value="Enviar" onclick="leernombre()">
+            </div>
+            <div>
+                <label for="telefono">Escriba su número de teléfono</label>
+                <input type="text" id="telefono">
+            </div>
+            <div>
+                <input type="button" value="Enviar" onclick="leertelefono()">
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function verificarRB() {
+            if (document.getElementById('radio1').checked) {
+                alert("Seleccionaste cumpleaños");
+            } else if (document.getElementById('radio2').checked) {
+                alert("Seleccionaste despedida");
+            } else if (document.getElementById('radio3').checked) {
+                alert("Seleccionaste comida familiar");
+            } else if (document.getElementById('radio4').checked) {
+                alert("Seleccionaste aniversario");
+            } else if (document.getElementById('radio5').checked) {
+                alert("Seleccionaste fiesta sorpresa");
+            } else if (document.getElementById('radio6').checked) {
+                alert("Seleccionaste fiesta de graduación");
+            } else if (document.getElementById('radio7').checked) {
+                alert("Seleccionaste reunión con amigos");
+            } else if (document.getElementById('radio8').checked) {
+                alert("Seleccionaste evento corporativo");
+            } else if (document.getElementById('radio9').checked) {
+                alert("Seleccionaste otro");
+            } else {
+                alert("No has seleccionado ningún evento");
+            }
+        }
+
+        function leercantidad() {
+            var cantidad = document.getElementById("personas").value;
+            alert("Cantidad de personas: " + cantidad);
+        }
+
+        function leernombre() {
+            var nombre_reserva = document.getElementById("nombre").value;
+            alert("Nombre: " + nombre_reserva);
+        }
+
+        function leertelefono() {
+            var ntelefono = document.getElementById("telefono").value;
+            alert("Teléfono: " + ntelefono);
+        }
+    </script>
+</body>
+</html>

@@ -100,7 +100,7 @@ header {
 
 /* ----------------------------------- Estilos cuando el header se reduce al hacer scroll ---------------------------------------- */
 .navbar-hd.shrink {
-    padding: 10px; /* Reduce el padding */
+    padding:10px; /* Reduce el padding */
     background-color: #000000; /* Opcional: cambiar color de fondo */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Opcional: agregar sombra */
 }

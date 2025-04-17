@@ -9,91 +9,128 @@
 });
 
 // Script para el carrusel de productos
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
+    // --- Carrusel ---
     const cursor = document.getElementById('cursor');
     const leftArrow = document.getElementById('left-arrow');
     const rightArrow = document.getElementById('right-arrow');
     const cardItems = document.querySelectorAll('.card-item');
 
-    // Configuración del desplazamiento
-    const scrollAmount = 250;
+    // Ancho de un ítem (220px) + gap (20px)
+    const itemWidth = 240;
 
-    // Navegación con flechas
-    leftArrow.addEventListener('click', function() {
-        cursor.scrollBy({
-            left: -scrollAmount,
+    // Función para desplazar el carrusel
+    function scrollCarousel(direction) {
+        const currentScroll = cursor.scrollLeft;
+        let newScroll;
+
+        if (direction === 'left') {
+            newScroll = currentScroll - itemWidth;
+        } else {
+            newScroll = currentScroll + itemWidth;
+        }
+
+        cursor.scrollTo({
+            left: newScroll,
             behavior: 'smooth'
         });
+    }
+
+    // Actualizar estado de los botones
+    function updateButtonStates() {
+        leftArrow.disabled = cursor.scrollLeft <= 0;
+        rightArrow.disabled = cursor.scrollLeft >= cursor.scrollWidth - cursor.clientWidth;
+    }
+
+    // Eventos de los botones
+    leftArrow.addEventListener('click', () => {
+        scrollCarousel('left');
+        updateButtonStates();
     });
 
-    rightArrow.addEventListener('click', function() {
-        cursor.scrollBy({
-            left: scrollAmount,
-            behavior: 'smooth'
-        });
+    rightArrow.addEventListener('click', () => {
+        scrollCarousel('right');
+        updateButtonStates();
     });
 
-    // Redirección al hacer clic en las tarjetas
-    cardItems.forEach(card => {
-        card.addEventListener('click', function() {
-            const url = this.getAttribute('data-url');
-            if (url) {
-                window.location.href = url;
+    // Actualizar estado inicial
+    updateButtonStates();
+
+    // Actualizar al desplazar manualmente
+    cursor.addEventListener('scroll', updateButtonStates);
+
+    // Hacer los ítems clicables con anclajes
+// Hacer los ítems clicables con anclajes o redirecciones
+cardItems.forEach(card => {
+    card.addEventListener('click', () => {
+        const anchor = card.getAttribute('data-anchor');
+        const url = card.getAttribute('data-url');
+
+        if (url) {
+            // Redirigir a la URL si existe
+            window.location.href = url;
+        } else if (anchor) {
+            // Desplazar a la sección si existe un anclaje
+            const section = document.querySelector(anchor);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    });
+});
+
+    // Navegación con teclado
+    cursor.setAttribute('tabindex', '0');
+    cursor.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') {
+            scrollCarousel('left');
+            updateButtonStates();
+        } else if (e.key === 'ArrowRight') {
+            scrollCarousel('right');
+            updateButtonStates();
+        }
+    });
+
+    // --- Barra de navegación ---
+    const navbar = document.getElementById('navbar');
+    const menuToggle = document.getElementById('menuToggle');
+    const mainMenu = document.getElementById('mainMenu');
+
+    // Reducir la barra de navegación
+    function handleScroll() {
+        if (window.scrollY > 50) {
+            navbar.classList.add('shrink');
+        } else {
+            navbar.classList.remove('shrink');
+        }
+    }
+
+    // Inicializar estado
+    handleScroll();
+    window.addEventListener('scroll', handleScroll);
+
+    // Menú hamburguesa
+    menuToggle.addEventListener('click', () => {
+        mainMenu.classList.toggle('show');
+    });
+
+    // Cerrar menú al hacer clic en un enlace
+    const menuLinks = document.querySelectorAll('.link');
+    menuLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 600) {
+                mainMenu.classList.remove('show');
             }
         });
     });
 
-    // Navegación con teclado para accesibilidad
-    cursor.addEventListener('keydown', function(e) {
-        if (e.key === 'ArrowLeft') {
-            cursor.scrollBy({
-                left: -scrollAmount,
-                behavior: 'smooth'
-            });
-        } else if (e.key === 'ArrowRight') {
-            cursor.scrollBy({
-                left: scrollAmount,
-                behavior: 'smooth'
-            });
+    // Cerrar menú al hacer clic fuera
+    document.addEventListener('click', (event) => {
+        const isClickInsideMenu = mainMenu.contains(event.target);
+        const isClickOnToggle = menuToggle.contains(event.target);
+
+        if (!isClickInsideMenu && !isClickOnToggle && mainMenu.classList.contains('show')) {
+            mainMenu.classList.remove('show');
         }
     });
-<<<<<<< HEAD
-});
-
-//reduccion de la barra de navegacion
-
-// window.onscroll = function() {
-//     reduceNavbar();
-// };
-
-// function reduceNavbar() {
-//     const navbar = document.getElementById("navbar");
-//     if (window.scrollY > 50) {  // Cuando el desplazamiento es mayor a 50px
-//         navbar.classList.add("scrolled"); // Añadir la clase para reducir el header
-//     } else {
-//         navbar.classList.remove("scrolled"); // Quitar la clase cuando el scroll vuelve al principio
-//     }
-// }
-
-
-// Obtener el elemento del encabezado
-const navbar = document.getElementById('navbar');
-
-// Función para reducir el encabezado al hacer scroll
-window.onscroll = function() {
-    if (window.scrollY > 50) {
-        navbar.classList.add('shrink');  // Agrega la clase 'shrink' si el scroll es mayor a 50px
-    } else {
-        navbar.classList.remove('shrink');  // Elimina la clase 'shrink' cuando el scroll es menor a 50px
-    }
-};
-
-// Función para mostrar/ocultar el menú al hacer clic en el botón de hamburguesa
-const menuToggle = document.getElementById('menuToggle');
-const mainMenu = document.getElementById('mainMenu');
-
-menuToggle.addEventListener('click', () => {
-    mainMenu.classList.toggle('show');
-=======
->>>>>>> 0226fac63b69a6d2af0a5fe5d5837d7a8f32c0a3
 });

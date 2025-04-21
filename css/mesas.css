@@ -1,7 +1,9 @@
 
 body {
     background-image: url('/imagenes/img_index/ombu_fondo_gris.jfif');
-    background-position: center;
+    background-position: auto;
+    background-size: cover;
+    
 }
 
 /* Estilos para la sección de mesas */
@@ -45,6 +47,11 @@ body {
     margin: 0;
     font-size: 18px;
     color: #fff;
+    
+}
+
+.mesas-section h2{
+    text-align: center;
 }
 
 /* Estilos para la sección de pedidos */
@@ -75,7 +82,8 @@ body {
 }
 
 .pedido-section table td {
-    background-color: #1a1a1a;
+    background-color: #ba3c3c;
+    color: white;
 }
 
 .pedido-section table td input {

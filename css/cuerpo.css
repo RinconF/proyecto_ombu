@@ -771,8 +771,6 @@ footer label{
         font-size: 1.2rem; /* Ajusta el tamaño del título en pantallas muy pequeñas */
     }
 }
-
-
 /* --------------------------------------------------- Estilo para dispositivos móviles --------------------------------------------------- */
 @media screen and (max-width: 768px) {
     footer {
@@ -837,4 +835,3 @@ footer label{
         font-size: 14px;
     }
 }
-

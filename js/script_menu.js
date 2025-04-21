@@ -34,6 +34,22 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.appendChild(overlay);
     
 
+    // Función para obtener un parámetro de la URL
+    function getUrlParameter(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        const results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+
+    // Obtener el mesaId de la URL
+    const mesaIdDesdeUrl = getUrlParameter('mesa');
+
+    // Ahora tienes el mesaId en la variable mesaIdDesdeUrl.
+    // Puedes usarlo para construir la clave de localStorage al guardar el pedido.
+    const clavePedidoMesa = `pedido_mesa_${mesaIdDesdeUrl}`;
+
+
     // Crear elemento para mostrar el precio en el modal
     const modalPrice = document.createElement('div');
     modalPrice.className = 'modal-price';
@@ -316,7 +332,6 @@ document.addEventListener("DOMContentLoaded", () => {
             updateCartDisplay();
         }
     });
-    
     // Actualizar la visualización del carrito
     function updateCartDisplay() {
         // Limpiar visualización actual
@@ -330,6 +345,12 @@ document.addEventListener("DOMContentLoaded", () => {
             cartItems.innerHTML = '<div class="empty-cart-message" style="text-align: center; padding: 20px; color: #aaa;">Su carrito está vacío</div>';
             cartTotalAmount.textContent = '$0';
             return;
+        }
+
+        if (mesaIdDesdeUrl) {
+            localStorage.setItem(clavePedidoMesa, JSON.stringify(cart));
+        } else {
+            console.warn("No se pudo obtener el ID de la mesa desde la URL al guardar el pedido.");
         }
         
         // Agregar artículos a la visualización
@@ -358,6 +379,15 @@ document.addEventListener("DOMContentLoaded", () => {
             
             cartItems.appendChild(cartItemElement);
         });
+
+        // Guardar los productos comprados en el localStorage
+        const mesaSeleccionadaElement = document.getElementById('mesa-seleccionada');
+        if (mesaSeleccionadaElement && mesaSeleccionadaElement.textContent) {
+            const mesaIdActiva = mesaSeleccionadaElement.textContent;
+            localStorage.setItem(`pedido_mesa_${mesaIdActiva}`, JSON.stringify(cart));
+        } else {
+            console.warn("No se pudo obtener el ID de la mesa seleccionada al guardar el pedido.");
+        }
         
         // Calcular y actualizar el total
         const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);

@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     // Variables globales
-    let cart = [];
+    let cart = JSON.parse(localStorage.getItem('cart')) || []; // Recuperar carrito desde localStorage
     let cartOpen = false;
     let currentProductData = {
         card: null,
@@ -49,6 +49,10 @@ document.addEventListener("DOMContentLoaded", () => {
     // Puedes usarlo para construir la clave de localStorage al guardar el pedido.
     const clavePedidoMesa = `pedido_mesa_${mesaIdDesdeUrl}`;
 
+    // Función para actualizar el carrito en localStorage
+    function updateCartStorage() {
+        localStorage.setItem('cart', JSON.stringify(cart));
+    }
 
     // Crear elemento para mostrar el precio en el modal
     const modalPrice = document.createElement('div');
@@ -392,6 +396,9 @@ document.addEventListener("DOMContentLoaded", () => {
         // Calcular y actualizar el total
         const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
         cartTotalAmount.textContent = `$${total.toLocaleString()}`;
+
+        // Guardamos el carrito en localStorage
+        updateCartStorage();
         
         // Agregar eventos a los botones de cantidad
         document.querySelectorAll('.increase-quantity').forEach(button => {

@@ -5,7 +5,7 @@ const mesaSeleccionadaText = document.getElementById('mesa-seleccionada');
 const pedidoBody = document.getElementById('pedido-body');
 const totalPedidoElement = document.getElementById('total-pedido');
 
-let mesaActivaId = null;
+let mesaActivaId = localStorage.getItem('mesaActivaId') || null;
 
 mesas.forEach(mesa => {
     mesa.addEventListener('click', function() {
@@ -68,7 +68,7 @@ const agregarProductoBtn = document.getElementById('agregar-producto-btn');
 if (agregarProductoBtn) {
     agregarProductoBtn.addEventListener('click', function() {
         if (mesaActivaId) {
-            window.location.href = `/pages/menu_mesero/bebidas_frias.html?mesa=${mesaActivaId}`;
+            window.location.href = `/pages/menu_mesero/bebidas_calientes.html?mesa=${mesaActivaId}`;
         } else {
             alert("Por favor, selecciona una mesa primero.");
         }
@@ -115,4 +115,33 @@ function finalizarPedido() {
 
     // Limpiar el pedido de la mesa actual en localStorage
     eliminarPedido(mesaId);
+}
+
+
+function actualizarEstadoMesas() {
+    const mesas = document.querySelectorAll('.mesa');
+    
+    mesas.forEach(mesa => {
+        const mesaId = mesa.getAttribute('data-mesa');
+        const clavePedidoMesa = `pedido_mesa_${mesaId}`;
+        const pedido = JSON.parse(localStorage.getItem(clavePedidoMesa)) || [];
+        
+        // Agregar clase visual si hay pedidos
+        if (pedido.length > 0) {
+            mesa.classList.add('con-pedido');
+            
+            // Opcional: Mostrar contador de productos
+            const cantidadTotal = pedido.reduce((total, item) => total + item.quantity, 0);
+            const contadorElement = mesa.querySelector('.contador') || document.createElement('span');
+            contadorElement.className = 'contador';
+            contadorElement.textContent = cantidadTotal;
+            mesa.appendChild(contadorElement);
+        } else {
+            mesa.classList.remove('con-pedido');
+            const contador = mesa.querySelector('.contador');
+            if (contador) {
+                contador.remove();
+            }
+        }
+    });
 }

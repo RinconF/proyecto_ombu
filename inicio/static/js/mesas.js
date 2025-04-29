@@ -1,15 +1,29 @@
+// Seleccionar todas las mesas
+const mesas = document.querySelectorAll('.mesa');
+const pedidoSection = document.getElementById('pedido-section');
+const mesaSeleccionadaText = document.getElementById('mesa-seleccionada');
+const pedidoBody = document.getElementById('pedido-body');
+const totalPedidoElement = document.getElementById('total-pedido');
 
-// Datos de ejemplo para productos
+let mesaActivaId = null;
 
-const productos = [
-    { nombre: "Producto A", precio: 10.00 },
-    { nombre: "Producto B", precio: 15.00 },
-    { nombre: "Producto C", precio: 20.00 },
-];
+mesas.forEach(mesa => {
+    mesa.addEventListener('click', function() {
+        const mesaId = mesa.getAttribute('data-mesa');  // Obtener ID de la mesa seleccionada
+        mesaActivaId = mesaId; // Guardar el ID de la mesa activa
 
-let mesaSeleccionada = null;
-let pedido = [];
+        
+        // Si la mesa seleccionada ya está abierta, ocultar el pedido
+        if (pedidoSection.style.display === 'block' && mesaSeleccionadaText.textContent === mesaId) {
+            pedidoSection.style.display = 'none';
+        } else {
+           // Mostrar el pedido para la mesa seleccionada
+           mesaSeleccionadaText.textContent = mesaId;
+           pedidoSection.style.display = 'block';
+           cargarPedido(mesaId); // Actualizar la vista del pedido para la mesa actual
+        }
 
+<<<<<<< HEAD:inicio/static/js/mesas.js
 // Seleccionar una mesa
 
 document.querySelectorAll('.mesa').forEach(mesa => {
@@ -18,54 +32,98 @@ document.querySelectorAll('.mesa').forEach(mesa => {
         document.getElementById('mesa-seleccionada').textContent = mesaSeleccionada;
         document.querySelector('.pedido-section').style.display = 'block';
         actualizarPedido();
+=======
+>>>>>>> daniel:js/mesas.js
     });
+    //        window.location.href = `/pages/menu_mesero/bebidas_frias.html?mesa=${mesaId}`; guardar esta linea por si algo//
 });
 
-// Agregar un producto al pedido
-function agregarProducto() {
-    const producto = productos[0]; /                      //Puedes-modificar-para-seleccionar-prodcto
-    pedido.push({ ...producto, cantidad: 1 });
-    actualizarPedido();
-}
+// Función para cargar el pedido del localStorage y actualizar la vista
+ function cargarPedido(mesaId) {
+    const clavePedidoMesa = `pedido_mesa_${mesaId}`; // Clave única para cada mesa
+    const pedido = JSON.parse(localStorage.getItem(clavePedidoMesa)) || [];
 
-// Eliminar un producto del pedido
-function eliminarProducto(index) {
-    pedido.splice(index, 1);
-    actualizarPedido();
-}
-
-// Actualizar la cantidad de un producto
-function actualizarCantidad(index, cantidad) {
-    pedido[index].cantidad = cantidad;
-    actualizarPedido();
-}
-
-// Actualizar la tabla de pedidos
-function actualizarPedido() {
     const tbody = document.getElementById('pedido-body');
-    tbody.innerHTML = '';
+    tbody.innerHTML = ''; // Limpiar tabla antes de llenarla con los productos actuales
     let total = 0;
+    let cantidadTotalProductos = 0;
 
-    pedido.forEach((item, index) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${item.nombre}</td>
-            <td>$${item.precio.toFixed(2)}</td>
-            <td><input type="number" value="${item.cantidad}" onchange="actualizarCantidad(${index}, this.value)"></td>
-            <td>$${(item.precio * item.cantidad).toFixed(2)}</td>
-            <td><button onclick="eliminarProducto(${index})">Eliminar</button></td>
-        `;
-        tbody.appendChild(row);
-        total += item.precio * item.cantidad;
+    if (pedido.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5">No se realizaron compras.</td></tr>';
+    } else {
+        pedido.forEach((producto, index) => {
+            console.log("Índice del producto:", index, "Producto:", producto.title);
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${producto.title}</td>
+                <td>$${producto.price.toFixed(2)}</td>
+                <td><span>${producto.quantity}</span></td>
+                <td>$${(producto.price * producto.quantity).toFixed(2)}</td>
+                <td><button onclick="eliminarProducto('${mesaId}', ${index})">Eliminar</button></td>
+            `;
+            tbody.appendChild(row);
+
+            // Sumar al total
+            total += producto.price * producto.quantity;
+            cantidadTotalProductos += parseInt(producto.quantity); // Sumar la cantidad de cada producto
+        });
+    }
+
+    // Actualizar el total del pedido
+    document.getElementById('total-pedido').textContent = `$${total.toFixed(2)}`;
+    document.getElementById('cantidad-total-pedido').textContent = cantidadTotalProductos; // Mostrar la cantidad total
+}
+
+
+const agregarProductoBtn = document.getElementById('agregar-producto-btn');
+if (agregarProductoBtn) {
+    agregarProductoBtn.addEventListener('click', function() {
+        if (mesaActivaId) {
+            window.location.href = `/pages/menu_mesero/bebidas_frias.html?mesa=${mesaActivaId}`;
+        } else {
+            alert("Por favor, selecciona una mesa primero.");
+        }
     });
+}
 
-    document.getElementById('total-pedido').textContent = total.toFixed(2);
+
+
+
+// Eliminar un producto específico del pedido
+function eliminarProducto(mesaId, index) {
+    const clavePedidoMesa = `pedido_mesa_${mesaId}`;
+    const pedidoActual = JSON.parse(localStorage.getItem(clavePedidoMesa)) || [];
+
+    // Eliminar el producto en la posición 'index'
+    pedidoActual.splice(index, 1);
+
+    // Guardar los cambios en localStorage
+    localStorage.setItem(clavePedidoMesa, JSON.stringify(pedidoActual));
+
+    // **Vuelve a llamar a cargarPedido() para actualizar la vista**
+    cargarPedido(mesaId);
+}
+
+
+
+
+
+
+// Eliminar todo el pedido (vaciar el carrito)
+function eliminarPedido(mesaId) {
+    const clavePedidoMesa = `pedido_mesa_${mesaId}`;
+    localStorage.setItem(clavePedidoMesa, JSON.stringify([]));
+    cargarPedido(mesaId);
 }
 
 // Finalizar el pedido
 function finalizarPedido() {
+    const mesaId = document.getElementById('mesa-seleccionada').textContent;
     const medioPago = document.getElementById('medio-pago').value;
-    alert(`Pedido de la Mesa ${mesaSeleccionada} finalizado. Total: $${document.getElementById('total-pedido').textContent}. Medio de pago: ${medioPago}`);
-    pedido = [];
-    actualizarPedido();
+    const totalPedido = document.getElementById('total-pedido').textContent;
+
+    alert(`Pedido de la Mesa ${mesaId} finalizado. Total: ${totalPedido}. Medio de pago: ${medioPago}`);
+
+    // Limpiar el pedido de la mesa actual en localStorage
+    eliminarPedido(mesaId);
 }

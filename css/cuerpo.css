@@ -100,7 +100,7 @@ header {
 
 /* ----------------------------------- Estilos cuando el header se reduce al hacer scroll ---------------------------------------- */
 .navbar-hd.shrink {
-    padding: 10px; /* Reduce el padding */
+    padding:10px; /* Reduce el padding */
     background-color: #000000; /* Opcional: cambiar color de fondo */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Opcional: agregar sombra */
 }
@@ -333,6 +333,14 @@ section {
     border-radius: 4px; 
     cursor: pointer; /* El cursor se convierte en una mano al pasar por encima */
     transition: background-color 0.3s ease, transform 0.2s ease; /* Efectos de transición */
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between; /* Distribuye los elementos de izquierda a derecha */
+    align-items: center;
+    flex-wrap: wrap; /* Asegura que los elementos se ajusten en pantallas pequeñas */
+    padding: 0 20px;
 }
 
 
@@ -705,6 +713,24 @@ footer label{
         width: 35px;
         height: 35px;
     }
+
+    .footer-content {
+        flex-direction: column; /* En pantallas pequeñas, organiza los elementos en columna */
+        align-items: center;
+    }
+
+    .mapa iframe {
+        width: 100%;
+        height: 300px; /* Ajusta el tamaño del mapa en pantallas pequeñas */
+    }
+
+    .footer-image img {
+        max-width: 150px; /* Ajusta el tamaño de la imagen en pantallas pequeñas */
+    }
+
+    #contacto {
+        margin-right: 0;
+    }
 }
 
 
@@ -745,8 +771,6 @@ footer label{
         font-size: 1.2rem; /* Ajusta el tamaño del título en pantallas muy pequeñas */
     }
 }
-
-
 /* --------------------------------------------------- Estilo para dispositivos móviles --------------------------------------------------- */
 @media screen and (max-width: 768px) {
     footer {
@@ -811,4 +835,3 @@ footer label{
         font-size: 14px;
     }
 }
-

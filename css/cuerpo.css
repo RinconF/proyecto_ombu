@@ -586,21 +586,65 @@ footer h2{
 footer label{
     color: white;
 }
-
-#formulario-contactanos{
-    background-color: black;
+#formulario-contactanos {
+    background-color: #121212;
     padding: 10px;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    text-align: center;
 }
 
-#btn-form-enviar{
-    padding: 8px 16px; 
-    font-size: 10px;
-    border-radius: 10px;
-    border-color: white;
-    cursor: pointer;
-    background-color: #1A3330;
-    color: rgb(255, 255, 255);
+#formulario {
+    display: flex;
+    flex-direction: column;
+    max-width: 350px;
+    margin: 10px auto 10px auto;
+    gap: 1px;
 }
+
+#formulario label {
+    font-weight: bold;
+    font-size: 12px;
+    margin-top: 1px;
+    margin-bottom: 2px;
+    text-align: left;
+}
+
+#formulario input[type="text"],
+#formulario input[type="email"],
+#formulario textarea {
+    padding: 5px;
+    margin: 0 auto;
+    border: 1px solid #444;
+    border-radius: 4px;
+    font-size: 12px;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #1e1e1e;
+    color: white;
+}
+
+#formulario textarea {
+    resize: vertical;
+}
+
+#btn-form-enviar {
+    padding: 6px 12px;
+    font-size: 12px;
+    border-radius: 6px;
+    border: none;
+    background-color: #1A3330;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: fit-content;
+    margin: 10px auto 0;
+}
+
+#btn-form-enviar:hover {
+    background-color: #0056b3;
+}
+
 
 /*  --------------------------------------------------- Animaciones --------------------------------------------------- */
 @keyframes fadeIn {

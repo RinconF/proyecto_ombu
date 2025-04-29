@@ -40,7 +40,9 @@
                     <span class="link-title">OMBÚ</span>
                 </a>
     
-                <a href="#productos" class="link">
+                <a href="#produc
+                4
+                {ñlkjhgfdstos" class="link">
                     <span class="link-icon">
                         <svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256px" height="256px" fill="#000000">
                             <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill="#000000" d="M128 352.576V352a288 288 0 0 1 491.072-204.224 192 192 0 0 1 274.24 204.48 64 64 0 0 1 57.216 74.24C921.6 600.512 850.048 710.656 736 756.992V800a96 96 0 0 1-96 96H384a96 96 0 0 1-96-96v-43.008c-114.048-46.336-185.6-156.48-214.528-330.496A64 64 0 0 1 128 352.64zm64-.576h64a160 160 0 0 1 320 0h64a224 224 0 0 0-448 0zm128 0h192a96 96 0 0 0-192 0zm439.424 0h68.544A128.256 128.256 0 0 0 704 192c-15.36 0-29.952 2.688-43.52 7.616 11.328 18.176 20.672 37.76 27.84 58.304A64.128 64.128 0 0 1 759.424 352zM672 768H352v32a32 32 0 0 0 32 32h256a32 32 0 0 0 32-32v-32zm-342.528-64h365.056c101.504-32.64 165.76-124.928 192.896-288H136.576c27.136 163.072 91.392 255.36 192.896 288z"></path></g></svg>
@@ -98,7 +100,7 @@
                 <button id="left-arrow" aria-label="Anterior producto"><span aria-hidden="true"><</span></button>
                 <div id="cursor">
                     <div class="card-item" data-url="/pages/productos_menu/bebida_caliente.html">
-                        <img src="/imagenes/imagenes_productos/cofee.jpg" alt="Bebidas Calientes">
+                        <img src="/imagenes/img_index/coffe_ombu.jfif" alt="Bebidas Calientes">
                         <div class="overlay">
                             <p>Bebidas Calientes</p>
                         </div>
@@ -150,7 +152,6 @@
      </section>
 
     <!-- Sección Sobre Nosotros -->
-    <section id="sobre-nosotros"></section>
     <section id="sobre-nosotros">
         <h2>Sobre Nosotros</h2>
         <div class="container">
@@ -168,7 +169,6 @@
     </section>
 
 <!-- seccion de mapa     -->
-<section id="ubicacion"></section>
 <div id="ub-c">
     <div class="m-ag">
         <div class="mapa">
@@ -185,6 +185,36 @@
     </div>
 </div>
 
+<section id="formulario-contactanos">
+    <h2>Formulario de Contacto</h2>
+
+    <form action="#" method="post" id="formulario">
+
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required><br><br>
+
+
+        <label for="apellido">Apellido:</label>
+        <input type="text" id="apellido" name="apellido" required><br><br>
+
+        <label for="telefono">Telefono</label>
+        <input type="text" id="telefono" name="telefono" required><br><br>
+
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br><br>
+
+
+        <label for="descripcion">Descripción:</label><br>
+        <textarea id="descripcion" name="descripcion" rows="4" cols="50" required></textarea><br><br>
+
+
+        <input type="submit" id="btn-form-enviar" value="Enviar">
+    </form>
+</section>
+
+
+
 
 
 <!-- seccion boton whatsapp -->
@@ -197,7 +227,6 @@
 
 
     <!-- Sección Contacto -->
-    <section id="contactos"></section>
     <footer>
         
         <div class="footer-image">
@@ -218,34 +247,7 @@
                     </a>
                 </div>
         </section>
-        <section id="formulario-contactanos">
-            <h2>Formulario de Contacto</h2>
-        
-            <form action="#" method="post" id="formulario">
-
-                <label for="nombre">Nombre:</label>
-                <input type="text" id="nombre" name="nombre" required><br><br>
-        
-
-                <label for="apellido">Apellido:</label>
-                <input type="text" id="apellido" name="apellido" required><br><br>
-
-                <label for="telefono">Telefono</label>
-                <input type="text" id="telefono" name="telefono" required><br><br>
-        
-
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required><br><br>
-        
-
-                <label for="descripcion">Descripción:</label><br>
-                <textarea id="descripcion" name="descripcion" rows="4" cols="50" required></textarea><br><br>
-        
-
-                <input type="submit" id="btn-form-enviar" value="Enviar">
-            </form>
-        </section>
-
+    
     </footer>
     <script src="/js/cuerpo.js"></script>
     <script src="/js/menu_cliente.js"></script>

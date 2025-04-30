@@ -23,17 +23,6 @@ mesas.forEach(mesa => {
            cargarPedido(mesaId); // Actualizar la vista del pedido para la mesa actual
         }
 
-<<<<<<< HEAD:inicio/static/js/mesas.js
-// Seleccionar una mesa
-
-document.querySelectorAll('.mesa').forEach(mesa => {
-    mesa.addEventListener('click', () => {
-        mesaSeleccionada = mesa.getAttribute('data-mesa');
-        document.getElementById('mesa-seleccionada').textContent = mesaSeleccionada;
-        document.querySelector('.pedido-section').style.display = 'block';
-        actualizarPedido();
-=======
->>>>>>> daniel:js/mesas.js
     });
     //        window.location.href = `/pages/menu_mesero/bebidas_frias.html?mesa=${mesaId}`; guardar esta linea por si algo//
 });

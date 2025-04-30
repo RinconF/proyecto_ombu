@@ -1,11 +1,12 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ombú - Gastrobar</title>
-    <link rel="stylesheet" href="/css/cuerpo.css">
-    <link rel="stylesheet" href="/css/css_barra_nav_index.css">
+    <link rel="stylesheet" href="{% static '/css/index.css' %}">
+    
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 
@@ -13,7 +14,7 @@
     <header class="navbar-hd" id="navbar">
         <div class="header-nav-bar">
             <section class="section">
-                <a href="#ombu">
+                <a href="{% url 'index' %}">
                     <button class="button" data-text="Awesome" data-title="#ombu">
                         <span class="actual-text">&nbsp;ombú&nbsp;</span>
                         <span aria-hidden="true" class="hover-text">&nbsp;OMBÚ&nbsp;</span>
@@ -30,7 +31,7 @@
             </button>
     
             <div class="menu" id="mainMenu">
-                <a href="#ombu" class="link">
+                <a href="{% url 'index' %}" class="link">
                     <span class="link-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" fill="currentColor" viewBox="0 0 256 256">
                             <rect width="256" height="256" fill="none"></rect>
@@ -40,12 +41,10 @@
                     <span class="link-title">OMBÚ</span>
                 </a>
     
-                <a href="#produc
-                4
-                {ñlkjhgfdstos" class="link">
+                <a href="{% url 'bebida_caliente' %}" class="link">
                     <span class="link-icon">
                         <svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256px" height="256px" fill="#000000">
-                            <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill="#000000" d="M128 352.576V352a288 288 0 0 1 491.072-204.224 192 192 0 0 1 274.24 204.48 64 64 0 0 1 57.216 74.24C921.6 600.512 850.048 710.656 736 756.992V800a96 96 0 0 1-96 96H384a96 96 0 0 1-96-96v-43.008c-114.048-46.336-185.6-156.48-214.528-330.496A64 64 0 0 1 128 352.64zm64-.576h64a160 160 0 0 1 320 0h64a224 224 0 0 0-448 0zm128 0h192a96 96 0 0 0-192 0zm439.424 0h68.544A128.256 128.256 0 0 0 704 192c-15.36 0-29.952 2.688-43.52 7.616 11.328 18.176 20.672 37.76 27.84 58.304A64.128 64.128 0 0 1 759.424 352zM672 768H352v32a32 32 0 0 0 32 32h256a32 32 0 0 0 32-32v-32zm-342.528-64h365.056c101.504-32.64 165.76-124.928 192.896-288H136.576c27.136 163.072 91.392 255.36 192.896 288z"></path></g></svg>
+                            <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill="white" d="M128 352.576V352a288 288 0 0 1 491.072-204.224 192 192 0 0 1 274.24 204.48 64 64 0 0 1 57.216 74.24C921.6 600.512 850.048 710.656 736 756.992V800a96 96 0 0 1-96 96H384a96 96 0 0 1-96-96v-43.008c-114.048-46.336-185.6-156.48-214.528-330.496A64 64 0 0 1 128 352.64zm64-.576h64a160 160 0 0 1 320 0h64a224 224 0 0 0-448 0zm128 0h192a96 96 0 0 0-192 0zm439.424 0h68.544A128.256 128.256 0 0 0 704 192c-15.36 0-29.952 2.688-43.52 7.616 11.328 18.176 20.672 37.76 27.84 58.304A64.128 64.128 0 0 1 759.424 352zM672 768H352v32a32 32 0 0 0 32 32h256a32 32 0 0 0 32-32v-32zm-342.528-64h365.056c101.504-32.64 165.76-124.928 192.896-288H136.576c27.136 163.072 91.392 255.36 192.896 288z"></path></g></svg>
                         </svg>
                     </span>
                     <span class="link-title">PRODUCTOS</span>
@@ -54,7 +53,7 @@
                 <a href="#sobre-nosotros" class="link">
                     <span class="link-icon">
                         <svg fill="#000000" version="1.1" xmlns="http://www.w3.org/2000/svg" width="256px" height="256px" viewBox="0 0 212 260">
-                            <svg viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>about</title> <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <g id="about-white" fill="#000000" transform="translate(42.666667, 42.666667)"> <path d="M213.333333,3.55271368e-14 C95.51296,3.55271368e-14 3.55271368e-14,95.51168 3.55271368e-14,213.333333 C3.55271368e-14,331.153707 95.51296,426.666667 213.333333,426.666667 C331.154987,426.666667 426.666667,331.153707 426.666667,213.333333 C426.666667,95.51168 331.154987,3.55271368e-14 213.333333,3.55271368e-14 Z M213.333333,384 C119.227947,384 42.6666667,307.43872 42.6666667,213.333333 C42.6666667,119.227947 119.227947,42.6666667 213.333333,42.6666667 C307.44,42.6666667 384,119.227947 384,213.333333 C384,307.43872 307.44,384 213.333333,384 Z M240.04672,128 C240.04672,143.46752 228.785067,154.666667 213.55008,154.666667 C197.698773,154.666667 186.713387,143.46752 186.713387,127.704107 C186.713387,112.5536 197.99616,101.333333 213.55008,101.333333 C228.785067,101.333333 240.04672,112.5536 240.04672,128 Z M192.04672,192 L234.713387,192 L234.713387,320 L192.04672,320 L192.04672,192 Z" id="Shape"> </path> </g> </g> </g></svg>
+                            <svg viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="white"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>about</title> <g id="Page-1" stroke="none" stroke-width="1" fill="white" fill-rule="evenodd"> <g id="about-white" fill="white" transform="translate(42.666667, 42.666667)"> <path d="M213.333333,3.55271368e-14 C95.51296,3.55271368e-14 3.55271368e-14,95.51168 3.55271368e-14,213.333333 C3.55271368e-14,331.153707 95.51296,426.666667 213.333333,426.666667 C331.154987,426.666667 426.666667,331.153707 426.666667,213.333333 C426.666667,95.51168 331.154987,3.55271368e-14 213.333333,3.55271368e-14 Z M213.333333,384 C119.227947,384 42.6666667,307.43872 42.6666667,213.333333 C42.6666667,119.227947 119.227947,42.6666667 213.333333,42.6666667 C307.44,42.6666667 384,119.227947 384,213.333333 C384,307.43872 307.44,384 213.333333,384 Z M240.04672,128 C240.04672,143.46752 228.785067,154.666667 213.55008,154.666667 C197.698773,154.666667 186.713387,143.46752 186.713387,127.704107 C186.713387,112.5536 197.99616,101.333333 213.55008,101.333333 C228.785067,101.333333 240.04672,112.5536 240.04672,128 Z M192.04672,192 L234.713387,192 L234.713387,320 L192.04672,320 L192.04672,192 Z" id="Shape"> </path> </g> </g> </g></svg>
                         </svg>
                     </span>
                     <span class="link-title">SOBRE NOSOTROS</span>
@@ -99,38 +98,38 @@
             <div id="cursor-container">
                 <button id="left-arrow" aria-label="Anterior producto"><span aria-hidden="true"><</span></button>
                 <div id="cursor">
-                    <div class="card-item" data-url="/pages/productos_menu/bebida_caliente.html">
-                        <img src="/imagenes/img_index/coffe_ombu.jfif" alt="Bebidas Calientes">
+                    <div class="card-item" data-url="{% url 'bebida_caliente' %}">
+                        <img src="{% static 'img/img_index/coffe_ombu.jfif' %}" alt="Bebidas Calientes">
                         <div class="overlay">
                             <p>Bebidas Calientes</p>
                         </div>
                     </div>
-                    <div class="card-item" data-url="pages\productos_menu\Bebida_fria.html">
-                        <img src="/imagenes/imagenes_productos/bebidas_frias.png" alt="Bebidas Frías">
+                    <div class="card-item" data-url="{% url 'Bebida_fria' %}">
+                        <img src="{% static 'img/imagenes_productos/bebidas_frias.png' %}" alt="Bebidas Frías">
                         <div class="overlay">
                             <p>Bebidas Frías</p>
                         </div>
                     </div>
-                    <div class="card-item" data-url="pages\productos_menu\Cigarrillo.html">
-                        <img src="/imagenes/imagenes_productos/garros.jpg" alt="Cigarros">
+                    <div class="card-item" data-url="{% url 'cigarrillo' %}">
+                        <img src="{% static 'img/imagenes_productos/garros.jpg' %}" alt="Cigarros">
                         <div class="overlay">
                             <p>Cigarros</p>
                         </div>
                     </div>
-                    <div class="card-item" data-url="pages\productos_menu\Cerveza.html">
-                        <img src="/imagenes/imagenes_productos/cerveza.jpg" alt="Cerveza">
+                    <div class="card-item" data-url="{% url 'cerveza' %}">
+                        <img src="{% static 'img/imagenes_productos/cerveza.jpg' %}" alt="Cerveza">
                         <div class="overlay">
                             <p>Cerveza</p>
                         </div>
                     </div>
-                    <div class="card-item" data-url="pages\productos_menu\Coctel.html">
-                        <img src="/imagenes/imagenes_productos/cocteles.jpg" alt="Cocteles">
+                    <div class="card-item" data-url="{% url 'coctel' %}">
+                        <img src="{% static 'img/imagenes_productos/cocteles.jpg' %}" alt="Cocteles">
                         <div class="overlay">
                             <p>Cocteles</p>
                         </div>
                     </div>
-                    <div class="card-item" data-url="pages\productos_menu\Picar.html">
-                        <img src="/imagenes/imagenes_productos/papas.webp" alt="Para Picar">
+                    <div class="card-item" data-url="{% url 'picar' %}">
+                        <img src="{% static 'img/imagenes_productos/papas.webp' %}" alt="Para Picar">
                         <div class="overlay">
                             <p>Para Picar</p>
                         </div>
@@ -220,7 +219,7 @@
 <!-- seccion boton whatsapp -->
     <div class="boton-whatsapp" id="btn-whps">
         <a href="#" class="icon-whatsapp">
-            <img src="/imagenes\icono_social\up.png" alt="whatsapp">
+            <img src="{% static '/img/icono_social/up.png' %}" alt="whatsapp">
         </a>
            
     </div>
@@ -230,26 +229,26 @@
     <footer>
         
         <div class="footer-image">
-            <img src="/imagenes/logos_o_otros/logo_ombu.png" alt="Imagen de pie de página">
+            <img src="{% static 'img/logos_o_otros/logo_ombu.png' %}" alt="Imagen de pie de página">
         </div>
         <section id="contacto">
             <h2>Contacto</h2>
           
                 <div class="social-icons">
                     <a href="https://www.facebook.com" target="_blank" class="icon facebook">
-                        <img src="/imagenes/icono_social/Facebook_Logo.png" alt="Facebook">
+                        <img src="{% static 'img/icono_social/Facebook_Logo.png' %}" alt="Facebook">
                     </a>
                     <a href="https://www.twitter.com" target="_blank" class="icon twitter">
-                        <img src="/imagenes/icono_social/twiter_log.png" alt="Twitter">
+                        <img src="{% static 'img/icono_social/twiter_log.png' %}" alt="Twitter">
                     </a>
                     <a href="https://www.instagram.com" target="_blank" class="icon instagram">
-                        <img src="/imagenes/icono_social/instagram_log.png" alt="Instagram">
+                        <img src="{% static 'img/icono_social/instagram_log.png' %}" alt="Instagram">
                     </a>
                 </div>
         </section>
     
     </footer>
-    <script src="/js/cuerpo.js"></script>
-    <script src="/js/menu_cliente.js"></script>
+    <script src="{% static 'js/cuerpo.js' %}"></script>
+    <script src="{% static 'js/menu_cliente.js' %}"></script>
 </body>
 </html>

@@ -1,12 +1,11 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title> OMBÚ | Bebidas Calientes 🍹 </title>
-    <link rel="stylesheet" href="{% static "css/Productos_Styles.css" %}" type="text/css" />
+    <link rel="stylesheet" href="{% static '/css/Productos_Styles.css' %}" type="text/css" />
   </head>
   <body>
     <header></header>
@@ -23,10 +22,10 @@
 
 
       <div>
-         
+        
           <section class="section">
             <a href="{% url 'index' %}">
-            <button class="button" data-text="Awesome" data-title="/pages/principal/index" >
+            <button class="button" data-text="Awesome" data-title="{% url 'index' %}" >
               <span class="actual-text">&nbsp;ombú&nbsp;</span>
               <span aria-hidden="true" class="hover-text">&nbsp;OMBÚ&nbsp;</span>
             </button></a>
@@ -119,21 +118,21 @@
 
         <div class="cards-container" >
 
-
-          <div class="card" data-title="SODA ITALIANA" data-image="https://png.pngtree.com/png-vector/20240416/ourmid/pngtree-fruit-juice-splash-with-flying-fruits-png-image_12290367.png"
-          data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]'>
+<!-- CAPUCHINO -->
+          <div class="card" data-title="CAPUCHINO" data-image="{% static 'img\imagenes_productos\capuchino.png' %}"
+          data-options='["Capuchino macadamia", "Capuchino vainilla", "Capuchino chia","Capuchino caramelo", "Capuchino tradicional"]'>
             <div class="img-container">
               <img
-                src="{{ 'https://png.pngtree.com/png-vector/20240416/ourmid/pngtree-fruit-juice-splash-with-flying-fruits-png-image_12290367.png' }}"
-                alt="{{Sodas.italianas}}"
+                src="{% static 'img\imagenes_productos\capuchino.png' %}"
+                alt="CAPUCHINO"
               />
             </div>
             
             <div class="main-card">
-              <span>SODA ITALIANA</span>
+              <span>CAPUCHINO</span>
               <p class="truncated-text">
-                Refrescantes bebidas a base de soda y combinada con lo natural de la fruta. Puedes elegir entre
-                frutos rojos,kiwi,maracuyá,mora y fresa.
+                Bebida  abase de cafe expreso y leche montada con vapor
+                para una gran cremosidad.
               </p>
             </div>
 
@@ -143,20 +142,20 @@
             </div>
           </div>
 
-
-          <div class="card"  data-title="JUGO NATURAL EN AGUA " data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
-          data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]' >
+<!-- CAFE MEXICANO -->
+          <div class="card"  data-title="CAFE MEXICANO " data-image="{% static 'img\imagenes_productos\cafe_mexicano.png' %}">
             <div class="img-container">
               <img
-                src="{{ 'https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png'}}"
-                alt="Lulada saha"
+                src="{% static 'img\imagenes_productos\cafe_mexicano.png' %}"
+                alt="CAFE MEXICANO"
               />
             </div>
 
             <div class="main-card">
-              <span>JUGO NATURAL EN AGUA</span>
+              <span>CAFE MEXICANO</span>
               <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
+                café con tequila de la casa y crema, 
+                una opción robusta con un toque dulce.
               </p>
             </div>
 
@@ -165,21 +164,20 @@
             </div>
           </div>
 
-<!-- ......................................................................................................................................... -->
-
-          <div class="card" data-title="JUGO NATURAL EN AGUA " data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
+<!-- CAFE IRLANDES -->
+          <div class="card" data-title="CAFE IRLANDES" data-image="{% static 'img\imagenes_productos\cafe_irlandes.png' %}"
           data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]'>
             <div class="img-container">
               <img
-                src="{{ 'https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png' }}"
-                alt="Lulada saha"
+                src="{% static 'img\imagenes_productos\cafe_irlandes.png' %}"
+                alt="CAFE IRLANDES"
               />
             </div>
 
             <div class="main-card">
-              <span>CAFES HELADOS CON TWIST</span>
+              <span>CAFE IRLANDÉS</span>
               <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
+                El Café Irlandés, también conocido como Irish Coffee, es una bebida caliente que combina café, whisky irlandés, azúcar y crema batida. Este cóctel se ha vuelto muy popular y se sirve en muchos lugares, especialmente en aquellos que tienen una influencia irlandesa. Aquí hay algunos cafés que comúnmente sirven Café Irlandés:
               </p>
             </div>
 
@@ -188,22 +186,20 @@
             </div>
           </div>
 
-
-
-
-          <div class="card" data-title="JUGO NATURAL EN AGUA " data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
+<!-- AMERICANO -->
+          <div class="card" data-title="AMERICANO" data-image="{% static 'img\imagenes_productos\cafe_americano.png' %}"
           data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]'>
             <div class="img-container">
               <img
-                src="{{ 'https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png' }}"
-                alt="Lulada saha"
+                src="{% static 'img\imagenes_productos\cafe_americano.png' %}"
+                alt="AMERICANO"
               />
             </div>
 
             <div class="main-card">
-              <span>GRANIZADO DE CAFE</span>
+              <span>AMERICANO</span>
               <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
+                El café americano es la bebida caliente ideal para las personas que quieren tomar un delicioso espresso, pero que no toleran el sabor tan intenso del espresso. Porque el americano no es otra cosa que un espresso con agua caliente, o más exactamente: un café que consiste en partes exactamente iguales de espresso y agua.
               </p>
             </div>
 
@@ -212,21 +208,20 @@
             </div>
           </div>
 
-
-
-          <div class="card" data-title="JUGO NATURAL EN AGUA " data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
+<!-- EUFORIA DE BROWNIE DE MOCA -->
+          <div class="card" data-title="EUFORIA DE BROWNIE CON MOCA" data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
           data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]'>
             <div class="img-container">
               <img
-                src="{{ 'https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png' }}"
-                alt="Lulada saha"
-              />
+                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
+                alt="EUFORIA DE BROWNIE DE MOCA"
+              />  
             </div>
 
             <div class="main-card">
-              <span>MILO FRIO</span>
+              <span>EUFORIA DE BROWNIE CON MOCA</span>
               <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
+                "Euforia" transmite una sensación de placer y felicidad, mientras que " Mocha Brownie" describe los elementos clave de la bebida. HELADO Y BROWNIE
               </p>
             </div>
 
@@ -235,19 +230,18 @@
             </div>
           </div>
 
-
-
-          <div class="card" data-title="JUGO NATURAL EN AGUA " data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
+<!-- CAFE EXPRESSO -->
+          <div class="card" data-title="CAFE EXPRESSO" data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
           data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]'>
             <div class="img-container">
               <img
-                src="{{ 'https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png' }}"
-                alt="Lulada saha"
+                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
+                alt="CAFE EXPRESSO"
               />
             </div>
 
             <div class="main-card">
-              <span>FRAPUCHINO</span>
+              <span>CAFE EXPRESSO</span>
               <p class="truncated-text">
                 Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
               </p>
@@ -258,21 +252,20 @@
             </div>
           </div>
 
-
-
-          <div class="card" data-title="JUGO NATURAL EN AGUA " data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
+<!-- CAFE BOMBOM -->
+          <div class="card" data-title="CAFE BOMBON" data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
           data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]'>
             <div class="img-container">
               <img
-                src="{{ 'https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png' }}"
-                alt="Lulada saha"
+                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
+                alt="CAFE BOMBOM"
               />
             </div>
 
             <div class="main-card">
-              <span>MANDARINADA</span>
+              <span>CAFE BOMBÓN</span>
               <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
+                El café bombón es una mezcla de café endulzado con leche condensada.​ Se suele servir en un vaso de cristal transparente con el objeto de mostrar las capas de café y leche. La diferente densidad de los líquidos hace que el café quede en la parte superior, mientras que la leche condensada va a la parte
               </p>
             </div>
 
@@ -281,21 +274,20 @@
             </div>
           </div>
 
-
-
-          <div class="card" data-title="JUGO NATURAL EN AGUA " data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
+<!-- LATTE -->
+          <div class="card" data-title="LATTE" data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
           data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]'>
             <div class="img-container">
               <img
-                src="{{ 'https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png' }}"
-                alt="Lulada saha"
+                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
+                alt="LATTE"
               />
             </div>
 
             <div class="main-card">
-              <span>BROWNIE Y HELADO</span>
+              <span>LATTE</span>
               <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
+                Un latte o café latte es un tipo de café que lleva una o dos medidas de espresso, mucha leche vaporizada y una última y fina capa de espuma de leche por encima
               </p>
             </div>
 
@@ -304,21 +296,20 @@
             </div>
           </div>
 
-
-
-          <div class="card" data-title="JUGO NATURAL EN AGUA " data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
+<!-- MOCACHINO -->
+          <div class="card" data-title="MOCACHINO" data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
           data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]'>
             <div class="img-container">
               <img
-                src="{{ 'https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png' }}"
-                alt="Lulada saha"
+                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
+                alt="MOCACHINO"
               />
             </div>
 
             <div class="main-card">
-              <span>TE HELADO</span>
+              <span>MOCACHINO</span>
               <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
+                Café espresso sobre base de salsa de chocolate y gran capa de leche caliente emulsionada.
               </p>
             </div>
 
@@ -327,19 +318,40 @@
             </div>
           </div>
 
-
-
-          <div class="card" data-title="JUGO NATURAL EN AGUA " data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
+<!-- CARAJILLO -->
+          <div class="card" data-title="CARAJILLO" data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
           data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]'>
             <div class="img-container">
               <img
-                src="{{ 'https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png' }}"
-                alt="Lulada saha"
+                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
+                alt="CARAJILLO"
               />
             </div>
 
             <div class="main-card">
-              <span>REDBULL</span>
+              <span>CARAJILLO</span>
+              <p class="truncated-text">
+                Esta combinación de café y una dosis de licor destilado
+              </p>
+            </div>
+
+            <div class="footer-card">
+              <button>ver mas</button>
+            </div>
+          </div>
+
+<!-- CANELAZO -->
+          <div class="card" data-title="CANELAZO" data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
+          data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]'>
+            <div class="img-container">
+              <img
+                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
+                alt="CANELAZO"
+              />
+            </div>
+
+            <div class="main-card">
+              <span>CANELAZO</span>
               <p class="truncated-text">
                 Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
               </p>
@@ -350,20 +362,19 @@
             </div>
           </div>
 
-
-
+<!-- TE CALIENTE -->
           <div class="card">
             <div class="img-container">
               <img
-                src="{{ 'https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png' }}"
-                alt="Lulada saha"
+                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
+                alt="TE_CALIENTE"
               />
             </div>
 
             <div class="main-card">
-              <span>NARANJADA</span>
+              <span>TE CALIENTE</span>
               <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
+                El té es ina bebida aromatica que se prepara combinada virtiendo agua caliente o hirviendo sobre hojas frescas o curadas de camelia sinensis, un arbusto de hojas perenne del este de Asia
               </p>
             </div>
 
@@ -372,42 +383,19 @@
             </div>
           </div>
 
-
-
+<!-- MILO CALIENTE -->
           <div class="card">
             <div class="img-container">
               <img
-                src="{{ 'https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png' }}"
-                alt="Lulada saha"
+                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
+                alt="MILO CALIENTE"
               />
             </div>
 
             <div class="main-card">
-              <span>MALTEADAS</span>
+              <span>MILO CALIENTE</span>
               <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <button>ver mas</button>
-            </div>
-          </div>
-
-
-
-          <div class="card">
-            <div class="img-container">
-              <img
-                src="{{ 'https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png' }}"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>JUGOS EN LECHE</span>
-              <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
+                MILO es delicioso con leche caliente, como una recarga de energia nutricional en cualquier momento del día
               </p>
             </div>
             
@@ -416,19 +404,19 @@
             </div>
           </div>
           
-          <!-- #liMONADA -->
+<!-- #VINO CALIENTE -->
           <div class="card">
               <div class="img-container">
                 <img
-                  src="{{ 'https://png.pngtree.com/png-vector/20240530/ourmid/pngtree-low-calories-beverage-natural-lemonade-drinks-png-image_12548297.png' }}"
-                  alt="Limonada natural"
+                  src="https://png.pngtree.com/png-vector/20240530/ourmid/pngtree-low-calories-beverage-natural-lemonade-drinks-png-image_12548297.png"
+                  alt="VINO CALIENTE"
                 />
               </div>
             
               <div class="main-card">
-                <span>LIMONADA</span>
+                <span>VINO CALIENTE DE LA CASA</span>
                 <p class="truncated-text">
-                  Una bebida bien fria a base de los mas ricos y frescos limones que calmara tu sed, pidela tambien granizada.
+                  El vino caliente o vino especializado es una preparacion alcohólica que se compone principalmente de vino, azucar, naranja y especias. Tiene su origen en Europa, donde tradicionalmente se toma dutrante el Adviento cristiano, corresponde con los frios
                 </p>
               </div>
             
@@ -440,20 +428,20 @@
             </div>
 
 
-
-<!-- LIMONADA HIERBA BUENA -->
-          <div class="card">
+<!-- CAPUCHINO CON LICOR -->
+          <div class="card" data-title="CAPUCHINO CON LICOR" data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
+          data-options='["Capuchino ararreto", "Crema de whisky capuchino", "Capuchino con brandy"]'>
             <div class="img-container">
               <img
-                src="{{ 'https://png.pngtree.com/png-vector/20240528/ourmid/pngtree-minty-fresh-delight-savoring-the-flavorful-experience-of-mint-slush-png-image_12511571.png' }}"
-                alt="Limonada hierbabuena"
+                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
+                alt="CAPUCHINO CON LICOR"
               />
             </div>
 
             <div class="main-card">
-              <span>LIMONADA HIERBABUENA</span>
+              <span>CAPUCHINO CON LICOR</span>
               <p class="truncated-text">
-                Una deliciosa bebida refrescante a base de limones y hierbabuena.
+                Un capuchino contien expreso, vapor y espuma de leche en partes iguales. La taza de un capuchino es mas pequeña que la taza de cafe con leche, generalmente a 150 ó 180 ml. El  tamaño de la taza es muy importante para conseguir el quilibrio perfecto entre el sabor del expreso y la cantidad exacta de leche
               </p>
             </div>
 
@@ -463,22 +451,20 @@
             </div>
           </div>
 
-<!-- LIMONADA DE COCO -->
-
-
-          <div class="card">
+<!-- AROMATICAS -->
+          <div class="card" data-title="AROMATICAS" data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
+          data-options='["Frutos rojos", "Papayuela", "Manzana","Durazno", "Hierbas"]'>
             <div class="img-container">
               <img
-                src="{{ 'https://png.pngtree.com/png-vector/20230325/ourmid/pngtree-summer-iced-coconut-water-png-image_6667753.png' }}"
-                alt="Limonada de coco"
+                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
+                alt="AROMATICAS"
               />
             </div>
 
             <div class="main-card">
-              <span>LIMONADA DE COCO</span>
+              <span>AROMATICAS</span>
               <p class="truncated-text">
-                Bebida a base de cocos frescos con la mejor seleccion de limones frescos en una refrescante bebida
-                que solo encontraras en SAHA.
+                Las aromaticas de frutas pueden ayudar a tu prganismo a evitar retener liquidos, te hidratan sin aportar muchas calorias, aumentan tus defensas.
               </p>
             </div>
 
@@ -487,26 +473,19 @@
             </div>
           </div>
 
-
-
-
-
-
-
-<!-- CEREZADA -->
+<!-- AFFOGATO -->
           <div class="card">
             <div class="img-container">
               <img
-                src="{{ 'https://png.pngtree.com/png-vector/20240426/ourmid/pngtree-glass-of-fresh-cherry-juice-isolated-on-transparent-background-png-image_12315190.png' }}"
-                alt="Limonada cerezada"
+                src="https://png.pngtree.com/png-vector/20240426/ourmid/pngtree-glass-of-fresh-cherry-juice-isolated-on-transparent-background-png-image_12315190.png"
+                alt="AFFOGATO"
               />
             </div>
 
             <div class="main-card">
-              <span>YCEREZADA</span>
+              <span>AFFOGATO</span>
               <p class="truncated-text">
-                Una bebida bien fria a base de los mas ricos y frescos limones con cerezas en almibar que calamara tu sed.
-                pidela tambien granizada.
+                Un affogato (en idioma italiano: "ahogado") es un postre italiano a base de café. Por lo general consiste en una cucharada de helado de vainilla coronada de helado de vainilla coronada o "ahogada" con un chorro de espresso caliente. Existen algunas variantes donde se agrega un chorrito de ameretto.
               </p>
             </div>
 
@@ -516,258 +495,9 @@
             </div>
           </div>
 
-
-
-
-          <div class="card">
-            <div class="img-container">
-              <img
-              src="{{ 'https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png' }}"
-              alt="Lulada saha"
-              />
-            </div>
-            
-            <div class="main-card">
-              <span>MONSTER</span>
-              <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
-              </p>
-            </div>
-            
-            <div class="footer-card">
-              <button>ver mas</button>
-            </div>
-          </div>
-          
-          
-          
-          <div class="card">
-            <div class="img-container">
-              <img
-              src="{{ 'https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png' }}"
-              alt="Lulada saha"
-              />
-            </div>
-            
-            <div class="main-card">
-              <span>SODA HATSU</span>
-              <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
-              </p>
-            </div>
-            
-            <div class="footer-card">
-              <button>ver mas</button>
-            </div>
-            
-          </div>
-          
-          
-          
-          <div class="card">
-            <div class="img-container">
-              <img
-              src="{{ 'https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png' }}"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>GINGER</span>
-              <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <button>ver mas</button>
-            </div>
-          </div>
-
-
-
-          <div class="card">
-            <div class="img-container">
-              <img
-                src="{{ 'https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png' }}"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>COPA DE HELADO</span>
-              <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <button>ver mas</button>
-            </div>
-          </div>
-
-
-
-          <div class="card">
-            <div class="img-container">
-              <img
-                src="{{ 'https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png' }}"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>GASEOSAS</span>
-              <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <button>ver mas</button>
-            </div>
-          </div>
-
-
-
-          <div class="card">
-            <div class="img-container">
-              <img
-                src="{{ 'https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png' }}"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>SODA</span>
-              <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <button>ver mas</button>
-            </div>
-          </div>
-
-
-
-          <div class="card">
-            <div class="img-container">
-              <img
-                src="{{ 'https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png' }}"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>GATORADE</span>
-              <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <button>ver mas</button>
-            </div>
-          </div>
-
-
-
-          <div class="card">
-            <div class="img-container">
-              <img
-                src="{{ 'https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png' }}"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>AGUA PEQUEÑA</span>
-              <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <button>ver mas</button>
-            </div>
-          </div>
-
-
-
-          <div class="card">
-            <div class="img-container">
-              <img
-                src="{{ 'https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png' }}"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>AGUA 600 ml</span>
-              <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <button>ver mas</button>
-            </div>
-          </div>
-
-
-
-          <div class="card">
-            <div class="img-container">
-              <img
-                src="{{ 'https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png' }}"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>POWERADE</span>
-              <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <button>ver mas</button>
-            </div>
-          </div>
-
-
-
-          <div class="card">
-            <div class="img-container">
-              <img
-                src="{{ 'https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png' }}"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>JUGO HIT</span>
-              <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <button>ver mas</button>
-            </div>
-          </div>
-
-          
-
-
-
-
-        
         </div>
-
+<!-- ------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------ -->
         <div id="modal" class="modal">
           <div class="modal-content">
               <span class="close">&times;</span>
@@ -786,12 +516,10 @@
       </section>
 
 
-     
-
+      <script src="{% static '/js/menu_cliente.js' %}"></script>
     </main>
     
     <footer></footer>
-    <script src="{% static 'js/menu_cliente.js' %}"></script>
   </body>
 </html>
 

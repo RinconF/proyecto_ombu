@@ -71,11 +71,11 @@
 <body>
     <!-- Menú superior -->
     <ul class="main-menu">
-        <li class="admin-item"><a href="admin_principal.html">Inicio</a></li>
-        <li class="admin-item"><a href="/pages/menu_mesero/bebidas_calientes.html">Productos</a></li>
-        <li class="admin-item"><a href="mesas.html">Mesas</a></li>
-        <li class="admin-item"><a href="dasboard.html">Dashboard</a></li>
-        <li class="admin-item"><a href="reserva.html">Reserva</a></li>
+        <li class="admin-item"><a href="{% url 'admin_principal' %}">Inicio</a></li>
+        <li class="admin-item"><a href="{% url 'bebidas_calientes' %}">Productos</a></li>
+        <li class="admin-item"><a href="{% url 'mesas' %}">Mesas</a></li>
+        <li class="admin-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+        <li class="admin-item"><a href="{% url 'reserva' %}">Reserva</a></li>
         <li class="admin-item"><a href="#">Usuarios</a></li>
     </ul>
 

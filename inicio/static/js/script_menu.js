@@ -376,33 +376,68 @@ document.addEventListener("DOMContentLoaded", () => {
         const mesaId = localStorage.getItem('mesaActivaId') || getUrlParameter('mesa');
 
         if (mesaId) {
-            const clavePedidoMesa = `pedido_mesa_${mesaId}`;
-            
-            // Obtener pedidos existentes para esta mesa
-            const pedidosExistentes = JSON.parse(localStorage.getItem(clavePedidoMesa)) || [];
-            
-            // Combinar con los nuevos productos
-            const pedidoActualizado = [...pedidosExistentes, ...cart];
-            
-            // Guardar el pedido combinado
-            localStorage.setItem(clavePedidoMesa, JSON.stringify(pedidoActualizado));
-            
-            alert(`Productos añadidos a la Mesa ${mesaId}. Total actual: ${cartTotalAmount.textContent}`);
-            cart = []; // vaciar el carrito
-            updateCartDisplay();
-            closeCart();
-            
-            localStorage.removeItem('cart'); // limpiar carrito temporal
-            
-            // Opcional: ofrecer navegar de vuelta a la página de mesas
-            if (confirm('¿Desea volver a la página de mesas?')) {
-                volverAMesas();
-            }
+            const pedidoData = {
+                mesa_id: mesaId,
+                productos: cart.map(item => ({
+                    title: item.title,
+                    quantity: item.quantity,
+                    price: item.price,
+                    option: item.option // Incluir la opción si es relevante
+                })),
+                total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0) // Opcional: enviar el total
+            };
+   
+            fetch('/pedido/agregar/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken') // Necesario para proteger contra ataques CSRF en Django
+                },
+                body: JSON.stringify(pedidoData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert(data.message);
+                    cart = []; // Vaciar el carrito local
+                    updateCartDisplay();
+                    closeCart();
+                    localStorage.removeItem('cart'); // Limpiar carrito temporal
+                    // Opcional: Redirigir o realizar otra acción después del éxito
+                    if (confirm('¿Desea volver a la página de mesas?')) {
+                        volverAMesas();
+                    }
+                } else {
+                    alert(`Error al guardar el pedido: ${data.message}`);
+                }
+            })
+            .catch(error => {
+                console.error('Error al enviar el pedido:', error);
+                alert('Ocurrió un error al enviar el pedido al servidor.');
+            });
         } else {
             alert('No se pudo identificar el ID de la mesa para guardar el pedido.');
         }
-
     });
+   
+    // Función para obtener el valor de la cookie CSRF
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                let cookie = cookies[i].trim();
+                // ¿Esta cookie comienza con el nombre que buscamos?
+                if (cookie.startsWith(name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+
 
     // Vaciar carrito
     emptyCartButton.addEventListener('click', function() {

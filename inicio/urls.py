@@ -14,7 +14,7 @@ urlpatterns = [
     path('picar/', views.Picar, name='picar'),
 
     # ADMIN
-    path('admin', views.admin_principal, name='admin_principal'),
+    path('admin', views.admin_principal, name='admin'),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('login/', views.login, name='login'),
     path('mesas/', views.mesas, name='mesas'),

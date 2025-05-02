@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/mesas.css">
+    <link rel="stylesheet" href="{% static '/css/mesas.css' %}">
     <title>Document</title>
 </head>
 <body>
@@ -113,7 +113,7 @@
             </tbody>
         </table>
 
-        <button id="agregar-producto-btn">Agregar Producto</button>
+        <button id="agregar-producto-btn"  data-url="{% url 'cervezas' %}"  >Agregar Producto</button>
 
         <p>Total del Pedido: $<span id="total-pedido">0.00</span></p>
         <select id="medio-pago">
@@ -130,12 +130,8 @@
     </div>
 </footer>
 
-    <script src="/js/mesas.js"></script>
+<script src="{% static '/js/mesas.js' %}"></script>
+
     
 </body>
 </html>
-
-
-
-
-

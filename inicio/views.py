@@ -45,7 +45,7 @@ def mesas (request):
 def reserva (request):
     return render(request, 'pages/Admin/reserva.html')
 
-# Igual con los demás...
+# menu mesero
 
 def bebidas_calientes (request):
     return render(request, 'pages/menu_mesero/bebidas_calientes.html')

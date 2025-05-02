@@ -34,7 +34,7 @@ def admin_principal(request):
     return render(request, 'pages/Admin/admin_principal.html')
 
 def dashboard (request):
-    return render(request, 'pages/Admin/dasboard.html')
+    return render(request, 'pages/Admin/dashboard.html')
 
 def login (request):
     return render(request, 'pages/Admin/login.html')
@@ -44,6 +44,9 @@ def mesas (request):
 
 def reserva (request):
     return render(request, 'pages/Admin/reserva.html')
+
+def usuarios (request):
+    return render(request, 'pages/Admin/usuarios.html')
 
 # Igual con los demás...
 

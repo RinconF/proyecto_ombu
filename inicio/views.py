@@ -1,6 +1,5 @@
 from django.shortcuts import render
-from django.http import JsonResponse
-import json
+
 
 
 # PRINCIPAL
@@ -66,54 +65,3 @@ def Cocteles (request):
 def Para_picar (request):
     return render(request, 'pages/menu_mesero/Para_picar.html')
 
-#Productos y mesa id para toma de pedidos
-
-def bebidas_calientes(request, mesa_id):
-    context = {'mesa_id': mesa_id}
-    return render(request, 'pages/menu_mesero/bebidas_calientes.html', context)
-
-def bebidas_frias(request, mesa_id):
-    context = {'mesa_id': mesa_id}
-    return render(request, 'pages/menu_mesero/bebidas_frias.html', context)
-
-def Cervezas(request, mesa_id):
-    context = {'mesa_id': mesa_id}
-    return render(request, 'pages/menu_mesero/Cervezas.html', context)
-
-def Cigarrillos(request, mesa_id):
-    context = {'mesa_id': mesa_id}
-    return render(request, 'pages/menu_mesero/Cigarrillos.html', context)
-
-def Cocteles(request, mesa_id):
-    context = {'mesa_id': mesa_id}
-    return render(request, 'pages/menu_mesero/Cocteles.html', context)
-
-def Para_picar(request, mesa_id):
-    context = {'mesa_id': mesa_id}
-    return render(request, 'pages/menu_mesero/Para_picar.html', context)
-
-
-# Vista para recibir los pedidos
-def agregar_pedido(request):
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-            mesa_id = data.get('mesa_id')
-            productos = data.get('productos')  # Suponemos que envías una lista de productos con cantidades
-
-            # Aquí podrías realizar la lógica para guardar el pedido en la base de datos
-            # utilizando tus modelos (por ejemplo, crear un modelo Pedido, y luego
-            # para cada producto en la lista, crear un modelo ItemPedido relacionado).
-
-            # Por ahora, vamos a simular que el pedido se recibió correctamente
-            print(f"Pedido recibido para la mesa {mesa_id}: {productos}")
-
-            # En una implementación real, aquí guardarías los datos en la base de datos
-
-            return JsonResponse({'status': 'success', 'message': 'Pedido recibido correctamente.'})
-        except json.JSONDecodeError:
-            return JsonResponse({'status': 'error', 'message': 'Error al decodificar el JSON del pedido.'}, status=400)
-        except Exception as e:
-            return JsonResponse({'status': 'error', 'message': f'Ocurrió un error: {str(e)}'}, status=500)
-    else:
-        return JsonResponse({'status': 'error', 'message': 'Método no permitido.'}, status=405)

@@ -76,7 +76,7 @@ const agregarProductoBtn = document.getElementById('agregar-producto-btn');
 if (agregarProductoBtn) {
     agregarProductoBtn.addEventListener('click', function() {
         if (mesaActivaId) {
-            window.location.href = `/productos/bebidas_calientes/${mesaActivaId}/`;
+            window.location.href = `/pages/menu_mesero/bebidas_calientes.html?mesa=${mesaActivaId}`;
         } else {
             alert("Por favor, selecciona una mesa primero.");
         }

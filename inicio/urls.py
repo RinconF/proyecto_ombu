@@ -27,12 +27,4 @@ urlpatterns = [
     path('cigarrillos/', views.Cigarrillos, name='cigarrillos'),
     path('cocteles/', views.Cocteles, name='cocteles'),
     path('Para_picar/', views.Para_picar, name='Para_picar'),
-    
-    
-    # MESAS
-    path('mesas/',views.mesas, name='mesas'),
-    
-    path('productos/bebidas_calientes/<int:mesa_id>/', views.bebidas_calientes, name='bebidas_calientes'),
-    path('productos/bebidas_frias/<int:mesa_id>/', views.bebidas_frias, name='bebidas_frias'),
-    path('pedido/agregar/', views.agregar_pedido, name='agregar_pedido'),
 ]

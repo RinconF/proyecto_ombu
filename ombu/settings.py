@@ -76,8 +76,12 @@ WSGI_APPLICATION = 'ombu.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'ombu',
+        'USER': 'ombu',
+        'PASSWORD': 'ombu123',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -127,4 +131,5 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/admin'

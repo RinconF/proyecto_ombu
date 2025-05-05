@@ -108,6 +108,10 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem('cart', JSON.stringify(cart));
     }
 
+
+
+
+    
     // Crear elemento para mostrar el precio en el modal
     const modalPrice = document.createElement('div');
     modalPrice.className = 'modal-price';

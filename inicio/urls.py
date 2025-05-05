@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     # PRINCIPAL
@@ -16,9 +17,12 @@ urlpatterns = [
     # ADMIN
     path('admin', views.admin_principal, name='admin'),
     path('dashboard/', views.dashboard, name='dashboard'),
-    path('login/', views.login, name='login'),
+    path('login/', views.login_view, name='login'),
     path('mesas/', views.mesas, name='mesas'),
     path('reserva/', views.reserva, name='reserva'),
+    path('logout/', views.logout_view, name='logout'),
+
+
 
     # MENU MESERO
     path('bebidas_calientes/', views.bebidas_calientes, name='bebidas_calientes'),

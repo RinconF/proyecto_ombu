@@ -19,6 +19,7 @@ urlpatterns = [
     path('login/', views.login, name='login'),
     path('mesas/', views.mesas, name='mesas'),
     path('reserva/', views.reserva, name='reserva'),
+    path('usuarios/', views.usuarios, name = 'usuarios'),
 
     # MENU MESERO
     path('bebidas_calientes/', views.bebidas_calientes, name='bebidas_calientes'),

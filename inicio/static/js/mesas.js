@@ -22,6 +22,7 @@ mesas.forEach(mesa => {
            pedidoSection.style.display = 'block';
            cargarPedido(mesaId); // Actualizar la vista del pedido para la mesa actual
         }
+<<<<<<< HEAD
     });
 // Seleccionar una mesa
 });
@@ -31,6 +32,9 @@ document.querySelectorAll('.mesa').forEach(mesa => {
         document.getElementById('mesa-seleccionada').textContent = mesaSeleccionada;
         document.querySelector('.pedido-section').style.display = 'block';
         actualizarPedido();
+=======
+
+>>>>>>> a325b083bb9d7f1441d74ccb9c51796b093d7065
     });
     //        window.location.href = `/pages/menu_mesero/bebidas_frias.html?mesa=${mesaId}`; guardar esta linea por si algo//
 });
@@ -73,15 +77,19 @@ document.querySelectorAll('.mesa').forEach(mesa => {
 
 
 const agregarProductoBtn = document.getElementById('agregar-producto-btn');
+
 if (agregarProductoBtn) {
+    const bebidaCalienteUrl = agregarProductoBtn.dataset.url;
+
     agregarProductoBtn.addEventListener('click', function() {
         if (mesaActivaId) {
-            window.location.href = `/pages/menu_mesero/bebidas_calientes.html?mesa=${mesaActivaId}`;
+            window.location.href = `${bebidaCalienteUrl}?mesa=${mesaActivaId}`;
         } else {
             alert("Por favor, selecciona una mesa primero.");
         }
     });
 }
+
 
 
 

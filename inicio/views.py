@@ -77,6 +77,8 @@ def mesas (request):
 def reserva (request):
     return render(request, 'pages/Admin/reserva.html')
 
+@never_cache
+@login_required
 def usuarios (request):
     return render(request, 'pages/Admin/usuarios.html')
 

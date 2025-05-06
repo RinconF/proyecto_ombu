@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Rol, Categoria, Usuario, Producto, Reserva, Factura
+from .models import Pedidos, Inventario, Usuario, Producto, Reserva
 
 # Clase para mejorar la vista del modelo Usuario en el admin
 class UsuarioAdmin(admin.ModelAdmin):
@@ -8,9 +8,9 @@ class UsuarioAdmin(admin.ModelAdmin):
     list_filter = ('rol',)
 
 # Registros
-admin.site.register(Rol)
-admin.site.register(Categoria)
+admin.site.register(Pedidos)
+admin.site.register(Inventario)
 admin.site.register(Usuario, UsuarioAdmin)  # Con la clase personalizada
 admin.site.register(Producto)
 admin.site.register(Reserva)
-admin.site.register(Factura)
+

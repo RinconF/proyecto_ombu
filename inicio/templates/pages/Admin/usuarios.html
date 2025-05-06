@@ -10,7 +10,7 @@
 <body>
     <!-- Menú superior -->
     <ul class="main-menu">
-        <li class="admin-item"><a href="{% url 'admin_principal' %}">Inicio</a></li>
+        <li class="admin-item"><a href="{% url 'admin' %}">Inicio</a></li>
         <li class="admin-item"><a href="{% url 'bebidas_calientes' %}">Productos</a></li>
         <li class="admin-item"><a href="{% url 'mesas' %}">Mesas</a></li>
         <li class="admin-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
@@ -77,7 +77,7 @@
                     <td>Mesero</td>
                     <td><span class="estado-inactivo">Inactivo</span></td>
                     <td class="action-buttons">
-                        <button class="btn btn-primary btn-sm" onclick="openEditModal(3, 'Carlos', 'Rodríguez', 'crodriguez', 'carlos.rodriguez@ejemplo.com', 'Cocinero')">Editar</button>
+                        <button class="btn btn-primary btn-sm" onclick="openEditModal(3, 'Carlos', 'Rodríguez', 'crodriguez', 'carlos.rodriguez@ejemplo.com', 'Mesero')">Editar</button>
                         <button class="btn btn-warning btn-sm" onclick="cambiarEstado(3)">Habilitar</button>
                     </td>
                 </tr>

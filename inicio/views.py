@@ -6,6 +6,11 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.views.decorators.cache import never_cache
+from .decorators import group_required
+
+
+
+
 
 
 
@@ -60,7 +65,7 @@ def admin_principal(request):
     return render(request, 'pages/Admin/admin_principal.html')
 
 @never_cache
-@login_required
+@group_required('administrador')
 def dashboard (request):
     return render(request, 'pages/Admin/dasboard.html')
 
@@ -73,7 +78,7 @@ def mesas (request):
     return render(request, 'pages/Admin/mesas.html')
 
 @never_cache
-@login_required
+@group_required('administrador')
 def reserva (request):
     return render(request, 'pages/Admin/reserva.html')
 

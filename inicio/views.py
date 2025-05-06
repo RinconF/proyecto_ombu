@@ -6,7 +6,8 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.views.decorators.cache import never_cache
-
+from .models import Reserva
+from django.core.mail import send_mail
 
 
 # PRINCIPAL
@@ -48,7 +49,7 @@ def login_view(request):
             return redirect('admin')  # Cambia esto según tu lógica
         else:
             messages.error(request, 'Usuario o contraseña incorrectos.')
-    return render(request, 'pages/Admin/usuarios.html')  # Tu template de login
+    return render(request, 'pages/Admin/reserva.html')  # Tu template de login
 
 def logout_view(request):
     logout(request)
@@ -111,3 +112,34 @@ def Cocteles (request):
 def Para_picar (request):
     return render(request, 'pages/menu_mesero/Para_picar.html')
 
+
+#EMAIL RESERVA
+
+@login_required
+def generar_reserva (request):
+    if request.method == 'POST':
+        nombre = request.POST['nombre']
+        email = request.POST['email']
+        fecha = request.POST['fecha']
+        hora = request.POST['hora']
+        cantidad = request.POST['cantidad']
+        
+        reserva.Reserva.objects.create(
+            nombreperReserva=nombre,
+            fecha=fecha, 
+            hora=hora,
+            cantidadPersonas=cantidad,
+            Usuario=request.user
+        )
+        
+        send_mail(
+            subject='Confirmación de la reserva',
+            message=f'Hola {nombre}, tu reserva fue realizada para el {fecha} a las {hora}.',
+            from_email='correo@gmail.com',  # Remplaza con tu email configurado en settings.py
+            recipient_list=[email],
+            fail_silently=False,
+        
+        )
+    
+        return JsonResponse({'Success': True})
+    return render(request,'reserva.html')

@@ -49,7 +49,7 @@ def login_view(request):
             return redirect('admin')  # Cambia esto según tu lógica
         else:
             messages.error(request, 'Usuario o contraseña incorrectos.')
-    return render(request, 'pages/Admin/reserva.html')  # Tu template de login
+    return render(request, 'pages/Admin/login.html')  # Tu template de login
 
 def logout_view(request):
     logout(request)

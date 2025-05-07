@@ -6,17 +6,12 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.views.decorators.cache import never_cache
-<<<<<<< HEAD
-from .models import Reserva
-from django.core.mail import send_mail
-=======
 from .decorators import group_required
 
 
 
 
 
->>>>>>> ee9a663acf74db5e6e4ac7b72c1de1e2ac7921c6
 
 
 # PRINCIPAL
@@ -122,33 +117,33 @@ def Para_picar (request):
     return render(request, 'pages/menu_mesero/Para_picar.html')
 
 
-#EMAIL RESERVA
+# #EMAIL RESERVA
 
-@login_required
-def generar_reserva (request):
-    if request.method == 'POST':
-        nombre = request.POST['nombre']
-        email = request.POST['email']
-        fecha = request.POST['fecha']
-        hora = request.POST['hora']
-        cantidad = request.POST['cantidad']
+# @login_required
+# def generar_reserva (request):
+#     if request.method == 'POST':
+#         nombre = request.POST['nombre']
+#         email = request.POST['email']
+#         fecha = request.POST['fecha']
+#         hora = request.POST['hora']
+#         cantidad = request.POST['cantidad']
         
-        reserva.Reserva.objects.create(
-            nombreperReserva=nombre,
-            fecha=fecha, 
-            hora=hora,
-            cantidadPersonas=cantidad,
-            Usuario=request.user
-        )
+#         reserva.Reserva.objects.create(
+#             nombreperReserva=nombre,
+#             fecha=fecha, 
+#             hora=hora,
+#             cantidadPersonas=cantidad,
+#             Usuario=request.user
+#         )
         
-        send_mail(
-            subject='Confirmación de la reserva',
-            message=f'Hola {nombre}, tu reserva fue realizada para el {fecha} a las {hora}.',
-            from_email='correo@gmail.com',  # Remplaza con tu email configurado en settings.py
-            recipient_list=[email],
-            fail_silently=False,
+    #     send_mail(
+    #         subject='Confirmación de la reserva',
+    #         message=f'Hola {nombre}, tu reserva fue realizada para el {fecha} a las {hora}.',
+    #         from_email='correo@gmail.com',  # Remplaza con tu email configurado en settings.py
+    #         recipient_list=[email],
+    #         fail_silently=False,
         
-        )
+    #     )
     
-        return JsonResponse({'Success': True})
-    return render(request,'reserva.html')
+    #     return JsonResponse({'Success': True})
+    # return render(request,'reserva.html')

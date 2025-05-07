@@ -44,16 +44,16 @@ def Picar (request):
 
 def login_view(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
+        username = request.POST.get('username')
+        password = request.POST.get('password')
         
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            login(request, user)  # <--- Aquí pasas el usuario
-            return redirect('admin')  # Cambia esto según tu lógica
+            login(request, user)
+            return redirect('admin')  # O la vista que tú desees
         else:
             messages.error(request, 'Usuario o contraseña incorrectos.')
-    return render(request, 'pages/Admin/login.html')  # Tu template de login
+    return render(request, 'pages/Admin/login.html')
 
 def logout_view(request):
     logout(request)
@@ -65,7 +65,7 @@ def admin_principal(request):
     return render(request, 'pages/Admin/admin_principal.html')
 
 @never_cache
-@group_required('administrador')
+@group_required('ombu')
 def dashboard (request):
     return render(request, 'pages/Admin/dasboard.html')
 
@@ -78,7 +78,7 @@ def mesas (request):
     return render(request, 'pages/Admin/mesas.html')
 
 @never_cache
-@group_required('administrador')
+@group_required('ombu')
 def reserva (request):
     return render(request, 'pages/Admin/reserva.html')
 

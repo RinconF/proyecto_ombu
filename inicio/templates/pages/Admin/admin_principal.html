@@ -1,4 +1,5 @@
 {% load static %}
+{% load custom_tags %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -77,7 +78,7 @@
             <li class="admin-item"><a href="{% url 'cervezas' %}">Productos</a></li>
             <li class="admin-item"><a href="{% url 'mesas' %}">Mesas</a></li>
     
-            {% if user.groups.all.0.name == 'administrador' %}
+            {% if user|has_group:"ombu" %}
                 <li class="admin-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
                 <li class="admin-item"><a href="{% url 'reserva' %}">Reserva</a></li>
                 <li class="admin-item"><a href="#">Usuarios</a></li>

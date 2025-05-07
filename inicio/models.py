@@ -59,5 +59,8 @@ class Reserva(models.Model):
 
     def __str__(self):
         return f"Reserva {self.id} - {self.fecha} {self.hora}"
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> ee9a663acf74db5e6e4ac7b72c1de1e2ac7921c6

@@ -6,8 +6,17 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.views.decorators.cache import never_cache
+<<<<<<< HEAD
 from .models import Reserva
 from django.core.mail import send_mail
+=======
+from .decorators import group_required
+
+
+
+
+
+>>>>>>> ee9a663acf74db5e6e4ac7b72c1de1e2ac7921c6
 
 
 # PRINCIPAL
@@ -40,16 +49,16 @@ def Picar (request):
 
 def login_view(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
+        username = request.POST.get('username')
+        password = request.POST.get('password')
         
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            login(request, user)  # <--- Aquí pasas el usuario
-            return redirect('admin')  # Cambia esto según tu lógica
+            login(request, user)
+            return redirect('admin')  # O la vista que tú desees
         else:
             messages.error(request, 'Usuario o contraseña incorrectos.')
-    return render(request, 'pages/Admin/login.html')  # Tu template de login
+    return render(request, 'pages/Admin/login.html')
 
 def logout_view(request):
     logout(request)
@@ -61,7 +70,7 @@ def admin_principal(request):
     return render(request, 'pages/Admin/admin_principal.html')
 
 @never_cache
-@login_required
+@group_required('ombu')
 def dashboard (request):
     return render(request, 'pages/Admin/dashboard.html')
 
@@ -74,7 +83,7 @@ def mesas (request):
     return render(request, 'pages/Admin/mesas.html')
 
 @never_cache
-@login_required
+@group_required('ombu')
 def reserva (request):
     return render(request, 'pages/Admin/reserva.html')
 

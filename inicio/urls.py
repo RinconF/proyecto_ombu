@@ -20,6 +20,7 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),
     path('mesas/', views.mesas, name='mesas'),
     path('reserva/', views.reserva, name='reserva'),
+    path('usuarios/', views.usuarios, name = 'usuarios'),
     path('logout/', views.logout_view, name='logout'),
 
 

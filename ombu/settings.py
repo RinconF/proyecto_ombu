@@ -76,8 +76,12 @@ WSGI_APPLICATION = 'ombu.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'ombu',
+        'USER': 'ombu',
+        'PASSWORD': 'ombu123',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -127,4 +131,14 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/admin'
 
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'giuseppeesteban101@gmail.com'
+EMAIL_HOST_PASSWORD = 'nxnp jmrf zvyc ffcq'
+EMAIL_USE_TLS = True

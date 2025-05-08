@@ -1,4 +1,5 @@
 {% load static %}
+{% load custom_tags %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -71,13 +72,22 @@
 <body>
     <!-- Menú superior -->
     <ul class="main-menu">
-        <li class="admin-item"><a href="{% url 'admin_principal' %}">Inicio</a></li>
-        <li class="admin-item"><a href="{% url 'bebidas_calientes' %}">Productos</a></li>
-        <li class="admin-item"><a href="{% url 'mesas' %}">Mesas</a></li>
-        <li class="admin-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
-        <li class="admin-item"><a href="{% url 'reserva' %}">Reserva</a></li>
-        <li class="admin-item"><a href="#">Usuarios</a></li>
+        <li class="admin-item"><a href="{% url 'admin' %}">Inicio</a></li>
+        
+        {% if user.is_authenticated %}
+            <li class="admin-item"><a href="{% url 'cervezas' %}">Productos</a></li>
+            <li class="admin-item"><a href="{% url 'mesas' %}">Mesas</a></li>
+    
+            {% if user|has_group:"ombu" %}
+                <li class="admin-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                <li class="admin-item"><a href="{% url 'reserva' %}">Reserva</a></li>
+                <li class="admin-item"><a href="#">Usuarios</a></li>
+            {% endif %}
+    
+            <li class="admin-item"><a href="{% url 'logout' %}">CERRAR SESION</a></li>
+        {% endif %}
     </ul>
+    
 
     <!-- Contenido principal -->
     <div class="main-content">

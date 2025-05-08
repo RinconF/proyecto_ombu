@@ -65,15 +65,19 @@ mesas.forEach(mesa => {
 
 
 const agregarProductoBtn = document.getElementById('agregar-producto-btn');
+
 if (agregarProductoBtn) {
+    const bebidaCalienteUrl = agregarProductoBtn.dataset.url;
+
     agregarProductoBtn.addEventListener('click', function() {
         if (mesaActivaId) {
-            window.location.href = `/static/templates/pages/menu_mesero/bebidas_calientes.html?mesa=${mesaActivaId}`;
+            window.location.href = `${bebidaCalienteUrl}?mesa=${mesaActivaId}`;
         } else {
             alert("Por favor, selecciona una mesa primero.");
         }
     });
 }
+
 
 
 

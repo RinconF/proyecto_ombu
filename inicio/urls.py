@@ -31,4 +31,33 @@ urlpatterns = [
     path('cigarrillos/', views.Cigarrillos, name='cigarrillos'),
     path('cocteles/', views.Cocteles, name='cocteles'),
     path('Para_picar/', views.Para_picar, name='Para_picar'),
+
+    # MODELO DE RECUPERAR CONTRASEÑA
+    path('password_reset/',
+         auth_views.PasswordResetView.as_view(
+             template_name='registration/password_reset_form.html'
+         ),
+         name='password_reset'),
+
+    # 2. Mensaje de "correo enviado"
+    path('password_reset/done/',
+         auth_views.PasswordResetDoneView.as_view(
+             template_name='registration/password_reset_done.html'
+         ),
+         name='password_reset_done'),
+
+    # 3. URL con token para cambiar contraseña
+    path('reset/<uidb64>/<token>/',
+         auth_views.PasswordResetConfirmView.as_view(
+             template_name='registration/password_reset_confirm.html'
+         ),
+         name='password_reset_confirm'),
+
+    # 4. Confirmación de cambio exitoso
+    path('reset/done/',
+         auth_views.PasswordResetCompleteView.as_view(
+             template_name='registration/password_reset_complete.html'
+         ),
+         name='password_reset_complete'),
 ]
+

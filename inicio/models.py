@@ -1,21 +1,80 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser, BaseUserManager
 
-class Usuario(models.Model):
-    ROLES = {
-        ('ADM', 'Administrador'),
-        ('MES', 'Mesero')
-    }
+
+class usuario_manager(BaseUserManager):
+    def create_user(self, email, username, password=None, **extra_fields):
+        if not email:
+            raise ValueError('El email es obligatorio')
+        if not username:
+            raise ValueError('El nombre de usuario es obligatorio')
     
-    nombre = models.CharField(max_length=45)
-    apellido = models.CharField(max_length=45)
-    correo = models.EmailField(max_length=100, unique=True)
-    contrasena = models.CharField(max_length=100)
-    celular = models.CharField(max_length=15, blank=True, null=True)
-    direccion = models.CharField(max_length=100, blank=True, null=True)
-    rol = models.CharField( max_length=3, choices=ROLES, default='ADM')
+        email = self.normalize_email(email)
+        user = self.model(email=email, username=username, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def crear_user(self, email, username, password=None, **extra_fields):
+        """Alias para mantener compatibilidad con código existente"""
+        return self.create_user(email, username, password, **extra_fields)
+
+    def create_superuser(self, email, username, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_active', True)
+        extra_fields.setdefault('rol', 'Administrador')
+    
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser debe tener is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser debe tener is_superuser=True.')
+        
+        return self.create_user(email, username, password, **extra_fields)
+
+    def crear_superuser(self, email, username, password=None, **extra_fields):
+        """Alias para mantener compatibilidad con código existente"""
+        return self.create_superuser(email, username, password, **extra_fields)
+
+
+class Usuario(AbstractUser):
+    ROLES = (
+        ('Administrador', 'Administrador'),
+        ('Mesero', 'Mesero'),
+    )
+  
+    email = models.EmailField(unique=True, default='sin_email@ejemplo.com')
+    username = models.CharField(max_length=150, unique=True)
+    first_name = models.CharField(max_length=150)
+    last_name = models.CharField(max_length=150)
+    rol = models.CharField(max_length=20, choices=ROLES, default='Mesero')
+    is_active = models.BooleanField(default=True)
+    date_joined = models.DateTimeField(auto_now_add=True)
+  
+    objects = usuario_manager()
+  
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email', 'first_name', 'last_name']
+    
+    groups = models.ManyToManyField(
+        'auth.Group',
+        verbose_name='grupos',
+        blank=True,
+        help_text='Los grupos a los que pertenece este usuario.',
+        related_name="usuario_set",
+        related_query_name="usuario",
+    )
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        verbose_name='permisos de usuario',
+        blank=True,
+        help_text='Permisos específicos para este usuario.',
+        related_name="usuario_set",
+        related_query_name="usuario",
+    )
 
     def __str__(self):
-        return f"{self.nombre} {self.apellido}"
+        return f"{self.first_name} {self.last_name} ({self.username})"
 
 
 class Pedidos(models.Model):
@@ -52,6 +111,7 @@ class Inventario(models.Model):
 
 
 class Reserva(models.Model):
+    nombreperReserva = models.CharField(max_length=45, default="sin nombre")
     fecha = models.DateField()
     hora = models.TimeField()
     cantidadPersonas = models.IntegerField()
@@ -59,5 +119,36 @@ class Reserva(models.Model):
 
     def __str__(self):
         return f"Reserva {self.id} - {self.fecha} {self.hora}"
+
+
+
+    
+
+
+
+# class CustomUser(AbstractUser):
+#     ROL_CHOICES = (
+#         ('Administrador', 'Administrador'),
+#         ('Mesero', 'Mesero'),
+#     )
+    
+#     email = models.EmailField(unique=True)
+#     username = models.CharField(max_length=150, unique=True)
+#     first_name = models.CharField(max_length=150)
+#     last_name = models.CharField(max_length=150)
+#     rol = models.CharField(max_length=20, choices=ROL_CHOICES, default='Mesero')
+#     is_active = models.BooleanField(default=True)
+#     date_joined = models.DateTimeField(auto_now_add=True)
+    
+#     objects = UserManager()
+    
+#     USERNAME_FIELD = 'username'
+#     REQUIRED_FIELDS = ['email', 'first_name', 'last_name']
+    
+#     def __str__(self):
+#         return f"{self.first_name} {self.last_name} ({self.username})"
+    
+# ESTA CLASS CUSTOM_USER PUEDE SER LA MISMA QUE CLASS USAURIOS (LA PRIMERA CLASS) SI ALGO SE 
+# PUEDEN MODIFICAR LAS DOS PARA QUEDAR SOLO UNA
 
 

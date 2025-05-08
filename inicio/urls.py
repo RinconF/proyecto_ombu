@@ -23,6 +23,13 @@ urlpatterns = [
     path('usuarios/', views.usuarios, name = 'usuarios'),
     path('logout/', views.logout_view, name='logout'),
 
+    # API de usuarios
+    path('crear-usuario/', views.crear_usuario, name='crear_usuario'),
+    path('actualizar-usuario/', views.actualizar_usuario, name='actualizar_usuario'),
+    path('actualizar-estado-usuario/<int:user_id>/', views.actualizar_estado_usuario, name='actualizar_estado_usuario'),
+    path('eliminar-usuario/<int:user_id>/', views.eliminar_usuario, name='eliminar_usuario'),
+    path('usuarios/obtener/<int:user_id>/', views.obtener_usuario, name='obtener_usuario'),  # Nueva ruta
+
 
 
     # MENU MESERO

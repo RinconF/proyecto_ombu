@@ -17,12 +17,12 @@ header .sashaL {
 
 body {
   font-family: "Work Sans", sans-serif;
-  color: #EEEEEE;
+  color: #ffffff;
   width: 100%;
   height: 100vh;
   margin: 0;
   overflow: hidden;
-  background-image: url('/static/img/logos/ombu.jpg')!important;
+  background-image: url('/static/img/logos_o_otros/ombu_fondo.jpg')!important;
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
@@ -36,7 +36,7 @@ main {
   width: 100%;
   height: 100vh;
   overflow-y: auto;
-  background-image: url('/static/img/logos/ombu.jpg')!important;
+  background-image: url('/static/img/logos_o_otros/ombu_fondo.jpg')!important;
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;

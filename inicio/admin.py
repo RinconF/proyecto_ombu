@@ -9,9 +9,15 @@ class UsuarioAdmin(admin.ModelAdmin):
 
 class CategoriaAdmin(admin.ModelAdmin):
     # Especifica los campos que se mostrarán en la lista dentro del admin
-    list_display = ('nombreCategoria')
+    list_display = ('nombreCategoria',)
     search_fields = ('nombreCategoria',)
     ordering = ('nombreCategoria',)
+    
+class ProductoAdmin(admin.ModelAdmin):
+    # Especifica los campos que se mostrarán en la lista dentro del admin
+    list_display = ('nombreProducto',)
+    search_fields = ('nombreProducto',)
+    ordering = ('nombreProducto',)
 
 # Registros
 admin.site.register(Rol)

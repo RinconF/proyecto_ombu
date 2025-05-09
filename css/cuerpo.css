@@ -1,367 +1,881 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:wght@700&display=swap');
 
-        /* Estilos generales */
-        * {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+/* ------------------------------------------------------- Reset y estilos base -----------------------------------------------------*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', sans-serif;
+}
 
-        body {
-            position: relative;
-            min-height: 100vh;
-            width: 100%;
-            background: #1A3330;
-        }
+body {
+    background: #1A3330;
+    color: white;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
 
-        /* Estilos para el header fijo */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background-color: #1A3330;
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 10px 0;
-        }
+/* Variables de colores */
+:root {
+    --primary-color: #1A3330;
+    --text-light: #ffffff;
+    --accent-color: #e74c3c;
+    --dark-bg: #000000;
+    --card-bg: rgba(254, 224, 189, 0.7);
+}
 
-        /* Contenedor del logo */
-        .logo-container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 10px;
-        }
+/* ---------------------------------------------------  Variables de colores --------------------------------------------------  */
+:root {
+    --primary-color: #1A3330;
+    --text-light: #ffffff;
+    --accent-color: #e74c3c;
+    --dark-bg: #000000;
+    --card-bg: rgba(254, 224, 189, 0.7);
+}
 
-        /* Estilos para el logo */
-        .logo {
-            max-width: 150px;
-            height: auto;
-        }
+/*  --------------------------------------------------- Estilos para el header fijo ---------------------------------------------------*/
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 0;
+    background-color: #000000;
+    
+}
 
-        /* Estilos para la barra de navegación */
-        .bar_nav {
-            list-style: none;
-            display: flex;
-            justify-content: center;
-            padding: 0;
-            margin: 0;
-            flex-wrap: wrap;
-        }
 
-        .bar_nav li {
-            margin: 0 15px;
-        }
+/* --------------------------------------------------- Contenedor del logo --------------------------------------------------- */
+/* .logo-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+} */
 
-        .bar_nav a {
-            color: white;
-            text-decoration: none;
-            font-size: 18px;
-        }
+/* --------------------------------------------------- Estilos para el logo --------------------------------------------------- */
+/* .logo {
+    max-width: 150px;
+    height: auto;
+    border-radius: 50%;
+    transition: max-width 0.3s; 
+} */
 
-        /* Estilos para títulos */
-        h1.titulo {
-            color: white;
-            font-size: 5rem;
-            margin-bottom: 20px;
-            text-align: center;
-            margin-top: 150px;
-        }
+/* --------------------------------------------------- Estilos para la barra de navegación --------------------------------------------------- */
+.bar_nav {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 0;
+}
 
-        h2.subtitulo {
-            color: #03045e;
-            font-size: 1.8rem;
-            background-color: rgba(254, 224, 189, 0.7);
-            border: 1px solid black;
-            border-radius: 20px;
-            width: 280px;
-            padding: 10px;
-            margin: 0 auto 20px;
-            text-align: center;
-        }
+.bar_nav li {
+    margin: 0 10px;
+}
 
-        /* Contenedor del carrusel */
-        #cursor-container {
-            position: relative;
-            width: 100%;
-            max-width: 960px;
-            margin: 20px auto;
-            padding: 0 10px;
-        }
+.bar_nav a {
+    color: var(--text-light);
+    text-decoration: none;
+    font-size: 18px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    display: block;
+}
 
-        #cursor {
-            display: flex;
-            flex-direction: row;
-            overflow-x: auto;
-            scroll-behavior: smooth;
-            gap: 10px;
-            padding: 10px 0;
-            width: 100%;
-            margin: 0 auto;
-        }
+.bar_nav a:hover {
+    background-color: var(--primary-color);
+    transform: translateY(-3px);
+}
 
-        /* Estilos para los elementos del carrusel */
-        .card-item {
-            position: relative;
-            flex: 0 0 180px;
-            height: 250px;
-            background-color: #f0f0f0;
-            border: 1px solid #ccc;
-            cursor: pointer;
-            transition: transform 0.3s, border 0.3s;
-        }
 
-        .card-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
 
-        .card-item:hover {
-            transform: scale(1.05); /* Efecto al pasar el mouse */
-        }
 
-        /* Estilos para el overlay que aparece al pasar el mouse */
-        .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
+/* ----------------------------------- Estilos cuando el header se reduce al hacer scroll ---------------------------------------- */
+.navbar-hd.shrink {
+    padding:10px; /* Reduce el padding */
+    background-color: #000000; /* Opcional: cambiar color de fondo */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Opcional: agregar sombra */
+}
 
-        .card-item:hover .overlay {
-            opacity: 1;
-        }
+.menu a {
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
 
-        .overlay p {
-            color: white;
-            font-size: 18px;
-            text-align: center;
-            margin: 0;
-        }
+.menu.show a {
+    opacity: 1;
+}
 
-        /* Estilos para las flechas de navegación */
-        #left-arrow, #right-arrow {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: black;
-            color: white;
-            border: 2px solid white;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            font-size: 24px;
-            cursor: pointer;
-            z-index: 10;
-        }
+.menu a:nth-child(1) {
+    transition-delay: 0.1s;
+}
 
-        #left-arrow {
-            left: 10px;
-        }
+.menu a:nth-child(2) {
+    transition-delay: 0.2s;
+}
 
-        #right-arrow {
-            right: 10px;
-        }
+.menu a:nth-child(3) {
+    transition-delay: 0.3s;
+}
 
-        /* Ocultar la barra de desplazamiento del carrusel */
-        #cursor::-webkit-scrollbar {
-            display: none;
-        }
+.menu a:nth-child(4) {
+    transition-delay: 0.4s;
+}
 
-        #cursor {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
+.menu a:nth-child(5) {
+    transition-delay: 0.5s;
+}
 
-        /* Estilos para las secciones */
-        section {
-            padding: 20px;
-            color: white;
-            text-align: center;
-        }
+.menu a:nth-child(6) {
+    transition-delay: 0.6s;
+}
 
-        /* Estilos para el footer */
-        footer {
-            width: 100%;
-            background-color: #1A3330;
-            padding: 20px 0;
-            text-align: center;
-        }
+/*  --------------------------------------------------- Estilos para títulos --------------------------------------------------- */
 
-        .empresa {
-            margin-bottom: 20px;
-        }
+h1.titulo {
+    font-family: 'Playfair Display', serif;
+    color: var(--text-light);
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    margin-top: 60px;
+    margin-bottom: 10px;
+    text-align: center;
+    padding-top: 100px;
+    animation: fadeIn 1s ease-in;
+}
 
-        .empresa h3 {
-            color: white;
-            font-size: 24px;
-        }
+h2 {
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    margin-bottom: 30px;
+    text-align: center;
+    color: var(--text-light);
+    color: var(--text-light);
+}
 
-        .empresa p {
-            color: white;
-            font-size: 16px;
-        }
+h2.subtitulo {
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    margin-bottom: 30px;
+    text-align: center;
+    color: var(--text-light);
+}
 
-        .social-icons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
 
-        .icon {
-            display: inline-block;
-            width: 50px;
-            height: 50px;
-            border-radius: 20px;
-            overflow: hidden;
-            transition: transform 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
 
-        .icon img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
 
-        /* Colores de fondo para cada ícono social */
-        .facebook { background-color: #1A3330; }
-        .twitter { background-color: #1A3330; }
-        .instagram { background-color: #1A3330; }
+/*  ------------------------------------------ Estilos para el carrusel de productos ------------------------------------------ */
+#productos {
+    padding-top: 10px;
+    background-color: var(--primary-color);
+}
 
-        /* Efecto de levantamiento al pasar el cursor */
-        .icon:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
+#cursor-container {
+    position: relative;
+    width: 100%;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 50px;
+}
 
-        /* Media Queries para Responsividad */
-        @media (max-width: 768px) {
-            h1.titulo {
-                font-size: 3rem;
-                margin-top: 120px;
-            }
+#cursor {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    gap: 20px;
+    padding: 20px 0;
+    width: 100%;
+    scrollbar-width: none;
+}
 
-            h2.subtitulo {
-                font-size: 1.5rem;
-                width: 200px;
-            }
+#cursor::-webkit-scrollbar {
+    display: none;
+}
 
-            .logo {
-                max-width: 120px;
-            }
+.card-item {
+    position: relative;
+    flex: 0 0 220px;
+    height: 300px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
 
-            .bar_nav li {
-                margin: 0 10px;
-            }
+.card-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
 
-            .bar_nav a {
-                font-size: 16px;
-            }
+.card-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
 
-            #cursor-container {
-                max-width: 100%;
-                padding: 0 5px;
-            }
+.card-item:hover img {
+    transform: scale(1.1);
+}
 
-            #cursor {
-                width: 100%;
-            }
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
 
-            .card-item {
-                flex: 0 0 150px;
-                height: 200px;
-            }
+.card-item:hover .overlay {
+    opacity: 1;
+}
 
-            .overlay p {
-                font-size: 14px;
-            }
+.overlay p {
+    color: white;
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+    margin: 0;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    width: 80%;
+}
 
-            #left-arrow, #right-arrow {
-                width: 30px;
-                height: 30px;
-                font-size: 18px;
-            }
+/* ------------------------------------------------ Estilos para las flechas de navegación ------------------------------------ */
+#left-arrow, #right-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--dark-bg);
+    color: var(--text-light);
+    border: 2px solid white;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s ease;
+}
 
-            .empresa h3 {
-                font-size: 20px;
-            }
+#left-arrow:hover, #right-arrow:hover {
+    background: var(--primary-color);
+    transform: translateY(-50%) scale(1.1);
+}
 
-            .empresa p {
-                font-size: 14px;
-            }
+#left-arrow {
+    left: 5px;
+}
 
-            .icon {
-                width: 40px;
-                height: 40px;
-            }
-        }
+#right-arrow {
+    right: 5px;
+}
+/*  -----------------------------------------Ocultar la barra de desplazamiento del carrusel ---------------------------------------- */
+#cursor::-webkit-scrollbar {
+    display: none;
+}
 
-        @media (max-width: 480px) {
-            h1.titulo {
-                font-size: 2rem;
-                margin-top: 100px;
-            }
+.content-block:hover {
+    transform: translateY(-5px);
+}
 
-            h2.subtitulo {
-                font-size: 1.2rem;
-                width: 180px;
-            }
+.content-block h3 {
+    color: var(--accent-color);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    margin-bottom: 20px;
+    font-family: 'Playfair Display', serif;
+}
 
-            .logo {
-                max-width: 100px;
-            }
+/*  ---------------------------------------------------Estilos para las secciones --------------------------------------------------- */
+section {
+    padding: 20px;
+    color: white;
+    text-align: center;
+}
 
-            .bar_nav {
-                flex-direction: column;
-                align-items: center;
-            }
+/* --------------------------------------------------- Reservas  ---------------------------------------------------*/
 
-            .bar_nav li {
-                margin: 5px 0;
-            }
+#reservas{
+    background-image: url(/imagenes/logos_o_otros/imagen-gastro-ia.jfif);
+    background-size: cover;
+    background-position: 10% center;  
+    background-repeat: no-repeat;  
+    height: 200px; /* Ajusta la altura que desees */
+    width: 100%; /* Asegura que ocupe el ancho completo */
+}
 
-            .bar_nav a {
-                font-size: 14px;
-            }
+#reservas h1{
+    color: rgb(255, 255, 255);
+}
 
-            .card-item {
-                flex: 0 0 120px;
-                height: 160px;
-            }
+.btn-reservas{
+    padding: 8px 16px; 
+    font-size: 14px; 
+    background-color: #000000; 
+    color: white; 
+    border: none; 
+    border-radius: 4px; 
+    cursor: pointer; /* El cursor se convierte en una mano al pasar por encima */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Efectos de transición */
+}
 
-            .overlay p {
-                font-size: 12px;
-            }
+.footer-content {
+    display: flex;
+    justify-content: space-between; /* Distribuye los elementos de izquierda a derecha */
+    align-items: center;
+    flex-wrap: wrap; /* Asegura que los elementos se ajusten en pantallas pequeñas */
+    padding: 0 20px;
+}
 
-            #left-arrow, #right-arrow {
-                width: 25px;
-                height: 25px;
-                font-size: 16px;
-            }
 
-            .empresa h3 {
-                font-size: 18px;
-            }
 
-            .empresa p {
-                font-size: 12px;
-            }
+/* ---------------------------------------------------seccion sobre nosotros ---------------------------------------------------*/
 
-            .icon {
-                width: 35px;
-                height: 35px;
-            }
-        }
+#sobre-nosotros {
+    background-image: url('/imagenes/img_index/ombu_fondo_gris.jfif');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 80px 20px;
+    font-size: 100%;
+}
+
+.container{
+    display: flex;
+    gap: 10px;
+}
+
+.content-block {
+    max-width: 800px;
+    margin: 0 auto 50px;
+    padding: 30px;
+    background-color: rgba(18, 84, 76, 0.3);
+
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.content-block:hover {
+    transform: translateY(-5px);
+}
+
+.content-block h3 {
+    color: var(--accent-color);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    margin-bottom: 20px;
+    font-family: 'Playfair Display', serif;
+}
+
+.content-block p {
+    margin-bottom: 15px;
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    line-height: 1.8;
+    text-align: justify;
+}
+
+
+/* ------------------------------------------------------------ mapa  ---------------------------------------------------*/
+#ub-c{
+    background-color: rgb(255, 255, 255);
+}
+
+#ub-c h1{
+    color: black;
+}
+
+#ub-c h2{
+    color: black;
+}
+
+.m-ag{
+    display: flex;
+    justify-content: center;
+    gap: 10%;
+    text-align: justify;
+}
+
+
+.mapa iframe {
+    width: 500px;
+    height: 500px;
+    margin: 20px 10px 10px 10px;
+    padding: 0;
+}   
+
+.empresa {
+    display: flex;
+    flex-direction: column; /* Hace que los elementos se apilen verticalmente */
+    justify-content: center; /* Centra los elementos verticalmente */
+    align-items: center; /* Centra los elementos horizontalmente */
+    margin-bottom: 20px;
+    text-align: center; /* Centra el texto dentro de los elementos */
+}
+.empresa h3 {
+    color: rgb(0, 0, 0);
+    font-size: 24px;
+    text-align: center;
+}
+
+.empresa p {
+    color: rgb(0, 0, 0);
+    font-size: 16px;
+}
+
+
+/*  --------------------------------------------------- whatsapp ---------------------------------------------------*/
+
+.icon-whatsapp img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    position: fixed;
+    bottom: 20px;  /* Asegura que el ícono esté cerca del borde inferior */
+    left: 20px;    /* Asegura que el ícono esté cerca del borde izquierdo */
+    z-index: 100;  /* Asegura que el ícono esté por encima de otros elementos */
+    border-radius: 50%;  /* Hace que el ícono tenga bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Agrega sombra para hacerlo más visible */
+    cursor: pointer; /* Cambia el cursor para indicar que es interactivo */
+}
+
+.icon-whatsapp {
+    display: block; /* Asegura que el enlace sea un bloque para facilitar la interacción */
+}
+
+.boton-whatsapp {
+    position: relative;
+    display: block;
+}
+
+/* --------------------------------------------------- Estilos para el footer  --------------------------------------------------- */
+footer {
+    width: 100%;
+    text-align: center;
+    display: flex; 
+    justify-content: center; /* Esto coloca el contenido a los lados */
+    gap: 10%;
+    align-items: center; /* Centra verticalmente */
+    background-image: url(/imagenes/logos_o_otros/footer-\ image-free.jpg);
+    background-position: center;  /* Centra la imagen en el fondo */
+    background-repeat: no-repeat;  /* Evita que la imagen se repita si es más pequeña que el contenedor */
+        
+
+}
+
+
+
+.footer-content {
+    display: flex;
+    justify-content:center; /* Distribuye los elementos de izquierda a derecha */
+    align-items: center;
+    flex-wrap: wrap; /* Asegura que los elementos se ajusten en pantallas pequeñas */
+    padding: 0 20px;
+    gap: 10%;
+}
+
+/* --------------------------------------------------- Estilos para el contenido de la información  ---------------------------------------------------*/
+#contacto {
+    flex-grow: 1; /* Esto hace que el contenido ocupe más espacio hacia el centro */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer-image img {
+    max-width: 180px;
+    height: auto;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+}
+
+.footer-image img:hover {
+    transform: scale(1.05);
+}
+
+#contacto h2{
+    color: rgb(255, 255, 255);
+    text-align: center;
+    
+}
+
+
+.social-icons {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+.icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #f5f5f5;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-color: black;
+}
+
+/* --------------------------------------------------- Colores de fondo para cada ícono social  ---------------------------------------------------*/
+.facebook { 
+    background-color: #ffffff; 
+
+}
+.twitter { 
+    background-color: #ffffff; 
+}
+
+
+.instagram { 
+    background-color: #ffffff; 
+
+}
+
+/* --------------------------------------------------- Efecto de levantamiento al pasar el cursor --------------------------------------------------- */
+.icon:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 16px rgba(0, 0, 0, 0.2);
+}
+
+/*  ---------------------------------------------------Estilos para la imagen en el pie de página  ---------------------------------------------------*/
+.footer-image {
+    display: flex;
+    justify-content: center; /* Alinea la imagen a la derecha */
+    align-items: center; /* Alinea la imagen verticalmente */
+    flex: 1; /* Esto permite que la imagen ocupe todo el espacio restante */
+}
+
+.footer-image img {
+    max-width: 200px; /* Ajusta el tamaño máximo de la imagen */
+    height: auto; /* Mantén la proporción de la imagen */
+    object-fit: contain; /* Asegura que la imagen se ajuste bien */
+    border-radius: 50%;
+    margin-left: 10vw;
+}
+
+
+footer h2{
+    color: white;
+}
+
+footer label{
+    color: white;
+}
+#formulario-contactanos {
+    background-color: #121212;
+    padding: 10px;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+#formulario {
+    display: flex;
+    flex-direction: column;
+    max-width: 350px;
+    margin: 10px auto 10px auto;
+    gap: 1px;
+}
+
+#formulario label {
+    font-weight: bold;
+    font-size: 12px;
+    margin-top: 1px;
+    margin-bottom: 2px;
+    text-align: left;
+}
+
+#formulario input[type="text"],
+#formulario input[type="email"],
+#formulario textarea {
+    padding: 5px;
+    margin: 0 auto;
+    border: 1px solid #444;
+    border-radius: 4px;
+    font-size: 12px;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #1e1e1e;
+    color: white;
+}
+
+#formulario textarea {
+    resize: vertical;
+}
+
+#btn-form-enviar {
+    padding: 6px 12px;
+    font-size: 12px;
+    border-radius: 6px;
+    border: none;
+    background-color: #1A3330;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: fit-content;
+    margin: 10px auto 0;
+}
+
+#btn-form-enviar:hover {
+    background-color: #0056b3;
+}
+
+
+/*  --------------------------------------------------- Animaciones --------------------------------------------------- */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+/*  ---------------------------------------------------Media Queries para Responsividad  ---------------------------------------------------*/
+@media (max-width: 768px) {
+    section {
+        padding: 60px 15px;
+    }
+    
+    .bar_nav {
+        gap: 5px;
+    }
+    
+    .bar_nav li {
+        margin: 0 5px;
+    }
+    
+    .bar_nav a {
+        font-size: 16px;
+        padding: 8px 15px;
+    }
+    
+    .card-item {
+        flex: 0 0 180px;
+        height: 250px;
+    }
+    
+    footer .container {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .footer-content, .footer-image {
+        flex: 1;
+        width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    header {
+        padding: 10px 0;
+    }
+    
+    .logo {
+        width: 100px;
+    }
+    
+    .bar_nav {
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+    }
+    
+    .bar_nav li {
+        margin: 3px 0;
+        width: 100%;
+        text-align: center;
+    }
+    
+    .bar_nav a {
+        font-size: 14px;
+        padding: 6px 12px;
+        border-radius: 5px;
+    }
+    
+    h1.titulo {
+        font-size: 2.5rem;
+        padding-top: 150px;
+    }
+    
+    h2.subtitulo {
+        font-size: 1.5rem;
+        padding: 8px 20px;
+    }
+    
+    #cursor-container {
+        padding: 0 30px;
+        margin: 20px auto;
+    }
+    
+    .card-item {
+        flex: 0 0 140px;
+        height: 200px;
+    }
+    
+    .overlay p {
+        font-size: 16px;
+    }
+    
+    #left-arrow, #right-arrow {
+        width: 30px;
+        height: 30px;
+        font-size: 18px;
+    }
+    
+    .content-block {
+        padding: 20px;
+    }
+    
+    .social-icons {
+        justify-content: center;
+    }
+
+    .icon {
+        width: 35px;
+        height: 35px;
+    }
+
+    .footer-content {
+        flex-direction: column; /* En pantallas pequeñas, organiza los elementos en columna */
+        align-items: center;
+    }
+
+    .mapa iframe {
+        width: 100%;
+        height: 300px; /* Ajusta el tamaño del mapa en pantallas pequeñas */
+    }
+
+    .footer-image img {
+        max-width: 150px; /* Ajusta el tamaño de la imagen en pantallas pequeñas */
+    }
+
+    #contacto {
+        margin-right: 0;
+    }
+}
+
+
+
+    
+/*  ---------------------------------------------------Media Queries para pantallas pequeñas (mapa) --------------------------------------------------- */
+@media screen and (max-width: 768px) {
+    #ub-c h1 {
+        font-size: 1.5rem; /* Reduce el tamaño del título en pantallas pequeñas */
+    }
+
+    .m-ag {
+        gap: 5%; /* Reduce el espacio entre los elementos */
+        flex-direction: column; /* Apila los elementos en pantallas pequeñas */
+        align-items: center;
+    }
+
+    .empresa {
+        width: 90%; /* Hace que el contenedor de la empresa ocupe el 90% del ancho en pantallas pequeñas */
+        text-align: center; /* Centra el texto de la empresa */
+    }
+
+    .empresa p {
+        font-size: 0.9rem; /* Ajusta el tamaño de la fuente en pantallas pequeñas */
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .mapa iframe {
+        height: 250px; /* Reduce el tamaño del mapa en pantallas muy pequeñas */
+    }
+
+    .empresa {
+        font-size: 0.9rem;
+    }
+
+    #ub-c h1 {
+        font-size: 1.2rem; /* Ajusta el tamaño del título en pantallas muy pequeñas */
+    }
+}
+/* --------------------------------------------------- Estilo para dispositivos móviles --------------------------------------------------- */
+@media screen and (max-width: 768px) {
+    footer {
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+    }
+
+    .footer-image img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .social-icons {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .social-icons .icon img {
+        width: 30px; /* Tamaño más pequeño para iconos en móviles */
+    }
+
+    /* Formulario de contacto: reducir tamaño de campos */
+    form {
+        width: 100%;
+        padding: 10px;
+    }
+
+    label, input, textarea {
+        width: 100%;
+        font-size: 14px;
+    }
+
+    #btn-form-enviar {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+    }
+}
+
+/*  ---------------------------------------------------Estilo para dispositivos muy pequeños (teléfonos pequeños) --------------------------------------------------- */
+@media screen and (max-width: 480px) {
+    #reservas {
+        height: 150px; /* Reduce la altura en pantallas pequeñas */
+    }
+
+    footer {
+        padding: 5px;
+    }
+
+    .social-icons {
+        gap: 10px;
+    }
+
+    .social-icons .icon img {
+        width: 25px; /* Ajusta tamaño de iconos */
+    }
+
+    #btn-form-enviar {
+        padding: 10px;
+        font-size: 14px;
+    }
+}

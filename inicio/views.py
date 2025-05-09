@@ -8,6 +8,9 @@ from django.contrib.auth import logout
 from django.views.decorators.cache import never_cache
 from .decorators import group_required
 from .models import Categoria
+#para el buscador
+from django.http import JsonResponse
+from django.db.models import Q
 
 
 
@@ -119,6 +122,22 @@ def Cocteles (request):
 @login_required
 def Para_picar (request):
     return render(request, 'pages/menu_mesero/Para_picar.html')
+
+
+#bucador 
+
+# def buscar_productos(request):
+#     query = request.GET.get('q', '').strip()
+#     resultados = []
+    
+#     if query:
+#         resultados = Producto.objects.filter(
+#             Q(nombre__icontains=query) | 
+#             Q(descripcion__icontains=query)
+#         ).values('nombre', 'descripcion', 'precio', 'imagen')
+    
+#     return JsonResponse({'resultados': list(resultados)})
+
 
 
 # #EMAIL RESERVA

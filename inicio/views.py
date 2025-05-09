@@ -7,11 +7,15 @@ from django.contrib import messages
 from django.contrib.auth import logout
 from django.views.decorators.cache import never_cache
 from .decorators import group_required
+from .models import Categoria
 
 
 
 
-
+# CATEGORIA
+def listar_categoria(request):
+    categorias = Categoria.objects.all()
+    return render(request, 'pages/categoria/listar_categoria.html', {'categorias': categorias})
 
 
 # PRINCIPAL

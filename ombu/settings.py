@@ -55,7 +55,7 @@ ROOT_URLCONF = 'ombu.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR  / 'inicio' / 'templates' / 'pages'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -133,3 +133,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/admin'
+LOGOUT_REDIRECT_URL = '/login/'
+
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'giuseppeesteban101@gmail.com'
+EMAIL_HOST_PASSWORD = 'nxnp jmrf zvyc ffcq'
+EMAIL_USE_TLS = True

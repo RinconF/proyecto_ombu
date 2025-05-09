@@ -30,4 +30,9 @@ class Migration(migrations.Migration):
                 ('usuario', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='inicio.usuario')),
             ],
         ),
+<<<<<<< HEAD
     ]
+=======
+    ]
+    
+>>>>>>> 1cd4a0b8352f467fff1157a32ba945f585828ceb

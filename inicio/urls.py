@@ -32,4 +32,12 @@ urlpatterns = [
     path('cigarrillos/', views.Cigarrillos, name='cigarrillos'),
     path('cocteles/', views.Cocteles, name='cocteles'),
     path('Para_picar/', views.Para_picar, name='Para_picar'),
+    
+    
+    # # RECUPERAR CONTRASEÑA
+    path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
+    path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
 ]
+

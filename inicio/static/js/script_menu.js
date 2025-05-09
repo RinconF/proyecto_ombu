@@ -600,3 +600,5 @@ document.addEventListener('DOMContentLoaded', function() {
     // Agrega el evento de scroll al `main` en lugar de `window`
     main.addEventListener("scroll", handleScroll);
 });
+
+

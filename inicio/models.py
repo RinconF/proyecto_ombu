@@ -104,7 +104,7 @@ class Inventario(models.Model):
     precioProducto = models.DecimalField(max_digits=10, decimal_places=2)
     Producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     def __str__(self):
-        return self.nombreCategoria
+        return self.nombreProducto
 
 
 

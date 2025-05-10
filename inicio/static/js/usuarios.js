@@ -173,8 +173,8 @@ document.addEventListener('DOMContentLoaded', function() {
             if (data.success) {
                 mostrarMensaje(data.message, 'success');
                 closeAddModal();
-                // --- INICIO DE LA ACTUALIZACIÓN DINÁMICA ---
-                const tablaUsuariosBody = document.querySelector('#tabla-usuarios tbody'); // Asegúrate de que tu tabla tenga el ID 'tabla-usuarios'
+
+                const tablaUsuariosBody = document.querySelector('#tabla-usuarios tbody'); 
                 const nuevoUsuario = data.user;
                 const nuevaFila = tablaUsuariosBody.insertRow();
 
@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 celda = nuevaFila.insertCell();
                 celda.textContent = nuevoUsuario.rol;
 
-                // Celda para las acciones (Editar y Eliminar)
+                // Celda para las acciones (Editar y Eliminar)0
                 celda = nuevaFila.insertCell();
                 const botonEditar = document.createElement('button');
                 botonEditar.textContent = 'Editar';
@@ -218,7 +218,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 botonEliminar.setAttribute('data-id', nuevoUsuario.id);
                 botonEliminar.addEventListener('click', () => eliminarUsuario(nuevoUsuario.id));
                 celda.appendChild(botonEliminar);
-                // --- FIN DE LA ACTUALIZACIÓN DINÁMICA ---
+
 
                 // Eliminar la recarga de la página
                 // setTimeout(() => {
@@ -277,13 +277,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 mostrarMensaje(data.message, 'success');
                 closeEditModal();
                 
-            // --- INICIO DE LA ACTUALIZACIÓN DINÁMICA DE LA FILA EDITADA ---
             const filaUsuario = document.querySelector(`#tabla-usuarios tbody tr[data-id="${userId}"]`); // Seleccionar la fila por su data-id
             if (filaUsuario) {
                 const usuarioActualizado = data.user;
                 const celdas = filaUsuario.querySelectorAll('td');
 
-                //celdas[0].textContent = usuarioActualizado.id;
+                celdas[0].textContent = usuarioActualizado.id;
                 celdas[1].textContent = usuarioActualizado.first_name;
                 celdas[2].textContent = usuarioActualizado.last_name;
                 celdas[3].textContent = usuarioActualizado.username;
@@ -292,7 +291,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // No actualizamos la celda de estado aquí, ya que la edición no suele cambiar el estado.
                 // La celda de acciones también se mantiene igual.
             }
-            // --- FIN DE LA ACTUALIZACIÓN DINÁMICA ---
+
 
             // Eliminar la recarga de la página
             // setTimeout(() => {

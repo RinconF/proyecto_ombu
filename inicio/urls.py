@@ -1,6 +1,8 @@
 from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
+from .views import usuarios_view    
+from django.contrib import admin
 
 urlpatterns = [
     # PRINCIPAL
@@ -15,7 +17,8 @@ urlpatterns = [
     path('picar/', views.Picar, name='picar'),
 
     # ADMIN
-    path('admin', views.admin_principal, name='admin'),
+    # path('admin', views.admin_principal, name='admin'),
+    path('admin/', admin.site.urls),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('login/', views.login_view, name='login'),
     path('mesas/', views.mesas, name='mesas'),
@@ -29,6 +32,7 @@ urlpatterns = [
     path('actualizar-estado-usuario/<int:user_id>/', views.actualizar_estado_usuario, name='actualizar_estado_usuario'),
     path('eliminar-usuario/<int:user_id>/', views.eliminar_usuario, name='eliminar_usuario'),
     path('usuarios/obtener/<int:user_id>/', views.obtener_usuario, name='obtener_usuario'),  # Nueva ruta
+    path('admin/usuarios/', usuarios_view, name='usuarios'),
 
 
 

@@ -1,0 +1,25 @@
+.custom-sidebar {
+    background-color: rgb(17, 119, 208);
+}
+
+.action-item {
+    background: #34495e;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.recent-actions-list {
+    color: white;
+    
+}
+
+.recent-actions-list li{
+    text-decoration: none;
+}
+
+/* .action-header {
+    color: white;
+} */

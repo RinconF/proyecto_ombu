@@ -8,9 +8,14 @@ from django.contrib.auth import logout
 from django.views.decorators.cache import never_cache
 from .decorators import group_required
 from .models import Categoria
+#bebidad calientes
+
+
+from .models import Producto, BebidaCaliente
+
 #para el buscador
-from django.http import JsonResponse
-from django.db.models import Q
+#from django.http import JsonResponse
+#from django.db.models import Q
 
 
 
@@ -123,8 +128,40 @@ def Cocteles (request):
 def Para_picar (request):
     return render(request, 'pages/menu_mesero/Para_picar.html')
 
+#capuchino...
+
+# En views.py
+
+
+def buscar(request):
+    query = request.GET.get('q', '')
+    
+    if query:
+        # Busca en productos generales
+        productos = Producto.objects.filter(
+            nombreProducto__icontains=query
+        )
+        
+        # Busca específicamente en bebidas
+        bebidas = BebidaCaliente.objects.filter(
+            producto__nombreProducto__icontains=query
+        )
+    else:
+        productos = Producto.objects.none()
+        bebidas = BebidaCaliente.objects.none()
+    
+    return render(request, 'buscar.html', {
+        'productos': productos,
+        'bebidas': bebidas,
+        'query': query
+    })
 
 #bucador 
+
+
+
+
+#productos 
 
 # def buscar_productos(request):
 #     query = request.GET.get('q', '').strip()

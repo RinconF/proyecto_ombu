@@ -39,3 +39,22 @@ class Reserva(models.Model):
 
     def str(self):
         return f"Reserva {self.id} - {self.fecha} {self.hora}"
+
+class BebidaCaliente(models.Model):
+    producto = models.OneToOneField(
+        Producto,
+        on_delete=models.CASCADE,
+        primary_key=True
+    )
+    TIPOS_BEBIDA = [
+        ('CAFE', 'Café'),
+        ('TE', 'Té'),
+        ('CHOCOLATE', 'Chocolate caliente'),
+        ('INFUSION', 'Infusión'),
+    ]
+    tipo = models.CharField(
+        max_length=50,
+        choices=TIPOS_BEBIDA,
+        default='CAFE'
+    )
+    # ... otros campos específicos de bebidas ...

@@ -600,3 +600,107 @@ document.addEventListener('DOMContentLoaded', function() {
     // Agrega el evento de scroll al `main` en lugar de `window`
     main.addEventListener("scroll", handleScroll);
 });
+
+
+
+/*BUSCADOR  
+###################################################################################################################
+####################!!!!!!!!!!!!!!!!!!!!!*/
+
+// script_menu.js - Buscador funcional con scroll
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Elementos del buscador
+    const searchInput = document.getElementById('product-search');
+    const searchButton = document.getElementById('search-btn');
+    const cards = Array.from(document.querySelectorAll('.card'));
+    const cardsContainer = document.querySelector('.cards-container');
+    
+    // Función para normalizar texto (insensible a mayúsculas/acentos)
+    const normalizeText = (text) => {
+        return text.toLowerCase()
+                  .normalize("NFD")
+                  .replace(/[\u0300-\u036f]/g, "");
+    };
+    
+    // Función principal de búsqueda
+    const performSearch = () => {
+        const searchTerm = normalizeText(searchInput.value.trim());
+        let hasResults = false;
+        
+        // 1. Ocultar/mostrar cards según coincidencia
+        cards.forEach(card => {
+            const title = normalizeText(card.querySelector('.main-card span').textContent);
+            const description = normalizeText(card.querySelector('.main-card p').textContent);
+            const dataTitle = card.dataset.title ? normalizeText(card.dataset.title) : '';
+            
+            const matches = title.includes(searchTerm) || 
+                          description.includes(searchTerm) || 
+                          dataTitle.includes(searchTerm);
+            
+            card.style.display = matches ? 'block' : 'none';
+            if (matches) hasResults = true;
+        });
+        
+        // 2. Scroll al primer resultado visible
+        if (searchTerm && hasResults) {
+            const firstVisible = cards.find(card => card.style.display !== 'none');
+            if (firstVisible) {
+                firstVisible.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+                
+                // Efecto visual de destacado (opcional)
+                firstVisible.classList.add('highlight');
+                setTimeout(() => firstVisible.classList.remove('highlight'), 2000);
+            }
+        }
+        
+        // 3. Feedback visual cuando no hay resultados
+        if (searchTerm && !hasResults) {
+            // Opción 1: Mostrar mensaje temporal
+            const feedback = document.createElement('div');
+            feedback.className = 'search-feedback';
+            feedback.textContent = '🔍 No encontramos productos con ese nombre';
+            document.body.appendChild(feedback);
+            
+            setTimeout(() => {
+                feedback.style.opacity = '0';
+                setTimeout(() => feedback.remove(), 500);
+            }, 3000);
+            
+            // Opción 2: También puedes usar un alert
+            // alert('No se encontraron productos con ese nombre');
+        }
+    };
+    
+    // Event Listeners mejorados
+    searchButton.addEventListener('click', (e) => {
+        e.preventDefault(); // Previene recarga si es un botón type="submit"
+        performSearch();
+    });
+    
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') performSearch();
+    });
+    
+    searchInput.addEventListener('input', () => {
+        if (!searchInput.value.trim()) {
+            cards.forEach(card => card.style.display = 'block');
+        }
+    });
+
+    // ... (aquí mantienes el resto de tu código existente)
+});
+
+
+
+
+
+
+
+
+
+
+/*BUSCADOR  */

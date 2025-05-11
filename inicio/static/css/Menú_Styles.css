@@ -33,7 +33,10 @@ main {
   height: 100vh;
   overflow-y: auto;
   background-image: url("/static/img/logos_o_otros/ombu_fondo.jpg");
-  
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center center;
 }
 
 .title {
@@ -856,72 +859,3 @@ main {
     text-align: left !important;
   }
 }
-
-/*BUSCADOR CSS*/
-body {
-  font-family: Arial, sans-serif;
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-h1 {
-  color: #4285f4;
-  text-align: center;
-}
-
-.buscador {
-  margin: 20px 0;
-  display: flex;
-}
-
-#busqueda {
-  flex: 1;
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ddd;
-  border-radius: 4px 0 0 4px;
-}
-
-button {
-  padding: 10px 15px;
-  background-color: #4285f4;
-  color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 0 4px 4px 0;
-}
-
-button:hover {
-  background-color: #357ae8;
-}
-
-.resultados {
-  margin-top: 20px;
-  background-color: #f9f9f9;
-  padding: 15px;
-  border-radius: 5px;
-}
-
-.resultado {
-  margin-bottom: 15px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #ddd;
-}
-
-.resultado:last-child {
-  border-bottom: none;
-  margin-bottom: 0;
-  padding-bottom: 0;
-}
-
-.resultado h3 {
-  margin: 0 0 5px 0;
-  color: #1a0dab;
-}
-
-.resultado p {
-  margin: 0;
-  color: #444;
-}
-

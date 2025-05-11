@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
+from .views import dashboard
 
 urlpatterns = [
     # PRINCIPAL
@@ -8,11 +9,11 @@ urlpatterns = [
 
     # PRODUCTOS MENU
     path('bebida_caliente/', views.bebida_caliente, name='bebida_caliente'),
-    path('Bebida_fria/', views.Bebida_fria, name='Bebida_fria'),
-    path('cerveza/', views.Cerveza, name='cerveza'),
-    path('cigarrillo/', views.Cigarrillo, name='cigarrillo'),
-    path('coctel/', views.Coctel, name='coctel'),
-    path('picar/', views.Picar, name='picar'),
+    path('bebida_fria/', views.bebida_fria, name='Bebida_fria'),
+    path('cerveza/', views.cerveza, name='cerveza'),
+    path('cigarrillo/', views.cigarrillo, name='cigarrillo'),
+    path('coctel/', views.coctel, name='coctel'),
+    path('picar/', views.picar, name='picar'),
 
     # ADMIN
     path('admin', views.admin_principal, name='admin'),
@@ -24,14 +25,13 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
 
 
-
     # MENU MESERO
     path('bebidas_calientes/', views.bebidas_calientes, name='bebidas_calientes'),
     path('bebidas_frias/', views.bebidas_frias, name='bebidas_frias'),
-    path('cervezas/', views.Cervezas, name='cervezas'),
-    path('cigarrillos/', views.Cigarrillos, name='cigarrillos'),
-    path('cocteles/', views.Cocteles, name='cocteles'),
-    path('Para_picar/', views.Para_picar, name='Para_picar'),
+    path('cervezas/', views.cervezas, name='cervezas'),
+    path('cigarrillos/', views.cigarrillos, name='cigarrillos'),
+    path('cocteles/', views.cocteles, name='cocteles'),
+    path('Para_picar/', views.para_picar, name='Para_picar'),
     
     
     # # RECUPERAR CONTRASEÑA
@@ -40,4 +40,3 @@ urlpatterns = [
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
 ]
-

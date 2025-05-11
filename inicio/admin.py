@@ -1,28 +1,43 @@
 from django.contrib import admin
-from .models import Rol, Categoria, Usuario, Producto, Reserva
+from .models import Rol, Categoria, Usuario, Producto, Mesa, Pedido, Reserva
 
-# Clase para mejorar la vista del modelo Usuario en el admin
-class UsuarioAdmin(admin.ModelAdmin):   
-    list_display = ('nombre', 'apellido', 'correo', 'rol')
-    search_fields = ('nombre', 'apellido', 'correo')
-    list_filter = ('rol',)
+@admin.register(Rol)
+class RolAdmin(admin.ModelAdmin):
+    list_display = ('tipoRol',)
 
+@admin.register(Categoria)
 class CategoriaAdmin(admin.ModelAdmin):
-    # Especifica los campos que se mostrarán en la lista dentro del admin
     list_display = ('nombreCategoria',)
     search_fields = ('nombreCategoria',)
-    ordering = ('nombreCategoria',)
-    
-class ProductoAdmin(admin.ModelAdmin):
-    # Especifica los campos que se mostrarán en la lista dentro del admin
-    list_display = ('nombreProducto',)
-    search_fields = ('nombreProducto',)
-    ordering = ('nombreProducto',)
+    ordering      = ('nombreCategoria',)
 
-# Registros
-admin.site.register(Rol)
-admin.site.register(Categoria)
-# admin.site.register(Inventario)
-admin.site.register(Usuario, UsuarioAdmin)  # Con la clase personalizada
-admin.site.register(Producto)
-admin.site.register(Reserva)
+@admin.register(Usuario)
+class UsuarioAdmin(admin.ModelAdmin):
+    list_display  = ('nombre', 'apellido', 'correo', 'rol')
+    search_fields = ('nombre', 'apellido', 'correo')
+    list_filter   = ('rol',)
+    ordering      = ('apellido',)
+
+@admin.register(Producto)
+class ProductoAdmin(admin.ModelAdmin):
+    list_display  = ('nombreProducto', 'precio', 'categoria')
+    search_fields = ('nombreProducto',)
+    list_filter   = ('categoria',)
+    ordering      = ('nombreProducto',)
+
+@admin.register(Mesa)
+class MesaAdmin(admin.ModelAdmin):
+    list_display = ('numero',)
+    ordering     = ('numero',)
+
+@admin.register(Pedido)
+class PedidoAdmin(admin.ModelAdmin):
+    list_display    = ('id', 'usuario', 'mesa', 'total', 'fecha')
+    list_filter     = ('fecha', 'mesa')
+    date_hierarchy  = 'fecha'
+
+@admin.register(Reserva)
+class ReservaAdmin(admin.ModelAdmin):
+    list_display    = ('id', 'usuario', 'mesa', 'fecha', 'estado')
+    list_filter     = ('estado', 'fecha')
+    date_hierarchy  = 'fecha'

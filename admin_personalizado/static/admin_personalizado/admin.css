@@ -1,6 +1,5 @@
 
 
-
 /* Barra superior personalizada */
 #header {
     background-color: #000;
@@ -78,8 +77,22 @@
 
 /*-------------------------------------------------------------------------*/
 
+#content-main {
+    border-collapse: collapse;
+    border: 2px solid #333; /* Mantiene el borde */
+    border-radius: 10px; /* Agrega bordes redondeados (ajusta el valor según el radio que desees) */
+    overflow: hidden; /* Importante para que el border-radius se aplique correctamente en las celdas */
+}
+
 #content h1{
     color: white;
+}
+
+#changelist{
+        border-collapse: collapse;
+    border: 2px solid #333; /* Mantiene el borde */
+    border-radius: 10px; /* Agrega bordes redondeados (ajusta el valor según el radio que desees) */
+    overflow: hidden; /* Importante para que el border-radius se aplique correctamente en las celdas */
 }
 
 

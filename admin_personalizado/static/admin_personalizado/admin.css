@@ -21,6 +21,10 @@
     margin: 0 auto;
     padding: 0 20px;
 }
+
+.navbar .main-nav li{
+    list-style-type: none;
+}
 /* Logo/título */
 .brand {
     font-size: 18px;
@@ -68,6 +72,14 @@
 }
 .submenu a:hover {
     background-color: #444;
+}
+
+
+
+/*-------------------------------------------------------------------------*/
+
+#content h1{
+    color: white;
 }
 
 
@@ -142,6 +154,16 @@
 
 #changelist a:hover {
     text-decoration: underline;
+}
+
+
+
+#result_list {
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid #333; /* Mantiene el borde */
+    border-radius: 10px; /* Agrega bordes redondeados (ajusta el valor según el radio que desees) */
+    overflow: hidden; /* Importante para que el border-radius se aplique correctamente en las celdas */
 }
 
 /* Corregir alineación específica para la tabla de reservas */
@@ -284,7 +306,7 @@ body {
 /*------------------------- user-tools -------------------------------------------*/
 /* Estilo para la barra superior de usuario */
 #user-tools {
-    background-color: #333;  /* Fondo oscuro */
+    background-color: #000000;  /* Fondo oscuro */
     color: rgb(175, 164, 164);  /* Texto blanco */
     padding: 8px 15px;  /* Más espacio alrededor */
     font-size: 14px;  /* Tamaño de texto */
@@ -302,6 +324,10 @@ body {
 #user-tools a:hover {
     color: #8BC34A;  /* Color al pasar el mouse */
     text-decoration: underline;  /* Subrayado al pasar el mouse */
+}
+
+#user-tools .theme-toggle{
+    filter: invert(100%);
 }
 
 /*--------------------------------------- sidebar izquierda para actividad reciente -----------------------------------*/

@@ -1,12 +1,14 @@
 from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
+#from .views import ProductFromView
 
 urlpatterns = [
     # PRINCIPAL
     path('', views.index, name='index'),
 
     # PRODUCTOS MENU
+    #path('bebida/', views.bebida, name='bebida'),
     path('bebida_caliente/', views.bebida_caliente, name='bebida_caliente'),
     path('Bebida_fria/', views.Bebida_fria, name='Bebida_fria'),
     path('cerveza/', views.Cerveza, name='cerveza'),
@@ -32,4 +34,9 @@ urlpatterns = [
     path('cigarrillos/', views.Cigarrillos, name='cigarrillos'),
     path('cocteles/', views.Cocteles, name='cocteles'),
     path('Para_picar/', views.Para_picar, name='Para_picar'),
-]
+    
+    #CATEGORIAS 
+    path('bebidas-calientes/', views.bebidas_calientes, name='bebidas_calientes'),
+    
+    
+] #+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

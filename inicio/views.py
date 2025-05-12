@@ -11,7 +11,7 @@ from .models import Categoria
 #bebidad calientes
 
 
-from .models import Producto, BebidaCaliente
+#from .models import Producto, BebidaCaliente
 
 #para el buscador
 #from django.http import JsonResponse
@@ -128,6 +128,13 @@ def Cocteles (request):
 def Para_picar (request):
     return render(request, 'pages/menu_mesero/Para_picar.html')
 
+
+
+#
+
+    
+    
+
 #capuchino...
 
 # En views.py
@@ -156,6 +163,11 @@ def buscar(request):
         'query': query
     })
 
+##BEDIDAS CALIENTES
+def bebidas_calientes(request):
+    categoria = Categoria.objects.get(nombre="Bebida Caliente")  # Ajusta según tu categoría
+    productos = Producto.objects.filter(categoria=categoria)
+    return render(request, 'bebidas_calientes.html', {'productos': productos})
 #bucador 
 
 

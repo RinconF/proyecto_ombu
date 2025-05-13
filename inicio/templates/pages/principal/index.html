@@ -6,31 +6,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ombú - Gastrobar</title>
     <link rel="stylesheet" href="{% static '/css/index.css' %}">
-    
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 
 <body>
-    <header class="navbar-hd" id="navbar">
-        <div class="header-nav-bar">
-            <section class="section">
-                <a href="{% url 'index' %}">
-                    <button class="button" data-text="Awesome" data-title="#ombu">
-                        <span class="actual-text">&nbsp;ombú&nbsp;</span>
-                        <span aria-hidden="true" class="hover-text">&nbsp;OMBÚ&nbsp;</span>
-                    </button>
-                </a>
-            </section>
-    
-            <button class="hamburger-btn" id="menuToggle">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="3" y1="12" x2="21" y2="12"></line>
-                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                    <line x1="3" y1="18" x2="21" y2="18"></line>
-                </svg>
-            </button>
-    
-            <div class="menu" id="mainMenu">
+    <main>
+      
+          <div id="loader" class="loader-wrapper">
+    <div class="loader">
+  <div class="container">
+    <div class="coffee-header">
+      <div class="coffee-header__buttons"></div>
+      <div class="coffee-header__display"></div>
+      <div class="coffee-header__details"></div>
+    </div>
+    <div class="coffee-medium">
+      <div class="coffe-medium__exit"></div>
+      <div class="coffee-medium__arm"></div>
+      <div class="coffee-medium__liquid"></div>
+      <div class="smoke one"></div>
+      <div class="smoke two"></div>
+      <div class="smoke three"></div>
+      <div class="smoke four"></div>
+      <div class="coffee-medium__cup"></div>
+    </div>
+  </div>
+</div>
+  </div>
+     
+        <div class="menu-container">
+
+      <div>
+        
+          <section class="section">
+            <a href="{% url 'index' %}">
+            <button class="button" data-text="Awesome" data-title="{% url 'index' %}" >
+              <span class="actual-text">&nbsp;ombú&nbsp;</span>
+              <span aria-hidden="true" class="hover-text">&nbsp;OMBÚ&nbsp;</span>
+            </button></a>
+
+          
+          <button class="hamburger-btn" id="menuToggle">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+
+        <div class="menu" id="mainMenu">
+
                 <a href="{% url 'index' %}" class="link">
                     <span class="link-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" fill="currentColor" viewBox="0 0 256 256">
@@ -40,7 +68,7 @@
                     </span>
                     <span class="link-title">OMBÚ</span>
                 </a>
-    
+
                 <a href="{% url 'bebida_caliente' %}" class="link">
                     <span class="link-icon">
                         <svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256px" height="256px" fill="#000000">
@@ -49,7 +77,7 @@
                     </span>
                     <span class="link-title">PRODUCTOS</span>
                 </a>
-    
+
                 <a href="#sobre-nosotros" class="link">
                     <span class="link-icon">
                         <svg fill="#000000" version="1.1" xmlns="http://www.w3.org/2000/svg" width="256px" height="256px" viewBox="0 0 212 260">
@@ -58,7 +86,7 @@
                     </span>
                     <span class="link-title">SOBRE NOSOTROS</span>
                 </a>
-    
+
                 <a href="#ubicacion" class="link">
                     <span class="link-icon">
                         <svg fill="#ffffff" width="256px" height="256px" viewBox="0 0 64.00 64.00" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff" stroke-width="0.512">
@@ -67,7 +95,7 @@
                     </span>
                     <span class="link-title">UBICACION</span>
                 </a>
-    
+
                 <a href="#contacto" class="link">
                     <span class="link-icon">
                         <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" fill="#ffffff" stroke="#ffffff">
@@ -76,19 +104,26 @@
                     </span>
                     <span class="link-title">CONTACTOS</span>
                 </a>
+        </div>
+      </div>
+      
+
+
+
+        <div class="cards-container" >
+
+    
+
+        <!-- Sección Inicio -->
+            <div class="bg-cover bg-center h-[500px] relative" style="background-image: url('/api/placeholder/1200/500');">
+        <div class="absolute inset-0 bg-black opacity-50"></div>
+        <div class="relative max-w-6xl mx-auto px-4 h-full flex items-center">
+            <div class="text-white text-center md:text-left">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4">BIENVENIDOS A OMBÜ</h1>
+                <p class="text-xl mb-6">Descubre una experiencia gastronómica única en el corazón de la ciudad</p>
             </div>
         </div>
-
-    </header>
-
-    <main>
-        <!-- Sección Inicio -->
-        <section id="ombu"></section>
-        <section id="inicio">
-            <div class="container-t">
-                <h1 class="titulo">Bienvenidos a Ombú</h1>
-            </div>
-        </section>
+    
 
     <!-- Sección Productos -->   
     <section id="productos"></section>     
@@ -96,8 +131,10 @@
         <div class="container-p">
             <h2 class="subtitulo">Carta</h2>
             <div id="cursor-container">
-                <button id="left-arrow" aria-label="Anterior producto"><span aria-hidden="true"></span></button>
-                <div id="cursor">
+                        <button id="left-arrow" aria-label="Producto anterior">
+                        <span aria-hidden="true"><i class='bx bx-chevron-left'></i></span>
+                        </button>   
+                    <div id="cursor">
                     <div class="card-item" data-url="{% url 'bebida_caliente' %}">
                         <img src="{% static 'img/img_index/coffe_ombu.jfif' %}" alt="Bebidas Calientes">
                         <div class="overlay">
@@ -135,8 +172,10 @@
                         </div>
                     </div>
                 </div>
-                <button id="right-arrow" aria-label="Siguiente producto"><span aria-hidden="true"></span></button>
-            </div>
+            <button id="right-arrow" aria-label="Siguiente producto">
+                <span aria-hidden="true"><i class='bx bx-chevron-right'></i></span>
+            </button>   
+        </div>
         </div>
     </section>
 
@@ -183,33 +222,6 @@
         </div>
     </div>
 
-<section id="formulario-contactanos">
-    <h2>Formulario de Contacto</h2>
-
-    <form action="#" method="post" id="formulario">
-
-        <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" name="nombre" required><br><br>
-
-
-        <label for="apellido">Apellido:</label>
-        <input type="text" id="apellido" name="apellido" required><br><br>
-
-        <label for="telefono">Telefono</label>
-        <input type="text" id="telefono" name="telefono" required><br><br>
-
-
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required><br><br>
-
-
-        <label for="descripcion">Descripción:</label><br>
-        <textarea id="descripcion" name="descripcion" rows="4" cols="50" required></textarea><br><br>
-
-
-        <input type="submit" id="btn-form-enviar" value="Enviar">
-    </form>
-</section>
 
 
 
@@ -223,31 +235,39 @@
            
     </div>
 
-
     <!-- Sección Contacto -->
-    <footer>
-        
-        <div class="footer-image">
+     <footer id="contacto">
+        <div class="footer-container">
+            <div class="footer-logo">
             <img src="{% static 'img/logos_o_otros/logo_ombu.png' %}" alt="Imagen de pie de página">
-        </div>
-        <section id="contacto">
-            <h2>Contacto</h2>
-          
+            </div>
+            
+            <div class="footer-contact">
+                <h2>Contacto</h2>
                 <div class="social-icons">
-                    <a href="https://www.facebook.com" target="_blank" class="icon facebook">
+                    <a href="https://www.facebook.com" target="_blank" class="social-icon facebook">
                         <img src="{% static 'img/icono_social/Facebook_Logo.png' %}" alt="Facebook">
                     </a>
-                    <a href="https://www.twitter.com" target="_blank" class="icon twitter">
+                    <a href="https://www.twitter.com" target="_blank" class="social-icon twitter">
                         <img src="{% static 'img/icono_social/twiter_log.png' %}" alt="Twitter">
                     </a>
-                    <a href="https://www.instagram.com" target="_blank" class="icon instagram">
+                    <a href="https://www.instagram.com" target="_blank" class="social-icon instagram">
                         <img src="{% static 'img/icono_social/instagram_log.png' %}" alt="Instagram">
                     </a>
+                    <a href="https://wa.me/123456789" target="_blank" class="social-icon whatsapp">
+                        <img src="{% static 'img/icono_social/whatsapp_icon.png' %}" alt="WhatsApp">
+                    </a>
                 </div>
-        </section>
-    
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2025 Ombú - Todos los derechos reservados</p>
+        </div>
     </footer>
-    <script src="{% static 'js/cuerpo.js' %}"></script>
+        </main>
+
+    <script src="{% static '/js/cuerpo.js' %}"></script>
     <!-- <script src="{% static 'js/menu_cliente.js' %}"></script> -->
 </body>
 </html>

@@ -4,8 +4,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title> OMBÚ | Cigarrillos 🍹 </title>
-    <link rel="stylesheet" href="{% static '/css/Menú_Styles.css' %}" type="text/css" />
+    <title> OMBÚ | Cigarrillo 🍹 </title>
+    <link rel="stylesheet" href="{% static '/css/Productos_Styles.css' %}" type="text/css" />
   </head>
   <body>
     <header></header>
@@ -13,17 +13,18 @@
       @import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 
 
+
     </style>
     <main>
       <div class="menu-container">
 
-        
+
 
         <div>
+        
           <section class="section">
-
-            <a href="/pages/Admin/admin_principal.html">
-            <button class="button" data-text="Awesome">
+            <a href="{% url 'index' %}">
+            <button class="button" data-text="Awesome" data-title="{% url 'index' %}" >
               <span class="actual-text">&nbsp;ombú&nbsp;</span>
               <span aria-hidden="true" class="hover-text">&nbsp;OMBÚ&nbsp;</span>
             </button></a>
@@ -38,9 +39,11 @@
           </button>
         </div>
     
+
+
         <div class="menu" id="mainMenu">
 
-          <a href="/pages/Admin/admin_principal.html" class="link">
+          <a href="{% url 'index' %}" class="link">
             <span class="link-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" fill="currentColor" viewBox="0 0 256 256">
                 <rect width="256" height="256" fill="none"></rect>
@@ -50,7 +53,7 @@
             <span class="link-title">OMBÚ</span>
           </a>
           
-          <a href="{% url "bebidas_calientes" %}" class="link">
+          <a href="{% url 'bebida_caliente' %}" class="link">
 
             <span class="link-icon">
 
@@ -63,14 +66,12 @@
           </a>
 
 
-          <a href="{% url 'cervezas' %}" class="link">
+          <a href="{% url 'cerveza' %}" class="link">
 
             <span class="link-icon">
 
               <svg fill="#000000" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="256px" height="256px" viewBox="0 0 212 260" enable-background="new 0 0 212 260" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M186,114h-24V90.73c6.96-4.99,11.51-13.15,11.51-22.35c0-12.49-8.38-23.15-19.93-26.44c-3.19-16.37-17.75-28.87-34.83-28.87 c-4.98,0-9.84,1.03-14.31,3C96.17,7.17,84.5,2,72.17,2c-19.8,0-37.06,13.39-42.36,31.98C14.21,35.58,2,48.8,2,64.82 c0,11.65,6.47,21.82,16,27.12V242c0,8.84,7.16,16,16,16h112c8.84,0,16-7.16,16-16v-16h4c24.26,0,44-19.74,44-44v-44 C210,124.77,199.23,114,186,114z M58,210H42v-80h16V210z M98,210H82v-80h16V210z M138,210h-16v-80h16V210z M146,82H82v16 c0,8.84-7.16,16-16,16s-16-7.16-16-16V82H33c-9.37,0-17-7.81-17-17.18s7.63-17,17-17h8.58l0.85-6.03C44.5,27.09,57.28,16,72.17,16 c9.88,0,19.13,4.86,24.75,13.01l3.96,5.76l5.76-3.96c3.56-2.45,7.75-3.74,12.11-3.74c11.53,0,21.16,9.44,21.47,21.04l0.17,6.43 l6.43,0.37c7.11,0.41,12.69,6.33,12.69,13.47C159.51,75.82,153.44,82,146,82z M194,182c0,15.44-12.56,28-28,28h-4v-80h24 c4.41,0,8,3.59,8,8V182z"></path> </g></svg>
             </span>
-
-
 
             <span class="link-title">Cervezas</span>
           </a>
@@ -110,100 +111,82 @@
         </div>
       </div>
       
-
-
-
-
-
-
+<!-- --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
 
         <div class="cards-container" >
 
-<!-- SECCION CIGARRILLO UNIDAD -->
-          <div class="card" data-title="SODA ITALIANA" data-image="https://png.pngtree.com/png-vector/20240416/ourmid/pngtree-fruit-juice-splash-with-flying-fruits-png-image_12290367.png"
-          data-options='["MUSTANG MALBORO", "MENTOLADO"]'>
+<!-- MALBORO -->
+          <div class="card" data-title="MALBORO" data-image="https://png.pngtree.com/png-vector/20240416/ourmid/pngtree-fruit-juice-splash-with-flying-fruits-png-image_12290367.png"
+          data-options='["Malboro rojo $", "malboro fushion $", "Malboro unidad rojo $", "malboro unidad fushion $"]'>
             <div class="img-container">
               <img
                 src="https://png.pngtree.com/png-vector/20240416/ourmid/pngtree-fruit-juice-splash-with-flying-fruits-png-image_12290367.png"
-                alt="Sodas italianas"
+                alt="MALBORO"
               />
             </div>
             
             <div class="main-card">
-              <span>CIGARRILLOS UNIDAD</span>
+              <span>MALBORO</span>
               <p class="truncated-text">
-                Le ofrecemos cigarrillos por unidad
+                Refrescantes bebidas a base de soda y combinada con lo natural de la fruta. Puedes elegir entre
+                frutos rojos,kiwi,maracuyá,mora y fresa.
               </p>
             </div>
 
             <div class="footer-card">
-              <span>$ 1.500</span>
+              
               <button>ver mas</button>
             </div>
           </div>
 
-
-<!-- SECCION CIGARRILLOS COMPLETOS -->
-
-
-          <div class="card"  data-title="JUGO NATURAL EN AGUA " data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
-          data-options='["ROTHMAN Y ROJOS","MENTOLADOS"]' >
+<!-- ROTHMAS -->
+          <div class="card"  data-title="ROTHMAS" data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
+          data-options='["Rothmas azul $", "Rothmas morado $", "Rothmas unidad azul $", "Rothmas unidad morado $"]' >
             <div class="img-container">
               <img
                 src="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
-                alt="Lulada saha"
+                alt="ROTHMAS"
               />
             </div>
 
             <div class="main-card">
-              <span>CIGARRILLOS</span>
+              <span>ROTHMAS</span>
               <p class="truncated-text">
-                Lleve la caja de cigarros que guste.
+                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
               </p>
             </div>
 
             <div class="footer-card">
-              <span>$ 9.500</span>
               <button>ver mas</button>
             </div>
           </div>
- 
-<div id="cart-container" class="cart-container">
-  <div class="cart-header">
-    <h2>Carrito de Compras</h2>
-    <button id="close-cart" class="close-cart">&times;</button>
-  </div>
-  <div id="cart-items" class="cart-items">
 
+<!-- LUCKY -->
+          <div class="card" data-title="LUCKY" data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
+          data-options='["Lucky rojo $", "Lucky verde $", "Lucky morado $", "Lucky alaska $", "lucky unidad $"]'>
+            <div class="img-container">
+              <img
+                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
+                alt="LUCKY"
+              />
+            </div>
 
-  </div>
-  <div class="cart-footer">
-    <div class="cart-total">
-      <span>Total:</span>
-      <span id="cart-total-amount">$0</span>
-    </div>
-    <a href="/pages/Admin/mesas.html">
-      <button id="checkout-button" class="checkout-button"></button>
-    </a>
-    <button id="empty-cart" class="empty-cart-button">Vaciar Carrito</button>
-  </div>
-</div>
+            <div class="main-card">
+              <span>LUCKY</span>
+              <p class="truncated-text">
+                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
+              </p>
+            </div>
 
-
-<div id="cart-icon-container" class="cart-icon-container">
-  <div class="cart-icon" id="cart-icon">
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="9" cy="21" r="1"></circle>
-      <circle cx="20" cy="21" r="1"></circle>
-      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-    </svg>
-    <span id="cart-count" class="cart-count">0</span>
-  </div>
-</div>
-
-        
+            <div class="footer-card">
+              <button>ver mas</button>
+            </div>
+          </div>
         </div>
 
+<!-- --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
         <div id="modal" class="modal">
           <div class="modal-content">
               <span class="close">&times;</span>
@@ -213,7 +196,6 @@
                   <p>Más detalles sobre el producto seleccionado.</p>
                   <h4 class="opcion">Opción</h4>
                   <select id="modal-select"></select>
-                  <button id="modal-add-to-cart">Agregar al carrito</button>
 
               </div>
           </div>

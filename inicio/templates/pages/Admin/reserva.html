@@ -109,4 +109,39 @@
         }
     </script>
 </body>
-</html>
+</html> 
+
+<!-- formulario.html -->
+{% comment %} <form id="formReserva">
+    <input type="text" name="nombre" placeholder="Tu nombre" required>
+    <input type="email" name="email" placeholder="Tu email" required>
+    <input type="date" name="fecha" required>
+    <input type="time" name="hora" required>
+    <button type="submit">Reservar</button>
+  </form>
+  
+  <div id="mensaje"></div>
+  
+  <script>
+  document.getElementById('formReserva').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+  
+      fetch('/hacer-reserva/', {
+          method: 'POST',
+          headers: {
+              'X-CSRFToken': '{{ csrf_token }}',
+          },
+          body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+          if (data.success) {
+              document.getElementById('mensaje').innerText = '¡Reserva confirmada! Revisa tu correo.';
+          } else {
+              document.getElementById('mensaje').innerText = 'Ocurrió un error.';
+          }
+      });
+  });
+  </script>
+   {% endcomment %}

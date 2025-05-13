@@ -134,5 +134,8 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+#Texto que va en la parte del nav-bar del panel de administracion
+site_header = 'El Texto Que Quieres Mostrar'
+
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/admin'

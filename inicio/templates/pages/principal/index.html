@@ -6,11 +6,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ombú - Gastrobar</title>
     <link rel="stylesheet" href="{% static '/css/index.css' %}">
-    
+    <link href="https://fonts.cdnfonts.com/css/opendyslexic" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 
 <body>
+
+<!-- Botón de accesibilidad -->
+<div id="accessibility-widget">
+    <button id="accessibility-toggle" title="Accesibilidad">☰</button>
+    <div id="accessibility-menu" class="hidden">
+    <h3>Menú de Accesibilidad</h3>
+
+    <!-- Tamaño de fuente -->
+    <div class="section">
+        <label>Tamaño de fuente</label>
+        <div class="controls">
+        <button onclick="adjustFontSize(-1)">A-</button>
+        <span id="fontSizeDisplay">100%</span>
+        <button onclick="adjustFontSize(1)">A+</button>
+        </div>
+    </div>
+
+    <!-- Fuente disléxica -->
+    <div class="section">
+        <label><input type="checkbox" onchange="toggleDyslexicFont(this)"> Fuente Disléxica</label>
+    </div>
+
+<!-- Contraste -->
+    <div class="section">
+        <label>Contraste</label>
+        <div class="controls">
+        <button onclick="setContrast('dark')">Oscuro</button>
+        <button onclick="setContrast('high')">Alto</button>
+        <button onclick="setContrast('normal')">Normal</button>
+        </div>
+    </div>
+
+<!-- Estilo de texto -->
+    <div class="section">
+        <label><input type="checkbox" onchange="toggleHighlightTitles(this)"> Resaltar títulos</label>
+        <label><input type="checkbox" onchange="toggleHighlightLinks(this)"> Resaltar enlaces</label>
+        <label><input type="checkbox" onchange="toggleBigCursor(this)"> Cursor grande</label>
+    </div>
+    </div>
+</div>
+
     <header class="navbar-hd" id="navbar">
         <div class="header-nav-bar">
             <section class="section">
@@ -250,4 +291,5 @@
     <script src="{% static 'js/cuerpo.js' %}"></script>
     <!-- <script src="{% static 'js/menu_cliente.js' %}"></script> -->
 </body>
+<script src="{% static 'js/accecibilidad.js' %}"></script>
 </html>

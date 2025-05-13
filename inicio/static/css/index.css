@@ -1266,3 +1266,59 @@ html {
   right: 0;
   width: 0;
 }
+
+/* boton de accecibilidad */
+#accessibility-widget {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    font-family: sans-serif;
+    z-index: 9999;
+}
+
+#accessibility-toggle {
+    position: fixed;
+    /* background-color: #1A3330; */
+    color: white;
+    border: none;
+    border-radius: 50%;
+    padding: 12px;
+    cursor: pointer;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+#accessibility-menu {
+    margin-top: 10 px;
+    background: white;
+    border-radius: 12 px;
+    padding: 15px;
+    width: 280px;
+    box-shadow: 0 10 20px rgba(0, 0, 0, 0.15);
+}
+
+#accessibility-menu.hidden {
+    display: none;
+}
+
+#accessibility-menu h3 {
+    margin-top: 0;
+    font-size: 18 px;
+    color: #0055aa;
+}
+
+.section {
+    margin-bottom: 15 px;
+}
+
+.controls {
+    display: flex;
+    gap: 10 px;
+    align-items: center;
+}
+
+.controls botton {
+    padding: 8 px 12 px;
+    font-size: 10 px;
+    cursor: pointer;
+}

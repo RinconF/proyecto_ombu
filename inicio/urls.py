@@ -17,12 +17,12 @@ urlpatterns = [
     path('picar/', views.picar, name='picar'),
 
     # ADMIN
-    # path('admin', views.admin_principal, name='admin'),
+    path('admin', views.admin_principal, name='admin'),
     path('admin/', admin.site.urls),
-    path('dashboard/', views.dashboard, name='dashboard'),
+    # path('dashboard/', views.dashboard, name='dashboard'),
     path('login/', views.login_view, name='login'),
     path('mesas/', views.mesas, name='mesas'),
-    path('reserva/', views.reserva, name='reserva'),
+    # path('reserva/', views.reserva, name='reserva'),
     path('usuarios/', views.usuarios, name = 'usuarios'),
     path('logout/', views.logout_view, name='logout'),
 
@@ -39,7 +39,7 @@ urlpatterns = [
     # MENU MESERO
     path('bebidas_calientes/', views.bebidas_calientes, name='bebidas_calientes'),
     path('bebidas_frias/', views.bebidas_frias, name='bebidas_frias'),
-    path('cervezas/', views.cervezas, name='cervezas'),
+    path('cervezas/', views.Cervezas, name='cervezas'),
     path('cigarrillos/', views.cigarrillos, name='cigarrillos'),
     path('cocteles/', views.cocteles, name='cocteles'),
     path('Para_picar/', views.para_picar, name='Para_picar'),

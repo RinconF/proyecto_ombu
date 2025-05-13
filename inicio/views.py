@@ -28,24 +28,24 @@ def index(request):
 #     categorias = Categoria.objects.all()
 #     return render(request, 'pages/categoria/listar_categoria.html', {'categorias': categorias})
 
-# # PRODUCTOS MENU
-# def bebida_caliente(request):
-#     return render(request, 'pages/productos_menu/bebida_caliente.html')
+# PRODUCTOS MENU
+def bebida_caliente(request):
+    return render(request, 'pages/productos_menu/bebida_caliente.html')
 
-# def bebida_fria(request):
-#     return render(request, 'pages/productos_menu/Bebida_fria.html')
+def bebida_fria(request):
+    return render(request, 'pages/productos_menu/Bebida_fria.html')
 
-# def cerveza(request):
-#     return render(request, 'pages/productos_menu/Cerveza.html')
+def cerveza(request):
+    return render(request, 'pages/productos_menu/Cerveza.html')
 
-# def cigarrillo(request):
-#     return render(request, 'pages/productos_menu/Cigarrillo.html')
+def cigarrillo(request):
+    return render(request, 'pages/productos_menu/Cigarrillo.html')
 
-# def coctel(request):
-#     return render(request, 'pages/productos_menu/Coctel.html')
+def coctel(request):
+    return render(request, 'pages/productos_menu/Coctel.html')
 
-# def picar(request):
-#     return render(request, 'pages/productos_menu/Picar.html')
+def picar(request):
+    return render(request, 'pages/productos_menu/Picar.html')
 
 # ADMIN
 def login_view(request):

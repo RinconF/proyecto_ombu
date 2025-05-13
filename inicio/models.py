@@ -2,6 +2,13 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 
 
+    
+class Usuario(AbstractUser):
+    nombre = models.CharField(max_length=100)
+    apellido = models.CharField(max_length=100)
+    correo = models.EmailField()
+
+
 class usuario_manager(BaseUserManager):
     def create_user(self, email, username, password=None, **extra_fields):
         if not email:

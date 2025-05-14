@@ -35,7 +35,7 @@
         </div>
     
         <div class="menu" id="mainMenu">
-          <a href="/pages/Admin/admin_principal.html" class="link">
+          <a href="{% url 'admin' %}" class="link">
             <span class="link-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" fill="currentColor" viewBox="0 0 256 256">
                 <rect width="256" height="256" fill="none"></rect>
@@ -621,7 +621,7 @@
         <span>Total:</span>
         <span id="cart-total-amount">$0</span>
       </div>
-      <a href="/pages/Admin/mesas.html">
+      <a href="{% url 'mesas' %}">
         <button id="checkout-button" class="checkout-button"></button>
       </a>
       <button id="empty-cart" class="empty-cart-button">Vaciar Carrito</button>
@@ -657,7 +657,35 @@
       </section>
 
       <script src="{% static '/js/script_menu.js' %}"></script>
-    </main>
-    <footer></footer>
+    <footer id="contacto">
+        <div class="footer-container">
+          <div class="footer-logo">
+            <img src="{% static 'img/logos_o_otros/logo_ombu.png' %}" alt="Imagen de pie de página">
+          </div>
+          
+          <div class="footer-contact">
+            <h2>Contacto</h2>
+                <div class="social-icons">
+                    <a href="https://www.facebook.com" target="_blank" class="social-icon facebook">
+                        <img src="{% static 'img/icono_social/Facebook_Logo.png' %}" alt="Facebook">
+                      </a>
+                      <a href="https://www.twitter.com" target="_blank" class="social-icon twitter">
+                        <img src="{% static 'img/icono_social/twiter_log.png' %}" alt="Twitter">
+                      </a>
+                      <a href="https://www.instagram.com" target="_blank" class="social-icon instagram">
+                        <img src="{% static 'img/icono_social/instagram_log.png' %}" alt="Instagram">
+                      </a>
+                      <a href="https://wa.me/123456789" target="_blank" class="social-icon whatsapp">
+                        <img src="{% static 'img/icono_social/whatsapp_icon.png' %}" alt="WhatsApp">
+                      </a>
+                </div>
+              </div>
+            </div>
+            
+            <div class="footer-bottom">
+              <p>&copy; 2025 Ombú - Todos los derechos reservados</p>
+            </div>
+          </footer>
+        </main>
   </body>
 </html>

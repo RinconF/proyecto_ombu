@@ -58,7 +58,7 @@ ROOT_URLCONF = 'ombu.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [BASE_DIR / 'inicio' / 'templates'],  # Ahora buscará en 'inicio/templates/pages/Admin/login.html'
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -71,6 +71,11 @@ TEMPLATES = [
         },
     },
 ]
+
+# AUTHENTICATION_BACKENDS = [
+#     'inicio.backends.CustomAuthBackend',  # Tu backend personalizado
+#     'django.contrib.auth.backends.ModelBackend',  # Mantener el backend predeterminado como fallback
+# ]
 
 WSGI_APPLICATION = 'ombu.wsgi.application'
 
@@ -138,4 +143,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 site_header = 'El Texto Que Quieres Mostrar'
 
 LOGIN_URL = '/login/'
+LOGOUT_URL = '/logout/'
 LOGIN_REDIRECT_URL = '/admin'
+LOGOUT_REDIRECT_URL = '/login/'
+
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'giuseppeesteban101@gmail.com'
+EMAIL_HOST_PASSWORD = 'nxnp jmrf zvyc ffcq'
+EMAIL_USE_TLS = True

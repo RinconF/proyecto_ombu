@@ -32,7 +32,11 @@ main {
   width: 100%;
   height: 100vh;
   overflow-y: auto;
-  background-image: url("/static/img/logos_otros/ombu_fondo.jpg");
+  background-image: url("/static/img/logos_o_otros/ombu_fondo.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center center;
 }
 
 .title {
@@ -45,9 +49,13 @@ main {
 }
 
 .section {
-  width: 100%;
-  height: 100%;
-  padding-top: 20px;
+    width: 100%;
+    height: 100%;
+    padding-top: 20px;
+    background-color: rgba(0, 0, 0, 0.3);    
+    border-radius: 15px;
+    padding: 0.9rem;    
+
 }
 
  /* ESTILOS PARA EL CONTENEDOR DE LAS CARTAS  (DONDE VAN LOS PRODUCTOS ) */
@@ -855,5 +863,207 @@ main {
     text-align: left !important;
   }
 }
+
+
+:root {
+            --primary-color: #1A3330;
+            --accent-color: #4eff37;
+            --footer-bg: rgba(0, 0, 0, 0.7);
+            --transition-normal: all 0.3s ease;
+            --transition-fast: all 0.2s ease;
+            --shadow-normal: 0 5px 15px rgba(0, 0, 0, 0.2);
+            --shadow-hover: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Footer principal */
+        footer {
+            width: 100%;
+            padding: 2rem 0;
+            background-color: var(--footer-bg);
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .footer-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        /* Logo del footer */
+        .footer-logo {
+            flex: 0 0 200px;
+            text-align: center;
+            transition: var(--transition-normal);
+        }
+        
+        .footer-logo img {
+            max-width: 180px;
+            border-radius: 50%;
+            transition: var(--transition-normal);
+            box-shadow: var(--shadow-normal);
+        }
+        
+        .footer-logo img:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        /* Sección de contacto */
+        .footer-contact {
+            flex: 1;
+            max-width: 500px;
+            padding: 0 2rem;
+        }
+        
+        .footer-contact h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .footer-contact h2::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--accent-color);
+            transition: var(--transition-normal);
+        }
+        
+        .footer-contact h2:hover::after {
+            width: 100%;
+        }
+        
+        /* Iconos sociales */
+        .social-icons {
+            display: flex;
+            gap: 1.2rem;
+            margin-top: 1rem;
+        }
+        
+        .social-icon {
+            position: relative;
+            display: block;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #fff;
+            transition: var(--transition-normal);
+            overflow: hidden;
+            box-shadow: var(--shadow-normal);
+        }
+        
+        .social-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition-normal);
+        }
+        
+        .social-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.2);
+            transform: translateY(100%);
+            transition: var(--transition-normal);
+            z-index: 1;
+        }
+        
+        .social-icon:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .social-icon:hover img {
+            transform: scale(1.1);
+        }
+        
+        .social-icon:hover::before {
+            transform: translateY(0);
+        }
+        
+        /* Footer adicional */
+        .footer-bottom {
+            width: 100%;
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        /* Media queries */
+        @media screen and (max-width: 768px) {
+            .footer-container {
+                flex-direction: column;
+                text-align: center;
+                gap: 2rem;
+            }
+            
+            .footer-logo {
+                flex: 0 0 auto;
+                order: 1;
+            }
+            
+            .footer-contact {
+                order: 2;
+                padding: 0;
+                max-width: 100%;
+            }
+            
+            .footer-contact h2 {
+                margin: 0 auto 1rem;
+            }
+            
+            .footer-contact h2::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            
+            .social-icons {
+                justify-content: center;
+            }
+        }
+        
+        @media screen and (max-width: 480px) {
+            footer {
+                padding: 1.5rem 0;
+            }
+            
+            .footer-container {
+                padding: 0 1rem;
+                gap: 1.5rem;
+            }
+            
+            .footer-logo img {
+                max-width: 140px;
+            }
+            
+            .social-icon {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .footer-contact h2 {
+                font-size: 1.5rem;
+            }
+        }
+
 
 

@@ -42,7 +42,7 @@
     
         <div class="menu" id="mainMenu">
 
-          <a href="/pages/Admin/admin_principal.html" class="link">
+          <a href="{% url 'admin' %}" class="link">
             <span class="link-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" fill="currentColor" viewBox="0 0 256 256">
                 <rect width="256" height="256" fill="none"></rect>
@@ -112,27 +112,22 @@
         </div>
       </div>
       
-
-
-
-
-
-
-
+{% comment %} <!-- -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- --> {% endcomment %}
         <div class="cards-container" >
 
-
-          <div class="card" data-title="SODA ITALIANA" data-image="https://png.pngtree.com/png-vector/20240416/ourmid/pngtree-fruit-juice-splash-with-flying-fruits-png-image_12290367.png"
-          data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]'>
+<!-- MULE -->
+          <div class="card" data-title="MULE" data-image="{% static 'img\imagenes_productos\MULE.png' %}"
+          data-options='["Mule merline $20.500", "Mosco mule $20.500", "Mule Berlín $20.000","Mule berlín $20.500", "Mule jagger $20.500", "Mule sandia $23.000"]'>
             <div class="img-container">
               <img
-                src="https://png.pngtree.com/png-vector/20240416/ourmid/pngtree-fruit-juice-splash-with-flying-fruits-png-image_12290367.png"
+                src="{% static 'img\imagenes_productos\MULE.png' %}"
                 alt="Sodas italianas"
               />
             </div>
             
             <div class="main-card">
-              <span>SODA ITALIANA</span>
+              <span>MULE</span>
               <p class="truncated-text">
                 Refrescantes bebidas a base de soda y combinada con lo natural de la fruta. Puedes elegir entre
                 frutos rojos,kiwi,maracuyá,mora y fresa.
@@ -140,645 +135,976 @@
             </div>
 
             <div class="footer-card">
+              <span>$ 20.500</span>
+              <button>ver mas</button>
+            </div>
+          </div>
+
+<!-- DOCTOR FUNK -->
+          <div class="card"  data-title="DOCTOR FUNK " data-image="{% static 'img\imagenes_productos\FUNK.png' %}"
+          data-options='["Doctor funk $22.000"]' >
+            <div class="img-container">
+              <img
+                src="{% static 'img\imagenes_productos\FUNK.png' %}"
+                alt="DOCTOR FUNK"
+              />
+            </div>
+
+            <div class="main-card">
+              <span>DOCTOR FUNK</span>
+              <p class="truncated-text">
+                Es un cóctel brillante y ligeramente espumoso, creado por el dr bernhadr funck durante su estadía en el pacífico. se prepara con jugo de lima, absenta y agua mineral. cuando llegó a beachcomber se añadió el ron, y así fue como comenzó a considerarse un trago tiki.
+              </p>
+            </div>
+            
+            <div class="footer-card">
               <span>$ 12.000</span>
               <button>ver mas</button>
             </div>
           </div>
 
+<!-- ILUCION -->
+        <div class="card" data-title="ILUCION" data-image="{% static '/img\imagenes_productos\ilucion.png'%}"
+        data-options='["Ilucion $23.000"]'>
+          <div class="img-container">
+            <img
+              src="{% static '/img\imagenes_productos\ilucion.png'%}"
+              alt="ILUCION"
+            />
+          </div>
 
-          <div class="card"  data-title="JUGO NATURAL EN AGUA " data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
-          data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]' >
+          <div class="main-card">
+            <span>ILUCION</span>
+            <p class="truncated-text">
+              Aperol, Vodka, Mango y Maracuya 
+            </p>
+          </div>
+
+            <div class="footer-card">
+              <span>$ 23.000</span>
+              <button>ver mas</button>
+            </div>
+          </div>
+
+<!-- SOL Y ESENCIA -->
+        <div class="card" data-title="SOL Y ESENCIA" data-image="{%static '/img\imagenes_productos\soly_y_escensia.png'%}"
+        data-options='["Sol y esencia $20.000"]'>
+          <div class="img-container">
+            <img
+              src="{%static '/img\imagenes_productos\soly_y_escensia.png'%}"
+              alt="SOL Y ESENCIA"
+            />
+          </div>
+
+          <div class="main-card">
+            <span>SOL Y ESENCIA</span>
+            <p class="truncated-text">
+              Este coctel de nuestra region boyacense cuya alma es el aguardiente lider endulzado con gulupa y unas notas ácidas de un mix de cítrico con escarchadas de tajín y chamoy
+            </p>
+          </div>
+
+            <div class="footer-card">
+              <span>$ 20.000</span>
+              <button>ver mas</button>
+            </div>
+          </div>
+
+<!-- RUSO BLANCO -->
+          <div class="card" data-title="RUSO BLANCO" data-image="{%static '/img\imagenes_productos\ruso_blanco.png'%}"
+          data-options='["Ruso blanco $20.500"]'>
             <div class="img-container">
               <img
-                src="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
-                alt="Lulada saha"
+                src="{%static '/img\imagenes_productos\ruso_blanco.png'%}"
+                alt="RUSO BLANCO"
               />
             </div>
 
             <div class="main-card">
-              <span>JUGO NATURAL EN AGUA</span>
+              <span>RUSO BLANCO</span>
+              <p class="truncated-text">
+                Cambiamos nuestro cafe colombiano con el vodka y un toque de crema de leche con licor de cafe
+              </p>
+            </div>
+            <div class="footer-card">
+              <span>$ 20.500</span>
+              <button>ver mas</button>
+            </div>
+          </div>
+
+<!-- PECERA -->
+          <div class="card" data-title="PECERA " data-image="{% static '/img\imagenes_productos\pecera.png'%}"
+          data-options='["Pecera $45.000"]'>
+            <div class="img-container">
+              <img
+                src="{% static '/img\imagenes_productos\pecera.png'%}"
+                alt="PECERA"
+              />
+            </div>
+
+            <div class="main-card">
+              <span>PECERA</span>
               <p class="truncated-text">
                 Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
               </p>
             </div>
 
             <div class="footer-card">
-              <span>$ 7.500</span>
+              <span>$ 45.000</span>
               <button>ver mas</button>
             </div>
           </div>
 
-<!-- ......................................................................................................................................... -->
-
-          <div class="card" data-title="JUGO NATURAL EN AGUA " data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
-          data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]'>
+<!-- SANDIA MULE -->
+          <div class="card" data-title="SANDIA MULE" data-image="{%static '/img\imagenes_productos\sandia_mule.png'%}"
+          data-options='["Sandia Mule $23.000"]'>
             <div class="img-container">
               <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
+                src="{%static '/img\imagenes_productos\sandia_mule.png'%}"
+                alt="SANDIA MULE"
               />
             </div>
 
             <div class="main-card">
-              <span>CAFES HELADOS CON TWIST</span>
+              <span>SANDIA MULE</span>
               <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
+                Cerveza de ginebra, sandiamix y tequila citrico
               </p>
             </div>
 
             <div class="footer-card">
-              <span>$ 7.500</span>
+              <span>$ 23.000</span>
               <button>ver mas</button>
             </div>
           </div>
 
-
-
-
-          <div class="card" data-title="JUGO NATURAL EN AGUA " data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
-          data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]'>
+<!-- ESPIRITU DE MANDARINA -->
+          <div class="card" data-title="ESPIRITU DE MANDARINA" data-image="{% static 'img\imagenes_productos\espiritu_mandarina.png'%}"
+          data-options='["Espiritu de mandarina $22.000"]'>
             <div class="img-container">
               <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
+                src="{% static 'img\imagenes_productos\espiritu_mandarina.png'%}"
+                alt="ESPIRITU DE MANDARINA"
               />
             </div>
 
             <div class="main-card">
-              <span>GRANIZADO DE CAFE</span>
+              <span>ESPIRITU DE MANDARINA</span>
               <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
+                Aperol, mezcla extracto, soda
               </p>
             </div>
 
             <div class="footer-card">
-              <span>$ 7.500</span>
+              <span>$ 722000</span>
               <button>ver mas</button>
             </div>
           </div>
 
-
-
-          <div class="card" data-title="JUGO NATURAL EN AGUA " data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
-          data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]'>
+<!-- PUNCH -->
+          <div class="card" data-title="PUNCH" data-image="{%static 'img\imagenes_productos\psco exotico.png'%}"
+          data-options='["Pico punch exótico $22.000"]'>
             <div class="img-container">
               <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
+                src="{%static 'img\imagenes_productos\psco exotico.png'%}"
+                alt="PUNCH"
               />
             </div>
 
             <div class="main-card">
-              <span>MILO FRIO</span>
+              <span>PISCO PUNCH EXÓTICO</span>
               <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
+                Jarabe de piña mandarina psico peruano mix citrico
               </p>
             </div>
 
             <div class="footer-card">
-              <span>$ 7.500</span>
+              <span>$ 22.000</span>
               <button>ver mas</button>
             </div>
           </div>
 
-
-
-          <div class="card" data-title="JUGO NATURAL EN AGUA " data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
-          data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]'>
+<!-- JAGGER-CUYA -->
+          <div class="card" data-title="JAGGER-CUYA" data-image="{%static 'img\imagenes_productos\jagger_cuya.png'%}"
+          data-options='["Yagger-Cuya $22.000"]'>
             <div class="img-container">
               <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
+                src="{%static 'img\imagenes_productos\jagger_cuya.png'%}"
+                alt="JAGGER-CUYA"
               />
             </div>
 
             <div class="main-card">
-              <span>FRAPUCHINO</span>
+              <span>JAGGER-CUYA</span>
               <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
+                La combinacion de jagermeister y maracuyá
               </p>
             </div>
 
             <div class="footer-card">
-              <span>$ 7.500</span>
+              <span>$ 22.000</span>
               <button>ver mas</button>
             </div>
           </div>
 
-
-
-          <div class="card" data-title="JUGO NATURAL EN AGUA " data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
-          data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]'>
+<!-- ORGASMO -->
+          <div class="card" data-title="ORGASMO" data-image="/imagenes\imagenes_productos\orgasmo.png"
+          data-options='["Orgasmo $20.000"]'>
             <div class="img-container">
               <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
+                src="d{%static 'img\imagenes_productos\orgasmo.png'%}"
+                alt="ORGASMO"
               />
             </div>
 
             <div class="main-card">
-              <span>MANDARINADA</span>
+              <span>ORGASMO</span>
               <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
+                Este coctel cremoso el cual evoca el sabor de un postre mezcla el bayleys la crema de cacao y el amaretto el cual actua con un delicioso sabor a el paladar
               </p>
             </div>
 
             <div class="footer-card">
-              <span>$ 7.500</span>
+              <span>$ 20.000</span>
               <button>ver mas</button>
             </div>
           </div>
 
-
-
-          <div class="card" data-title="JUGO NATURAL EN AGUA " data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
-          data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]'>
+<!-- CAIPIRINA -->
+          <div class="card" data-title="CAIPIRINA" data-image="{%static 'img\imagenes_productos\caipiriña.png'%}"
+          data-options='["Caipirina $21.000"]'>
             <div class="img-container">
               <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
+                src="{%static 'img\imagenes_productos\caipiriña.png'%}"
+                alt="CAIPIRINA"
               />
             </div>
 
             <div class="main-card">
-              <span>BROWNIE Y HELADO</span>
+              <span>CAIPIRINA</span>
               <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
+                El coctel mas consumido en brazil la cachaza ,limon mazerado y azucar
               </p>
             </div>
 
             <div class="footer-card">
-              <span>$ 7.500</span>
+              <span>$ 21.000</span>
               <button>ver mas</button>
             </div>
           </div>
 
-
-
-          <div class="card" data-title="JUGO NATURAL EN AGUA " data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
-          data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]'>
+<!-- EXTASIS -->
+          <div class="card" data-title="EXTASIS" data-image="{%static '/img\imagenes_productos\extasis.png'%}"
+          data-options='["Extasis $22.000"]'>
             <div class="img-container">
               <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
+                src="{%static '/img\imagenes_productos\extasis.png'%}"
+                alt="EXTASIS"
               />
             </div>
 
             <div class="main-card">
-              <span>TE HELADO</span>
+              <span>ÉXTASIS</span>
               <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
+                Es un coctel de la casa a base de wiki y su bebida espirituosa es un ron a base de caña
               </p>
             </div>
 
             <div class="footer-card">
-              <span>$ 7.500</span>
+              <span>$ 22.000</span>
               <button>ver mas</button>
             </div>
           </div>
 
-
-
-          <div class="card" data-title="JUGO NATURAL EN AGUA " data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
-          data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]'>
+<!-- ENTRE_DOS_TIERRAS -->
+          <div class="card" data-title="ENTRE_DOS_TIERRAS" data-image="{% static '/img\imagenes_productos\entre_tierras.png'%}"
+          data-options='["Entre dos tierras $22.000"]'>
             <div class="img-container">
               <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
+                src="{% static '/img\imagenes_productos\entre_tierras.png'%}"
+                alt="ENTRE_DOS_TIERRAS"
               />
             </div>
 
             <div class="main-card">
-              <span>REDBULL</span>
+              <span>ENTRE DOS TIERRAS</span>
               <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <span>$ 7.500</span>
-              <button>ver mas</button>
-            </div>
-          </div>
-
-
-
-          <div class="card">
-            <div class="img-container">
-              <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>NARANJADA</span>
-              <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <span>$ 7.500</span>
-              <button>ver mas</button>
-            </div>
-          </div>
-
-
-
-          <div class="card">
-            <div class="img-container">
-              <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>MALTEADAS</span>
-              <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <span>$ 7.500</span>
-              <button>ver mas</button>
-            </div>
-          </div>
-
-
-
-          <div class="card">
-            <div class="img-container">
-              <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>JUGOS EN LECHE</span>
-              <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
+                Este coctel de la casa divide la miel miel y el tequila mexicano combinado con nuestras frutas naranja fresa y durazno disfrútalo
               </p>
             </div>
             
             <div class="footer-card">
-              <span>$ 7.500</span>
+              <span>$ 22.000</span>
               <button>ver mas</button>
             </div>
           </div>
           
-          <!-- #liMONADA -->
-          <div class="card">
-              <div class="img-container">
-                <img
-                  src="https://png.pngtree.com/png-vector/20240530/ourmid/pngtree-low-calories-beverage-natural-lemonade-drinks-png-image_12548297.png"
-                  alt="Limonada natural"
-                />
-              </div>
-            
-              <div class="main-card">
-                <span>LIMONADA</span>
-                <p class="truncated-text">
-                  Una bebida bien fria a base de los mas ricos y frescos limones que calmara tu sed, pidela tambien granizada.
-                </p>
-              </div>
+<!-- ZOMBIE -->
+          <div class="card" data-title="ZOMBIE" data-image="{%static '/img\imagenes_productos\zombie.png'%}"
+          data-options='["Zombie $22.000"]'>
+            <div class="img-container">
+              <img
+                src="{%static '/img\imagenes_productos\zombie.png'%}"
+                alt="ZOMBIE"
+              />
+            </div>
+
+            <div class="main-card">
+              <span>ZOMBIE</span>
+              <p class="truncated-text">
+                Se le llama así por la graduación alcohólica que tiene, es una de las bebidas más fuertes que puedes servir. Se prepara con tres tipos diferentes de ron, brandy de albaricoque, fruta. Naranja y tropicales son las más usadas, aunque también puedes usar las frutas de estación que más te gusten. ¡Anímate a jugar con los sabores!
+              </p>
+            </div>
             
               <div class="footer-card">
-                <span>$ 5.500</span>
+                <span>$ 22.000</span>
                 <button>ver mas
-  </button>
+                </button>
               </div>
             </div>
 
+<!-- POLVO_DE_HADAS-->
+            <div class="card" data-title="POLVO_DE_HADAS" data-image="POLVO_HADAS" data-image="{% static '/img\imagenes_productos\POLVO_DE_HADAS.png'%}"
+            data-options='["Polvo de hadas $25.000"]'>
+              <div class="img-container">
+                <img
+                  src=data-image="{% static '/img\imagenes_productos\POLVO_HADAS.png'%}"
+                  alt="POLVO_DE_HADAS"
+                />
+              </div>
 
-
-<!-- LIMONADA HIERBA BUENA -->
-          <div class="card">
-            <div class="img-container">
-              <img
-                src="https://png.pngtree.com/png-vector/20240528/ourmid/pngtree-minty-fresh-delight-savoring-the-flavorful-experience-of-mint-slush-png-image_12511571.png"
-                alt="Limonada hierbabuena"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>LIMONADA HIERBABUENA</span>
-              <p class="truncated-text">
-                Una deliciosa bebida refrescante a base de limones y hierbabuena.
-              </p>
-            </div>
+              <div class="main-card">
+                <span>POLVO DE HADAS</span>
+                <p class="truncated-text">
+                  TEQUILLA, RON, VODKA, CURRASSAO AZUL, MELÓN, RED BULL YABSENTA
+                </p>
+              </div>
 
             <div class="footer-card">
-              <span>$ 7.000</span>
+              <span>$ 25.000</span>
               <button>ver mas</button>
             </div>
           </div>
 
-<!-- LIMONADA DE COCO -->
-
-
-          <div class="card">
+<!-- SUEÑO_MANDARINA -->
+          <div class="card" data-title="SUEÑO_MANDARINA" data-image="POLVO_DE_HADAS" data-image="{% static '/img\imagenes_productos\SUEÑO_MANDARINA.png'%}"
+          data-options='["Sueño $20.000"]'>
             <div class="img-container">
               <img
-                src="https://png.pngtree.com/png-vector/20230325/ourmid/pngtree-summer-iced-coconut-water-png-image_6667753.png"
-                alt="Limonada de coco"
+                src=data-image="{% static '/img\imagenes_productos\SUEÑO_MANDARINA.png'%}"
+                alt="SUEÑO_MANDARINA"
               />
             </div>
 
             <div class="main-card">
-              <span>LIMONADA DE COCO</span>
+              <span>SUEÑO MANDARINA</span>
               <p class="truncated-text">
-                Bebida a base de cocos frescos con la mejor seleccion de limones frescos en una refrescante bebida
-                que solo encontraras en SAHA.
+                ...
               </p>
             </div>
 
             <div class="footer-card">
-              <span>$ 7.500</span>
+              <span>$ 20.000</span>
               <button>ver mas</button>
             </div>
           </div>
 
-
-<!-- CEREZADA -->
-          <div class="card">
+<!-- SUEÑO_MANDARINA -->
+          <div class="card" data-title="SUEÑO_MANDARINA" data-image="POLVO_DE_HADAS" data-image="{% static '/img\imagenes_productos\SUEÑO_MANDARINA.png'%}"
+          data-options='["Sueño $20.000"]'>
             <div class="img-container">
               <img
-                src="https://png.pngtree.com/png-vector/20240426/ourmid/pngtree-glass-of-fresh-cherry-juice-isolated-on-transparent-background-png-image_12315190.png"
-                alt="Limonada cerezada"
+                src=data-image="{% static '/img\imagenes_productos\SUEÑO_MANDARINA.png'%}"
+                alt="SUEÑO_MANDARINA"
               />
             </div>
 
             <div class="main-card">
-              <span>YCEREZADA</span>
+              <span>SUEÑO MANDARINA</span>
               <p class="truncated-text">
-                Una bebida bien fria a base de los mas ricos y frescos limones con cerezas en almibar que calamara tu sed.
-                pidela tambien granizada.
+                ...
               </p>
             </div>
 
             <div class="footer-card">
-              <span>$ 7.000</span>
+              <span>$ 20.000</span>
               <button>ver mas</button>
             </div>
           </div>
 
-
-
-
-          <div class="card">
+<!-- ANTÍDOTO_OMBU -->
+          <div class="card" data-title="ANTÍDOTO_OMBU" data-image="{% static '/img\imagenes_productos\ANTIDOTO_OMBU.png'%}"
+          data-options='["Antídoto ombú $23.500"]'>
             <div class="img-container">
               <img
-              src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-              alt="Lulada saha"
+                src="{% static '/img\imagenes_productos\ANTIDOTO_OMBU.png'%}"
+                alt="ANTÍDOTO_OMBU"
               />
             </div>
             
             <div class="main-card">
-              <span>MONSTER</span>
+              <span>ANTÍDOTO OMBU</span>
               <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
+                cóctel de la casa el cual combina el sabor del tequila y una ginebra botánica con los deliciosos ácidos de LA toronja
               </p>
             </div>
             
             <div class="footer-card">
-              <span>$ 7.500</span>
+              <span>$ 23.500</span>
               <button>ver mas</button>
             </div>
           </div>
           
-          
-          
-          <div class="card">
+<!-- MACHUPICCHU -->
+          <div class="card" data-title="MACHUPICCHU" data-image="{%static '\img\imagenes_productos\MACHUPICHU.png'%}"
+          data-options='["MACHUPICCHU $20.000"]'>
             <div class="img-container">
               <img
-              src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-              alt="Lulada saha"
+                src="{%static '\img\imagenes_productos\MACHUPICHU.png'%}"
+                alt="MACHUPICCHU"
               />
             </div>
             
             <div class="main-card">
-              <span>SODA HATSU</span>
+              <span>MACHUPICCHU</span>
               <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
+                Este cóctel trae el zumo de naranja, granadina, pisco y menta atractivo y llamativo.
               </p>
             </div>
             
             <div class="footer-card">
-              <span>$ 7.500</span>
+              <span>$ 20.000</span>
               <button>ver mas</button>
             </div>
             
           </div>
           
-          
-          
-          <div class="card">
+<!-- BESOS_PELIGROSOS -->
+          <div class="card" data-title="BESOS_PELIGROSOS" data-image="{% static '/img\imagenes_productos\BESOS_PELIGROSOS.png'%}"
+          data-options='["Besos peligrosos $22.000"]'>
             <div class="img-container">
               <img
-              src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
+                src="{% static '/img\imagenes_productos\BESOS_PELIGROSOS.png'%}"
+                alt="BESOS_PELIGROSOS"
               />
             </div>
 
             <div class="main-card">
-              <span>GINGER</span>
+              <span>BESOS PELIGROSOS</span>
               <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
+                Vodka crema de chocolate amaretto y un licor de la casa echo a base de avellanas cremoso
               </p>
             </div>
 
             <div class="footer-card">
-              <span>$ 7.500</span>
+              <span>$ 22.000</span>
               <button>ver mas</button>
             </div>
           </div>
 
-
-
-          <div class="card">
+<!-- COSMOPOLITA -->
+          <div class="card" data-title="COSMOPOLITA" data-image="{% static '/img\imagenes_productos\COSMOPOLITAN.png'%}"
+          data-options='["COSMOPOLITA $21.000"]'>
             <div class="img-container">
               <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
+                src="{% static '/img\imagenes_productos\COSMOPOLITAN.png'%}"
+                alt="COSMOPOLITA"
               />
             </div>
 
             <div class="main-card">
-              <span>COPA DE HELADO</span>
+              <span>COSMOPOLITA</span>
               <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
+                Coctel suave que combina vodka y triple sec con el acido de el limon y el dulce de un jugo de arandanos
               </p>
             </div>
 
             <div class="footer-card">
-              <span>$ 7.500</span>
+              <span>$ 21.000</span>
               <button>ver mas</button>
             </div>
           </div>
 
-
-
-          <div class="card">
+<!-- CRAZZY_PINEAPPLE -->
+          <div class="card" data-title="CRAZZY_PINEAPPLE" data-image="{%static '\img\imagenes_productos\CRAZZY.png'%}"
+          data-options='["CRAZZY PINEAPPLE $21.000"]'>
             <div class="img-container">
               <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
+                src="{%static '\img\imagenes_productos\CRAZZY.png'%}"
+                alt="CRAZZY_PINEAPPLE"
               />
             </div>
 
             <div class="main-card">
-              <span>GASEOSAS</span>
+              <span>CRAZZY PINEAPPLE</span>
               <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
+                este coctel de la casa diseñado desde una dulce piña el sabor de el coco el hermoso color de el blue curassao con la fuerza y alma de el ron malibu
               </p>
             </div>
 
             <div class="footer-card">
-              <span>$ 7.500</span>
+              <span>$ 21.000</span>
               <button>ver mas</button>
             </div>
           </div>
 
-
-
-          <div class="card">
+<!-- DIABLO_ROJO -->
+          <div class="card" data-title="DIABLO_ROJO" data-image="{%static '\img\imagenes_productos\RED_DEVIL.png'%}"
+          data-options='["Diablo rojo $21.000"]'>
             <div class="img-container">
               <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
+                src="{%static '\img\imagenes_productos\RED_DEVIL.png'%}"
+                alt="DIABLO_ROJO"
               />
             </div>
 
             <div class="main-card">
-              <span>SODA</span>
+              <span>DIABLO ROJO</span>
               <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
+                WHISKY, MEZCLA DE ARÁNDANOS, CÍTRICO, JENGIBRE
               </p>
             </div>
 
             <div class="footer-card">
-              <span>$ 7.500</span>
+              <span>$ 21.000</span>
               <button>ver mas</button>
             </div>
           </div>
 
-
-
-          <div class="card">
+<!-- PIÑA COLADA -->
+          <div class="card" data-title="PIÑA_COLADA" data-image="{%static '\img\imagenes_productos\PIÑA_COLADA.png'%}"
+          data-options='["Piña colada con licor $21.000", "Piña colada sin licor $18,800"]'>
             <div class="img-container">
               <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
+                src="{%static '\img\imagenes_productos\PIÑA_COLADA.png'%}"
+                alt="BESOS_PELIGROSOS"
               />
             </div>
 
             <div class="main-card">
-              <span>GATORADE</span>
+              <span>PIÑA COLADA</span>
               <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
+                Coctel caribeño el cual tiene ron añejo piña crema de coco helado de vainilla leche condensada fresco y cremoso
               </p>
             </div>
 
             <div class="footer-card">
-              <span>$ 7.500</span>
+              <span>$ 21.000</span>
               <button>ver mas</button>
             </div>
           </div>
 
-
-
-          <div class="card">
+<!-- MAITAI -->
+          <div class="card" data-title="MAITAI" data-image="{%static '\img\imagenes_productos\MAITAI.png'%}"
+          data-options='["Maitai $20.000"]'>
             <div class="img-container">
               <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
+                src="{%static '\img\imagenes_productos\MAITAI.png'%}"
+                alt="MAITAI"
               />
             </div>
 
             <div class="main-card">
-              <span>AGUA PEQUEÑA</span>
+              <span>MAITAI</span>
               <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
+                Con este cóctel comenzó todo, y su nombre se traduce como: “excelente”. La receta original consiste en una mezcla de rones (blanco,mandarina,limon) con flor de jamaica blue curassao y limon
               </p>
             </div>
 
             <div class="footer-card">
-              <span>$ 7.500</span>
+              <span>$ 20.000</span>
               <button>ver mas</button>
             </div>
           </div>
 
-
-
-          <div class="card">
+<!-- MARTINI DE MANZANA -->
+          <div class="card" data-title="MARTINI_DE_MANZANA" data-image="{%static '\img\imagenes_productos\APPLE_MARTINI.png'%}"
+          data-options='["Martini de manzana $21.000"]'>
             <div class="img-container">
               <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
+                src="{%static '\img\imagenes_productos\APPLE_MARTINI.png'%}"
+                alt="MARTINI_DE_MANZANA"
               />
             </div>
 
             <div class="main-card">
-              <span>AGUA 600 ml</span>
+              <span>MARTINI DE MANZANA</span>
               <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
+                Vodka, mezcla cítrica, manzana verde, triple sec
               </p>
             </div>
 
             <div class="footer-card">
-              <span>$ 7.500</span>
+              <span>$ 21.000</span>
               <button>ver mas</button>
             </div>
           </div>
 
-
-
-          <div class="card">
+<!-- El_MAS_ALLA -->
+          <div class="card" data-title="El_MAS_ALLA" data-image="{%static '\img\imagenes_productos\MAS_ALLA.png'%}"
+          data-options='["El mas alla $23.000"]'>
             <div class="img-container">
               <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
+                src="{%static '\img\imagenes_productos\MAS_ALLA.png'%}"
+                alt="El_MAS_ALLA"
               />
             </div>
 
             <div class="main-card">
-              <span>POWERADE</span>
+              <span>El MAS ALLA</span>
               <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
+                Está combinación aromática y gustativa combina el albacea el tequila campari con un dulce de arándanos de nuestra casa
               </p>
             </div>
 
             <div class="footer-card">
-              <span>$ 7.500</span>
+              <span>$ 23.000</span>
               <button>ver mas</button>
             </div>
           </div>
 
-
-
-          <div class="card">
+<!-- CABEZA_DE_JABALI -->
+          <div class="card" data-title="CABEZA_DE_JABALI" data-image="{%static '\img\imagenes_productos\CABEZA_JABALI.png'%}"
+          data-options='["Cabeza de jabali $28.000"]'>
             <div class="img-container">
               <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
+                src="{%static '\img\imagenes_productos\CABEZA_JABALI.png'%}"
+                alt="CABEZA_DE_JABALI"
               />
             </div>
 
             <div class="main-card">
-              <span>JUGO HIT</span>
+              <span>CABEZA DE JABALI</span>
               <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
+                Este golpe a tu cabeza combina los sabores de 5 licores (vodka,tequila,whisky,triple sec, ron)en un zumo de naranja y granadina
               </p>
             </div>
 
             <div class="footer-card">
-              <span>$ 7.500</span>
+              <span>$ 28.000</span>
               <button>ver mas</button>
             </div>
+          </div>
+        
+<!-- SEX_ON_THE_BECH -->
+          <div class="card" data-title="SEX_ON_THE_BECH" data-image="{%static '\img\imagenes_productos\SEX_BECH.png'%}"
+          data-options='["Sex on bech $20.000"]'>
+            <div class="img-container">
+              <img
+                src="{%static '\img\imagenes_productos\SEX_BECH.png'%}"
+                alt="SEX_ON_THE_BECH"
+              />
+            </div>
+
+            <div class="main-card">
+              <span>SEX ON THE BECH</span>
+              <p class="truncated-text">
+                Molecular el cual mezcla en colores vodka gin zumo de naranja granadina blue currasao
+              </p>
+            </div>
+
+            <div class="footer-card">
+              <span>$ 20.000</span>
+              <button>ver mas</button>
+            </div>
+          </div>
+
+<!-- COCO_LOCO -->
+          <div class="card" data-title="COCO_LOCO" data-image="{%static '\img\imagenes_productos\COCO_LOCO.png'%}"
+          data-options='["COCO-LOCO $23.000"]'>
+            <div class="img-container">
+              <img
+                src="{%static '\img\imagenes_productos\COCO_LOCO.png'%}"
+                alt="COCO_LOCO"
+              />
+            </div>
+
+            <div class="main-card">
+              <span>COCO-LOCO</span>
+              <p class="truncated-text">
+                Este coctel caribeño echo a base de ron malibu tequila y vodka combiando con la crema de coco la piña y el limon
+              </p>
+            </div>
+
+            <div class="footer-card">
+              <span>$ 23.000</span>
+              <button>ver mas</button>
+            </div>
+          </div>
+
+<!-- MOHANA -->
+          <div class="card" data-title="MOHANA" data-image="{%static '\img\imagenes_productos\MOHANA.PNG'%}"
+          data-options='["MOHANA $21.000"]'>
+            <div class="img-container">
+              <img
+                src="{%static '\img\imagenes_productos\MOHANA.PNG'%}"
+                alt="MOHANA"
+              />
+            </div>
+
+            <div class="main-card">
+              <span>MOHANA</span>
+              <p class="truncated-text">
+                Ginebra ,mix citrico , jarabe de limon cosmico , blue curassao y soda dulce y refrescante acompañado de perlas expllsivas y un final de sabor blaaster
+              </p>
+            </div>
+
+            <div class="footer-card">
+              <span>$ 21.000</span>
+              <button>ver mas</button>
+            </div>
+          </div>
+
+<!-- MARGARITA_COSMICA -->
+          <div class="card" data-title="MARGARITA_COSMICA" data-image="{%static '\img\imagenes_productos\MARGARITA_COSMICA.png'%}"
+          data-options='["Margarati cosmica $21.000"]'>
+            <div class="img-container">
+              <img
+                src="{%static '\img\imagenes_productos\MARGARITA_COSMICA.png'%}"
+                alt="MARGARITA_COSMICA"
+              />
+            </div>
+
+            <div class="main-card">
+              <span>MARGARITA CÓSMICA</span>
+              <p class="truncated-text">
+                esta combinación de la casa convierte la clásica margarita en una experiencia de sabores colores que disfrutala
+              </p>
+            </div>
+
+            <div class="footer-card">
+              <span>$ 21.000</span>
+              <button>ver mas</button>
+            </div>
+          </div>
+
+<!-- PITUFO -->
+          <div class="card" data-title="PITUFO" data-image="{%static '\img\imagenes_productos\PITUFO.png'%}"
+          data-options='["Pitufo $21.000"]'>
+            <div class="img-container">
+              <img
+                src="{%static '\img\imagenes_productos\PITUFO.png'%}"
+                alt="PITUFO"
+              />
+            </div>
+
+            <div class="main-card">
+              <span>PITUFO</span>
+              <p class="truncated-text">
+                Coctel que combina el powerade azul el blue curassao con un alma de vodka y unas deliciosas perlas de blue berry
+              </p>
+            </div>
+
+            <div class="footer-card">
+              <span>$ 21.000</span>
+              <button>ver mas</button>
+            </div>
+          </div>
+
+<!-- CEREZA_HIGH_BALL -->
+          <div class="card" data-title="CEREZA_HIGH_BALL" data-image="{%static '\img\imagenes_productos\HIGH_BALL_CHERRY.PNG'%}"
+          data-options='["SCereza high ball $23.000"]'>
+            <div class="img-container">
+              <img
+                src="{%static '\img\imagenes_productos\HIGH_BALL_CHERRY.PNG'%}"
+                alt="CEREZA_HIGH_BALL"
+              />
+            </div>
+
+            <div class="main-card">
+              <span>CEREZA HIGH BALL</span>
+              <p class="truncated-text">
+                Molecular el cual mezcla en colores vodka gin zumo de naranja granadina blue currasao
+              </p>
+            </div>
+
+            <div class="footer-card">
+              <span>$ 23.000</span>
+              <button>ver mas</button>
+            </div>
+          </div>
+
+<!-- MARTINI SECO -->
+          <div class="card" data-title="MARTINI SECO" data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
+          data-options='["Martini seco $23.000"]'>
+            <div class="img-container">
+              <img
+                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
+                alt="MARTINI SECO"
+              />
+            </div>
+
+            <div class="main-card">
+              <span>MARTINI SECO</span>
+              <p class="truncated-text">
+                El martini o martini seco (Dry Martini en inglés) es uno de los cócteles más conocidos, compuesto de ginebra con una porción de vermut.
+              </p>
+            </div>
+
+            <div class="footer-card">
+              <span>$ 23.000</span>
+              <button>ver mas</button>
+            </div>
+          </div>
+
+<!-- DESARMADOR -->
+          <div class="card" data-title="DESARMADOR" data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
+          data-options='["Desarmador $22.000"]'>
+            <div class="img-container">
+              <img
+                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
+                alt="DESARMADOR"
+              />
+            </div>
+
+            <div class="main-card">
+              <span>DESARMADOR</span>
+              <p class="truncated-text">
+                Vodka zumo de naranja y granadina
+              </p>
+            </div>
+
+            <div class="footer-card">
+              <span>$ 22.000</span>
+              <button>ver mas</button>
+            </div>
+          </div>
+
+<!-- PADRINO -->
+          <div class="card" data-title="PADRINO" data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
+          data-options='["Padrino $20.000"]'>
+            <div class="img-container">
+              <img
+                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
+                alt="PADRINO"
+              />
+            </div>
+
+            <div class="main-card">
+              <span>PADRINO</span>
+              <p class="truncated-text">
+                Este clásico famoso por la película de marlon brandon combina un licor de almendras y albaricoque con un delicioso whisky escoses
+              </p>
+            </div>
+
+            <div class="footer-card">
+              <span>$ 20.000</span>
+              <button>ver mas</button>
+            </div>
+          </div>
+
+<!-- MARGARITA -->
+          <div class="card" data-title="MARGARITA" data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
+          data-options='["Margarita $21.000"]'>
+            <div class="img-container">
+              <img
+                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
+                alt="MARGARITA"
+              />
+            </div>
+
+            <div class="main-card">
+              <span>MARGARITA</span>
+              <p class="truncated-text">
+                este clasico coctel mexicano escarchado con tajín y sal co la fuerza del tequila y los ácidos del limon y triple sec
+              </p>
+            </div>
+
+            <div class="footer-card">
+              <span>$ 21.000</span>
+              <button>ver mas</button>
+            </div>
+          </div>
+
+<!-- AMANECER_CON_TEQUILA -->
+          <div class="card" data-title="AMANECER_CON_TEQUILA" data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
+          data-options='["Amanecer con tequila $20.000"]'>
+            <div class="img-container">
+              <img
+                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
+                alt="AMANECER_CON_TEQUILA"
+              />
+            </div>
+
+            <div class="main-card">
+              <span>AMANECER CON TEQUILA</span>
+              <p class="truncated-text">
+                Zumo de naranja, tequila y granadina el cual da y evoca los colores de un atardecer el cual da su caracteristico efecto visual
+              </p>
+            </div>
+
+            <div class="footer-card">
+              <span>$ 20.000</span>
+              <button>ver mas</button>
+            </div>
+          </div>
+
+<!-- RON_COLA -->
+          <div class="card" data-title="RON_COLA" data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
+          data-options='["Ron cola $20.000"]'>
+            <div class="img-container">
+              <img
+                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
+                alt="RON COLA"
+              />
+            </div>
+
+            <div class="main-card">
+              <span>RON COLA</span>
+              <p class="truncated-text">
+                El cubalibre es un cóctel cubano resultante de la mezcla del refresco de cola con ron y jugo de limón.
+              </p>
+            </div>
+
+            <div class="footer-card">
+              <span>$ 20.000</span>
+              <button>ver mas</button>
+            </div>
+          </div>
+
+<!-- MOJITO -->
+          <div class="card" data-title="MOJITO" data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
+          data-options='["Mojito cuyá $20.500", "Mojito fresa $20.500", "Mojito Azul $20.500", "Mojito kiwi $20.500", "Mojito lulo $20.500", "Mojito tradicional $19.000"]'>
+            <div class="img-container">
+              <img
+                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
+                alt="MOJITO"
+              />
+            </div>
+
+            <div class="main-card">
+              <span>MOJITO</span>
+              <p class="truncated-text">
+                Este refrescante coctel trabajado con ron añejo bacardi hierbabuena mazerada y soda
+              </p>
+            </div>
+
+            <div class="footer-card">
+              <span>$ 20.500</span>
+              <button>ver mas</button>
+            </div>
+          </div>
+
+<!-- DAIQUIRI -->
+          <div class="card" data-title="DAIQUIRI" data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
+          data-options='["Daiquiri tradicional $21.000", "Daiquiri fresa $22.000", "Daiquiri maracuya $22.000", "Daiquiri lulo $22.000", "Daiquiri mandarina $22.000", "Daiquiri lyche $22.000", "Daiquiri frambuesa $22.000"]'>
+            <div class="img-container">
+              <img
+                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
+                alt="DAIQUIRI"
+              />
+            </div>
+
+            <div class="main-card">
+              <span>DAIQUIRI</span>
+              <p class="truncated-text">
+                Los orígenes de esta bebida se remontan a principios del siglo XX, específicamente en el año 1896, existía una mina de hierro en la zona de Daiquiri en Santiago de Cuba
+              </p>
+            </div>
+
+            <div class="footer-card">
+              <button>ver mas</button>
+            </div>
+          </div>
           </div>
 
           
@@ -838,9 +1164,36 @@
 
 
       <script src="{% static '/js/script_menu.js' %}"></script>
-    </main>
-    
-    <footer></footer>
+    <footer id="contacto">
+        <div class="footer-container">
+          <div class="footer-logo">
+            <img src="{% static 'img/logos_o_otros/logo_ombu.png' %}" alt="Imagen de pie de página">
+          </div>
+          
+          <div class="footer-contact">
+            <h2>Contacto</h2>
+                <div class="social-icons">
+                    <a href="https://www.facebook.com" target="_blank" class="social-icon facebook">
+                        <img src="{% static 'img/icono_social/Facebook_Logo.png' %}" alt="Facebook">
+                      </a>
+                      <a href="https://www.twitter.com" target="_blank" class="social-icon twitter">
+                        <img src="{% static 'img/icono_social/twiter_log.png' %}" alt="Twitter">
+                      </a>
+                      <a href="https://www.instagram.com" target="_blank" class="social-icon instagram">
+                        <img src="{% static 'img/icono_social/instagram_log.png' %}" alt="Instagram">
+                      </a>
+                      <a href="https://wa.me/123456789" target="_blank" class="social-icon whatsapp">
+                        <img src="{% static 'img/icono_social/whatsapp_icon.png' %}" alt="WhatsApp">
+                      </a>
+                </div>
+              </div>
+            </div>
+            
+            <div class="footer-bottom">
+              <p>&copy; 2025 Ombú - Todos los derechos reservados</p>
+            </div>
+          </footer>
+        </main>
   </body>
 </html>
 

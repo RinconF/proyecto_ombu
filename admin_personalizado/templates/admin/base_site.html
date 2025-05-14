@@ -5,12 +5,15 @@
 <link rel="stylesheet" href="{% static 'admin_personalizado/admin.css' %}">
 
 <style id="dynamic-bg-style">
-    /* Este estilo será modificado por JavaScript */
+    
     body, #content {
-        background-color: #1A3330;
+        background-color: #1A3330; 
+        background-image: url('/static/img/logos_o_otros/ombu_fondo.jpg'); 
+        background-size: cover; 
+        background-repeat: no-repeat; 
+        background-attachment: fixed;
+        transition: background 0.5s ease;
     }
-    
-    
 </style>
 
 {% endblock %}
@@ -19,7 +22,8 @@
 {% block branding %}
 <div class="navbar">
     <div class="brand">
-        <h1 id="site-name"><a href="{% url 'admin:index' %}">{{ site_header|default:_('OMBÚ') }}</a></h1>
+        <h1 id="site-name">
+            <a href="{% url 'admin:index' %}">{{ site_header|default:_('OMBÚ') }}</a></h1>
     </div>
     <ul class="main-nav">
         {% for app in available_apps %}
@@ -36,33 +40,46 @@
 {% block nav-global %}{% endblock %}
 
 
+{% block content %}
+{{ block.super }}
+<div class="module">
+    <h2>{% translate 'Personalización del Fondo' %}</h2>
+    <div class="form-row">
+        <label for="admin-bg-image">{% translate 'URL de la Imagen de Fondo:' %}</label>
+        <input type="text" id="admin-bg-image" name="admin-bg-image" placeholder="{% translate 'Ingrese la URL de la imagen' %}">
+    </div>
+</div>
+{% endblock %}
 
 
 {% block extrajs %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Obtener elementos
-    const colorPicker = document.getElementById('admin-bg-color');
+    const imageInput = document.getElementById('admin-bg-image');
     const dynamicStyle = document.getElementById('dynamic-bg-style');
-    
-    // Cargar color guardado
-    const savedColor = localStorage.getItem('adminBgColor');
-    if (savedColor) {
-        colorPicker.value = savedColor;
-        updateBackgroundColor(savedColor);
+
+    // Cargar imagen guardada
+    const savedImage = localStorage.getItem('adminBgImage');
+    if (savedImage) {
+        imageInput.value = savedImage;
+        updateBackgroundImage(savedImage);
     }
-    
-    // Manejar cambio de color
-    colorPicker.addEventListener('input', function() {
-        updateBackgroundColor(this.value);
-        localStorage.setItem('adminBgColor', this.value);
+
+    // Manejar cambio de URL de la imagen
+    imageInput.addEventListener('input', function() {
+        updateBackgroundImage(this.value);
+        localStorage.setItem('adminBgImage', this.value);
     });
-    
-    function updateBackgroundColor(color) {
+
+    function updateBackgroundImage(imageUrl) {
         dynamicStyle.textContent = `
             body, #content {
-                background-color: ${color} !important;
-                transition: background-color 0.5s ease;
+                background-image: url('${imageUrl}');
+                background-size: cover;
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+                transition: background 0.5s ease;
             }
         `;
     }

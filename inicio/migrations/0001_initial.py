@@ -16,7 +16,29 @@ class Migration(migrations.Migration):
             name='Pedidos',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('fechahoraPedido', models.DateTimeField(auto_now_add=True)),
+                ('nombreCategoria', models.CharField(max_length=50)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Mesa',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('numero', models.PositiveIntegerField(unique=True)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Rol',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('tipoRol', models.CharField(max_length=45)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Producto',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('nombreProducto', models.CharField(max_length=45)),
+                ('descripcion', models.TextField(blank=True, null=True)),
                 ('precio', models.DecimalField(decimal_places=2, max_digits=10)),
                 ('id_mesa', models.IntegerField()),
             ],
@@ -31,27 +53,7 @@ class Migration(migrations.Migration):
                 ('contrasena', models.CharField(max_length=100)),
                 ('celular', models.CharField(blank=True, max_length=15, null=True)),
                 ('direccion', models.CharField(blank=True, max_length=100, null=True)),
-                ('rol', models.CharField(choices=[('ADM', 'Administrador'), ('MES', 'Mesero')], default='ADM', max_length=3)),
-            ],
-        ),
-        migrations.CreateModel(
-            name='Producto',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('nombreProducto', models.CharField(max_length=45)),
-                ('descripcion', models.TextField(blank=True, null=True)),
-                ('precio', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('Pedidos', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='inicio.pedidos')),
-            ],
-        ),
-        migrations.CreateModel(
-            name='Inventario',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('nombreProducto', models.CharField(max_length=45)),
-                ('Cantidad', models.CharField(max_length=50)),
-                ('precioProducto', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('Producto', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='inicio.producto')),
+                ('rol', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='inicio.rol')),
             ],
         ),
         migrations.CreateModel(
@@ -68,5 +70,28 @@ class Migration(migrations.Migration):
             model_name='pedidos',
             name='Usuario',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='inicio.usuario'),
+        ),
+        migrations.CreateModel(
+            name='Reserva',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('fecha', models.DateField()),
+                ('hora', models.TimeField()),
+                ('cantidadPersonas', models.IntegerField()),
+                ('estado', models.CharField(choices=[('pendiente', 'Pendiente'), ('confirmada', 'Confirmada'), ('cancelada', 'Cancelada')], default='pendiente', max_length=20)),
+                ('mesa', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='inicio.mesa')),
+                ('usuario', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='inicio.usuario')),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Pedido',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('total', models.DecimalField(decimal_places=2, max_digits=10)),
+                ('fecha', models.DateTimeField(auto_now_add=True)),
+                ('mesa', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='inicio.mesa')),
+                ('productos', models.ManyToManyField(related_name='pedido', to='inicio.producto')),
+                ('usuario', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='inicio.usuario')),
+            ],
         ),
     ]

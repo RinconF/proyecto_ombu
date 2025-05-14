@@ -1,102 +1,46 @@
 {% load static %}
+{% load custom_tags %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static '/css/mesas.css' %}">
-    <link rel="stylesheet" href="{% static '/css/mesas.css' %}">
-    <title>Document</title>
+    <title>Mesas - Gastro Bar</title>
+    <link rel="stylesheet" href="{% static 'css/mesas.css' %}">
 </head>
 <body>
-<!-- Sección de Mesas -->
+    <!-- Menú superior -->
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+    <ul class="main-menu" id="mainMenu">
+        <li class="admin-item"><a href="{% url 'admin' %}">Inicio</a></li>
+        {% if user.is_authenticated %}
+            <li class="admin-item"><a href="{% url 'cervezas' %}">Productos</a></li>
+            <li class="admin-item"><a href="{% url 'mesas' %}">Mesas</a></li>
+            {% if user|has_group:"ombu" %}
+                <li class="admin-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                <li class="admin-item"><a href="{% url 'reserva' %}">Reserva</a></li>
+                <li class="admin-item"><a href="#">Usuarios</a></li>
+            {% endif %}
+            <li class="admin-item"><a href="{% url 'logout' %}">CERRAR SESIÓN</a></li>
+        {% endif %}
+    </ul>
+    <!-- Fondo con capa oscura -->
+    <div class="background-overlay"></div>
+
+    <!-- Sección de Mesas -->
     <div class="mesas-section">
         <h2>Mesas</h2>
         <div class="mesas-grid">
-            <!-- Mesa 1 -->
-            <div class="mesa" data-mesa="1">
-                <i class="fas fa-chair"></i>
-                <h3>Mesa 1</h3>
-            </div>
-
-            <!-- Mesa 2 -->
-            <div class="mesa" data-mesa="2">
-                <i class="fas fa-chair"></i>
-                <h3>Mesa 2</h3>
-            </div>
-
-            <!-- Mesa 3 -->
-            <div class="mesa" data-mesa="3">
-                <i class="fas fa-chair"></i>
-                <h3>Mesa 3</h3>
-            </div>
-
-
-            <!-- Mesa 4 -->
-            <div class="mesa" data-mesa="4">
-                <i class="fas fa-chair"></i>
-                <h3>Mesa 4</h3>
-            </div>
-
-
-            <!-- Mesa 5 -->
-            <div class="mesa" data-mesa="5">
-                <i class="fas fa-chair"></i>
-                <h3>Mesa 5</h3>
-            </div>
-
-
-            <!-- Mesa 6 -->
-            <div class="mesa" data-mesa="6">
-                <i class="fas fa-chair"></i>
-                <h3>Mesa 6</h3>
-            </div>
-
-
-            <!-- Mesa 7 -->
-            <div class="mesa" data-mesa="7">
-                <i class="fas fa-chair"></i>
-                <h3>Mesa 7</h3>
-            </div>
-
-
-            <!-- Mesa 8 -->
-            <div class="mesa" data-mesa="8">
-                <i class="fas fa-chair"></i>
-                <h3>Mesa 8</h3>
-            </div>
-
-
-            <!-- Mesa 9 -->
-            <div class="mesa" data-mesa="9">
-                <i class="fas fa-chair"></i>
-                <h3>Mesa 9</h3>
-            </div>
-
-
-            <!-- Mesa 10 -->
-            <div class="mesa" data-mesa="10">
-                <i class="fas fa-chair"></i>
-                <h3>Mesa 10</h3>
-            </div>
-
-            
-            <!-- Mesa 11 -->
-            <div class="mesa" data-mesa="11">
-                <i class="fas fa-chair"></i>
-                <h3>Mesa 11</h3>
-            </div>
-
-
-            <!-- Mesa 12 -->
-            <div class="mesa" data-mesa="12">
-                <i class="fas fa-chair"></i>
-                <h3>Mesa 12</h3>
-            </div>            
+            {% for i in "123456789101112"|make_list %}
+                <div class="mesa" data-mesa="{{ i }}">
+                    <i class="fas fa-chair"></i>
+                    <h3>Mesa {{ i }}</h3>
+                </div>
+            {% endfor %}
         </div>
     </div>
 
-    <!-- Sección de Pedidos (oculta inicialmente) -->
+    <!-- Sección de Pedidos -->
     <div class="pedido-section" id="pedido-section">
         <h3>Pedido de la Mesa <span id="mesa-seleccionada"></span></h3>
         <table>
@@ -110,12 +54,11 @@
                 </tr>
             </thead>
             <tbody id="pedido-body">
-                <!-- Aquí se agregarán los productos dinámicamente -->
+                <!-- Productos dinámicos -->
             </tbody>
         </table>
 
-        <button id="agregar-producto-btn"  data-url="{% url 'cervezas' %}"  >Agregar Producto</button>
-
+        <button id="agregar-producto-btn" data-url="{% url 'cervezas' %}">Agregar Producto</button>
         <p>Total del Pedido: $<span id="total-pedido">0.00</span></p>
         <select id="medio-pago">
             <option value="efectivo">Efectivo</option>
@@ -124,15 +67,14 @@
         </select>
         <button onclick="finalizarPedido()">Finalizar Pedido</button>
     </div>
-    
-<!-- Footer Section -->  
-<footer>
-    <div class="footer-bottom">
-        <p>&copy; 2025 Restaurante Nombre. Todos los derechos reservados.</p>
-    </div>
-</footer>
 
-    <script src="{% static '/js/mesas.js' %}"></script>
-    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Restaurante Nombre. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/mesas.js' %}"></script>
 </body>
 </html>

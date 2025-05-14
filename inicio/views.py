@@ -3,8 +3,9 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponseForbidden, JsonResponse
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_POST, require_http_methods
 from django.urls import reverse
@@ -17,51 +18,76 @@ from .models import Usuario
 from .forms import customusuario_crear, customusuario_change, PasswordChangeForm
 from django.contrib.auth.models import User
 
+from .decorators import group_required
+# from .models import Categoria, Producto, Pedido, Mesa
+from django.db.models import Sum, Count
+from django.db.models.functions import TruncMonth
+from .decorators import group_required
 
 # PRINCIPAL
-
 def index(request):
     return render(request, 'pages/principal/index.html')
 
+# CATEGORIA
+def listar_categoria(request):
+    categorias = Categoria.objects.all()
+    return render(request, 'pages/categoria/listar_categoria.html', {'categorias': categorias})
 
-#productos_menu
-
+# PRODUCTOS MENU
 def bebida_caliente(request):
     return render(request, 'pages/productos_menu/bebida_caliente.html')
 
-def Bebida_fria (request):
+def bebida_fria(request):
     return render(request, 'pages/productos_menu/Bebida_fria.html')
 
-def Cerveza (request):
+def cerveza(request):
     return render(request, 'pages/productos_menu/Cerveza.html')
 
-def Cigarrillo (request):
+def cigarrillo(request):
     return render(request, 'pages/productos_menu/Cigarrillo.html')
 
-def Coctel (request):
+def coctel(request):
     return render(request, 'pages/productos_menu/Coctel.html')
 
-def Picar (request):
+def picar(request):
     return render(request, 'pages/productos_menu/Picar.html')
 
 # ADMIN
-
 def login_view(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            login(request, user)  # <--- Aquí pasas el usuario
-            return redirect('admin')  # Cambia esto según tu lógica
+            if user.is_active:
+                login(request, user)
+                # Redireccionar según el rol del usuario
+                if user.is_superuser:
+                    return redirect('admin:index')  # Redirige al panel de administración de Django
+                elif user.rol == 'ombu':
+                    return redirect('admin') # Redirige a tu vista 'admin_principal'
+                else:
+                    return redirect('bebidas_calientes')  # Redirige a la página de usuario regular
+            else:
+                messages.error(request, 'Tu cuenta está desactivada. Contacta al administrador.')
         else:
             messages.error(request, 'Usuario o contraseña incorrectos.')
-    return render(request, 'pages/Admin/login.html')  # Tu template de login
+
+    # Si el usuario ya está autenticado, redirigir según su rol
+    if request.user.is_authenticated:
+        if request.user.is_superuser:
+            return redirect('admin:index')  # Redirige al panel de administración de Django
+        elif request.user.rol == 'ombu':
+            return redirect('admin') # Redirige a tu vista 'admin_principal'
+        else:
+            return redirect('bebidas_calientes')  # Redirige a la página de usuario regular
+
+    return render(request, 'pages/Admin/login.html')
 
 def logout_view(request):
     logout(request)
-    return redirect('login') 
+    return redirect('pages/Admin/login.html') 
 
 @never_cache
 @login_required
@@ -69,21 +95,44 @@ def admin_principal(request):
     return render(request, 'pages/Admin/admin_principal.html')
 
 @never_cache
-@login_required
-def dashboard (request):
-    return render(request, 'pages/Admin/dashboard.html')
+@group_required('ombu')
+def dashboard(request):
+    # Totales
+    total_pedidos = Pedido.objects.count()
+    ingresos = Pedido.objects.aggregate(total=Sum('total'))['total'] or 0
+
+    # Top productos
+    top_productos = Producto.objects.annotate(veces_vendido=Count('pedido')).order_by('-veces_vendido')[:5]
+
+    # Mesas más usadas
+    mesas_top = Pedido.objects.values('mesa__numero').annotate(usos=Count('id')).order_by('-usos')[:5]
+
+    # Ventas por mes últimos 6 meses
+    qs = Pedido.objects.annotate(mes=TruncMonth('fecha')).values('mes').annotate(total_mes=Sum('total')).order_by('mes')[:6]
+    labels = [item['mes'].strftime('%b') for item in qs]
+    data   = [item['total_mes'] for item in qs]
+
+    context = {
+        'total_pedidos': total_pedidos,
+        'ingresos': ingresos,
+        'top_productos': top_productos,
+        'mesas_top': mesas_top,
+        'ventas_por_mes_labels': labels,
+        'ventas_por_mes_data': data,
+    }
+    return render(request, 'pages/Admin/dashboard.html', context)
 
 def admin_login_page(request):
     return render(request, 'pages/Admin/login.html')
 
 @never_cache
 @login_required
-def mesas (request):
+def mesas(request):
     return render(request, 'pages/Admin/mesas.html')
 
 @never_cache
-@login_required
-def reserva (request):
+@group_required('ombu')
+def reserva(request):
     return render(request, 'pages/Admin/reserva.html')
 
 @never_cache
@@ -295,34 +344,42 @@ def obtener_usuario(request, user_id):
 
 
 # menu mesero
+
 @never_cache
 @login_required
-def bebidas_calientes (request):
+def usuarios(request):
+    return render(request, 'pages/Admin/usuarios.html')
+
+# MENU MESERO
+@never_cache
+@login_required
+def bebidas_calientes(request):
     return render(request, 'pages/menu_mesero/bebidas_calientes.html')
 
 @never_cache
 @login_required
-def bebidas_frias (request):
+def bebidas_frias(request):
     return render(request, 'pages/menu_mesero/bebidas_frias.html')
+
 
 @never_cache
 @login_required
-def Cervezas (request):
+def cervezas(request):
     return render(request, 'pages/menu_mesero/Cervezas.html')
 
 @never_cache
 @login_required
-def Cigarrillos (request):
+def cigarrillos(request):
     return render(request, 'pages/menu_mesero/Cigarrillos.html')
 
 @never_cache
 @login_required
-def Cocteles (request):
+def cocteles(request):
     return render(request, 'pages/menu_mesero/Cocteles.html')
 
 @never_cache
 @login_required
-def Para_picar (request):
+def para_picar(request):
     return render(request, 'pages/menu_mesero/Para_picar.html')
 
 

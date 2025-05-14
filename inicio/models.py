@@ -22,14 +22,21 @@ class Usuario(models.Model):
     def str(self):
         return f"{self.nombre} {self.apellido}"
 
-class Producto(models.Model):
-    nombreProducto = models.CharField(max_length=45)
-    descripcion = models.TextField(blank=True, null=True)
-    precio = models.DecimalField(max_digits=10, decimal_places=2)
-    categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
 
-    def str(self):
-        return self.nombreProducto
+
+class Producto(models.Model):
+    name = models.CharField(max_length=200, verbose_name="nombre")
+    description = models.TextField(verbose_name="descripcion", default="Sin descripción")
+    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="precio")
+    available = models.BooleanField(default=True, verbose_name="disponible")
+    photo = models.ImageField(upload_to="logos", null=True, blank=True, verbose_name="foto")
+    categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)  # Manteniendo la relación con `Categoria`
+
+    def __str__(self):  # Para retornar el nombre
+        return self.name
+
+   
+
 
 class Reserva(models.Model):
     fecha = models.DateField()
@@ -40,21 +47,23 @@ class Reserva(models.Model):
     def str(self):
         return f"Reserva {self.id} - {self.fecha} {self.hora}"
 
-class BebidaCaliente(models.Model):
-    producto = models.OneToOneField(
-        Producto,
-        on_delete=models.CASCADE,
-        primary_key=True
-    )
-    TIPOS_BEBIDA = [
-        ('CAFE', 'Café'),
-        ('TE', 'Té'),
-        ('CHOCOLATE', 'Chocolate caliente'),
-        ('INFUSION', 'Infusión'),
-    ]
-    tipo = models.CharField(
-        max_length=50,
-        choices=TIPOS_BEBIDA,
-        default='CAFE'
-    )
+# class BebidaCaliente(models.Model):
+#     producto = models.OneToOneField(
+#         Producto,
+#         on_delete=models.CASCADE,
+#         primary_key=True
+#     )
+    # TIPOS_BEBIDA = [
+    #     ('CAFE', 'Café'),
+    #     ('TE', 'Té'),
+    #     ('CHOCOLATE', 'Chocolate caliente'),
+    #     ('INFUSION', 'Infusión'),
+    # ]
+    # tipo = models.CharField(
+    #     max_length=50,
+    #     choices=TIPOS_BEBIDA,
+    #     default='CAFE'
+    # )
     # ... otros campos específicos de bebidas ...
+    
+    

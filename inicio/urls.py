@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 from django.contrib.auth import views as auth_views
 #from .views import ProductFromView
@@ -35,8 +35,14 @@ urlpatterns = [
     path('cocteles/', views.Cocteles, name='cocteles'),
     path('Para_picar/', views.Para_picar, name='Para_picar'),
     
+    
+    
     #CATEGORIAS 
     path('bebidas-calientes/', views.bebidas_calientes, name='bebidas_calientes'),
+    
+    
+    #############
+    #path('agregar/', ProductFormView.as_view(), name="add_producto"),
     
     
 ] #+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

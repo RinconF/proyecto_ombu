@@ -10,6 +10,8 @@ from .decorators import group_required
 from .models import Categoria
 #bebidad calientes
 
+#from django.views import generic
+
 
 #from .models import Producto, BebidaCaliente
 
@@ -130,7 +132,9 @@ def Para_picar (request):
 
 
 
-#
+#vista productos 
+# class ProductFromView(generic.Fromview):
+#     template_name = "productos/add_product.html"
 
     
     

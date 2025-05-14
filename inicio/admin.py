@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Rol, Categoria, Usuario, Producto, Reserva
+from .models import Rol, Categoria, Usuario, Reserva, Producto
 
 # Clase para mejorar la vista del modelo Usuario en el admin
 class UsuarioAdmin(admin.ModelAdmin):   
@@ -13,21 +13,24 @@ class CategoriaAdmin(admin.ModelAdmin):
     search_fields = ('nombreCategoria',)
     ordering = ('nombreCategoria',)
 
-#@admin.register(Producto)
+
 class ProductoAdmin(admin.ModelAdmin):
-    #model = Producto
-    list_display = ['nombreProducto', 'precio', 'categoria']  # He quitado 'disponible'
-    search_fields = ('nombreProducto', 'descripcion')
-    list_filter = ('categoria',)  # He quitado 'disponible'
-    list_editable = ('precio',)  # He quitado 'disponible'
-    ordering = ('nombreProducto',)
+    list_display = ('name', 'price', 'available')  # Usa los nombres de `models.py`
+    ordering = ['name']
+    list_filter = ['available']  # No hay `categoria`, así que usa `available`
+    list_editable = ['price']
+
+admin.site.register(Producto, ProductoAdmin)
+
+
+#admin.site.register(Producto, ProductoAdmin)
 
 
 #####################################################
 
 # Registros
 ##################
-admin.site.register(Producto, ProductoAdmin)
+#admin.site.register(Producto, ProductoAdmin)
 
 admin.site.register(Rol)
 admin.site.register(Categoria)

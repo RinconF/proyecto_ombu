@@ -17,7 +17,9 @@
 {% block content %}
     <nav id="inicio-nav">
         <h2>{% translate 'Inicio' %}</h2>
-        <ul>
+           <ul>
+                <li><a href="{% url 'perfil' %}" class="nav-link">Perfil</a></li>
+
             {% for app in app_list %}
                 {% if app.app_label == 'inicio' %}
                     {% for model in app.models %}

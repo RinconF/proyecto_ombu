@@ -6,6 +6,9 @@ from django.contrib import admin
 from .views import dashboard
 from .forms import CustomPasswordResetForm
 from django.contrib.auth.views import PasswordResetView
+from inicio.views import perfil_view
+from admin_personalizado.views import perfil_view
+
 
 urlpatterns = [
     # PRINCIPAL
@@ -61,4 +64,15 @@ urlpatterns = [
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
     
+
+    path('perfil/', perfil_view, name='perfil'),
+
 ]
+# perfil
+
+
+# inicio/urls.py
+
+
+
+

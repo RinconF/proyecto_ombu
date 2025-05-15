@@ -1,6 +1,10 @@
 {% extends "admin/base.html" %}
 {% load static i18n %}
-
+{% block userlinks %}
+  {{ block.super }}
+  /
+  <a href="{% url 'perfil' %}">{% translate 'Perfil' %}</a>
+{% endblock %}
 {% block extrastyle %}{{ block.super }}
 <link rel="stylesheet" href="{% static 'admin_personalizado/admin.css' %}">
 

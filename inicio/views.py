@@ -18,6 +18,8 @@ from .models import Usuario
 from .forms import customusuario_crear, customusuario_change, PasswordChangeForm
 from django.contrib.auth.models import User
 
+from django.contrib.admin.views.decorators import staff_member_required
+
 from .decorators import group_required
 # from .models import Categoria, Producto, Pedido, Mesa
 from django.db.models import Sum, Count

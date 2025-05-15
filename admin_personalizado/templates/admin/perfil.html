@@ -1,0 +1,23 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+<h2>Mi perfil</h2>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <fieldset>
+        <legend>Información del usuario</legend>
+        {{ user_form.as_p }}
+    </fieldset>
+
+    <fieldset>
+        <legend>Perfil</legend>
+        {% if perfil_form.instance.avatar %}
+            <img src="{{ perfil_form.instance.avatar.url }}" width="150" height="150"><br>
+        {% endif %}
+        {{ perfil_form.as_p }}
+    </fieldset>
+
+    <button type="submit" class="default">Guardar cambios</button>
+</form>
+{% endblock %}

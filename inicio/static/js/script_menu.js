@@ -108,6 +108,10 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem('cart', JSON.stringify(cart));
     }
 
+
+
+
+    
     // Crear elemento para mostrar el precio en el modal
     const modalPrice = document.createElement('div');
     modalPrice.className = 'modal-price';
@@ -596,3 +600,5 @@ document.addEventListener('DOMContentLoaded', function() {
     // Agrega el evento de scroll al `main` en lugar de `window`
     main.addEventListener("scroll", handleScroll);
 });
+
+

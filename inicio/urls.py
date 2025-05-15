@@ -1,5 +1,14 @@
 from django.urls import path
 from . import views
+from django.contrib.auth import views as auth_views
+from .views import usuarios_view    
+from django.contrib import admin
+from .views import dashboard
+from .forms import CustomPasswordResetForm
+from django.contrib.auth.views import PasswordResetView
+from inicio.views import perfil_view
+from admin_personalizado.views import perfil_view
+
 
 urlpatterns = [
     # PRINCIPAL
@@ -7,24 +16,63 @@ urlpatterns = [
 
     # PRODUCTOS MENU
     path('bebida_caliente/', views.bebida_caliente, name='bebida_caliente'),
-    path('Bebida_fria/', views.Bebida_fria, name='Bebida_fria'),
-    path('cerveza/', views.Cerveza, name='cerveza'),
-    path('cigarrillo/', views.Cigarrillo, name='cigarrillo'),
-    path('coctel/', views.Coctel, name='coctel'),
-    path('picar/', views.Picar, name='picar'),
+    path('bebida_fria/', views.bebida_fria, name='Bebida_fria'),
+    path('cerveza/', views.cerveza, name='cerveza'),
+    path('cigarrillo/', views.cigarrillo, name='cigarrillo'),
+    path('coctel/', views.coctel, name='coctel'),
+    path('picar/', views.picar, name='picar'),
 
     # ADMIN
-    path('admin', views.admin_principal, name='admin_principal'),
+    # path('admin', views.admin_principal, name='admin'),
+    # path('admin/', admin.site.urls),
     path('dashboard/', views.dashboard, name='dashboard'),
-    path('login/', views.login, name='login'),
+    path('login/', views.login_view, name='login'),
     path('mesas/', views.mesas, name='mesas'),
     path('reserva/', views.reserva, name='reserva'),
+    # path('usuarios/', views.usuarios, name = 'usuarios'),
+    path('logout/', views.logout_view, name='logout'),
+
+    # API de usuarios
+    path('crear-usuario/', views.crear_usuario, name='crear_usuario'),
+    path('actualizar-usuario/', views.actualizar_usuario, name='actualizar_usuario'),
+    path('actualizar-estado-usuario/<int:user_id>/', views.actualizar_estado_usuario, name='actualizar_estado_usuario'),
+    path('eliminar-usuario/<int:user_id>/', views.eliminar_usuario, name='eliminar_usuario'),
+    path('usuarios/obtener/<int:user_id>/', views.obtener_usuario, name='obtener_usuario'),  # Nueva ruta
+    path('admin/usuarios/', usuarios_view, name='usuarios'),
+
+
 
     # MENU MESERO
     path('bebidas_calientes/', views.bebidas_calientes, name='bebidas_calientes'),
     path('bebidas_frias/', views.bebidas_frias, name='bebidas_frias'),
-    path('cervezas/', views.Cervezas, name='cervezas'),
-    path('cigarrillos/', views.Cigarrillos, name='cigarrillos'),
-    path('cocteles/', views.Cocteles, name='cocteles'),
-    path('Para_picar/', views.Para_picar, name='Para_picar'),
+    path('cervezas/', views.cervezas, name='cervezas'),
+    path('cigarrillos/', views.cigarrillos, name='cigarrillos'),
+    path('cocteles/', views.cocteles, name='cocteles'),
+    path('Para_picar/', views.para_picar, name='Para_picar'),
+    
+    
+    # # RECUPERAR CONTRASEÑA
+    path('password_reset/', PasswordResetView.as_view(
+    form_class=CustomPasswordResetForm,
+    email_template_name='registration/password_reset_email.txt',
+    html_email_template_name='registration/password_reset_email.html',
+    subject_template_name='registration/password_reset_subject.txt',
+    success_url='/password_reset/done/'
+    ), 
+    name='password_reset'),  
+    path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+    
+
+    path('perfil/', perfil_view, name='perfil'),
+
 ]
+# perfil
+
+
+# inicio/urls.py
+
+
+
+

@@ -75,7 +75,7 @@
 
 
 
-/*-------------------------------------------------------------------------*/
+/*--------------------------------- estilos para el contenido main ----------------------------------------*/
 
 #content-main {
  
@@ -85,7 +85,14 @@
     color: white;
 }
 
+#content-start #content .colM{
+    background-color: white;
+}
 
+
+#content .colM p{
+    background-color: white;
+}
 
 #content h1{
     color: rgb(255, 255, 255);
@@ -95,10 +102,17 @@
     color: wheat;
 }
 
-
-#content .colM{
-    color: white;
+#content-start #content h2{
+    color: black;
+    background-color: white;
 }
+
+
+#content-start #content ul{
+    background-color: black;
+}
+
+
 
 #changelist{
     border-collapse: collapse;
@@ -226,6 +240,13 @@
     width: 40px;  /* Ancho fijo para columna de checkbox */
     background-color: #5cb85c;  /* Mismo color que las otras celdas */
 }
+
+/* Estilo para el texto dentro del las filas*/
+#result_list tbody td{
+    color: black;
+}
+
+
 
 /* Estilo para la fila de encabezado */
 #result_list thead th {

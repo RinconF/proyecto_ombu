@@ -130,7 +130,7 @@
 {% block extrabody %}{% endblock extrabody %}
 
 {% block extrajs %}
-<script>
+{% comment %} <script>
 document.addEventListener('DOMContentLoaded', function() {
     function adjustSidebar() {
         const header = document.getElementById('header');
@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
-</script>
+</script> {% endcomment %}
 {% endblock %}
 </body>
 </html>

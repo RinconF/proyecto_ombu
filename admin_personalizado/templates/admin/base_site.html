@@ -1,3 +1,5 @@
+
+
 {% extends "admin/base.html" %}
 {% load static i18n %}
 
@@ -53,36 +55,40 @@
 
 
 {% block extrajs %}
+{{block.super}}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Obtener elementos
     const imageInput = document.getElementById('admin-bg-image');
     const dynamicStyle = document.getElementById('dynamic-bg-style');
 
-    // Cargar imagen guardada
-    const savedImage = localStorage.getItem('adminBgImage');
-    if (savedImage) {
-        imageInput.value = savedImage;
-        updateBackgroundImage(savedImage);
-    }
 
-    // Manejar cambio de URL de la imagen
-    imageInput.addEventListener('input', function() {
-        updateBackgroundImage(this.value);
-        localStorage.setItem('adminBgImage', this.value);
-    });
+    if (imageInput && dynamicStyle){
 
-    function updateBackgroundImage(imageUrl) {
-        dynamicStyle.textContent = `
-            body, #content {
-                background-image: url('${imageUrl}');
-                background-size: cover;
-                background-repeat: no-repeat;
-                background-attachment: fixed;
-                transition: background 0.5s ease;
-            }
-        `;
-    }
+        const savedImage = localStorage.getItem('adminBgImage');
+        if (savedImage) {
+            imageInput.value = savedImage;
+            updateBackgroundImage(savedImage);
+        }
+
+        // Manejar cambio de URL de la imagen
+        imageInput.addEventListener('input', function() {
+            updateBackgroundImage(this.value);
+            localStorage.setItem('adminBgImage', this.value);
+        });
+
+        function updateBackgroundImage(imageUrl) {
+            dynamicStyle.textContent = `
+                body, #content {
+                    background-image: url('${imageUrl}');
+                    background-size: cover;
+                    background-repeat: no-repeat;
+                    background-attachment: fixed;
+                    transition: background 2s ease;
+                }
+            `;
+        }
+    }    
 });
 </script>
 {% endblock %}

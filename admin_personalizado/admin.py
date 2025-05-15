@@ -9,3 +9,7 @@ class CustomAdminSite(AdminSite):
 
 # Puedes reemplazar el sitio admin por defecto
 admin.site = CustomAdminSite()
+
+
+
+admin.site.site_header = "Ombu-Administración"

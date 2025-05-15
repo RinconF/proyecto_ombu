@@ -10,12 +10,19 @@
 
 {% block bodyclass %}{{ block.super }} dashboard{% endblock %}
 
-{% block nav-breadcrumbs %}{% endblock %}
+{% block nav-breadcrumbs %}
+    <nav aria-label="{% translate 'Breadcrumbs' %}">
+        <div class="breadcrumbs">
+            <a href="{% url 'admin:index' %}">{% translate 'Inicio' %}</a>
+            {% if title %} &rsaquo; {{ title }}{% endif %}
+        </div>
+    </nav>
+{% endblock %}
 
-
+{% block title %}{% translate 'Panel de Administración' %}{% endblock %}
 
 {% block content %}
-    <nav id="inicio-nav">
+    {% comment %} <nav id="inicio-nav">
         <h2>{% translate 'Inicio' %}</h2>
         <ul>
             {% for app in app_list %}
@@ -26,7 +33,7 @@
                 {% endif %}
             {% endfor %}
         </ul>
-    </nav>
+    </nav> {% endcomment %}
 
     <div id="content-main">
         {# Tu contenido principal aquí #}

@@ -4,12 +4,34 @@
 # class ProductFormView(generic.FormView):
 #     template_name = "productos/add_product.html"
 
+# from django.views import generic
+# from productos.forms import ProductForm
+# from django.conf import settings
+# import os
+# from django.urls import reverse_lazy 
+
+
+# class ProductFormView(generic.FormView):      
+#     template_name = "productos/add_product.html"
+#     form_class = ProductForm
+#     success_url = reverse_lazy('add_product')
+    
+#     def form_valid(self, form):
+#         form.save()
+#         return super().form_valid(form)
+    
+# class ProductListView(generic.ListView):
+#     template_name = "productos/list_products.html"
+#     context_object_name = "products"
+#     model = Product
+
+
 from django.views import generic
 from productos.forms import ProductForm
 from django.conf import settings
+from .models import Producto  # ✅ Importación correcta
 import os
 from django.urls import reverse_lazy 
-
 
 class ProductFormView(generic.FormView):      
     template_name = "productos/add_product.html"
@@ -23,9 +45,11 @@ class ProductFormView(generic.FormView):
 class ProductListView(generic.ListView):
     template_name = "productos/list_products.html"
     context_object_name = "products"
-    model = Product
+    model = Producto  # ✅ Aquí va el nombre correcto
 
-    
+def list_products(request):
+    return render(request,'productos/list_products.html')
+
     """"
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

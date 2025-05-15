@@ -16,6 +16,7 @@ class CategoriaAdmin(admin.ModelAdmin):
 
 class ProductoAdmin(admin.ModelAdmin):
     list_display = ('name', 'price', 'available')  # Usa los nombres de `models.py`
+    search_fields = ['name']
     ordering = ['name']
     list_filter = ['available']  # No hay `categoria`, así que usa `available`
     list_editable = ['price']

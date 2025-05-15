@@ -18,6 +18,8 @@ Including another URLconf
 from productos.views import ProductFormView
 from django.urls import path, include
 from django.contrib import admin
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,6 +28,10 @@ urlpatterns = [
     path('agregar/', ProductFormView.as_view(), name="add_product"),
     #Productos 
     path('productos/', include('productos.urls')),
+    path('', ProductFormView.as_view(), name='list_products')
+    #path('productos/', include('productos.urls')),
+
    
     
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)#con esat configuracion se importan las imagenes 
+

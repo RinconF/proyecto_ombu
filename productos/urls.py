@@ -16,8 +16,14 @@ Including another URLconf
 """
 from django.urls import path
 from .views import ProductFormView
+from .views import ProductFormView, ProductListView
+#from django.conf.urls.static import static 
+#from django.conf import settings
 
 urlpatterns = [
-    path('agregar/', ProductFormView.as_view(), name="add_product"),7
-    path('', ProductFromView.as_view(), name='lsit_product')
+    path('agregar/', ProductFormView.as_view(), name="add_product"),
+    path('', ProductListView.as_view(), name='list_product')  # ⬅️ esta debe mostrar la lista
 ]
+#+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+

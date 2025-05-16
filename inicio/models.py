@@ -2,11 +2,13 @@ from django.db import models
 
 class Rol(models.Model):
     tipoRol = models.CharField(max_length=45)
+
     def __str__(self):
         return self.tipoRol
 
 class Categoria(models.Model):
     nombreCategoria = models.CharField(max_length=50)
+
     def __str__(self):
         return self.nombreCategoria
 
@@ -33,27 +35,34 @@ class Producto(models.Model):
 
 class Mesa(models.Model):
     numero = models.PositiveIntegerField(unique=True)
-    def __str__(self): return f"Mesa {self.numero}"
-    
-class Pedido(models.Model):
-    productos = models.ManyToManyField(Producto, related_name='pedido')
-    mesa      = models.ForeignKey(Mesa, on_delete=models.PROTECT)
-    usuario   = models.ForeignKey(Usuario, on_delete=models.PROTECT)
-    total     = models.DecimalField(max_digits=10, decimal_places=2)
-    fecha     = models.DateTimeField(auto_now_add=True)
-    def __str__(self): return f"Pedido {self.id}"
-
-class Reserva(models.Model):
-    fecha            = models.DateField()
-    hora             = models.TimeField()
-    cantidadPersonas = models.IntegerField()
-    usuario          = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    mesa             = models.ForeignKey(Mesa, on_delete=models.CASCADE, null=True, blank=True)
-    estado           = models.CharField(max_length=20, choices=[
-                         ('pendiente', 'Pendiente'),
-                         ('confirmada', 'Confirmada'),
-                         ('cancelada', 'Cancelada'),
-                     ], default='pendiente')
 
     def __str__(self):
-        return f"Reserva {self.id} - Mesa {self.mesa.numero} el {self.fecha} a las {self.hora}"
+        return f"Mesa {self.numero}"
+
+class Pedido(models.Model):
+    productos = models.ManyToManyField(Producto, related_name='pedidos')
+    mesa = models.ForeignKey(Mesa, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(Usuario, on_delete=models.PROTECT)
+    total = models.DecimalField(max_digits=10, decimal_places=2)
+    fecha = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Pedido {self.id} - Total: {self.total}"
+
+class Reserva(models.Model):
+    ESTADOS = [
+        ('pendiente', 'Pendiente'),
+        ('confirmada', 'Confirmada'),
+        ('cancelada', 'Cancelada'),
+    ]
+
+    fecha = models.DateField()
+    hora = models.TimeField()
+    cantidadPersonas = models.IntegerField()
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    mesa = models.ForeignKey(Mesa, on_delete=models.CASCADE, null=True, blank=True)
+    estado = models.CharField(max_length=20, choices=ESTADOS, default='pendiente')
+
+    def __str__(self):
+        mesa_info = f"Mesa {self.mesa.numero}" if self.mesa else "Mesa no asignada"
+        return f"Reserva {self.id} - {mesa_info} el {self.fecha} a las {self.hora}"

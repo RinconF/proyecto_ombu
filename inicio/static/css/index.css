@@ -274,7 +274,6 @@ h2.subtitulo {
 .content-block:hover {
     transform: translateY(-5px);
 }
-
 .content-block h3 {
     color: var(--accent-color);
     font-size: clamp(1.5rem, 3vw, 2rem);
@@ -338,7 +337,7 @@ section {
     max-width: 800px;
     margin: 0 auto 50px;
     padding: 30px;
-    background-color: rgba(18, 84, 76, 0.3);    
+    background-color: rgba(0, 0, 0, 0.466);    
     border-radius: 15px;
     box-shadow: 0 5px 20px rgba(255, 16, 16, 0.1);
     transition: transform 0.3s ease;
@@ -419,9 +418,10 @@ section {
     height: 60px;
     object-fit: contain;
     position: fixed;
-    bottom: 20px;  /* Asegura que el ícono esté cerca del borde inferior */
+    bottom: 100px;  /* Asegura que el ícono esté cerca del borde inferior */
     left: 20px;    /* Asegura que el ícono esté cerca del borde izquierdo */
-    z-index: 100;  /* Asegura que el ícono esté por encima de otros elementos */
+    z-index: 40;  /* Asegura que el ícono esté por encima de otros elementos */
+    background-color: #40916c;
     border-radius: 50%;  /* Hace que el ícono tenga bordes redondeados */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Agrega sombra para hacerlo más visible */
     cursor: pointer; /* Cambia el cursor para indicar que es interactivo */
@@ -429,6 +429,7 @@ section {
 
 .icon-whatsapp {
     display: block; /* Asegura que el enlace sea un bloque para facilitar la interacción */
+    /* background-color: rgb(0, 102, 34); */
 }
 
 .boton-whatsapp {

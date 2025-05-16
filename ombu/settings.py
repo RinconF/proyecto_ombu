@@ -43,7 +43,7 @@ INSTALLED_APPS = [
 
 AUTH_USER_MODEL = 'inicio.Usuario'
 
-MIDDLEWARE = [
+MIDDLEWARE = [  
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -155,3 +155,6 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'giuseppeesteban101@gmail.com'
 EMAIL_HOST_PASSWORD = 'nxnp jmrf zvyc ffcq'
 EMAIL_USE_TLS = True
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'

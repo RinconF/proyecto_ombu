@@ -86,14 +86,21 @@ class Usuario(AbstractUser):
     def __str__(self):
         return f"{self.first_name} {self.last_name} ({self.username})"
 
+class Mesa(models.Model):
+    numero = models.PositiveIntegerField(unique=True)
+    
+    def __str__(self):
+        return f"Mesa {self.numero}"
 
 class Pedidos(models.Model):
     fechahoraPedido = models.DateTimeField(auto_now_add=True)
     precio = models.DecimalField(max_digits=10, decimal_places=2)
-    id_mesa = models.IntegerField()
+    id_mesa = models.ForeignKey(Mesa, on_delete=models.CASCADE)  # Cambié IntegerField por ForeignKey
     Usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+
     def __str__(self):
-        return f"Pedido en mesa {self.id_mesa} - ${self.precio}"
+        return f"Pedido en mesa {self.id_mesa.numero} - ${self.precio}"  # Modifiqué para mostrar el número de la mesa
+
 
 
 class Producto(models.Model):
@@ -188,3 +195,16 @@ class Reserva(models.Model):
 
 #     def __str__(self):
 #         return f"Reserva {self.id} - Mesa {self.mesa.numero} el {self.fecha} a las {self.hora}"
+from django.conf import settings  # <-- esta línea es la que falta
+
+
+from django.db import models
+from django.contrib.auth.models import User
+
+class Perfil(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
+    telefono = models.CharField(max_length=15, blank=True, null=True)
+
+    def __str__(self):
+        return f"Perfil de {self.user.username}"

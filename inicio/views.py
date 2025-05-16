@@ -8,9 +8,11 @@ from .models import Categoria, Producto, Pedido, Mesa
 from django.db.models import Sum, Count
 import datetime
 import calendar
-import openpyxl
+from django.utils.timezone import now
+# import openpyxl
 from django.http import HttpResponse
 from django.db.models.functions import TruncMonth
+from django.utils.dateformat import DateFormat
 from .decorators import group_required
 from django.db.utils import ProgrammingError
 
@@ -67,64 +69,49 @@ def admin_principal(request):
 
 @never_cache
 @group_required('ombu')
-def dashboard(request):
-    # Ventas por mes
-    hoy = datetime.date.today()
-    ventas_mensuales = []
-    ventas_mensuales_labels = []
-    ventas_mensuales_data = []
+def dashboard_view(request):
+    # Datos generales
+    total_productos = Producto.objects.count()
+    total_mesas = Mesa.objects.count()
+    pedidos_hoy = Pedido.objects.filter(fecha__date=date.today()).count()
+    ventas_mes = Pedido.objects.filter(fecha__month=date.today().month).aggregate(
+        total=Sum('total')
+    )['total'] or 0
 
-    for i in range(1, 13):
-        total = Pedido.objects.filter(fecha__month=i).aggregate(Sum('total'))['total__sum'] or 0
-        ventas_mensuales.append({'month': calendar.month_name[i], 'total': float(total)})
-        ventas_mensuales_labels.append(calendar.month_name[i])
-        ventas_mensuales_data.append(float(total))
+    # Top productos y mesas
+    productos_top = Producto.objects.annotate(
+        cantidad_vendida=Sum('pedido__cantidad')
+    ).order_by('-cantidad_vendida')[:5]
 
-    # Top mesas más usadas
-    mesas_usadas = (
-        Pedido.objects.values('mesa__numero')
-        .annotate(total=Count('id'))
-        .order_by('-total')[:5]
+    mesas_top = Mesa.objects.annotate(
+        cantidad_reservas=Count('reserva')
+    ).order_by('-cantidad_reservas')[:5]
+
+    # 🎯 Paso 6: Ventas mensuales para el gráfico
+    ventas = (
+        Pedido.objects
+        .annotate(month=TruncMonth('fecha'))
+        .values('month')
+        .annotate(total=Sum('total'))
+        .order_by('month')
     )
 
-    # Top productos más vendidos
-    productos_vendidos = (
-        Producto.objects.annotate(total=Count('pedido'))
-        .order_by('-total')[:5]
-    )
+    # Etiquetas y datos para Chart.js
+    ventas_labels = [DateFormat(v['month']).format('F') for v in ventas]
+    ventas_data = [float(v['total']) for v in ventas]
 
-    # Cálculos simples para los 4 recuadros:
-    ventas_totales = Pedido.objects.aggregate(Sum('total'))['total__sum'] or 0
-    hoy = datetime.date.today()
-    ventas_dia = Pedido.objects.filter(fecha__date=hoy).aggregate(Sum('total'))['total__sum'] or 0
-    ventas_mes = Pedido.objects.filter(fecha__month=hoy.month).aggregate(Sum('total'))['total__sum'] or 0
-    ventas_anio = Pedido.objects.filter(fecha__year=hoy.year).aggregate(Sum('total'))['total__sum'] or 0
-
-    return render(request, 'dashboard.html', {
-        'ventas_mensuales_labels': ventas_mensuales_labels,
-        'ventas_mensuales_data': ventas_mensuales_data,
-        'mesas_usadas': mesas_usadas,
-        'productos_vendidos': productos_vendidos,
-        'ventas_totales': ventas_totales,
-        'ventas_dia': ventas_dia,
+    context = {
+        'total_productos': total_productos,
+        'total_mesas': total_mesas,
+        'pedidos_hoy': pedidos_hoy,
         'ventas_mes': ventas_mes,
-        'ventas_anio': ventas_anio
-    })
+        'productos_top': productos_top,
+        'mesas_top': mesas_top,
+        'ventas_labels': ventas_labels,
+        'ventas_data': ventas_data,
+    }
 
-def exportar_dashboard(request):
-    workbook = openpyxl.Workbook()
-    sheet = workbook.active
-    sheet.title = "Dashboard Ventas"
-
-    sheet.append(["Mes", "Total Ventas"])
-    for i in range(1, 13):
-        total = Pedido.objects.filter(fecha__month=i).aggregate(Sum('total'))['total__sum'] or 0
-        sheet.append([calendar.month_name[i], float(total)])
-
-    response = HttpResponse(content_type="application/ms-excel")
-    response["Content-Disposition"] = 'attachment; filename="dashboard_ventas.xlsx"'
-    workbook.save(response)
-    return response
+    return render(request, 'pages/Admin/dashboard.html', context)
 
 def admin_login_page(request):
     return render(request, 'pages/Admin/login.html')

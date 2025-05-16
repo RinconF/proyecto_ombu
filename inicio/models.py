@@ -40,7 +40,8 @@ class Mesa(models.Model):
         return f"Mesa {self.numero}"
 
 class Pedido(models.Model):
-    productos = models.ManyToManyField(Producto, related_name='pedidos')
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE, related_name='pedido')
+    cantidad = models.IntegerField()
     mesa = models.ForeignKey(Mesa, on_delete=models.CASCADE)
     usuario = models.ForeignKey(Usuario, on_delete=models.PROTECT)
     total = models.DecimalField(max_digits=10, decimal_places=2)
@@ -60,7 +61,7 @@ class Reserva(models.Model):
     hora = models.TimeField()
     cantidadPersonas = models.IntegerField()
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    mesa = models.ForeignKey(Mesa, on_delete=models.CASCADE, null=True, blank=True)
+    mesa = models.ForeignKey(Mesa, on_delete=models.CASCADE, related_name='reserva')
     estado = models.CharField(max_length=20, choices=ESTADOS, default='pendiente')
 
     def __str__(self):

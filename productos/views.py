@@ -30,6 +30,7 @@ from django.views import generic
 from productos.forms import ProductForm
 from django.conf import settings
 from .models import Producto  # ✅ Importación correcta
+from .forms import ProductForm
 import os
 from django.urls import reverse_lazy 
 
@@ -47,7 +48,14 @@ class ProductListView(generic.ListView):
     context_object_name = "products"
     model = Producto  # ✅ Aquí va el nombre correcto
 
+class ProductListView(generic.ListView):
+    template_name = "productos/list_products.html"
+    context_object_name = "products"
+    model = Producto
+
 def list_products(request):
+    products = Producto.objects.all()
+
     return render(request,'productos/list_products.html')
 
     """"

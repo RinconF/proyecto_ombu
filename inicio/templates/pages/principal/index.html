@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ombú - Gastrobar</title>
     <link rel="stylesheet" href="{% static '/css/index.css' %}">
+    <link rel="stylesheet" href="{% static '/css/style_accesibilidad.css' %}">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
@@ -115,15 +116,15 @@
     
 
         <!-- Sección Inicio -->
-            <div class="bg-cover bg-center h-[500px] relative" style="background-image: url('/api/placeholder/1200/500');">
-        <div class="absolute inset-0 bg-black opacity-50"></div>
-        <div class="relative max-w-6xl mx-auto px-4 h-full flex items-center">
-            <div class="text-white text-center md:text-left">
-                <h1 class="text-4xl md:text-5xl font-bold mb-4">BIENVENIDOS A OMBÜ</h1>
-                <p class="text-xl mb-6">Descubre una experiencia gastronómica única en el corazón de la ciudad</p>
+        <div class="bg-cover bg-center h-[500px] relative" style="background-image: url('/api/placeholder/1200/500');">
+        <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+        <div class="relative h-full flex items-center justify-center text-white text-center px-4">
+            <div class="max-w-3xl">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">BIENVENIDOS A OMBÜ</h1>
+            <p class="text-xl mb-6">Descubre una experiencia gastronómica única en el corazón de la ciudad</p>
             </div>
         </div>
-    
+        </div>
 
     <!-- Sección Productos -->   
     <section id="productos"></section>     
@@ -227,27 +228,28 @@
 
 
 
-<!-- seccion boton whatsapp -->
+<!-- seccion boton subir -->
     <div class="boton-whatsapp" id="btn-whps">
         <a href="#" class="icon-whatsapp">
             <img src="{% static '/img/icono_social/up.png' %}" alt="whatsapp">
         </a>
-           
     </div>
 
     <!-- Sección Contacto -->
      <footer id="contacto">
         <div class="footer-container">
-            <div class="footer-logo">
-            <img src="{% static 'img/logos_o_otros/logo_ombu.png' %}" alt="Imagen de pie de página">
-            </div>
+                <div class="footer-logo">
+                    <a href="#" class="footer-logo">
+                <img src="{% static 'img/logos_o_otros/logo_ombu.png' %}" alt="Imagen de pie de página">
+            </a>
+        </div>
             
             <div class="footer-contact">
                 <h2>Contacto</h2>
                 <div class="social-icons">
-                    <a href="https://www.facebook.com" target="_blank" class="social-icon facebook">
+                    <b href="https://www.facebook.com" target="_blank" class="social-icon facebook">
                         <img src="{% static 'img/icono_social/Facebook_Logo.png' %}" alt="Facebook">
-                    </a>
+                    </b>
                     <a href="https://www.twitter.com" target="_blank" class="social-icon twitter">
                         <img src="{% static 'img/icono_social/twiter_log.png' %}" alt="Twitter">
                     </a>
@@ -268,6 +270,7 @@
         </main>
 
     <script src="{% static '/js/cuerpo.js' %}"></script>
+    <script src="{% static '/js/script_accesibilidad.js' %}"></script>
     <!-- <script src="{% static 'js/menu_cliente.js' %}"></script> -->
 </body>
 </html>

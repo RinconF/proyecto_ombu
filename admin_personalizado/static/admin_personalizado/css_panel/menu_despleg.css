@@ -41,8 +41,12 @@
     padding: 10px 15px;
 }
 
+:root {
+    --menu-text-color: black; /* Define la variable */
+}
+
 .user-menu li a {
-    color: #c12a2a;
+    color: var(--menu-text-color); /* Usa la variable */
     text-decoration: none;
     display: block;
 }
@@ -74,7 +78,7 @@
     display: block;
 }
 
-.user-menu-container li{
+.user-menu-container .user-menu li a{
     color: black;
     list-style: none;
 

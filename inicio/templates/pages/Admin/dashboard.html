@@ -1,250 +1,104 @@
 {% load static %}
 {% load custom_tags %}
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Dashboard</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #7BB661; /* Verde pasto */
-      margin: 0;
-      padding: 0;
-    }
-
-    /* Navbar */
-    .main-menu {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-      background-color: #222;
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      position: fixed;
-      top: 0;
-      width: 100%;
-      height: 50px;
-      z-index: 1000;
-    }
-
-    .admin-item {
-      margin: 0;
-    }
-
-    .admin-item a {
-      display: block;
-      color: white;
-      padding: 14px 20px;
-      text-decoration: none;
-    }
-
-    .admin-item a:hover {
-      background-color: #444;
-    }
-
-    /* Estilo responsive */
-    .menu-toggle {
-      display: none;
-      background-color: #4CAF50;
-      color: white;
-      padding: 10px;
-      border: none;
-      font-size: 20px;
-      cursor: pointer;
-      margin: 10px;
-    }
-
-    @media (max-width: 768px) {
-      .main-menu {
-        flex-direction: column;
-        align-items: flex-start;
-        height: auto;
-        width: 200px;
-        position: fixed;
-        top: 0;
-        left: -200px;
-        transition: left 0.3s ease;
-        height: 100%;
-      }
-
-      .main-menu.show {
-        left: 0;
-      }
-
-      .menu-toggle {
-        display: block;
-        position: fixed;
-        top: 10px;
-        left: 10px;
-        z-index: 1100;
-      }
-    }
-
-    /* Espaciado para el contenido */
-    .contenido {
-      padding-top: 60px;
-    }
-
-    @media (max-width: 768px) {
-      .contenido {
-        padding-left: 10px;
-        padding-top: 20px;
-        margin-left: 0;
-      }
-    }
-
-    .card {
-      border: none;
-      border-radius: 1rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { background-color: #0f172a; color: white; }
+        .card { background-color: #1e293b; border: none; border-radius: 15px; padding: 20px; }
+        .text-small { font-size: 0.9rem; }
+    </style>
 </head>
 <body>
+<div class="container py-4">
+    <h2 class="mb-4">Ventas</h2>
 
-<!-- Botón toggle (solo en móviles) -->
-<button class="menu-toggle" onclick="toggleMenu()">☰</button>
+    <div class="row g-4">
+        <div class="col-md-3">
+            <div class="card">
+                <h5>Ventas Totales</h5>
+                <h3>${{ ventas_totales }}</h3>
+                <p class="text-success text-small">+ 23.36% desde el mes pasado</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <h5>Ventas por Día</h5>
+                <h3>{{ ventas_dia }}</h3>
+                <p class="text-success text-small">+ 3.88% desde el mes pasado</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <h5>Ventas por Mes</h5>
+                <h3>${{ ventas_mes }}</h3>
+                <p class="text-danger text-small">- 12.21% desde el mes pasado</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <h5>Ventas por Año</h5>
+                <h3>{{ ventas_anio }}</h3>
+                <p class="text-warning text-small">- 6.76% desde el mes pasado</p>
+            </div>
+        </div>
+    </div>
 
-<!-- Menú principal -->
-<ul class="main-menu" id="mainMenu">
-  <li class="admin-item"><a href="{% url 'admin' %}">Inicio</a></li>
-  {% if user.is_authenticated %}
-    <li class="admin-item"><a href="{% url 'cervezas' %}">Productos</a></li>
-    <li class="admin-item"><a href="{% url 'mesas' %}">Mesas</a></li>
-    {% if user|has_group:"ombu" %}
-      <li class="admin-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
-      <li class="admin-item"><a href="{% url 'reserva' %}">Reserva</a></li>
-      <li class="admin-item"><a href="#">Usuarios</a></li>
-    {% endif %}
-    <li class="admin-item"><a href="{% url 'logout' %}">CERRAR SESIÓN</a></li>
-  {% endif %}
-</ul>
+    <div class="row mt-5">
+        <div class="col-lg-8">
+            <div class="card">
+                <h5 class="mb-3">Actividades Financieras</h5>
+                <canvas id="ventasChart"></canvas>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card mb-4">
+                <h5>Top Mesas</h5>
+                <ul>
+                    {% for mesa in mesas_usadas %}
+                    <li>Mesa {{ mesa.mesa__numero }} - {{ mesa.total }} usos</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="card">
+                <h5>Top Productos</h5>
+                <ul>
+                    {% for producto in productos_vendidos %}
+                    <li>{{ producto.producto__nombre }} - {{ producto.total }} ventas</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
 
-<!-- Contenido principal -->
-<div class="container contenido my-4">
-  <div class="row g-4 mb-4">
-    <div class="col-md-3">
-      <div class="card p-3">
-        <h6>Ventas del Día</h6>
-        <h3>$1.200</h3>
-        <small class="text-muted">+12% respecto a ayer</small>
-      </div>
+    <div class="text-end mt-4">
+        <a href="{% url 'exportar_dashboard' %}" class="btn btn-success">Descargar Excel</a>
     </div>
-    <div class="col-md-3">
-      <div class="card p-3">
-        <h6>Ventas del Mes</h6>
-        <h3>$25.300</h3>
-        <small class="text-muted">+18% respecto al mes pasado</small>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card p-3">
-        <h6>Compras</h6>
-        <h3>$9.200</h3>
-        <small class="text-muted">-5% respecto al mes pasado</small>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card p-3">
-        <h6>Órdenes</h6>
-        <h3>385</h3>
-        <small class="text-muted">+7% respecto al mes pasado</small>
-      </div>
-    </div>
-  </div>
-
-  <!-- Gráficas -->
-  <div class="row g-4 mb-4">
-    <div class="col-md-6">
-      <div class="card p-3">
-        <h6>Ventas Mensuales</h6>
-        <canvas id="ventasMes"></canvas>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="card p-3">
-        <h6>Histórico de Compras</h6>
-        <canvas id="historicoCompras"></canvas>
-      </div>
-    </div>
-  </div>
-
-  <!-- Tablas -->
-  <div class="row g-4 mb-4">
-    <div class="col-md-6">
-      <div class="card p-3">
-        <h6>Mesas más utilizadas</h6>
-        <table class="table table-sm table-hover mb-0">
-          <thead>
-            <tr><th>Mesa</th><th>Veces Usada</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>Mesa 3</td><td>45</td></tr>
-            <tr><td>Mesa 1</td><td>42</td></tr>
-            <tr><td>Mesa 2</td><td>38</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="card p-3">
-        <h6>Productos más pedidos</h6>
-        <table class="table table-sm table-hover mb-0">
-          <thead>
-            <tr><th>Producto</th><th>Cantidad</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>Pizza</td><td>120</td></tr>
-            <tr><td>Hamburguesa</td><td>110</td></tr>
-            <tr><td>Refresco</td><td>100</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <!-- Botón para imprimir -->
-  <div class="text-end mb-4">
-    <button class="btn btn-success" onclick="window.print()">🖨 Imprimir Desprendible</button>
-  </div>
 </div>
 
-<!-- Scripts -->
 <script>
-  function toggleMenu() {
-    document.getElementById('mainMenu').classList.toggle('show');
-  }
-
-  new Chart(document.getElementById('ventasMes'), {
-    type: 'bar',
-    data: {
-      labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
-      datasets: [{
-        label: 'Ventas $',
-        data: [3200, 4500, 5000, 4700, 5300, 6000],
-        backgroundColor: '#0d6efd'
-      }]
-    }
-  });
-
-  new Chart(document.getElementById('historicoCompras'), {
-    type: 'line',
-    data: {
-      labels: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4'],
-      datasets: [{
-        label: 'Compras $',
-        data: [900, 1200, 1100, 1000],
-        borderColor: '#dc3545',
-        backgroundColor: 'rgba(220,53,69,0.1)',
-        fill: true
-      }]
-    }
-  });
+    const ctx = document.getElementById('ventasChart').getContext('2d');
+    const ventasChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: {{ ventas_mensuales_labels|safe }},
+            datasets: [{
+                label: 'Ventas',
+                data: {{ ventas_mensuales_data|safe }},
+                backgroundColor: '#3b82f6'
+            }]
+        },
+        options: {
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
 </script>
 
 </body>

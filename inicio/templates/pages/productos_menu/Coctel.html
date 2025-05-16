@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title> OMBÚ | Cocteles🍹 </title>
     <link rel="stylesheet" href="{% static '/css/Productos_Styles.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static '/css/accesibilidad.css' %}">
   </head>
   <body>
     <header></header>
@@ -1062,15 +1063,14 @@
           
       </div>
       </section>
-
-
-      <script src="{% static '/js/menu_cliente.js' %}"></script>
       
       <footer id="contacto">
         <div class="footer-container">
-          <div class="footer-logo">
-            <img src="{% static 'img/logos_o_otros/logo_ombu.png' %}" alt="Imagen de pie de página">
-          </div>
+                <div class="footer-logo">
+                    <a href="{% url 'index' %}" class="footer-logo">
+                <img src="{% static 'img/logos_o_otros/logo_ombu.png' %}" alt="Imagen de pie de página">
+            </a>
+        </div>
           
           <div class="footer-contact">
             <h2>Contacto</h2>
@@ -1096,6 +1096,7 @@
           </div>
         </footer>
       </main>
-
+    <script src="{% static '/js/menu_cliente.js' %}"></script>
+    <script src="{% static '/js/script_accesibilidad.js' %}"></script>
   </body>
 </html>

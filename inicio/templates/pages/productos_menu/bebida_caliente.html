@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title> OMBÚ | Bebidas Calientes 🍹 </title>
     <link rel="stylesheet" href="{% static '/css/Productos_Styles.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static '/css/accesibilidad.css' %}">
   </head>
   <body>
     <header></header>
@@ -18,11 +19,7 @@
     <main>
       <div class="menu-container">
 
-
-
-
-      <div>
-        
+        <div>
           <section class="section">
             <a href="{% url 'index' %}">
             <button class="button" data-text="Awesome" data-title="{% url 'index' %}" >
@@ -496,8 +493,10 @@
           </div>
 
         </div>
-<!-- ------------------------------------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------------------------------- -->
+
+
+{% comment %} <!-- ------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------ --> {% endcomment %}
         <div id="modal" class="modal">
           <div class="modal-content">
               <span class="close">&times;</span>
@@ -520,9 +519,11 @@
       
       <footer id="contacto">
         <div class="footer-container">
-          <div class="footer-logo">
-            <img src="{% static 'img/logos_o_otros/logo_ombu.png' %}" alt="Imagen de pie de página">
-          </div>
+                <div class="footer-logo">
+                    <a href="{% url 'index' %}" class="footer-logo">
+                <img src="{% static 'img/logos_o_otros/logo_ombu.png' %}" alt="Imagen de pie de página">
+            </a>
+        </div>
           
           <div class="footer-contact">
             <h2>Contacto</h2>
@@ -548,9 +549,6 @@
             </div>
           </footer>
         </main>
+    <script src="{% static '/js/script_accesibilidad.js' %}"></script>
   </body>
 </html>
-
-
-
-

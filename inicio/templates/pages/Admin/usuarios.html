@@ -8,22 +8,12 @@
     <title>Administración de Usuarios - Gastro Bar</title>
 </head> 
 <body>
-<<<<<<< HEAD
-    <!-- Menú superior -->
-=======
->>>>>>> a9d122ff392c8e450b36601156503c8d6a32bd35
     <ul class="main-menu">
         <li class="admin-item"><a href="{% url 'admin' %}">Inicio</a></li>
         <li class="admin-item"><a href="{% url 'bebidas_calientes' %}">Productos</a></li>
         <li class="admin-item"><a href="{% url 'mesas' %}">Mesas</a></li>
         <li class="admin-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
         <li class="admin-item"><a href="{% url 'reserva' %}">Reserva</a></li>
-<<<<<<< HEAD
-        <li class="admin-item"><a href="{% url 'usuarios' %}" style="background-color: #575757;">Usuarios</a></li>
-    </ul>
-
-    <!-- Contenido de la sección de usuarios -->
-=======
         <li class="admin-item"><a href="{% url 'usuarios' %}" style="background-color:rgb(28, 23, 23);">Usuarios</a></li>
     </ul>
 
@@ -32,18 +22,12 @@
         <span class="cerrar-notificacion" onclick="this.parentElement.style.display='none'">&times;</span>
     </div>
 
->>>>>>> a9d122ff392c8e450b36601156503c8d6a32bd35
     <div class="usuarios-content">
         <h1 class="page-title">Administración de Usuarios</h1>
         
         <a href="#" class="btn btn-success add-user-btn" onclick="openAddModal()">+ Agregar Usuario</a>
         
-<<<<<<< HEAD
-        <!-- Tabla de usuarios -->
-        <table class="usuarios-table">
-=======
         <table class="usuarios-table" id="tabla-usuarios">
->>>>>>> a9d122ff392c8e450b36601156503c8d6a32bd35
             <thead>
                 <tr>
                     <th>ID</th>
@@ -57,50 +41,6 @@
                 </tr>
             </thead>
             <tbody>
-<<<<<<< HEAD
-                <!-- Datos de ejemplo  -->
-                <tr>
-                    <td>1</td>
-                    <td>Juan</td>
-                    <td>Pérez</td>
-                    <td>jperez</td>
-                    <td>juan.perez@ejemplo.com</td>
-                    <td>Administrador</td>
-                    <td><span class="estado-activo">Activo</span></td>
-                    <td class="action-buttons">
-                        <button class="btn btn-primary btn-sm" onclick="openEditModal(1, 'Juan', 'Pérez', 'jperez', 'juan.perez@ejemplo.com', 'Administrador')">Editar</button>
-                        <button class="btn btn-danger btn-sm" onclick="cambiarEstado(1)">Inhabilitar</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>María</td>
-                    <td>González</td>
-                    <td>mgonzalez</td>
-                    <td>maria.gonzalez@ejemplo.com</td>
-                    <td>Mesero</td>
-                    <td><span class="estado-activo">Activo</span></td>
-                    <td class="action-buttons">
-                        <button class="btn btn-primary btn-sm" onclick="openEditModal(2, 'María', 'González', 'mgonzalez', 'maria.gonzalez@ejemplo.com', 'Mesero')">Editar</button>
-                        <button class="btn btn-danger btn-sm" onclick="cambiarEstado(2)">Inhabilitar</button>
-                        <button class "btn btn-seconday btn-sm" onclink="eliminarusuario(2)">Eliminar</button>
-                        
-                    </td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>Carlos</td>
-                    <td>Rodríguez</td>
-                    <td>crodriguez</td>
-                    <td>carlos.rodriguez@ejemplo.com</td>
-                    <td>Mesero</td>
-                    <td><span class="estado-inactivo">Inactivo</span></td>
-                    <td class="action-buttons">
-                        <button class="btn btn-primary btn-sm" onclick="openEditModal(3, 'Carlos', 'Rodríguez', 'crodriguez', 'carlos.rodriguez@ejemplo.com', 'Mesero')">Editar</button>
-                        <button class="btn btn-warning btn-sm" onclick="cambiarEstado(3)">Habilitar</button>
-                    </td>
-                </tr>
-=======
                 {% for usuario in usuarios %}
                 <tr data-id="{{ usuario.id }}">
                     <td>{{ usuario.id }}</td>
@@ -131,26 +71,17 @@
                     </td>
                 </tr>
                 {% endfor %}
->>>>>>> a9d122ff392c8e450b36601156503c8d6a32bd35
             </tbody>
         </table>
     </div>
 
-<<<<<<< HEAD
-    <!-- agregar usuario -->
-=======
->>>>>>> a9d122ff392c8e450b36601156503c8d6a32bd35
     <div id="addUserModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeAddModal()">&times;</span>
             <h2>Agregar Nuevo Usuario</h2>
-<<<<<<< HEAD
-            <form id="addUserForm">
-=======
             <form method="POST" id="addUserForm" action = "{% url 'crear_usuario' %}">
                 {% csrf_token %}
                 {{ form_crear_usuario.as_p }}
->>>>>>> a9d122ff392c8e450b36601156503c8d6a32bd35
                 <div class="form-group">
                     <label for="nombre">Nombre:</label>
                     <input type="text" class="form-control" id="nombre" required>
@@ -179,10 +110,7 @@
                     <label for="rol">Cargo:</label>
                     <select class="form-control" id="rol" required>
                         <option value="">Seleccione cargo</option>
-<<<<<<< HEAD
-=======
                         <option value="Administrador">Administrador</option>
->>>>>>> a9d122ff392c8e450b36601156503c8d6a32bd35
                         <option value="Mesero">Mesero</option>
                     </select>
                 </div>
@@ -194,19 +122,12 @@
         </div>
     </div>
 
-<<<<<<< HEAD
-    <!-- editar usuario -->
-=======
->>>>>>> a9d122ff392c8e450b36601156503c8d6a32bd35
     <div id="editUserModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeEditModal()">&times;</span>
             <h2>Editar Usuario</h2>
             <form id="editUserForm">
-<<<<<<< HEAD
-=======
                 {% csrf_token %}
->>>>>>> a9d122ff392c8e450b36601156503c8d6a32bd35
                 <input type="hidden" id="edit_id">
                 <div class="form-group">
                     <label for="edit_nombre">Nombre:</label>
@@ -225,11 +146,7 @@
                     <input type="email" class="form-control" id="edit_email" required>
                 </div>
                 <div class="form-group">
-<<<<<<< HEAD
-                    <label for="edit_password">Nueva Contraseña (en blanco por ahora):</label>
-=======
                     <label for="edit_password">Nueva Contraseña (dejar en blanco para mantener la actual):</label>
->>>>>>> a9d122ff392c8e450b36601156503c8d6a32bd35
                     <input type="password" class="form-control" id="edit_password">
                 </div>
                 <div class="form-group">
@@ -248,11 +165,5 @@
     </div>
     
     <script src="{% static '/js/usuarios.js' %}"></script>
-<<<<<<< HEAD
-
 </body>
 </html>
-=======
-</body>
-</html>
->>>>>>> a9d122ff392c8e450b36601156503c8d6a32bd35

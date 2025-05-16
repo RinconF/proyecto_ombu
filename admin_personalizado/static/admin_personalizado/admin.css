@@ -78,10 +78,7 @@
 /*-------------------------------------------------------------------------*/
 
 #content-main {
-    border-collapse: collapse;
-    border: 2px solid #333; /* Mantiene el borde */
-    border-radius: 10px; /* Agrega bordes redondeados (ajusta el valor según el radio que desees) */
-    overflow: hidden; /* Importante para que el border-radius se aplique correctamente en las celdas */
+ 
 }
 
 #content-main .form-row{
@@ -91,7 +88,7 @@
 
 
 #content h1{
-    color: rgb(20, 18, 18);
+    color: rgb(255, 255, 255);
 }
 
 #content-start {
@@ -111,6 +108,20 @@
 }
 
 
+/* --------------------------------------------------alerts ------------------*/
+
+#usuario_form p{
+    color: white;
+}
+
+
+#usuario_form .errornote {
+    color: black;
+}
+
+
+
+
 
 
 /*------------------------------------- cambio de filas --------------------------------------------------------*/
@@ -119,8 +130,9 @@
 .actions {
     width: 100%; /* Igualar el ancho de la tabla */
     box-sizing: border-box; /* Asegurar que el padding no afecte el ancho total */
-    /* Otros estilos que ya tengas para .actions */
+    
 }
+
 
 #changelist table {
     width: 100%;

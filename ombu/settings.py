@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'admin_personalizado',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,7 +41,9 @@ INSTALLED_APPS = [
     "inicio",
 ]
 
-MIDDLEWARE = [
+AUTH_USER_MODEL = 'inicio.Usuario'
+
+MIDDLEWARE = [  
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -55,7 +58,7 @@ ROOT_URLCONF = 'ombu.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR  / 'inicio' / 'templates' / 'pages'],
+        'DIRS': [BASE_DIR / 'inicio' / 'templates'],  # Ahora buscará en 'inicio/templates/pages/Admin/login.html'
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -68,6 +71,11 @@ TEMPLATES = [
         },
     },
 ]
+
+# AUTHENTICATION_BACKENDS = [
+#     'inicio.backends.CustomAuthBackend',  # Tu backend personalizado
+#     'django.contrib.auth.backends.ModelBackend',  # Mantener el backend predeterminado como fallback
+# ]
 
 WSGI_APPLICATION = 'ombu.wsgi.application'
 
@@ -120,7 +128,6 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
-import os
 STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [
@@ -132,7 +139,11 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+#Texto que va en la parte del nav-bar del panel de administracion
+site_header = 'El Texto Que Quieres Mostrar'
+
 LOGIN_URL = '/login/'
+LOGOUT_URL = '/logout/'
 LOGIN_REDIRECT_URL = '/admin'
 LOGOUT_REDIRECT_URL = '/login/'
 
@@ -144,3 +155,6 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'giuseppeesteban101@gmail.com'
 EMAIL_HOST_PASSWORD = 'nxnp jmrf zvyc ffcq'
 EMAIL_USE_TLS = True
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'

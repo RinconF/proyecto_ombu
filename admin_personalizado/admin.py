@@ -1,5 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin import AdminSite
+from django.contrib import admin
+from django.utils.translation import gettext_lazy as _
 
 class CustomAdminSite(AdminSite):
     def each_context(self, request):
@@ -9,3 +11,7 @@ class CustomAdminSite(AdminSite):
 
 # Puedes reemplazar el sitio admin por defecto
 admin.site = CustomAdminSite()
+
+admin.site.site_header = _("OMBÜ Café")
+admin.site.site_title = _("Administración de OMBÜ")
+admin.site.index_title = _("Sitio administrativo")

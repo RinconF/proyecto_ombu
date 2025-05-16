@@ -11,4 +11,9 @@
 <h1 id="site-name"><a href="{% url 'admin:index' %}">Mi Proyecto Admin</a></h1>
 {% endblock %}
 
+{% block usertools %}
+  {{ block.super }}
+  <li><a href="{% url 'perfil' %}">Perfil</a></li>
+{% endblock %}
+
 {% block nav-global %}{% endblock %}

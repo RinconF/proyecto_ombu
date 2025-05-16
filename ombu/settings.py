@@ -72,10 +72,10 @@ TEMPLATES = [
     },
 ]
 
-# AUTHENTICATION_BACKENDS = [
-#     'inicio.backends.CustomAuthBackend',  # Tu backend personalizado
-#     'django.contrib.auth.backends.ModelBackend',  # Mantener el backend predeterminado como fallback
-# ]
+AUTHENTICATION_BACKENDS = [
+    'inicio.backends.CustomAuthBackend',  # Tu backend personalizado
+    'django.contrib.auth.backends.ModelBackend',  # Mantener el backend predeterminado como fallback
+]
 
 WSGI_APPLICATION = 'ombu.wsgi.application'
 

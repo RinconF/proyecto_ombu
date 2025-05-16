@@ -1,3 +1,5 @@
+{% comment %} base.html {% endcomment %}
+
 {% load i18n static %}<!DOCTYPE html>
 {% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
 <html lang="{{ LANGUAGE_CODE|default:"en-us" }}" dir="{{ LANGUAGE_BIDI|yesno:'rtl,ltr,auto' }}">
@@ -15,7 +17,8 @@
 {% block extrastyle %}
 {{ block.super }}
 {% comment %} <link rel="stylesheet" href="{% static 'admin_personalizado/sidebar.css' %}">    referencia del css {% endcomment %}
-<link rel="stylesheet" href="{% static 'admin_personalizado/barraside.css' %}">
+<link rel="stylesheet" href="{% static 'admin_personalizado/css_panel/barraside.css' %}">
+<link rel="stylesheet" href="{% static 'admin_personalizado/css_panel/menu_despleg.css' %}">
 {% endblock %}
 {% if LANGUAGE_BIDI %}<link rel="stylesheet" href="{% block stylesheet_rtl %}{% static "admin/css/rtl.css" %}{% endblock %}">{% endif %}
 {% block extrahead %}{% endblock %}
@@ -43,29 +46,32 @@
         {% block usertools %}
         {% if has_permission %}
         <div id="user-tools">
-            {% block welcome-msg %}
-                {% translate 'Bienvenido a' %}
-                <strong>{% firstof user.get_short_name user.get_username %}</strong>.
-            {% endblock %}
-            {% block userlinks %}
-                {% if site_url %}
-                    <a href="{{ site_url }}">{% translate 'Ver sitio web' %}</a> /
-                {% endif %}
-                {% if user.is_active and user.is_staff %}
-                    {% url 'django-admindocs-docroot' as docsroot %}
-                    {% if docsroot %}
-                        <a href="{{ docsroot }}">{% translate 'Documentacion' %}</a> /
+            <div class="user-menu-container">
+                <button class="user-menu-toggle">
+                    <img src="{% static 'admin_personalizado/user_icon.png' %}" alt="{% firstof user.get_short_name user.get_username %}">  <span>{% firstof user.get_short_name user.get_username %}</span>
+                </button>
+                <ul class="user-menu">
+                    {% if site_url %}
+                        <li><a href="{{ site_url }}">{% translate 'Ver sitio web' %}</a></li>
                     {% endif %}
-                {% endif %}
-                {% if user.has_usable_password %}
-                <a href="{% url 'admin:password_change' %}">{% translate 'Cambiar contraseña' %}</a> /
-                {% endif %}
-                <form id="logout-form" method="post" action="{% url 'admin:logout' %}">
-                    {% csrf_token %}
-                    <button type="submit">{% translate 'Cerrar sesion' %}</button>
-                </form>
-                {% include "admin/color_theme_toggle.html" %}
-            {% endblock %}
+                    {% if user.is_active and user.is_staff %}
+                        {% url 'django-admindocs-docroot' as docsroot %}
+                        {% if docsroot %}
+                            <li><a href="{{ docsroot }}">{% translate 'Documentacion' %}</a></li>
+                        {% endif %}
+                    {% endif %}
+                    {% if user.has_usable_password %}
+                        <li><a href="{% url 'admin:password_change' %}">{% translate 'Cambiar contraseña' %}</a></li>
+                    {% endif %}
+                    <li>
+                        <form id="logout-form" method="post" action="{% url 'admin:logout' %}">
+                            {% csrf_token %}
+                            <button type="submit">{% translate 'Cerrar sesion' %}</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+            {% include "admin/color_theme_toggle.html" %}
         </div>
         {% endif %}
         {% endblock %}
@@ -170,6 +176,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script> {% endcomment %}
+{{ block.super }}
+<script src="{% static 'admin_personalizado/js_panel/menu_despleg.js' %}"></script>
 {% endblock %}
 </body>
 </html>

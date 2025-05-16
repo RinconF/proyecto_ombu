@@ -20,7 +20,7 @@ urlpatterns = [
     path('picar/', views.picar, name='picar'),
 
     # ADMIN
-    # path('admin', views.admin_principal, name='admin'),
+    path('admin', views.admin_principal, name='admin'),
     # path('admin/', admin.site.urls),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('login/', views.login_view, name='login'),

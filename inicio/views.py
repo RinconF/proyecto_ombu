@@ -55,20 +55,25 @@ def picar(request):
 # ADMIN
 def login_view(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+        username = request.POST.get('username').strip()
+        password = request.POST.get('password').strip()
+        
+        print(f"Intento de inicio de sesión: username='{username}', password='{password}'")  # Para depurar
 
         user = authenticate(request, username=username, password=password)
         if user is not None:
             if user.is_active:
                 login(request, user)
                 # Redireccionar según el rol del usuario
+                print(f"Inicio de sesión exitoso para: {user.username}, rol: {user.rol}")  # Para depurar
                 if user.is_superuser:
-                    return redirect('admin:index')  # Redirige al panel de administración de Django
+                    return redirect('admin:index')  
                 elif user.rol == 'ombu':
-                    return redirect('admin') # Redirige a tu vista 'admin_principal'
+                    return redirect('dashboard')  # Corregido a 'dashboard' (ver urls.py)
+                elif user.rol == 'mesero':  # Nueva condición para mesero
+                    return redirect('bebidas_calientes')  # Redirige a la vista de mesero
                 else:
-                    return redirect('bebidas_calientes')  # Redirige a la página de usuario regular
+                    return redirect('index')  # Redirige a la página principal por defecto
             else:
                 messages.error(request, 'Tu cuenta está desactivada. Contacta al administrador.')
         else:
@@ -76,12 +81,15 @@ def login_view(request):
 
     # Si el usuario ya está autenticado, redirigir según su rol
     if request.user.is_authenticated:
+        print(f"Usuario ya autenticado: {request.user.username}, rol: {request.user.rol}") 
         if request.user.is_superuser:
             return redirect('admin:index')  # Redirige al panel de administración de Django
         elif request.user.rol == 'ombu':
-            return redirect('admin') # Redirige a tu vista 'admin_principal'
+            return redirect('dashboard')  # Corregido a 'dashboard'
+        elif request.user.rol == 'mesero':  # Nueva condición para mesero
+            return redirect('bebidas_calientes')  # Redirige a la vista de mesero
         else:
-            return redirect('bebidas_calientes')  # Redirige a la página de usuario regular
+            return redirect('index')  # Redirige a la página principal por defecto
 
     return render(request, 'pages/Admin/login.html')
 

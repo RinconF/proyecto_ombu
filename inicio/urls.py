@@ -6,7 +6,6 @@ from django.contrib import admin
 from .views import dashboard
 from .forms import CustomPasswordResetForm
 from django.contrib.auth.views import PasswordResetView
-from inicio.views import perfil_view
 from admin_personalizado.views import perfil_view
 
 

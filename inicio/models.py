@@ -105,14 +105,29 @@ class Pedidos(models.Model):
 
 
 
-class Producto(models.Model):
-    nombreProducto = models.CharField(max_length=45)
-    descripcion = models.TextField(blank=True, null=True)
-    precio = models.DecimalField(max_digits=10, decimal_places=2)
-    Pedidos = models.ForeignKey(Pedidos, on_delete=models.CASCADE)
 
+class Producto(models.Model):
+    ESTADOS = [
+        ('disponible', 'Disponible'),
+        ('no_disponible', 'No disponible'),
+    ]
+    
+    CATEGORIAS = [
+        ('cocteles', 'Cócteles'),
+        ('bebidas_calientes', 'Bebidas Calientes'),
+        ('postres', 'Postres'),
+        # Agrega más según tu necesidad
+    ]
+
+    titulo = models.CharField(max_length=100)
+    descripcion = models.TextField()
+    precio = models.DecimalField(max_digits=8, decimal_places=2)
+    estado = models.CharField(max_length=20, choices=ESTADOS, default='disponible')
+    foto = models.ImageField(upload_to='productos/')
+    categoria = models.CharField(max_length=30, choices=CATEGORIAS)
+    opciones = models.JSONField(default=list, blank=True)  # lista de strings    
     def __str__(self):
-        return self.nombreProducto
+        return self.titulo
 
 
 

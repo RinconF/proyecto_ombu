@@ -140,7 +140,7 @@
           </div>
 
 <!-- CAFE MEXICANO -->
-          <div class="card"  data-title="CAFE MEXICANO " data-image="{% static 'img\imagenes_productos\cafe_mexicano.png' %}">
+          <div class="card"  data-title="CAFE MEXICANO " data-image="{% static 'img\imagenes_productos\cafe_mexicano.png' %}" >
             <div class="img-container">
               <img
                 src="{% static 'img\imagenes_productos\cafe_mexicano.png' %}"
@@ -160,6 +160,28 @@
               <button>ver mas</button>
             </div>
           </div>
+
+    {% comment %} Productos       {% endcomment %}
+
+    {% for producto in productos %}
+  <div class="card" data-title="{{ producto.titulo }}" data-image="{{ producto.foto.url }} " data-options='{{ producto.opciones|safe }}'>
+    <div class="img-container">
+      <img src="{{ producto.foto.url }}" alt="{{ producto.titulo }}" />
+    </div>
+
+    <div class="main-card">
+      <span>{{ producto.titulo|upper }}</span>
+      <p class="truncated-text">
+        {{ producto.descripcion|truncatechars:250 }}
+      </p>
+    </div>
+    <div class="footer-card">
+      <button>ver mas</button>
+    </div>
+  </div>
+{% empty %}
+  <p>No hay productos disponibles en esta categoría.</p>
+{% endfor %}
 
 <!-- CAFE IRLANDES -->
           <div class="card" data-title="CAFE IRLANDES" data-image="{% static 'img\imagenes_productos\cafe_irlandes.png' %}"
@@ -497,21 +519,23 @@
 
 {% comment %} <!-- ------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------ --> {% endcomment %}
+    {% for producto in productos %}
         <div id="modal" class="modal">
           <div class="modal-content">
               <span class="close">&times;</span>
               <img id="modal-image" src="" alt="Producto">
               <div class="modal-info">
                   <h2 id="modal-title"></h2>
-                  <p>Más detalles sobre el producto seleccionado.</p>
-                  <h4 class="opcion">Opción</h4>
+                  <p>{{ producto.descripcion }}</p>
+                  <h4 class="opcion">opciones</h4>
                   <select id="modal-select"></select>
-
+                  
               </div>
           </div>
 
           
       </div>
+    {% endfor %}  
       </section>
 
 

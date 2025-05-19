@@ -68,7 +68,16 @@ urlpatterns = [
     path('dashboard/exportar/', views.exportar_dashboard, name='exportar_dashboard'),
     
     path('perfil/', perfil_view, name='perfil'),
+    
+    
+    
+    # PRODUCTOS
+
+
 ]
+
+
+
 # perfil
 
 

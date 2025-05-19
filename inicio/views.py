@@ -17,7 +17,7 @@ import json
 from .models import Usuario
 from .forms import customusuario_crear, customusuario_change, PasswordChangeForm
 from django.contrib.auth.models import User
-
+from .models import Producto
 from django.contrib.admin.views.decorators import staff_member_required
 
 from .decorators import group_required
@@ -42,7 +42,8 @@ def listar_categoria(request):
 
 # PRODUCTOS MENU
 def bebida_caliente(request):
-    return render(request, 'pages/productos_menu/bebida_caliente.html')
+    productos = Producto.objects.filter(estado='disponible', categoria='bebidas_calientes')
+    return render(request, 'pages/productos_menu/bebida_caliente.html', {'productos': productos})
 
 def bebida_fria(request):
     return render(request, 'pages/productos_menu/Bebida_fria.html')
@@ -430,6 +431,12 @@ def cocteles(request):
 def para_picar(request):
     return render(request, 'pages/menu_mesero/Para_picar.html')
 
+
+# PRODUCTOS
+
+# def productos_disponibles(request):
+#     productos = Producto.objects.filter(estado='disponible')
+#     return render(request, 'principal/index.html', {'productos': productos})
 
 #EMAIL RESERVA
 

@@ -3,7 +3,6 @@ from .models import Pedidos, Inventario, Usuario, Producto, Reserva
 from django.contrib.auth.admin import UserAdmin
 # from .models import Rol, Categoria, Usuario, Producto, Mesa, Pedido, Reserva
 from .forms import customusuario_crear,customusuario_change
-
 # Clase para mejorar la vista del modelo Usuario en el admin
 class UsuarioAdmin(admin.ModelAdmin):
     list_display = ('username', 'email', 'first_name', 'last_name', 'rol', 'is_active', 'date_joined')
@@ -23,6 +22,13 @@ class UsuarioAdmin(admin.ModelAdmin):
              'fields': ('username', 'email', 'first_name', 'last_name', 'rol'),   #se elimino password
          }),
      )
+     
+     
+@admin.register(Producto)
+class ProductoAdmin(admin.ModelAdmin):
+    list_display = ('titulo', 'precio', 'estado')
+    list_filter = ('estado',)
+    search_fields = ('titulo', 'descripcion')
      
 # Registros
 admin.site.register(Pedidos)

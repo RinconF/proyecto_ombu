@@ -16,11 +16,11 @@ body #content-main .form-row {
     display: flex;
     align-items: center;
     margin-bottom: 15px;
-    flex-wrap: wrap; /* Permitir que los elementos se envuelvan */
+    flex-wrap: wrap; 
 }
 
 body #content-main .form-row label {
-    flex-basis: 150px; /* Ancho inicial de la etiqueta */
+    flex-basis: 150px;
     margin-right: 10px;
     font-weight: 500;
     color: #495057;
@@ -31,7 +31,7 @@ body #content-main .form-row input[type="text"],
 body #content-main .form-row input[type="email"],
 body #content-main .form-row input[type="password"],
 body #content-main .form-row select {
-    flex: 1; /* El campo ocupa el resto del espacio */
+    flex: 1; 
     padding: 0.75rem;
     border: 1px solid #ced4da;
     border-radius: 0.25rem;
@@ -39,25 +39,25 @@ body #content-main .form-row select {
     font-size: 1rem;
     color: #495057;
     background-color: #fff;
-    min-width: 0; /* Importante para evitar que los campos se contraigan demasiado */
+    min-width: 0; 
 }
 
 /* Ajuste para cuando los elementos se envuelven */
 body #content-main .form-row:where(.flex-wrap) > * {
     flex-basis: 100%;
-    text-align: left; /* Alinea todo a la izquierda */
-    margin-bottom: 5px; /* Espacio entre la etiqueta y el campo cuando están apilados */
+    text-align: left; 
+    margin-bottom: 5px; 
 }
 
 body #content-main .form-row:where(.flex-wrap) label {
-    text-align: left; /* Asegura que la etiqueta se alinee a la izquierda */
+    text-align: left; 
 }
 
 body #content-main .form-row .flex-container.checkbox-row {
     display: flex;
     align-items: center;
     margin-left: 0; /* Eliminar el margen izquierdo fijo */
-    padding-left: 150px; /* Usar padding para la sangría, si es necesario */
+    padding-left: 150px; 
     margin-bottom: 5px;
 }
 
@@ -79,8 +79,8 @@ body #content-main .submit-row {
 
 body #content-main .submit-row input[type="submit"],
 body #content-main .submit-row button {
-    background-color: #28a745;
-    color: #fff;
+    background-color: #000000;
+    color: #000000;
     padding: 0.75rem 1.5rem;
     border: none;
     border-radius: 0.25rem;

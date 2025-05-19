@@ -40,7 +40,7 @@ body #content-main .submit-row {
 
 body #content-main .submit-row input[type="submit"],
 body #content-main button {
-    background-color: #17a2b8;
+    background-color: #000000;
     border-color: #17a2b8;
     padding: 0.6rem 1.2rem;
     font-size: 0.9rem;

@@ -76,3 +76,4 @@ admin.site.register(Reserva)
 #     list_display    = ('id', 'usuario', 'mesa', 'fecha', 'estado')
 #     list_filter     = ('estado', 'fecha')
 #     date_hierarchy  = 'fecha'
+c

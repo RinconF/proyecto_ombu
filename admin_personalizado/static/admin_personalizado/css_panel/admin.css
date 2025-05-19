@@ -1,0 +1,486 @@
+
+
+/* Barra superior personalizada */
+#header {
+    background-color: #000;
+    color: white;
+    width: 100%;
+    padding: 10px 0;
+    
+}
+#header a:link, #header a:visited {
+    color: white !important;
+}
+/* Contenedor de la barra */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.navbar .main-nav li{
+    list-style-type: none;
+}
+/* Logo/título */
+.brand {
+    font-size: 18px;
+    font-weight: bold;
+}
+/* Menú principal */
+.main-nav {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.main-nav li {
+    margin-left: 20px;
+    position: relative;
+}
+.main-nav a {
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: all 0.3s;
+    font-weight: 500;
+}
+.main-nav a:hover {
+    background-color: #444;
+    text-decoration: none;
+    transform: translateY(-2px);
+}
+/* Submenú desplegable */
+.submenu {
+    display: none;
+    position: absolute;
+    background-color: #222;
+    min-width: 200px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    z-index: 1000;
+    border-radius: 4px;
+}
+.main-nav li:hover .submenu {
+    display: block;
+}
+.submenu a {
+    padding: 10px 15px;
+    display: block;
+    border-bottom: 1px solid #333;
+}
+.submenu a:hover {
+    background-color: #444;
+}
+
+
+
+/*--------------------------------- estilos para el contenido main ----------------------------------------*/
+
+#content-main {
+ 
+}
+
+#content-main .form-row{
+    color: white;
+}
+
+#content-start #content .colM{
+    background-color: white;
+}
+
+
+#content .colM p{
+    background-color: white;
+}
+
+#content h1{
+    color: rgb(255, 255, 255);
+}
+
+#content-start {
+    color: wheat;
+}
+
+#content-start #content h2{
+    color: black;
+    background-color: white;
+}
+
+
+#content-start #content ul{
+    background-color: black;
+    
+}
+
+
+
+#changelist{
+    border-collapse: collapse;
+    border: 2px solid #333; /* Mantiene el borde */
+    border-radius: 10px; /* Agrega bordes redondeados (ajusta el valor según el radio que desees) */
+    overflow: hidden; /* Importante para que el border-radius se aplique correctamente en las celdas */
+}
+
+
+/* --------------------------------------------------alerts ------------------*/
+
+#usuario_form p{
+    color: white;
+}
+
+
+#usuario_form .errornote {
+    color: black;
+}
+
+
+
+
+
+
+/*------------------------------------- cambio de filas --------------------------------------------------------*/
+/* Estilos para las tablas */
+
+.actions {
+    width: 100%; /* Igualar el ancho de la tabla */
+    box-sizing: border-box; /* Asegurar que el padding no afecte el ancho total */
+    
+}
+
+
+#changelist table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Encabezados de la tabla */
+#changelist th {
+    background-color: #24a119;  /* Verde más oscuro para encabezados */
+    color: white;
+    padding: 12px 8px;
+    font-weight: bold;
+    text-align: left;
+}
+
+
+/* Filas de la tabla */
+#changelist tr {
+    transition: background-color 0.3s;
+}
+
+/* Filas pares */
+#changelist tr:nth-child(even) {
+    background-color: #e0f2e0;  /* Verde claro para filas pares */
+}
+
+/* Filas al pasar el mouse */
+#changelist tr:hover {
+    background-color: #c6e6c6;  /* Verde más saturado al pasar el mouse */
+}
+
+/* Celdas de la tabla */
+#changelist td {
+    padding: 12px 8px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Checkbox en la tabla */
+#changelist input[type="checkbox"] {
+    transform: scale(1.2);
+    margin: 0 auto;
+    display: block;
+}
+
+/* Estilo para usarios activos (el icono verde) */
+#changelist .field-is_active img {
+    filter: brightness(0) saturate(100%) invert(72%) sepia(24%) 
+            saturate(2152%) hue-rotate(72deg) brightness(92%) contrast(87%);
+}
+
+/* Incrementar el espacio entre filas */
+#changelist tbody tr {
+    height: 48px;
+}
+
+/* Estilos para los enlaces */
+#changelist a {
+    color: #2b5329;
+    text-decoration: none;
+}
+
+#changelist a:hover {
+    text-decoration: underline;
+}
+
+
+
+#result_list {
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid #333; /* Mantiene el borde */
+    border-radius: 10px; /* Agrega bordes redondeados (ajusta el valor según el radio que desees) */
+    overflow: hidden; /* Importante para que el border-radius se aplique correctamente en las celdas */
+}
+
+/* Corregir alineación específica para la tabla de reservas */
+#result_list tbody th.field-__str__ {
+    font-weight: normal;  /* Quitar negrita por defecto de th */
+    text-align: left;     /* Alinear texto a la izquierda */
+    padding: 12px ;   /* Padding consistente */
+    background-color: #138213;  /* Color de fondo verde */
+    color: white;         /* Texto en blanco */
+    vertical-align: middle;  /* Alineación vertical */
+}
+
+/* Estilo para las celdas de checkbox */
+#result_list td.action-checkbox {
+    padding: 12px;
+    text-align: center;
+    vertical-align: middle;
+    width: 40px;  /* Ancho fijo para columna de checkbox */
+    background-color: #5cb85c;  /* Mismo color que las otras celdas */
+}
+
+/* Estilo para el texto dentro del las filas*/
+#result_list tbody td{
+    color: black;
+}
+
+
+
+/* Estilo para la fila de encabezado */
+#result_list thead th {
+    background-color: #4c9545;  /* Verde más oscuro para encabezados */
+    color: white;
+    padding: 12px 15px;
+    font-weight: bold;
+    text-align: left;
+}
+
+
+/* Estilo para la columna de encabezado de checkbox */
+#result_list thead th.action-checkbox-column {
+    width: 40px;  /* Mismo ancho que las celdas de checkbox */
+    padding: 12px;
+    text-align: center;
+}
+
+/* Asegurar altura consistente */
+#result_list tr {
+    height: 48px;
+}
+
+/* Hover sobre las filas */
+#result_list tbody tr:hover th.field-__str__,
+#result_list tbody tr:hover td.action-checkbox {
+    background-color: #449d44;  /* Verde más oscuro al pasar el mouse */
+}
+
+/* Estilo para los enlaces dentro de las celdas */
+#result_list tbody th.field-__str__ a {
+    color: white;
+    text-decoration: none;
+    display: block;  /* Hacer que el enlace ocupe toda la celda */
+}
+
+#result_list tbody th.field-__str__ a:hover {
+    text-decoration: underline;
+}
+
+/*--------------------------------------------------- Barra de filtros a la derecha ------------------------------------------*/
+.filter {
+    background-color: #f0f8f0;
+    border-radius: 4px;
+    border: 1px solid #c6e6c6;
+}
+
+.filter h3 {
+    background-color: #4c9545;
+    color: white;
+    padding: 8px 12px;
+    margin: 0;
+    border-radius: 4px 4px 0 0;
+}
+
+/* Estilo general del fondo */
+body {
+    background-color: #f8fef8;
+}
+
+/* Barra superior verde */
+#header {
+    background-color: #000000;
+    color: white;
+}
+
+
+
+
+
+/*breadcrumb*/
+/* ===== ESTILOS PARA BREADCRUMB PERSONALIZADO ===== */
+.breadcrumbs {
+    background-color: #000 !important;
+    padding: 12px;
+    margin: 0 0 0 0;
+
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    color: #6f5207;
+    font-size: 15px;
+
+}
+
+.breadcrumbs a {
+    color: #3498db !important;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    padding: 4px 8px;
+    border-radius: 3px;
+}
+
+.breadcrumbs a:hover {
+    color: #2980b9 !important;
+    background-color: rgba(255,255,255,0.1);
+    text-decoration: none;
+}
+
+.breadcrumbs a:first-child {
+    margin-left: -8px;
+}
+
+/* Separador personalizado */
+.breadcrumbs-custom a + a:before {
+    content: "›";
+    color: #7f8c8d;
+    padding: 0 10px;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/* Efecto para la página actual */
+.breadcrumbs .breadcrumb-current {
+    color: #bdc3c7;
+    font-weight: 500;
+}
+
+
+/*------------------------- user-tools -------------------------------------------*/
+/* Estilo para la barra superior de usuario */
+#user-tools {
+    background-color: #000000;  /* Fondo oscuro */
+    color: rgb(175, 164, 164);  /* Texto blanco */
+    padding: 8px 15px;  /* Más espacio alrededor */
+    font-size: 14px;  /* Tamaño de texto */
+    font-weight: bold;
+}
+
+/* Enlaces en la barra de usuario */
+#user-tools a {
+    color: #4CAF50;  /* Enlaces en verde */
+    text-decoration: none;  /* Sin subrayado */
+    margin: 0 5px;  /* Espacio entre enlaces */
+    font-weight: bold;  /* Texto en negrita */
+}
+
+#user-tools a:hover {
+    color: #8BC34A;  /* Color al pasar el mouse */
+    text-decoration: underline;  /* Subrayado al pasar el mouse */
+}
+
+#user-tools .theme-toggle{
+    filter: invert(100%);
+}
+
+/*--------------------------------------- sidebar izquierda para actividad reciente -----------------------------------*/
+/* Ajustes para el sidebar y contenido principal
+.main {
+    transition: margin-left 0.3s ease;
+    position: relative;
+}
+
+.main.shifted {
+    margin-left: 280px; /* Igual al ancho del sidebar 
+}
+
+#content {
+    margin-left: 0;
+    width: auto;
+    min-height: calc(100vh - 120px); Ajuste para el footer 
+}
+
+.custom-sidebar {
+    position: fixed;
+    left: 0;
+    top: 60px;  Debajo del header 
+    bottom: 0;
+    width: 280px;
+    background: #2c3e50; Color oscuro para contraste 
+    border-right: 1px solid #34495e;
+    overflow-y: auto;
+    padding: 15px;
+    z-index: 1000;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.2);
+    color: #ecf0f1;
+}
+
+Estilos específicos para el contenido del sidebar 
+.recent-actions-container {
+    padding: 10px;
+}
+
+.recent-actions-container h2 {
+    color: #ecf0f1;
+    border-bottom: 1px solid #34495e;
+    padding-bottom: 10px;
+    font-size: 1.1em;
+}
+
+.action-item {
+    background: #34495e;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.action-item:hover {
+    background: #3d566e;
+    transform: translateX(5px);
+}
+
+Ajuste para el footer 
+#footer {
+    margin-left: 280px;
+    transition: margin-left 0.3s ease;
+}
+
+Responsive Design 
+@media (max-width: 1024px) {
+    .main.shifted, #footer {
+        margin-left: 0;
+    }
+    
+    .custom-sidebar {
+        transform: translateX(-100%);
+    }
+    
+    .custom-sidebar.active {
+        transform: translateX(0);
+        box-shadow: 5px 0 15px rgba(0,0,0,0.3);
+    }
+    
+    Botón para mostrar/ocultar sidebar en móviles 
+    .sidebar-toggle {
+        display: inline-block;
+        background: #34495e;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        margin-right: 10px;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+} */

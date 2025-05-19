@@ -420,7 +420,7 @@ section {
     position: fixed;
     bottom: 100px;  /* Asegura que el ícono esté cerca del borde inferior */
     left: 20px;    /* Asegura que el ícono esté cerca del borde izquierdo */
-    z-index: 40;  /* Asegura que el ícono esté por encima de otros elementos */
+    z-index: 999;  /* Asegura que el ícono esté por encima de otros elementos */
     background-color: #40916c;
     border-radius: 50%;  /* Hace que el ícono tenga bordes redondeados */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Agrega sombra para hacerlo más visible */

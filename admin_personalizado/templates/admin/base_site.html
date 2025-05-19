@@ -1,0 +1,127 @@
+
+
+{% extends "admin/base.html" %}
+{% load static i18n %}
+{% block userlinks %}
+  {{ block.super }}
+  /
+  <a href="{% url 'perfil' %}">{% translate 'Perfil' %}</a>
+{% endblock %}
+{% block extrastyle %}{{ block.super }}
+<link rel="stylesheet" href="{% static 'admin_personalizado/css_panel/admin.css' %}">
+<link rel="stylesheet" href="{% static 'admin_personalizado/css_panel/agregar_forms.css' %}">
+<link rel="stylesheet" href="{% static 'admin_personalizado/css_panel/editar_forms.css' %}">
+<link rel="stylesheet" href="{% static 'admin_personalizado/css_panel/eliminar_forms.css' %}">
+
+<style id="dynamic-bg-style">
+    
+    body, #content {
+        background-color: #1A3330; 
+        background-image: url('/static/img/logos_o_otros/ombu_fondo.jpg'); 
+        background-size: cover; 
+        background-repeat: no-repeat; 
+        background-attachment: fixed;
+        transition: background 0.5s ease;
+    }
+</style>
+
+{% endblock %}
+
+
+{% block branding %}
+<div class="navbar">
+    <div class="brand">
+        <h1 id="site-name">
+            <a href="{% url 'admin:index' %}">{{ site_header|default:_('OMBÚ') }}</a></h1>
+    </div>
+    <ul class="main-nav">
+        {% for app in available_apps %}
+            {% if app.app_label == 'inicio' %}
+                {% for model in app.models %}
+                    <li><a href="{{ model.admin_url }}">{{ model.name }}</a></li>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
+
+{% comment %} {% block branding %}
+<div class="navbar">
+    <div class="brand">
+        <h1 id="site-name">
+            <a href="{% url 'admin:index' %}">{{ site_header|default:_('OMBÚ') }}</a></h1>
+            
+            {% if request.user.is_authenticated and request.user.perfil.avatar %}
+            <a href="{% url 'perfil' %}">
+                <img src="{{ request.user.perfil.avatar.url }}"
+                    alt="Avatar"
+                    style="height:80px; width:80px; border-radius:50%; margin-left:10px; vertical-align:middle;">
+            </a>
+            {% endif %}
+    </div>
+    <ul class="main-nav">
+        {% for app in available_apps %}
+            {% if app.app_label == 'inicio' %}
+                {% for model in app.models %}
+                    <li><a href="{{ model.admin_url }}">{{ model.name }}</a></li>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %} {% endcomment %}
+
+{% block nav-global %}{% endblock %}
+
+
+{% block content %}
+{{ block.super }}
+<div class="module">
+    <h2>{% translate 'Personalización del Fondo' %}</h2>
+    <div class="form-row">
+        <label for="admin-bg-image">{% translate 'URL de la Imagen de Fondo:' %}</label>
+        <input type="text" id="admin-bg-image" name="admin-bg-image" placeholder="{% translate 'Ingrese la URL de la imagen' %}">
+    </div>
+</div>
+{% endblock %}
+
+
+{% block extrajs %}
+{{block.super}}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Obtener elementos
+    const imageInput = document.getElementById('admin-bg-image');
+    const dynamicStyle = document.getElementById('dynamic-bg-style');
+
+
+    if (imageInput && dynamicStyle){
+
+        const savedImage = localStorage.getItem('adminBgImage');
+        if (savedImage) {
+            imageInput.value = savedImage;
+            updateBackgroundImage(savedImage);
+        }
+
+        // Manejar cambio de URL de la imagen
+        imageInput.addEventListener('input', function() {
+            updateBackgroundImage(this.value);
+            localStorage.setItem('adminBgImage', this.value);
+        });
+
+        function updateBackgroundImage(imageUrl) {
+            dynamicStyle.textContent = `
+                body, #content {
+                    background-image: url('${imageUrl}');
+                    background-size: cover;
+                    background-repeat: no-repeat;
+                    background-attachment: fixed;
+                    transition: background 2s ease;
+                }
+            `;
+        }
+    }    
+});
+</script>
+{% endblock %}

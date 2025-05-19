@@ -3,9 +3,16 @@
     position: relative;
 }
 
-.user-menu-container ul li a{
+.user-menu-container ul li {
     color: black;
+    list-style: none;
 }
+
+.user-menu-container ul li #ch{
+    color: black;
+    
+}
+
 
 .user-menu-toggle {
     background: none;
@@ -35,10 +42,18 @@
     margin: 0;
     display: none; 
     z-index: 1000; 
+
+
+
 }
 
 .user-menu li {
     padding: 10px 15px;
+    width: auto;
+}
+
+.user-menu li a{
+    padding: 10px;
 }
 
 :root {
@@ -52,7 +67,7 @@
 }
 
 .user-menu li a:hover {
-    background-color: #f0f0f0;
+    background-color: #030303;
 }
 
 .user-menu li form {
@@ -76,13 +91,16 @@
 /* Estilos para mostrar el menú */
 .user-menu.show {
     display: block;
+    padding: 30px;
+    background-color: rgb(40, 38, 38);
+    text-align: center;
 }
 
-.user-menu-container .user-menu li a{
-    color: black;
-    list-style: none;
-
+.user-menu.show li a{
+    width: auto;
+    padding: 5px 50px 5px 50px;
 }
+
 
 .user-menu-container  a{
     color: black;

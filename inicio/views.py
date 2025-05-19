@@ -102,7 +102,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('pages/Admin/login.html') 
+    return redirect('login') 
 
 @never_cache
 @login_required

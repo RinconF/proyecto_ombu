@@ -24,6 +24,7 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('inicio.urls')),
+    path('admin_panel/', include('admin_personalizado.urls', namespace='admin_panel')),
 ]
 
 urlpatterns += [

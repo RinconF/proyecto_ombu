@@ -22,7 +22,7 @@ urlpatterns = [
     path('picar/', views.picar, name='picar'),
 
     # ADMIN
-    path('admin', views.admin_principal, name='admin'),
+    # path('admin', views.admin_principal, name='admin'),
     # path('admin/', admin.site.urls),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('login/', views.login_view, name='login'),
@@ -64,12 +64,10 @@ urlpatterns = [
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
 
 #dashboard
-    # path('dashboard/', views.dashboard, name='dashboard'),
-    # path('dashboard/exportar/', views.exportar_dashboard, name='exportar_dashboard'),
+    path('dashboard/', views.dashboard, name='dashboard'),
+    path('dashboard/exportar/', views.exportar_dashboard, name='exportar_dashboard'),
     
-
-    # path('perfil/', perfil_view, name='perfil'),
-
+    path('perfil/', perfil_view, name='perfil'),
 ]
 # perfil
 

@@ -5,11 +5,10 @@ class AdminPersonalizadoConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'admin_personalizado'
 
-    def ready(self):
-        import admin_personalizado.signals
+    # def ready(self):
+    #     import admin_personalizado.signals
 
-    def ready(self):
-        import admin_personalizado.signals
+
 
 class InicioConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'

@@ -1,0 +1,122 @@
+/* Estilos para la página de agregar usuario */
+body #content-main form#usuario_form {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    max-width: 900px; /* Aumentado */
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
+body #content-main .form-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap; /* Permitir que los elementos se envuelvan */
+}
+
+body #content-main .form-row label {
+    flex-basis: 150px; /* Ancho inicial de la etiqueta */
+    margin-right: 10px;
+    font-weight: 500;
+    color: #495057;
+    text-align: right;
+}
+
+body #content-main .form-row input[type="text"],
+body #content-main .form-row input[type="email"],
+body #content-main .form-row input[type="password"],
+body #content-main .form-row select {
+    flex: 1; /* El campo ocupa el resto del espacio */
+    padding: 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    box-sizing: border-box;
+    font-size: 1rem;
+    color: #495057;
+    background-color: #fff;
+    min-width: 0; /* Importante para evitar que los campos se contraigan demasiado */
+}
+
+/* Ajuste para cuando los elementos se envuelven */
+body #content-main .form-row:where(.flex-wrap) > * {
+    flex-basis: 100%;
+    text-align: left; /* Alinea todo a la izquierda */
+    margin-bottom: 5px; /* Espacio entre la etiqueta y el campo cuando están apilados */
+}
+
+body #content-main .form-row:where(.flex-wrap) label {
+    text-align: left; /* Asegura que la etiqueta se alinee a la izquierda */
+}
+
+body #content-main .form-row .flex-container.checkbox-row {
+    display: flex;
+    align-items: center;
+    margin-left: 0; /* Eliminar el margen izquierdo fijo */
+    padding-left: 150px; /* Usar padding para la sangría, si es necesario */
+    margin-bottom: 5px;
+}
+
+body #content-main .form-row .flex-container.checkbox-row input[type="checkbox"] {
+    margin-right: 0.5rem;
+}
+
+body #content-main .form-row .flex-container.checkbox-row label.vCheckboxLabel {
+    margin-left: 0;
+    font-weight: normal;
+}
+
+body #content-main .submit-row {
+    padding: 1rem 0;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}
+
+body #content-main .submit-row input[type="submit"],
+body #content-main .submit-row button {
+    background-color: #28a745;
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.15s ease-in-out;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+body #content-main .submit-row input[type="submit"]:hover,
+body #content-main .submit-row button:hover {
+    background-color: #218838;
+}
+
+body #content-main h1 {
+    color: #28a745;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #ced4da;
+    padding-bottom: 0.5rem;
+}
+
+body #content-main h2.fieldset-heading {
+    color: #495057;
+    font-size: 1rem;
+    font-weight: bold;
+    margin-top: 1rem;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.25rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+body #content-main .help {
+    color: #6c757d;
+    font-size: 0.8rem;
+    display: block;
+    margin-top: 0.15rem;
+    margin-left: 0; /* Eliminar el margen izquierdo fijo */
+    padding-left: 150px; /* Usar padding para la sangría, si es necesario */
+}

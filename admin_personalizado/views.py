@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-# from .forms import UsuarioForm, PerfilForm
-# from inicio.models import Perfil  
+from .forms import UsuarioForm, PerfilForm
+from inicio.models import Perfil  
 
 @login_required
 def perfil_view(request):

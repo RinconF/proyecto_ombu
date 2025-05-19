@@ -9,6 +9,9 @@
 {% endblock %}
 {% block extrastyle %}{{ block.super }}
 <link rel="stylesheet" href="{% static 'admin_personalizado/css_panel/admin.css' %}">
+<link rel="stylesheet" href="{% static 'admin_personalizado/css_panel/agregar_forms.css' %}">
+<link rel="stylesheet" href="{% static 'admin_personalizado/css_panel/editar_forms.css' %}">
+<link rel="stylesheet" href="{% static 'admin_personalizado/css_panel/eliminar_forms.css' %}">
 
 <style id="dynamic-bg-style">
     
@@ -26,6 +29,24 @@
 
 
 {% block branding %}
+<div class="navbar">
+    <div class="brand">
+        <h1 id="site-name">
+            <a href="{% url 'admin:index' %}">{{ site_header|default:_('OMBÚ') }}</a></h1>
+    </div>
+    <ul class="main-nav">
+        {% for app in available_apps %}
+            {% if app.app_label == 'inicio' %}
+                {% for model in app.models %}
+                    <li><a href="{{ model.admin_url }}">{{ model.name }}</a></li>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
+
+{% comment %} {% block branding %}
 <div class="navbar">
     <div class="brand">
         <h1 id="site-name">
@@ -49,7 +70,7 @@
         {% endfor %}
     </ul>
 </div>
-{% endblock %}
+{% endblock %} {% endcomment %}
 
 {% block nav-global %}{% endblock %}
 

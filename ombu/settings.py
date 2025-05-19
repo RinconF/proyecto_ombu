@@ -43,7 +43,7 @@ INSTALLED_APPS = [
 
 AUTH_USER_MODEL = 'inicio.Usuario'
 
-MIDDLEWARE = [  
+MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -73,7 +73,7 @@ TEMPLATES = [
 ]
 
 AUTHENTICATION_BACKENDS = [
-    'inicio.backends.CustomAuthBackend',  # Tu backend personalizado
+    # 'inicio.backends.CustomAuthBackend',  # Tu backend personalizado
     'django.contrib.auth.backends.ModelBackend',  # Mantener el backend predeterminado como fallback
 ]
 
@@ -131,7 +131,8 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'inicio/static')
+    os.path.join(BASE_DIR, 'inicio/static'),
+    os.path.join(BASE_DIR, 'admin_personalizado/static'),
 ]
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

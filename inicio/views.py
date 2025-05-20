@@ -42,23 +42,29 @@ def listar_categoria(request):
 
 # PRODUCTOS MENU
 def bebida_caliente(request):
-    productos = Producto.objects.filter(estado='disponible', categoria='bebidas_calientes')
+    productos = Producto.objects.filter(estado='disponible', categoria='bebida_caliente')
     return render(request, 'pages/productos_menu/bebida_caliente.html', {'productos': productos})
 
 def bebida_fria(request):
-    return render(request, 'pages/productos_menu/Bebida_fria.html')
+    productos = Producto.objects.filter(estado='disponible', categoria='Bebida_fria')
+    return render(request, 'pages/productos_menu/Bebida_fria.html', {'productos': productos})
 
 def cerveza(request):
-    return render(request, 'pages/productos_menu/Cerveza.html')
+    productos = Producto.objects.filter(estado='disponible', categoria='Cerveza')
+    return render(request, 'pages/productos_menu/Cerveza.html', {'productos': productos})
 
 def cigarrillo(request):
-    return render(request, 'pages/productos_menu/Cigarrillo.html')
+    productos = Producto.objects.filter(estado='disponible', categoria='Cigarrillo')
+    return render(request, 'pages/productos_menu/Cigarrillo.html', {'productos': productos})
 
 def coctel(request):
-    return render(request, 'pages/productos_menu/Coctel.html')
+    productos = Producto.objects.filter(estado='disponible', categoria='Coctel')
+    return render(request, 'pages/productos_menu/Coctel.html', {'productos': productos})
 
 def picar(request):
-    return render(request, 'pages/productos_menu/Picar.html')
+    productos = Producto.objects.filter(estado='disponible', categoria='Picar')
+    return render(request, 'pages/productos_menu/Picar.html', {'productos': productos})
+
 
 # ADMIN
 def login_view(request):
@@ -431,6 +437,16 @@ def cocteles(request):
 def para_picar(request):
     return render(request, 'pages/menu_mesero/Para_picar.html')
 
+
+def productos_por_categoria(request, categoria):
+    productos = Producto.objects.filter(estado='disponible', categoria=categoria)
+
+    try:
+        
+        template_name = f'pages/productos_menu/{categoria}.html'
+        return render(request, template_name, {'productos': productos})
+    except:
+        return render(request, 'pages/productos_menu/no_encontrado.html', {'categoria': categoria})
 
 # PRODUCTOS
 

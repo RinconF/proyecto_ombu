@@ -113,9 +113,12 @@ class Producto(models.Model):
     ]
     
     CATEGORIAS = [
-        ('cocteles', 'Cócteles'),
-        ('bebidas_calientes', 'Bebidas Calientes'),
-        ('postres', 'Postres'),
+        ('Coctel', 'Cócteles'),
+        ('bebida_caliente', 'Bebidas Calientes'),
+        ('Bebida_fria', 'Bebidas Frias'),
+        ('Cerveza', 'Cervezas'),
+        ('Cigarrillo', 'Cigarrillos'),
+        ('Picar', 'Para Picar'),
         # Agrega más según tu necesidad
     ]
 
@@ -125,7 +128,10 @@ class Producto(models.Model):
     estado = models.CharField(max_length=20, choices=ESTADOS, default='disponible')
     foto = models.ImageField(upload_to='productos/')
     categoria = models.CharField(max_length=30, choices=CATEGORIAS)
-    opciones = models.JSONField(default=list, blank=True)  # lista de strings    
+    opciones = models.TextField(blank=True,help_text="Escribe las opciones separadas por comas. Ej: Capuchino vainilla, Capuchino caramelo") # lista de strings    
+    modificado = models.DateTimeField(auto_now=True)
+
+
     def __str__(self):
         return self.titulo
 

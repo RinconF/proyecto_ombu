@@ -65,20 +65,21 @@ document.addEventListener("DOMContentLoaded", () => {
                 try {
                     // Verificar si hay opciones para este producto
                     const options = card.getAttribute('data-options');
-                    if (options) {
-                        const optionsArray = JSON.parse(options);
-                        optionsArray.forEach(option => {
-                            const optionElement = document.createElement('option');
-                            optionElement.value = option;
-                            optionElement.textContent = option;
-                            modalSelect.appendChild(optionElement);
-                            
-                            // Establecer el mismo precio para todas las opciones
-                            currentProductData.options[option] = {
-                                price: basePriceValue,
-                                priceDisplay: basePrice
-                            };
-                        });
+                  if (options) {
+                    const optionsArray = options.split(',').map(opt => opt.trim()).filter(opt => opt.length > 0);
+                    optionsArray.forEach(option => {
+                        const optionElement = document.createElement('option');
+                        optionElement.value = option;
+                        optionElement.textContent = option;
+                        modalSelect.appendChild(optionElement);
+
+                        // Establecer el mismo precio para todas las opciones
+                        currentProductData.options[option] = {
+                            price: basePriceValue,
+                            priceDisplay: basePrice
+                        };
+                    });
+                
                     } else {
                         // Opción predeterminada si no hay data-options
                         const optionElement = document.createElement('option');
@@ -172,7 +173,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let currentScrollTop = main.scrollTop || document.documentElement.scrollTop;
 
-        if (currentScrollTop > 150) {
+        if (currentScrollTop > 350) {
             menuContainer.classList.add("menu-fixed");
         } else {
             menuContainer.classList.remove("menu-fixed");

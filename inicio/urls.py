@@ -21,8 +21,10 @@ urlpatterns = [
     path('coctel/', views.coctel, name='coctel'),
     path('picar/', views.picar, name='picar'),
 
+
+
     # ADMIN
-    # path('admin', views.admin_principal, name='admin'),
+    path('admin', views.admin_principal, name='admin'),
     # path('admin/', admin.site.urls),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('login/', views.login_view, name='login'),
@@ -30,6 +32,8 @@ urlpatterns = [
     path('reserva/', views.reserva, name='reserva'),
     # path('usuarios/', views.usuarios, name = 'usuarios'),
     path('logout/', views.logout_view, name='logout'),
+
+
 
     # API de usuarios
     path('crear-usuario/', views.crear_usuario, name='crear_usuario'),
@@ -49,7 +53,8 @@ urlpatterns = [
     path('cocteles/', views.cocteles, name='cocteles'),
     path('Para_picar/', views.para_picar, name='Para_picar'),
     
-    
+
+
     # # RECUPERAR CONTRASEÑA
     path('password_reset/', PasswordResetView.as_view(
     form_class=CustomPasswordResetForm,

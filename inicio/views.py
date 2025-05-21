@@ -11,11 +11,13 @@ from django.views.decorators.http import require_POST, require_http_methods
 from django.urls import reverse
 from django.db import transaction
 from django.views.decorators.csrf import csrf_exempt
+from .decorators import role_required
+
 # from .models import Reserva
 # from django.core.mail import send_mail
 import json
 from .models import Usuario
-from .forms import customusuario_crear, customusuario_change, PasswordChangeForm
+from .forms import CustomUserCreationForm, CustomUserChangeForm, PasswordChangeForm
 from django.contrib.auth.models import User
 from .models import Producto
 from django.contrib.admin.views.decorators import staff_member_required
@@ -84,8 +86,8 @@ def login_view(request):
                     return redirect('admin:index')  
                 elif user.rol == 'ombu':
                     return redirect('dashboard')  # Corregido a 'dashboard' (ver urls.py)
-                elif user.rol == 'mesero':  # Nueva condición para mesero
-                    return redirect('bebidas_calientes')  # Redirige a la vista de mesero
+                elif user.rol.strip().lower()  == 'mesero':  # Nueva condición para mesero
+                    return redirect('admin')  # Redirige a la vista de mesero
                 else:
                     return redirect('index')  # Redirige a la página principal por defecto
             else:
@@ -98,7 +100,7 @@ def login_view(request):
         print(f"Usuario ya autenticado: {request.user.username}, rol: {request.user.rol}") 
         if request.user.is_superuser:
             return redirect('admin:index')  # Redirige al panel de administración de Django
-        elif request.user.rol == 'ombu':
+        elif request.user.rol == 'Administrador':
             return redirect('dashboard')  # Corregido a 'dashboard'
         elif request.user.rol == 'mesero':  # Nueva condición para mesero
             return redirect('bebidas_calientes')  # Redirige a la vista de mesero
@@ -402,6 +404,7 @@ def obtener_usuario(request, user_id):
 
 @never_cache
 @login_required
+@role_required(['mesero'])
 def usuarios(request):
     return render(request, 'pages/Admin/usuarios.html')
 

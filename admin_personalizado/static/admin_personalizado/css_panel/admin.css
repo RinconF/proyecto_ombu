@@ -99,7 +99,7 @@
 }
 
 #content-start {
-    color: wheat;
+    color: rgb(0, 0, 0);
 }
 
 #content-start #content h2{
@@ -125,8 +125,8 @@
 
 /* --------------------------------------------------alerts ------------------*/
 
-#usuario_form p{
-    color: white;
+ .content-main #usuario_form p{
+    color: rgb(10, 10, 10);
 }
 
 

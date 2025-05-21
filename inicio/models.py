@@ -51,8 +51,8 @@ class usuario_manager(BaseUserManager):
 
 class Usuario(AbstractUser):
     ROLES = (
-        ('Administrador', 'Administrador'),
-        ('Mesero', 'Mesero'),
+        ('administrador', 'administrador'),
+        ('mesero', 'mesero'),
     )
   
     email = models.EmailField(unique=True, default='sin_email@ejemplo.com')

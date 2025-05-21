@@ -12,7 +12,7 @@
     <!-- Menú superior -->
     <button class="menu-toggle" onclick="toggleMenu()">☰</button>
     <ul class="main-menu" id="mainMenu">
-        <li class="admin-item"><a href="{% url 'admin' %}">Inicio</a></li>
+        {% comment %} <li class="admin-item"><a href="{% url 'admin' %}">Inicio</a></li> {% endcomment %}
         {% if user.is_authenticated %}
             <li class="admin-item"><a href="{% url 'cervezas' %}">Productos</a></li>
             <li class="admin-item"><a href="{% url 'mesas' %}">Mesas</a></li>

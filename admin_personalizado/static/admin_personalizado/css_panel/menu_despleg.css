@@ -91,7 +91,7 @@
 /* Estilos para mostrar el menú */
 .user-menu.show {
     display: block;
-    padding: 30px;
+    padding: 15px;
     background-color: rgb(40, 38, 38);
     text-align: center;
 }

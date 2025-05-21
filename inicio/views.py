@@ -64,8 +64,6 @@ def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username').strip()
         password = request.POST.get('password').strip()
-        
-        print(f"Intento de inicio de sesión: username='{username}', password='{password}'")  # Para depurar
 
         user = authenticate(request, username=username, password=password)
         if user is not None:
@@ -75,10 +73,10 @@ def login_view(request):
                 print(f"Inicio de sesión exitoso para: {user.username}, rol: {user.rol}")  # Para depurar
                 if user.is_superuser:
                     return redirect('admin:index')  
-                elif user.rol == 'ombu':
+                elif user.rol.lower() == 'ombu':
                     return redirect('dashboard')  # Corregido a 'dashboard' (ver urls.py)
-                elif user.rol == 'mesero':  # Nueva condición para mesero
-                    return redirect('bebidas_calientes')  # Redirige a la vista de mesero
+                elif user.rol.lower() == 'mesero':  # Nueva condición para mesero
+                    return redirect('mesero_principal')  # Redirige a la vista de mesero
                 else:
                     return redirect('index')  # Redirige a la página principal por defecto
             else:
@@ -91,10 +89,10 @@ def login_view(request):
         print(f"Usuario ya autenticado: {request.user.username}, rol: {request.user.rol}") 
         if request.user.is_superuser:
             return redirect('admin:index')  # Redirige al panel de administración de Django
-        elif request.user.rol == 'ombu':
+        elif request.user.rol.lower() == 'ombu':
             return redirect('dashboard')  # Corregido a 'dashboard'
-        elif request.user.rol == 'mesero':  # Nueva condición para mesero
-            return redirect('bebidas_calientes')  # Redirige a la vista de mesero
+        elif request.user.rol.lower() == 'mesero':  # Nueva condición para mesero
+            return redirect('mesero_principal')  # Redirige a la vista de mesero
         else:
             return redirect('index')  # Redirige a la página principal por defecto
 
@@ -108,6 +106,17 @@ def logout_view(request):
 @login_required
 def admin_principal(request):
     return render(request, 'pages/Admin/admin_principal.html')
+
+
+# NUEVA VISTA PARA MESEROS
+@never_cache
+@login_required
+@user_passes_test(lambda u: u.rol == 'mesero' or u.rol == 'administrador') # Permite a administradores también acceder si es necesario
+def mesero_principal(request):
+    """Panel principal para usuarios con rol 'Mesero'"""
+    return render(request, 'pages/menu_mesero/mesero_principal.html') # Renderiza el nuevo HTM
+
+
 
 @never_cache
 @group_required('ombu')

@@ -40,7 +40,7 @@ body #content-main .submit-row {
 
 body #content-main .submit-row input[type="submit"],
 body #content-main button {
-    background-color: #000000;
+    background-color: #d5d5d5;
     border-color: #17a2b8;
     padding: 0.6rem 1.2rem;
     font-size: 0.9rem;
@@ -68,4 +68,24 @@ body #content-main .submit-row a.deletelink {
 body #content-main .submit-row a.deletelink:hover {
     background-color: #c82333;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+
+/* DEBUGGING: Asegúrate de que los errores sean visibles */
+ul.errorlist {
+    display: block !important;
+    visibility: visible !important;
+    background-color: red !important;
+    color: white !important;
+    padding: 5px !important;
+    margin: 5px 0 !important;
+    border: 1px solid darkred !important;
+    list-style: none !important;
+    font-weight: bold !important;
+    z-index: 9999 !important; /* Asegura que esté por encima de todo */
+    position: relative !important; /* Asegura que sea posicionado */
+}
+
+ul.errorlist li {
+    color: white !important;
 }

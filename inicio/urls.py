@@ -49,6 +49,9 @@ urlpatterns = [
     path('cocteles/', views.cocteles, name='cocteles'),
     path('Para_picar/', views.para_picar, name='Para_picar'),
     
+    # NUEVA URL PARA EL PANEL DE MESEROS
+    path('mesero_principal/', views.mesero_principal, name='mesero_principal'),
+    
     
     # # RECUPERAR CONTRASEÑA
     path('password_reset/', PasswordResetView.as_view(

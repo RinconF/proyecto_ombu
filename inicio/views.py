@@ -27,9 +27,11 @@ from .decorators import group_required
 from django.db.models import Sum, Count
 import datetime
 import calendar
-# import openpyxl
+from django.utils.timezone import now
+# # import openpyxl
 from django.http import HttpResponse
 from django.db.models.functions import TruncMonth
+from django.utils.dateformat import DateFormat
 from .decorators import group_required
 from django.db.utils import ProgrammingError
 
@@ -170,23 +172,13 @@ def dashboard(request):
         'ventas_totales': ventas_totales,
         'ventas_dia': ventas_dia,
         'ventas_mes': ventas_mes,
-        'ventas_anio': ventas_anio
+        'productos_top': productos_top,
+        'mesas_top': mesas_top,
+        'ventas_labels': ventas_labels,
+        'ventas_data': ventas_data,
     })
 
-def exportar_dashboard(request):
-    workbook = openpyxl.Workbook()
-    sheet = workbook.active
-    sheet.title = "Dashboard Ventas"
-
-    sheet.append(["Mes", "Total Ventas"])
-    for i in range(1, 13):
-        total = Pedido.objects.filter(fecha__month=i).aggregate(Sum('total'))['total__sum'] or 0
-        sheet.append([calendar.month_name[i], float(total)])
-
-    response = HttpResponse(content_type="application/ms-excel")
-    response["Content-Disposition"] = 'attachment; filename="dashboard_ventas.xlsx"'
-    workbook.save(response)
-    return response
+    return render(request, 'pages/Admin/dashboard.html', context)
 
 def admin_login_page(request):
     return render(request, 'pages/Admin/login.html')

@@ -3,7 +3,7 @@ from . import views
 from django.contrib.auth import views as auth_views
 from .views import usuarios_view    
 from django.contrib import admin
-from .views import dashboard
+# from .views import dashboard
 from .forms import CustomPasswordResetForm
 from django.contrib.auth.views import PasswordResetView
 from admin_personalizado.views import perfil_view
@@ -26,7 +26,7 @@ urlpatterns = [
     # ADMIN
     path('admin', views.admin_principal, name='admin'),
     # path('admin/', admin.site.urls),
-    path('dashboard/', views.dashboard, name='dashboard'),
+    # path('dashboard/', views.dashboard, name='dashboard'),
     path('login/', views.login_view, name='login'),
     path('mesas/', views.mesas, name='mesas'),
     path('reserva/', views.reserva, name='reserva'),
@@ -71,8 +71,8 @@ urlpatterns = [
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
 
 #dashboard
-    path('dashboard/', views.dashboard, name='dashboard'),
-    path('dashboard/exportar/', views.exportar_dashboard, name='exportar_dashboard'),
+    # path('dashboard/', views.dashboard, name='dashboard'),
+    # path('dashboard/exportar/', views.exportar_dashboard, name='exportar_dashboard'),
     
     path('perfil/', perfil_view, name='perfil'),
     

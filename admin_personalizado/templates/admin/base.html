@@ -75,6 +75,10 @@
                                 <li><a href="{{ docsroot }}">{% translate 'Documentacion' %}</a></li>
                             {% endif %}
                         {% endif %}
+                        <li>
+                            <a href="{% static 'manual de usuario.docx' %}" target="_blank">
+                                Descargar manual PDF
+                            </a>
                         {% if user.has_usable_password %}
                             <li><a href="{% url 'admin:password_change' %}">{% translate 'Cambiar contraseña' %}</a></li>
                         {% endif %}

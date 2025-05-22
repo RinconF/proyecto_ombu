@@ -109,7 +109,7 @@
 
 
 #content-start #content ul{
-    background-color: black;
+    background-color: rgb(255, 255, 255); /*aca hice un cambio de color que en teoria se deberai aplicar al filtro en usuarios si no funciona volverlo negro otravez*/
     
 }
 

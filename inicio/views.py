@@ -11,13 +11,15 @@ from django.views.decorators.http import require_POST, require_http_methods
 from django.urls import reverse
 from django.db import transaction
 from django.views.decorators.csrf import csrf_exempt
+from .decorators import role_required
+
 # from .models import Reserva
 # from django.core.mail import send_mail
 import json
 from .models import Usuario
-from .forms import customusuario_crear, customusuario_change, PasswordChangeForm
+from .forms import CustomUserCreationForm, CustomUserChangeForm, PasswordChangeForm
 from django.contrib.auth.models import User
-
+from .models import Producto
 from django.contrib.admin.views.decorators import staff_member_required
 
 from .decorators import group_required
@@ -42,22 +44,29 @@ def listar_categoria(request):
 
 # PRODUCTOS MENU
 def bebida_caliente(request):
-    return render(request, 'pages/productos_menu/bebida_caliente.html')
+    productos = Producto.objects.filter(estado='disponible', categoria='bebida_caliente')
+    return render(request, 'pages/productos_menu/bebida_caliente.html', {'productos': productos})
 
 def bebida_fria(request):
-    return render(request, 'pages/productos_menu/Bebida_fria.html')
+    productos = Producto.objects.filter(estado='disponible', categoria='Bebida_fria')
+    return render(request, 'pages/productos_menu/Bebida_fria.html', {'productos': productos})
 
 def cerveza(request):
-    return render(request, 'pages/productos_menu/Cerveza.html')
+    productos = Producto.objects.filter(estado='disponible', categoria='Cerveza')
+    return render(request, 'pages/productos_menu/Cerveza.html', {'productos': productos})
 
 def cigarrillo(request):
-    return render(request, 'pages/productos_menu/Cigarrillo.html')
+    productos = Producto.objects.filter(estado='disponible', categoria='Cigarrillo')
+    return render(request, 'pages/productos_menu/Cigarrillo.html', {'productos': productos})
 
 def coctel(request):
-    return render(request, 'pages/productos_menu/Coctel.html')
+    productos = Producto.objects.filter(estado='disponible', categoria='Coctel')
+    return render(request, 'pages/productos_menu/Coctel.html', {'productos': productos})
 
 def picar(request):
-    return render(request, 'pages/productos_menu/Picar.html')
+    productos = Producto.objects.filter(estado='disponible', categoria='Picar')
+    return render(request, 'pages/productos_menu/Picar.html', {'productos': productos})
+
 
 # ADMIN
 def login_view(request):
@@ -404,6 +413,7 @@ def obtener_usuario(request, user_id):
 
 @never_cache
 @login_required
+@role_required(['mesero'])
 def usuarios(request):
     return render(request, 'pages/Admin/usuarios.html')
 
@@ -439,6 +449,37 @@ def cocteles(request):
 def para_picar(request):
     return render(request, 'pages/menu_mesero/Para_picar.html')
 
+
+def productos_por_categoria(request, categoria):
+    productos = Producto.objects.filter(estado='disponible', categoria=categoria)
+
+    try:
+        
+        template_name = f'pages/productos_menu/{categoria}.html'
+        return render(request, template_name, {'productos': productos})
+    except:
+        return render(request, 'pages/productos_menu/no_encontrado.html', {'categoria': categoria})
+
+
+
+#NUMERO DE MESAS
+def mesas(request):
+    # Puedes definir cuántas mesas quieres aquí
+    num_mesas = 12
+    # Creamos una lista de números del 1 al num_mesas
+    mesas_list = list(range(1, num_mesas + 1)) 
+    
+    context = {
+        'mesas': mesas_list,
+    }
+    return render(request, 'pages/Admin/mesas.html', context)
+
+
+# PRODUCTOS
+
+# def productos_disponibles(request):
+#     productos = Producto.objects.filter(estado='disponible')
+#     return render(request, 'principal/index.html', {'productos': productos})
 
 #EMAIL RESERVA
 

@@ -21,8 +21,10 @@ urlpatterns = [
     path('coctel/', views.coctel, name='coctel'),
     path('picar/', views.picar, name='picar'),
 
+
+
     # ADMIN
-    # path('admin', views.admin_principal, name='admin'),
+    path('admin', views.admin_principal, name='admin'),
     # path('admin/', admin.site.urls),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('login/', views.login_view, name='login'),
@@ -30,6 +32,8 @@ urlpatterns = [
     path('reserva/', views.reserva, name='reserva'),
     # path('usuarios/', views.usuarios, name = 'usuarios'),
     path('logout/', views.logout_view, name='logout'),
+
+
 
     # API de usuarios
     path('crear-usuario/', views.crear_usuario, name='crear_usuario'),
@@ -71,7 +75,17 @@ urlpatterns = [
     path('dashboard/exportar/', views.exportar_dashboard, name='exportar_dashboard'),
     
     path('perfil/', perfil_view, name='perfil'),
+    
+    
+    
+    # PRODUCTOS
+    path('productos/<str:categoria>/', views.productos_por_categoria, name='productos_por_categoria'),
+
+
 ]
+
+
+
 # perfil
 
 

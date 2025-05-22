@@ -41,7 +41,10 @@
 
 
 .recent-actions-scroll{
-
+    max-height: 600px; /* Altura máxima antes de que aparezca el scroll */
+    overflow-y: auto;
+    scrollbar-width: thin; 
+    scrollbar-color: #888 #f1f1f1;
 }
 
 /* .action-header {

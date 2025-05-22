@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import Pedidos, Inventario, Usuario, Producto, Reserva
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 # from .models import Rol, Categoria, Usuario, Producto, Mesa, Pedido, Reserva
-from .forms import customusuario_crear,customusuario_change
+from .forms import CustomUserCreationForm, CustomUserChangeForm
 from django.contrib.admin.utils import flatten_fieldsets
 
 
@@ -13,8 +13,8 @@ class UsuarioAdmin(BaseUserAdmin):
     ordering = ('username',)
     
      
-    add_form = customusuario_crear  
-    form = customusuario_change     
+    add_form = CustomUserCreationForm 
+    form = CustomUserChangeForm
     
     
     fieldsets = (
@@ -69,6 +69,15 @@ class UsuarioAdmin(BaseUserAdmin):
         # Para la vista de edición (obj existe), seguimos usando la lógica normal
         # y llamamos a la clase padre para que maneje el formulario de cambio.
         return super().get_form(request, obj, **kwargs)
+
+
+@admin.register(Producto)
+class ProductoAdmin(admin.ModelAdmin):
+    list_display = ('titulo', 'precio', 'estado')
+    list_filter = ('estado',)
+    search_fields = ('titulo', 'descripcion')
+    
+    
      
 # Registros
 admin.site.register(Pedidos)

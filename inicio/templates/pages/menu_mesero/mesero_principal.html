@@ -6,110 +6,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mesero - Gastro Bar</title>
-    <style>
-        /* Estilos generales */
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-        }
-
-        /* Menú fijo superior */
-        .main-menu {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            background-color: #333;
-            overflow: hidden;
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-        }
-
-        .admin-item {
-            float: left;
-        }
-
-        .admin-item a {
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 20px;
-            text-decoration: none;
-        }
-
-        .admin-item a:hover {
-            background-color: #575757;
-        }
-
-        /* Fondo con capa oscura */
-        .main-content {
-            background-image: url('{% static "img/logos_o_otros/ombu_fondo.jpg" %}'); /* Reemplaza con la ruta de tu imagen de fondo */
-            background-size: cover;
-            background-position: center;
-            height: 100vh; /* Altura completa de la ventana */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            text-align: center;
-            position: relative;
-            overflow: hidden; /* Asegura que la capa oscura no se salga */
-        }
-
-        .main-content::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5); /* Oscurece la imagen */
-            z-index: 1;
-        }
-
-        .main-content h1,
-        .main-content p {
-            position: relative;
-            z-index: 2;
-        }
-
-        .main-content h1 {
-            font-size: 3rem;
-            margin: 0;
-        }
-
-        .main-content p {
-            font-size: 1.5rem;
-            margin: 10px 0;
-        }
-
-        .admin-item span{
-            color: white;
-            top: 10px
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/mesas_principal.css' %}" type="text/css" /> {# Ruta actualizada para coincidir con CSS #}
 </head>
 <body>
-    <ul class="main-menu">
-        <li class="admin-item"><a href="{% url 'mesero_principal' %}">Inicio Mesero</a></li>
-        
-        {% if user.is_authenticated %}
-            <li class="admin-item"><a href="{% url 'bebidas_calientes' %}">Productos</a></li>
-            <li class="admin-item"><a href="{% url 'mesas' %}">Mesas</a></li>
-            
-            <li class="admin-item" style="float:right"><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
-            <li class="admin-item" style="float:right"><span>Bienvenido, {{ user.first_name }}</span></li>
-        {% endif %}
-    </ul>
+    <div class="menu-container">
+        <div>
+            <section class="section">
+                <a href="/pages/Admin/admin_principal.html">
+                    <button class="button" data-text="Awesome">
+                        <span class="actual-text">&nbsp;ombú&nbsp;</span>
+                        <span aria-hidden="true" class="hover-text">&nbsp;OMBÚ&nbsp;</span>
+                    </button>
+                </a>
+                <button class="hamburger-btn" id="menuToggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+            </section>
+        </div>
+
+        <nav class="menu" id="mainMenu"> {# Cambiado div a nav para HTML semántico #}
+            <a href="{% url 'mesero_principal' %}" class="link">
+                <span class="link-icon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M19 9.77806V16.2C19 17.8801 19 18.7202 18.673 19.3619C18.3854 19.9264 17.9265 20.3854 17.362 20.673C16.7202 21 15.8802 21 14.2 21H9.8C8.11984 21 7.27976 21 6.63803 20.673C6.07354 20.3854 5.6146 19.9264 5.32698 19.3619C5 18.7202 5 17.8801 5 16.2V9.7774M21 12L15.5668 5.96393C14.3311 4.59116 13.7133 3.90478 12.9856 3.65138C12.3466 3.42882 11.651 3.42887 11.0119 3.65153C10.2843 3.90503 9.66661 4.59151 8.43114 5.96446L3 12M14 12C14 13.1045 13.1046 14 12 14C10.8954 14 10 13.1045 10 12C10 10.8954 10.8954 9.99996 12 9.99996C13.1046 9.99996 14 10.8954 14 12Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                </span>
+                <span class="link-title">Inicio</span>
+            </a>
+
+            <a href="{% url 'bebidas_calientes' %}" class="link">
+                <span class="link-icon">
+                    <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill="white" d="M128 352.576V352a288 288 0 0 1 491.072-204.224 192 192 0 0 1 274.24 204.48 64 64 0 0 1 57.216 74.24C921.6 600.512 850.048 710.656 736 756.992V800a96 96 0 0 1-96 96H384a96 96 0 0 1-96-96v-43.008c-114.048-46.336-185.6-156.48-214.528-330.496A64 64 0 0 1 128 352.64zm64-.576h64a160 160 0 0 1 320 0h64a224 224 0 0 0-448 0zm128 0h192a96 96 0 0 0-192 0zm439.424 0h68.544A128.256 128.256 0 0 0 704 192c-15.36 0-29.952 2.688-43.52 7.616 11.328 18.176 20.672 37.76 27.84 58.304A64.128 64.128 0 0 1 759.424 352zM672 768H352v32a32 32 0 0 0 32 32h256a32 32 0 0 0 32-32v-32zm-342.528-64h365.056c101.504-32.64 165.76-124.928 192.896-288H136.576c27.136 163.072 91.392 255.36 192.896 288z"></path></g></svg>
+                </span>
+                <span class="link-title">Productos</span>
+            </a>
+
+            <a href="{% url 'mesas' %}" class="link">
+                <span class="link-icon">
+                    <svg fill="#000000" height="200px" width="200px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <path d="M512,107.52c0-47.06-128.785-71.68-256-71.68S0,60.46,0,107.52c0,45.797,121.968,70.334,245.76,71.619V424.96h-51.2 c-5.655,0-10.24,4.585-10.24,10.24v40.96h20.48v-30.72h40.96h20.48h40.96v30.72h20.48V435.2c0-5.655-4.585-10.24-10.24-10.24 h-51.2V179.139C390.032,177.854,512,153.317,512,107.52z M256,158.72c-143.77,0-235.52-30.325-235.52-51.2s91.75-51.2,235.52-51.2 s235.52,30.325,235.52,51.2S399.77,158.72,256,158.72z"></path> </g> </g> </g></svg>
+                </span>
+                <span class="link-title">Mesas</span>
+            </a>
+
+
+            <a href="{% url 'logout' %}" class="link">
+                <span class="link-icon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M21 12L13 12" stroke="#323232" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M18 15L20.913 12.087V12.087C20.961 12.039 20.961 11.961 20.913 11.913V11.913L18 9" stroke="#323232" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M16 5V4.5V4.5C16 3.67157 15.3284 3 14.5 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H14.5C15.3284 21 16 20.3284 16 19.5V19.5V19" stroke="#323232" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                </span>
+                <span class="link-title">Cerrar Sesion</span>
+            </a>
+
+
+        </nav>
+    </div>
 
     <div class="main-content">
-        <h1>Bienvenido, Mesero</h1>
+        <h1>Bienvenido, {{user.first_name}} </h1>
         <p>Aquí puedes gestionar productos y mesas.</p>
     </div>
 
-    </body>
+    <script src="{% static 'js/mesero_principal.js' %}"></script> 
+</body>
 </html>

@@ -117,92 +117,56 @@
 
         <div class="cards-container" >
 
-<!-- MALBORO -->
-          <div class="card" data-title="MALBORO" data-image="https://png.pngtree.com/png-vector/20240416/ourmid/pngtree-fruit-juice-splash-with-flying-fruits-png-image_12290367.png"
-          data-options='["Malboro rojo $", "malboro fushion $", "Malboro unidad rojo $", "malboro unidad fushion $"]'>
-            <div class="img-container">
-              <img
-                src="https://png.pngtree.com/png-vector/20240416/ourmid/pngtree-fruit-juice-splash-with-flying-fruits-png-image_12290367.png"
-                alt="MALBORO"
-              />
-            </div>
-            
-            <div class="main-card">
-              <span>MALBORO</span>
-              <p class="truncated-text">
-                Refrescantes bebidas a base de soda y combinada con lo natural de la fruta. Puedes elegir entre
-                frutos rojos,kiwi,maracuyá,mora y fresa.
-              </p>
-            </div>
+          
 
-            <div class="footer-card">
-              
-              <button>ver mas</button>
-            </div>
-          </div>
 
-<!-- ROTHMAS -->
-          <div class="card"  data-title="ROTHMAS" data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
-          data-options='["Rothmas azul $", "Rothmas morado $", "Rothmas unidad azul $", "Rothmas unidad morado $"]' >
-            <div class="img-container">
-              <img
-                src="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
-                alt="ROTHMAS"
-              />
-            </div>
+                   <!-- PRODUCTOS -->
 
-            <div class="main-card">
-              <span>ROTHMAS</span>
-              <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
-              </p>
-            </div>
 
-            <div class="footer-card">
-              <button>ver mas</button>
-            </div>
-          </div>
+             {% for producto in productos %}
+  <div class="card" data-title="{{ producto.titulo }}" data-image="{{ producto.foto.url }} " data-options='{{ producto.opciones|safe }}'>
+    <div class="img-container">
+      <img src="{{ producto.foto.url }}" alt="{{ producto.titulo }}" />
+    </div>
 
-<!-- LUCKY -->
-          <div class="card" data-title="LUCKY" data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
-          data-options='["Lucky rojo $", "Lucky verde $", "Lucky morado $", "Lucky alaska $", "lucky unidad $"]'>
-            <div class="img-container">
-              <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="LUCKY"
-              />
-            </div>
+    <div class="main-card">
+      <span>{{ producto.titulo|upper }}</span>
+      <p class="truncated-text">
+        {{ producto.descripcion|truncatechars:250 }}
+      </p>
+    </div>
+    <div class="footer-card">
+      <button>ver mas</button>
+    </div>
+  </div>
+{% empty %}
+  <p>No hay productos disponibles en esta categoría.</p>
+{% endfor %}
 
-            <div class="main-card">
-              <span>LUCKY</span>
-              <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
-              </p>
-            </div>
 
-            <div class="footer-card">
-              <button>ver mas</button>
-            </div>
-          </div>
+
         </div>
 
 <!-- --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+        <!-- modal -->
+    {% for producto in productos %}
         <div id="modal" class="modal">
           <div class="modal-content">
               <span class="close">&times;</span>
               <img id="modal-image" src="" alt="Producto">
               <div class="modal-info">
                   <h2 id="modal-title"></h2>
-                  <p>Más detalles sobre el producto seleccionado.</p>
-                  <h4 class="opcion">Opción</h4>
+                  <p>{{ producto.descripcion }}</p>
+                  <h4 class="opcion">opciones</h4>
                   <select id="modal-select"></select>
-
+                  
               </div>
           </div>
 
           
       </div>
+    {% endfor %}  
       </section>
 
 

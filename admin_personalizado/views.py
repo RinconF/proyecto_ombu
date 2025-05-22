@@ -1,7 +1,14 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .forms import UsuarioForm, PerfilForm
-from inicio.models import Perfil  
+from django.contrib.admin.views.decorators import staff_member_required
+import os
+
+@login_required
+def descargar_manual(request):
+    file_path = os.path.join('manual de usuario.docx')
+    return FileResponse(open(file_path, 'rb'), content_type='application/pdf')
+
 
 @login_required
 def perfil_view(request):

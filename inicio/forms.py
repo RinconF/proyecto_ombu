@@ -7,7 +7,7 @@ from django.template.loader import render_to_string
 from django.conf import settings
 
 
-class customusuario_crear(UserCreationForm):
+class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = Usuario 
         fields = ('username','first_name', 'last_name', 'email', 'rol')
@@ -16,23 +16,21 @@ class customusuario_crear(UserCreationForm):
         super().__init__(*args, **kwargs)
         self.fields['first_name'].label = "Nombre"
         self.fields['last_name'].label = "Apellido"
-        
         for field_name, field in self.fields.items():
-           field.widget.attrs['class'] = 'form-control'   #aplicar bootstrap
+            field.widget.attrs['class'] = 'form-control'   #aplicar bootstrap
            
-class customusuario_change(UserChangeForm):
-    password = None #Esto evita que se muestre la contraseña al momento de editar
+class CustomUserChangeForm(UserChangeForm):
+    password = None
     
     class Meta:
         model = Usuario
         fields = ('username', 'email', 'first_name', 'last_name', 'rol', 'is_active')
-        
+    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['first_name'].label = "Nombre"
         self.fields['last_name'].label = "Apellido"
         self.fields['is_active'].label = "Estado activo"
-        
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'  #bootstrap
             

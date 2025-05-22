@@ -2,27 +2,46 @@ from django.contrib import admin
 from .models import Pedidos, Inventario, Usuario, Producto, Reserva
 from django.contrib.auth.admin import UserAdmin
 # from .models import Rol, Categoria, Usuario, Producto, Mesa, Pedido, Reserva
-from .forms import customusuario_crear,customusuario_change
+from .forms import CustomUserCreationForm, CustomUserChangeForm
+
+
+
 
 # Clase para mejorar la vista del modelo Usuario en el admin
-class UsuarioAdmin(admin.ModelAdmin):
-    list_display = ('username', 'email', 'first_name', 'last_name', 'rol', 'is_active', 'date_joined')
-    add_form = customusuario_crear  # Usa tu formulario de creación personalizado
-    form = customusuario_change     # Usa tu formulario de edición personalizado
+
+class UsuarioAdmin(UserAdmin):
+    add_form = CustomUserCreationForm
+    form = CustomUserChangeForm
+    model = Usuario
+
+    list_display = ("username", "email", "first_name", "last_name", "rol", "is_active", "is_staff")
+    list_filter = ("rol", "is_active", "is_staff")
+
     fieldsets = (
-         (None, {'fields': ('username', 'password')}),
-         ('Información Personal', {'fields': ('first_name', 'last_name', 'email')}),
-         ('Roles y Permisos', {'fields': ('rol', 'is_active', 'is_staff', 'is_superuser',
-                                        'groups', 'user_permissions')}),  # Añadidos groups y user_permissions
-         ('Fechas Importantes', {'fields': ('last_login', 'date_joined')}),
-     )
-    readonly_fields = ('last_login', 'date_joined')
+        (None, {"fields": ("username", "email", "password")}),
+        ("Información personal", {"fields": ("first_name", "last_name", "rol")}),
+        ("Permisos", {"fields": ("is_active", "is_staff", "is_superuser", "groups", "user_permissions")}),
+        ("Fechas importantes", {"fields": ("last_login", "date_joined")}),
+    )
+
     add_fieldsets = (
-         (None, {
-             'classes': ('wide',),
-             'fields': ('username', 'email', 'first_name', 'last_name', 'rol'),   #se elimino password
-         }),
-     )
+        (None, {
+            "classes": ("wide",),
+            "fields": ("username", "email", "first_name", "last_name", "rol", "password1", "password2", "is_active", "is_staff"),
+        }),
+    )
+
+    search_fields = ("username", "email")
+    ordering = ("username",)
+
+
+
+
+@admin.register(Producto)
+class ProductoAdmin(admin.ModelAdmin):
+    list_display = ('titulo', 'precio', 'estado')
+    list_filter = ('estado',)
+    search_fields = ('titulo', 'descripcion')
      
 # Registros
 admin.site.register(Pedidos)

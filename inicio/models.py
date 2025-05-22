@@ -54,36 +54,16 @@ class Usuario(AbstractUser):
         ('Administrador', 'Administrador'),
         ('Mesero', 'Mesero'),
     )
-  
-    email = models.EmailField(unique=True, default='sin_email@ejemplo.com')
-    username = models.CharField(max_length=150, unique=True)
-    first_name = models.CharField(max_length=150)
-    last_name = models.CharField(max_length=150)
     rol = models.CharField(max_length=20, choices=ROLES, default='Mesero')
-    is_active = models.BooleanField(default=True)
-    date_joined = models.DateTimeField(auto_now_add=True)
-  
-    objects = usuario_manager()
-  
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email', 'first_name', 'last_name']
+    email = models.EmailField(unique=True)
+    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
+    telefono = models.CharField(max_length=20, blank=True, null=True)
+    # Los campos first_name, last_name, username, is_active, etc. ya vienen de AbstractUser
     
-    groups = models.ManyToManyField(
-        'auth.Group',
-        verbose_name='grupos',
-        blank=True,
-        help_text='Los grupos a los que pertenece este usuario.',
-        related_name="usuario_set",
-        related_query_name="usuario",
-    )
-    user_permissions = models.ManyToManyField(
-        'auth.Permission',
-        verbose_name='permisos de usuario',
-        blank=True,
-        help_text='Permisos específicos para este usuario.',
-        related_name="usuario_set",
-        related_query_name="usuario",
-    )
+    objects = usuario_manager()
+    
+    REQUIRED_FIELDS = ['email', 'first_name', 'last_name']
+    USERNAME_FIELD = 'username'  # o 'email' si prefieres usar el email como login
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} ({self.username})"
@@ -105,14 +85,34 @@ class Pedidos(models.Model):
 
 
 
+
 class Producto(models.Model):
-    nombreProducto = models.CharField(max_length=45)
-    descripcion = models.TextField(blank=True, null=True)
-    precio = models.DecimalField(max_digits=10, decimal_places=2)
-    Pedidos = models.ForeignKey(Pedidos, on_delete=models.CASCADE)
+    ESTADOS = [
+        ('disponible', 'Disponible'),
+        ('no_disponible', 'No disponible'),
+    ]
+    
+    CATEGORIAS = [
+        ('Coctel', 'Cócteles'),
+        ('bebida_caliente', 'Bebidas Calientes'),
+        ('Bebida_fria', 'Bebidas Frias'),
+        ('Cerveza', 'Cervezas'),
+        ('Cigarrillo', 'Cigarrillos'),
+        ('Picar', 'Para Picar'),
+        # Agrega más según tu necesidad
+    ]
+
+    titulo = models.CharField(max_length=100)
+    descripcion = models.TextField()
+    precio = models.DecimalField(max_digits=8, decimal_places=2)
+    estado = models.CharField(max_length=20, choices=ESTADOS, default='disponible')
+    foto = models.ImageField(upload_to='productos/')
+    categoria = models.CharField(max_length=30, choices=CATEGORIAS)
+    opciones = models.TextField(blank=True,help_text="Escribe las opciones separadas por comas. Ej: Capuchino vainilla, Capuchino caramelo") # lista de strings    
+    
 
     def __str__(self):
-        return self.nombreProducto
+        return self.titulo
 
 
 

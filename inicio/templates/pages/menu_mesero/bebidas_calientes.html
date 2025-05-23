@@ -512,6 +512,33 @@
             </div>
           </div>
 
+          <!-- PRUEBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAS -->
+
+          
+    {% comment %} Productos       {% endcomment %}
+
+    {% for producto in productos %}
+  <div class="card" data-title="{{ producto.titulo }}" data-image="{{ producto.foto.url }} " data-options='{{ producto.opciones|safe }}'>
+    <div class="img-container">
+      <img src="{{ producto.foto.url }}" alt="{{ producto.titulo }}" />
+    </div>
+
+    <div class="main-card">
+      <span>{{ producto.titulo|upper }}</span>
+      <p class="truncated-text">
+        {{ producto.descripcion|truncatechars:250 }}
+      </p>
+    </div>
+    <div class="footer-card">
+      <button>ver mas</button>
+    </div>
+  </div>
+{% empty %}
+  <p>No hay productos disponibles en esta categoría.</p>
+{% endfor %}
+
+
+
 <!-- LIMONADA DE COCO -->
 
 

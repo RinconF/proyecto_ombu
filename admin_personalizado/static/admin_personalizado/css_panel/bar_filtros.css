@@ -1,0 +1,304 @@
+/* Contenedor de buscador y botón de filtro */
+.search-and-filter-trigger-container {
+    display: flex;
+    justify-content: space-between; /* Empuja el grupo de búsqueda/filtro a la izquierda y el botón de añadir a la derecha */
+    align-items: center; /* Centra verticalmente los elementos */
+    margin-bottom: 20px;
+    padding: 10px 0;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #eee;
+    padding-right: 10px;
+    flex-wrap: wrap;
+    /* Añade un poco de espacio en la parte superior para separarlo si es necesario */
+    padding-top: 10px;
+}
+
+/* Grupo para el buscador y el botón de filtro (izquierda) */
+.search-filter-group {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-grow: 1;
+}
+
+
+#changelist-search {
+    /* Ajustes para el buscador, ahora dentro de .search-filter-group */
+    /* Elimina margin-right si ya usas gap en el grupo */
+    flex-shrink: 1; /* Permite que el buscador se encoja si no hay espacio */
+    min-width: 150px; /* Ancho mínimo para que no se vea muy pequeño */
+    max-width: 400px; /* Ancho máximo para el buscador */
+}
+
+#changelist-search #toolbar {
+    margin: 0; /* Elimina márgenes extra si los tiene */
+    padding: 0;
+    display: flex; /* Para alinear el input y el botón "Buscar" */
+    align-items: center;
+    gap: 5px; /* Espacio entre el icono/label y el input/botón */
+}
+
+#changelist-search input[type="text"] {
+    flex-grow: 1; /* El input de texto puede expandirse */
+}
+
+
+
+/* Estilos del botón de filtro */
+.custom-filter-button {
+    background-color: #007bff !important;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s ease;
+    white-space: nowrap; /* Evita que el texto del botón se rompa */
+}
+
+.custom-filter-button:hover {
+    background-color: #0056b3;
+}
+
+
+/*----------------------------------- Estilos para el botón "Añadir usuario" (derecha) -----------------------------------*/
+.search-and-filter-trigger-container .object-tools {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-shrink: 0;
+    display: flex; /* Para centrar el botón dentro de él */
+    align-items: center; /* Centra el contenido verticalmente */
+    /* Remueve cualquier margin-top o padding-top no deseado que Django pueda aplicar */
+    margin-top: 0 !important; /* Fuerza el margen superior a cero */
+    padding-top: 0 !important; /* Fuerza el padding superior a cero */
+    /* Puedes añadir un padding-bottom si el botón parece cortado en la parte inferior */
+    padding-bottom: 0 !important;
+}
+
+.search-and-filter-trigger-container .object-tools li {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+}
+
+.search-and-filter-trigger-container .object-tools .addlink {
+    display: inline-block;
+    padding: 10px 25px 10px 10px;
+    background-color: #28a745;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    white-space: nowrap;
+    border: none;
+    cursor: pointer;
+    line-height: normal;
+    /* Ajusta la altura si es necesario para que coincida con la del buscador/filtro */
+    height: auto; /* Permite que la altura se ajuste al contenido */
+    display: flex; /* Para centrar el contenido del botón si tiene íconos o texto */
+    align-items: center;
+    justify-content: center;
+}
+
+.search-and-filter-trigger-container .object-tools .addlink:hover {
+    background-color: #218838;
+}
+
+
+
+/* ------------------------------------------------------- MODAL -----------------------------------------------------*/
+.modal {
+    display: none; /* Oculto por defecto */
+    position: fixed; /* Permanece fijo en la pantalla */
+    z-index: 1050; /* Z-index alto para estar encima de todo */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Habilita scroll si el contenido es demasiado grande */
+    background-color: rgba(0,0,0,0.4); /* Fondo semi-transparente */
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: auto; /* Centrar el modal en la pantalla */
+    padding: 25px;
+    border: 1px solid #888;
+    border-radius: 8px;
+    width: 90%; /* Ancho del modal */
+    max-width: 600px; /* Ancho máximo */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    position: relative; /* Para posicionar el botón de cerrar */
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-filters-body {
+    max-height: 400px; /* Altura máxima para el cuerpo del modal */
+    overflow-y: auto; /* Scroll si el contenido excede la altura */
+    padding-right: 15px; /* Espacio para la barra de scroll */
+}
+
+/* Estilos para los elementos de lista de filtros dentro del modal
+.modal-filters-body .filter-group li {
+    background-color: #e9e9e9;
+    padding: 5px 10px;
+    border-radius: 3px;
+    transition: background-color 0.2s ease, color 0.2s ease; 
+}
+
+.modal-filters-body .filter-group li:hover {
+    background-color: #d9d9d9;
+}
+
+.modal-filters-body .filter-group a {
+    text-decoration: none;
+    color: #333;
+    display: block;
+}
+
+
+.modal-filters-body .filter-group li.active-filter {
+    background-color: #28a745; 
+    color: white; 
+    font-weight: bold;
+}
+
+.modal-filters-body .filter-group li.active-filter a {
+    color: white; 
+}
+
+.modal-filters-body .filter-group li.active-filter:hover {
+    background-color: #218838; 
+} */
+
+.filter-group {
+    margin-bottom: 15px;
+}
+
+.filter-group h3 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    color: #555;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.filter-group ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex; /* Para que las opciones estén en línea */
+    flex-wrap: wrap; /* Si hay muchas, que se envuelvan */
+    gap: 10px; /* Espacio entre las opciones */
+}
+
+.filter-group li {
+    background-color: #e9e9e9;
+    padding: 5px 10px;
+    border-radius: 3px;
+    transition: background-color 0.2s ease;
+    list-style: none;
+}
+
+.filter-group li:hover {
+    background-color: #d9d9d9;
+}
+
+.filter-group a {
+    text-decoration: none;
+    color: #333;
+    display: block;
+}
+
+/* Estilos para el footer del modal */
+.modal-footer {
+    display: flex;
+    justify-content: flex-end; /* Alinea los botones a la derecha */
+    gap: 10px; /* Espacio entre botones */
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+/* Estilos específicos para los botones del footer */
+.modal-footer .button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.modal-footer #resetFiltersButton {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.modal-footer #resetFiltersButton:hover {
+    background-color: #e0e0e0;
+}
+
+.modal-footer #applyFiltersButton {
+    background-color: #28a745; /* Un verde para "Aplicar" */
+    color: white;
+}
+
+.modal-footer #applyFiltersButton:hover {
+    background-color: #218838;
+}
+
+/* Media Queries para responsividad */
+@media (max-width: 768px) {
+    .search-and-filter-trigger-container {
+        flex-direction: column;
+        align-items: flex-start;
+        padding-right: 0;
+    }
+
+    .search-filter-group,
+    .search-and-filter-trigger-container .object-tools { /* Modificado para incluir la especificidad */
+        width: 100%;
+        margin-bottom: 10px;
+        margin-left: 0;
+        margin-right: 0;
+        justify-content: flex-start;
+    }
+
+    #changelist-search {
+        max-width: 100%;
+    }
+}

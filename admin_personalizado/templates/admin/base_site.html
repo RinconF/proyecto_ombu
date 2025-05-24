@@ -9,7 +9,9 @@
 <link rel="stylesheet" href="{% static 'admin_personalizado/css_panel/admin.css' %}">
 <link rel="stylesheet" href="{% static 'admin_personalizado/css_panel/agregar_forms.css' %}">
 <link rel="stylesheet" href="{% static 'admin_personalizado/css_panel/editar_forms.css' %}">
-<link rel="stylesheet" href="{% static 'admin_personalizado/css_panel/eliminar_forms.css' %}">
+<link rel="stylesheet" href="{% static 'admin_personalizado/css_panel/delete_forms.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'admin_personalizado/css_panel/bar_filtros.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <style id="dynamic-bg-style">
     
@@ -82,11 +84,30 @@
         <input type="text" id="admin-bg-image" name="admin-bg-image" placeholder="{% translate 'Ingrese la URL de la imagen' %}">
     </div>
 </div>
+
+<div id="delete-confirmation-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <h2>Confirmar Eliminación</h2>
+        <p>¿Estás seguro de que quieres eliminar <strong id="object-name-to-delete"></strong>?</p>
+        <div class="modal-buttons">
+            <button id="confirm-delete-button" class="button button-red">Eliminar</button>
+            <button id="cancel-delete-button" class="button">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
 {% endblock %}
 
 
 {% block extrajs %}
 {{block.super}}
+<script src="{% static 'admin_personalizado/js_panel/delete_forms.js' %}" defer></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Obtener elementos
@@ -117,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     background-attachment: fixed;
                     transition: background 2s ease;
                 }
-            `;
+            `;  
         }
     }    
 });

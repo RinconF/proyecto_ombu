@@ -81,11 +81,11 @@ def login_view(request):
             if user.is_active:
                 login(request, user)
                 # Redireccionar según el rol del usuario
-                print(f"Inicio de sesión exitoso para: {user.username}, rol: {user.rol}")  # Para depurar
-                if user.is_superuser:
+                # print(f"Inicio de sesión exitoso para: {user.username}, rol: {user.rol}")  # Para depurar
+                if user.is_superuser or (user.rol.lower() == 'administrador' and user.is_staff):
                     return redirect('admin:index')  
                 elif user.rol.lower() == 'ombu':
-                    return redirect('dashboard')  # Corregido a 'dashboard' (ver urls.py)
+                    return redirect('admin:index')  # Corregido a 'dashboard' (ver urls.py)
                 elif user.rol.lower() == 'mesero':  # Nueva condición para mesero
                     return redirect('mesero_principal')  # Redirige a la vista de mesero
                 else:
@@ -97,11 +97,11 @@ def login_view(request):
 
     # Si el usuario ya está autenticado, redirigir según su rol
     if request.user.is_authenticated:
-        print(f"Usuario ya autenticado: {request.user.username}, rol: {request.user.rol}") 
-        if request.user.is_superuser:
+        # print(f"Usuario ya autenticado: {request.user.username}, rol: {request.user.rol}") 
+        if request.user.is_superuser or (request.user.rol.lower() == 'administrador' and request.user.is_staff):
             return redirect('admin:index')  # Redirige al panel de administración de Django
         elif request.user.rol.lower() == 'ombu':
-            return redirect('dashboard')  # Corregido a 'dashboard'
+            return redirect('admin:index')  # Corregido a 'dashboard'
         elif request.user.rol.lower() == 'mesero':  # Nueva condición para mesero
             return redirect('mesero_principal')  # Redirige a la vista de mesero
         else:

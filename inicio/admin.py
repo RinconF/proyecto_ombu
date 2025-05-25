@@ -102,19 +102,54 @@ class UsuarioAdmin(BaseUserAdmin):
     
     
 
-@admin.register(Producto)
+# --- CLASE ProductoAdmin (Esta es la importante para las columnas) ---
+@admin.register(Producto) 
 class ProductoAdmin(admin.ModelAdmin):
-    list_display = ('titulo', 'precio', 'estado')
-    list_filter = ('estado',)
-    search_fields = ('titulo', 'descripcion')
+    # ¡AQUÍ DEFINES LAS COLUMNAS PARA LA TABLA DE PRODUCTOS!
+    list_display = ('titulo', 'precio', 'get_estado_display', 'acciones')
+    list_filter = ('estado', 'categoria',)
+    search_fields = ('titulo', 'descripcion','categoria')
+    ordering = ('titulo',) 
+
+    def get_estado_display(self, obj):
+        display_value = obj.get_estado_display() 
+        if obj.estado == 'disponible':
+            return format_html('<span style="color: green; font-weight: bold;">{}</span>', display_value)
+        elif obj.estado == 'no_disponible':
+            return format_html('<span style="color: red; font-weight: bold;">{}</span>', display_value)
+        return display_value 
     
+    get_estado_display.short_description = 'Estado'
+
+
+    def acciones(self, obj):
+        app_label = obj._meta.app_label
+        model_name = obj._meta.model_name
+
+        edit_url = reverse(f'admin:{app_label}_{model_name}_change', args=[obj.pk])
+        delete_url = reverse(f'admin:{app_label}_{model_name}_delete', args=[obj.pk])
+
+        return format_html(
+            '<a class="button action-edit" href="{}"><i class="fa fa-pencil"></i> Editar</a>&nbsp;'
+            '<a class="button deletelink custom-delete-button" href="{}" data-object-name="{}"><i class="fa fa-trash"></i> Eliminar</a>',
+            edit_url,
+            delete_url,
+            obj 
+        )
+    acciones.short_description = 'Acciones'
+    acciones.allow_tags = True 
+
+    class Media:
+        css = {
+            'all': ('admin_personalizado/css_panel/acc_user.css',) 
+        }
     
      
 # Registros
 admin.site.register(Pedidos)
 admin.site.register(Inventario)
 admin.site.register(Usuario, UsuarioAdmin)  # Con la clase personalizada
-admin.site.register(Producto)
+admin.site.register(Producto, ProductoAdmin)
 admin.site.register(Reserva)
 
 

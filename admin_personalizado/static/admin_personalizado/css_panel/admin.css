@@ -2,75 +2,125 @@
 
 /* Barra superior personalizada */
 #header {
-    background-color: #000;
+    background-color: #2c3e50; /* Un tono más oscuro y moderno */
     color: white;
     width: 100%;
-    padding: 10px 0;
-    
+    padding: 15px 0; /* Aumentar el padding vertical */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3); /* Sombra más pronunciada para profundidad */
+    z-index: 1000; /* Asegura que esté sobre otros elementos */
+    position: relative; /* Para que la sombra se vea correctamente */
 }
+
 #header a:link, #header a:visited {
     color: white !important;
 }
+
+
 /* Contenedor de la barra */
 .navbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    max-width: 1200px;
+    max-width: 1400px; /* Un poco más de ancho */
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 30px; /* Más padding horizontal */
 }
 
 .navbar .main-nav li{
     list-style-type: none;
 }
+
 /* Logo/título */
 .brand {
-    font-size: 18px;
+    font-size: 28px; /* Tamaño de fuente más grande */
     font-weight: bold;
+    letter-spacing: 1.5px; /* Espaciado entre letras */
+    text-transform: uppercase; /* Texto en mayúsculas */
 }
+
+.brand #site-name a {
+    color: #4CAF50 !important; /* Color verde vibrante para el nombre del sitio */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+
+.brand #site-name a:hover {
+    color: #8BC34A !important; /* Tono de verde diferente al pasar el cursor */
+}
+
+
 /* Menú principal */
 .main-nav {
     display: flex;
     list-style: none;
     margin: 0;
     padding: 0;
+    gap: 25px; /* Espaciado moderno entre los elementos del menú */
 }
+
+
 .main-nav li {
-    margin-left: 20px;
     position: relative;
 }
+
+
 .main-nav a {
-    padding: 8px 12px;
-    border-radius: 4px;
-    transition: all 0.3s;
-    font-weight: 500;
-}
-.main-nav a:hover {
-    background-color: #444;
+    padding: 10px 15px;
+    border-radius: 6px; /* Bordes más redondeados */
+    transition: all 0.3s ease;
+    font-weight: 600; /* Un poco más de negrita */
+    color: #ecf0f1; /* Color de texto claro */
     text-decoration: none;
-    transform: translateY(-2px);
+    display: block; /* Para que el padding y el hover se apliquen a todo el área */
 }
+
+
+.main-nav a:hover {
+    background-color: rgba(76, 175, 80, 0.2); /* Fondo verde semitransparente al pasar el cursor */
+    color: #4CAF50 !important; /* Resaltar el texto al pasar el cursor */
+    transform: translateY(-3px); /* Pequeño efecto de elevación */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Sombra al pasar el cursor */
+}
+
+
 /* Submenú desplegable */
 .submenu {
     display: none;
     position: absolute;
-    background-color: #222;
-    min-width: 200px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-    z-index: 1000;
-    border-radius: 4px;
+    background-color: #34495e; /* Fondo del submenú */
+    min-width: 220px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    z-index: 1050;
+    border-radius: 6px;
+    padding: 5px 0;
+    top: 100%; /* Posiciona debajo del elemento padre */
+    left: 0;
 }
+
+
 .main-nav li:hover .submenu {
     display: block;
 }
+
+
 .submenu a {
-    padding: 10px 15px;
+    padding: 1px 20px;
     display: block;
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid rgba(255,255,255,0.1); /* Separador sutil */
+    color: #ecf0f1;
 }
+
+.submenu a:last-child {
+    border-bottom: none; /* Quita el borde del último elemento */
+}
+
+
 .submenu a:hover {
-    background-color: #444;
+    background-color: #4CAF50; /* Fondo verde al pasar el cursor en el submenú */
+    color: white !important;
+    transform: none; /* Desactiva la transformación para el submenú */
+    box-shadow: none;
 }
 
 
@@ -321,37 +371,62 @@ body {
 /*breadcrumb*/
 /* ===== ESTILOS PARA BREADCRUMB PERSONALIZADO ===== */
 .breadcrumbs {
-    background-color: #000 !important;
-    padding: 12px;
-    margin: 0 0 0 0;
-
-    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-    color: #6f5207;
-    font-size: 15px;
-
+    background-color: #f8f8f8 !important; /* Un fondo blanco suave o un gris claro */
+    padding: 15px 30px; /* Más padding para mayor espacio */
+    margin: 0; /* Eliminar margen si lo tiene por defecto */
+    border-bottom: 1px solid #ddd; /* Un borde inferior sutil */
+    font-family: 'Open Sans', sans-serif; /* Fuente más moderna */
+    box-shadow: inset 0 -1px 3px rgba(0,0,0,0.05); /* Sombra interna sutil */
+    color: #555; /* Color de texto más suave */
+    font-size: 14px; /* Tamaño de fuente ajustado */
+    display: flex; /* Para alinear los elementos */
+    align-items: center;
 }
 
 .breadcrumbs a {
-    color: #3498db !important;
+    color: #007bff !important; /* Azul más estándar para enlaces */
     text-decoration: none;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    padding: 4px 8px;
-    border-radius: 3px;
+    font-weight: 500; /* Peso de fuente normal */
+    transition: all 0.2s ease-in-out;
+    padding: 5px 8px; /* Padding para el área del enlace */
+    border-radius: 4px; /* Bordes redondeados */
 }
 
 .breadcrumbs a:hover {
-    color: #2980b9 !important;
-    background-color: rgba(255,255,255,0.1);
+    color: #0056b3 !important; /* Tono de azul más oscuro al pasar el cursor */
+    background-color: rgba(0,123,255,0.05); /* Fondo azul semitransparente al pasar el cursor */
     text-decoration: none;
 }
+
+
+.breadcrumbs span.sep { /* Si usas un <span> para el separador */
+    color: #505659;
+    margin: 0 8px;
+    font-weight: normal;
+}
+
 
 .breadcrumbs a:first-child {
     margin-left: -8px;
 }
 
-/* Separador personalizado */
+
+.breadcrumbs > a + a:before,
+.breadcrumbs > span + a:before,
+.breadcrumbs > a + span:before {
+    content: "›"; /* Utiliza el carácter de comilla angular */
+    color: #888; /* Color más sutil para el separador */
+    padding: 0 8px; /* Espaciado alrededor del separador */
+}
+
+
+.breadcrumbs .current {
+    color: #333; /* Color más oscuro para el elemento actual */
+    font-weight: 600; /* Más negrita para resaltarlo */
+}
+
+
+/* Separador personalizado
 .breadcrumbs-custom a + a:before {
     content: "›";
     color: #7f8c8d;
@@ -360,11 +435,11 @@ body {
     font-size: 16px;
 }
 
-/* Efecto para la página actual */
+
 .breadcrumbs .breadcrumb-current {
     color: #bdc3c7;
     font-weight: 500;
-}
+} */
 
 
 /*------------------------- user-tools -------------------------------------------*/

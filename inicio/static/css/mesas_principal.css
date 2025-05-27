@@ -328,7 +328,7 @@ body.no-scroll {
 .main-content p {
     font-size: 1.5rem;
     margin: 10px 0;
-    color: red;
+    color: rgb(255, 255, 255);
 }
 
 .admin-item span{

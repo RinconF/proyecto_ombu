@@ -321,10 +321,16 @@ main {
 
 
 .cart-icon-container {
-  position: fixed;
-  top: 20px;
-  right: 30px;
-  z-index: 900;
+    position: fixed; /* Lo mantenemos fijo para que siga al scroll */
+    /* Ajusta el valor 'top' para que quede debajo de la barra de búsqueda */
+    /* La barra de búsqueda tiene un padding-top de 1rem y padding-bottom de 1rem. */
+    /* Su altura aproximada podría ser de 60-70px (padding + altura de los elementos). */
+    /* Vamos a poner un valor inicial de 70px, que debería ser suficiente para que esté debajo del buscador. */
+    top: 90px; /* Ajusta este valor. Prueba con 70px, 80px, etc., hasta que quede justo debajo del buscador. */
+    right: 30px;
+    z-index: 1001; /* Aseguramos que esté por encima del buscador que tiene z-index: 1000 */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Mantenemos la sombra */
+    transition: all 0.3s ease;
 }
 
 .cart-icon {
@@ -582,7 +588,18 @@ main {
   }
 }
 
-
+@media (max-width: 768px) {
+    .cart-icon-container {
+        /* Para móviles, el buscador también se ajusta en altura. */
+        /* Aquí también necesitamos ajustar el 'top' para que no lo tape. */
+        /* La barra de búsqueda móvil tiene padding: 0.8rem 0; */
+        /* Podría ser una altura similar o un poco menos que en desktop. */
+        top: 60px; /* Ajusta este valor para móviles, puede que 60px sea suficiente */
+        right: 15px; /* Un poco menos de margen para móviles */
+        z-index: 1100; /* Aseguramos que esté por encima de cualquier otro elemento móvil, como el botón de hamburguesa (z-index: 1100) */
+        transform: translateY(0); /* Si aplicaste un transform anteriormente, asegúrate de resetearlo si no es necesario aquí */
+    }
+}
 
 
 

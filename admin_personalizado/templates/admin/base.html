@@ -130,7 +130,7 @@
           <div id="content" class="{% block coltype %}colM{% endblock %}">
             {% block pretitle %}{% endblock %}
             {% block content_title %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}
-            {% block object-tools %}{% endblock %}
+            {% comment %} {% block object-tools %}{% endblock %} {% endcomment %}
             {% block content_subtitle %}{% if subtitle %}<h2>{{ subtitle }}</h2>{% endif %}{% endblock %}
             {% block content %}
               {{ content }}

@@ -3,7 +3,10 @@ from django.contrib.auth.decorators import login_required
 from .forms import UsuarioForm, PerfilForm
 from django.contrib.admin.views.decorators import staff_member_required
 import os
+from django.http import FileResponse # <--- ¡IMPORTA FileResponse aquí!
 
+# Si el modelo 'Perfil' está en 'inicio/models.py', impórtalo así:
+from inicio.models import Perfil
 
 
 

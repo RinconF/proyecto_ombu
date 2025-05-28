@@ -1,0 +1,105 @@
+/* Estilos para la página de confirmación de eliminación */
+
+body #content-start #content .colM h1 {
+    color: #dc3545 !important; /* Rojo intenso y forzado para el título */
+    border-bottom: 2px solid #dc3545 !important;
+    padding-bottom: 0.75rem !important;
+    margin-bottom: 1.5rem !important;
+    font-size: 2.5rem !important; /* Tamaño más grande para destacar */
+    font-weight: bold !important;
+}
+
+body #content-start #content .colM p {
+    font-size: 1.15rem !important;
+    color: #333 !important; /* Texto más oscuro para mejor legibilidad */
+    margin-bottom: 1.25rem !important;
+    line-height: 1.6 !important;
+}
+
+body #content-start #content .colM h2 {
+    color: #c82333 !important; /* Rojo más oscuro para los subtítulos */
+    margin-top: 2rem !important;
+    margin-bottom: 1rem !important;
+    border-bottom: 1px solid #c82333 !important;
+    padding-bottom: 0.5rem !important;
+    font-size: 1.5rem !important;
+    font-weight: bold !important;
+    background-color: transparent !important; /* Asegura fondo transparente */
+}
+
+body #content-start #content .colM ul#deleted-objects {
+    list-style: none !important;
+    padding-left: 0 !important;
+    margin-bottom: 1.75rem !important;
+    background-color: #fdecea !important; /* Fondo rojo muy claro y suave */
+    border: 1px solid #fcc2c3 !important; /* Borde rojo claro */
+    border-radius: 0.3rem !important;
+    padding: 1rem !important;
+}
+
+body #content-start #content .colM ul#deleted-objects li {
+    color: #a71d2a !important; /* Rojo oscuro para los elementos de la lista */
+    font-weight: bold !important;
+    margin-bottom: 0.75rem !important;
+    padding: 0.5rem 0 !important;
+    border-bottom: 1px dotted #fcc2c3 !important; /* Separador suave entre elementos */
+}
+
+body #content-start #content .colM ul#deleted-objects li:last-child {
+    border-bottom: none !important; /* Elimina el borde inferior del último elemento */
+}
+
+body #content-start #content .colM ul#deleted-objects li a {
+    color: #a71d2a !important;
+    text-decoration: underline !important;
+}
+
+body #content-start #content .colM form div {
+    display: flex !important;
+    gap: 1.5rem !important;
+    align-items: center !important;
+    margin-top: 1.5rem !important;
+}
+
+body #content-start #content .colM form input[type="submit"] {
+    background-color: #dc3545 !important; /* Rojo llamativo para el botón de confirmar */
+    color: #fff !important;
+    padding: 1.1rem 2.2rem !important;
+    border: none !important;
+    border-radius: 0.3rem !important;
+    cursor: pointer !important;
+    font-size: 1.1rem !important;
+    font-weight: bold !important;
+    transition: background-color 0.15s ease-in-out !important;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1) !important;
+}
+
+body #content-start #content .colM form input[type="submit"]:hover {
+    background-color: #c82333 !important;
+}
+
+body #content-start #content .colM form a.cancel-link {
+    background-color: #6c757d !important; /* Gris neutro para el botón de cancelar */
+    color: #fff !important;
+    padding: 1.1rem 2.2rem !important;
+    border-radius: 0.3rem !important;
+    text-decoration: none !important;
+    transition: background-color 0.15s ease-in-out !important;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1) !important;
+}
+
+body #content-start #content .colM form a.cancel-link:hover {
+    background-color: #5a6268 !important;
+}
+
+/* Estilos adicionales para mejorar la apariencia */
+body #content-start #content .colM {
+    padding: 2rem !important;
+    border: 1px solid #ddd !important;
+    border-radius: 0.5rem !important;
+    background-color: #f9f9f9 !important; /* Fondo gris muy claro para el contenedor */
+}
+
+body #content-start #content .colM > p:first-of-type {
+    margin-top: 0 !important; /* Elimina el margen superior del primer párrafo */
+}

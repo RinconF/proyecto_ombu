@@ -1,12 +1,4 @@
- // Script para la barra de navegación fija
- window.addEventListener('scroll', function() {
-    const header = document.getElementById('navbar');
-    if (window.scrollY > 100) {
-        header.classList.add('scrolled');
-    } else {
-        header.classList.remove('scrolled');
-    }
-});
+
 
 // Script para el carrusel de productos
 document.addEventListener('DOMContentLoaded', function() {
@@ -61,6 +53,37 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
+document.addEventListener('DOMContentLoaded', function() {
+    const menuToggle = document.getElementById('menuToggle');
+    const mainMenu = document.getElementById('mainMenu');
+    
+    // Toggle menu cuando se hace clic en el botón hamburguesa
+    menuToggle.addEventListener('click', function() {
+      mainMenu.classList.toggle('active');
+    });
+    
+    // Cerrar menú cuando se hace clic en un enlace
+    const menuLinks = document.querySelectorAll('.link');
+    menuLinks.forEach(link => {
+      link.addEventListener('click', function() {
+        if (window.innerWidth <= 600) {
+          mainMenu.classList.remove('active');
+        }
+      });
+    });
+    
+    // Cerrar menú si se hace clic fuera de él
+    document.addEventListener('click', function(event) {
+      const isClickInsideMenu = mainMenu.contains(event.target);
+      const isClickOnToggle = menuToggle.contains(event.target);
+      
+      if (!isClickInsideMenu && !isClickOnToggle && mainMenu.classList.contains('active')) {
+        mainMenu.classList.remove('active');
+      }
+    });
+  });
+
+
 // JavaScript para el menú desplegable en escritorio (para que aparezca y desaparezca al subir y bajar el scroll)
 document.addEventListener("DOMContentLoaded", () => {
     const menuContainer = document.querySelector(".menu-container");
@@ -92,38 +115,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Agrega el evento de scroll al `main` en lugar de `window`
-    addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll);
+});
+
+// loader
+
+window.addEventListener('load', function () {
+  setTimeout(() => {
+    document.getElementById('loader').style.opacity = '0';
+    document.getElementById('loader').style.visibility = 'hidden';
+    document.querySelector('.contenido').style.visibility = 'visible';
+  }, 1000); // 1000 ms = 1 segundo
 });
 
 
+// buscador
 
 
-document.addEventListener('DOMContentLoaded', function() {
-    const menuToggle = document.getElementById('menuToggle');
-    const mainMenu = document.getElementById('mainMenu');
-    
-    // Toggle menu cuando se hace clic en el botón hamburguesa
-    menuToggle.addEventListener('click', function() {
-      mainMenu.classList.toggle('active');
-    });
-    
-    // Cerrar menú cuando se hace clic en un enlace
-    const menuLinks = document.querySelectorAll('.link');
-    menuLinks.forEach(link => {
-      link.addEventListener('click', function() {
-        if (window.innerWidth <= 600) {
-          mainMenu.classList.remove('active');
-        }
-      });
-    });
-    
-    // Cerrar menú si se hace clic fuera de él
-    document.addEventListener('click', function(event) {
-      const isClickInsideMenu = mainMenu.contains(event.target);
-      const isClickOnToggle = menuToggle.contains(event.target);
-      
-      if (!isClickInsideMenu && !isClickOnToggle && mainMenu.classList.contains('active')) {
-        mainMenu.classList.remove('active');
-      }
-    });
-  });

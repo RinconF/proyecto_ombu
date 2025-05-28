@@ -8,24 +8,26 @@
     <title>Administración de Usuarios - Gastro Bar</title>
 </head> 
 <body>
-    <!-- Menú superior -->
     <ul class="main-menu">
         <li class="admin-item"><a href="{% url 'admin' %}">Inicio</a></li>
         <li class="admin-item"><a href="{% url 'bebidas_calientes' %}">Productos</a></li>
         <li class="admin-item"><a href="{% url 'mesas' %}">Mesas</a></li>
         <li class="admin-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
         <li class="admin-item"><a href="{% url 'reserva' %}">Reserva</a></li>
-        <li class="admin-item"><a href="{% url 'usuarios' %}" style="background-color: #575757;">Usuarios</a></li>
+        <li class="admin-item"><a href="{% url 'usuarios' %}" style="background-color:rgb(28, 23, 23);">Usuarios</a></li>
     </ul>
 
-    <!-- Contenido de la sección de usuarios -->
+    <div id="notificacion" class="notificacion" style="display: none;">
+        <span id="mensaje-notificacion"></span>
+        <span class="cerrar-notificacion" onclick="this.parentElement.style.display='none'">&times;</span>
+    </div>
+
     <div class="usuarios-content">
         <h1 class="page-title">Administración de Usuarios</h1>
         
         <a href="#" class="btn btn-success add-user-btn" onclick="openAddModal()">+ Agregar Usuario</a>
         
-        <!-- Tabla de usuarios -->
-        <table class="usuarios-table">
+        <table class="usuarios-table" id="tabla-usuarios">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -39,58 +41,47 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Datos de ejemplo  -->
-                <tr>
-                    <td>1</td>
-                    <td>Juan</td>
-                    <td>Pérez</td>
-                    <td>jperez</td>
-                    <td>juan.perez@ejemplo.com</td>
-                    <td>Administrador</td>
-                    <td><span class="estado-activo">Activo</span></td>
-                    <td class="action-buttons">
-                        <button class="btn btn-primary btn-sm" onclick="openEditModal(1, 'Juan', 'Pérez', 'jperez', 'juan.perez@ejemplo.com', 'Administrador')">Editar</button>
-                        <button class="btn btn-danger btn-sm" onclick="cambiarEstado(1)">Inhabilitar</button>
+                {% for usuario in usuarios %}
+                <tr data-id="{{ usuario.id }}">
+                    <td>{{ usuario.id }}</td>
+                    <td>{{ usuario.first_name }}</td>
+                    <td>{{ usuario.last_name }}</td>
+                    <td>{{ usuario.username }}</td>
+                    <td>{{ usuario.email }}</td>
+                    <td>{{ usuario.rol }}</td>
+                    <td>
+                        {% if usuario.is_active %}
+                        <span class="estado-activo">Activo</span>
+                        {% else %}
+                        <span class="estado-inactivo">Inactivo</span>
+                        {% endif %}
                     </td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>María</td>
-                    <td>González</td>
-                    <td>mgonzalez</td>
-                    <td>maria.gonzalez@ejemplo.com</td>
-                    <td>Mesero</td>
-                    <td><span class="estado-activo">Activo</span></td>
                     <td class="action-buttons">
-                        <button class="btn btn-primary btn-sm" onclick="openEditModal(2, 'María', 'González', 'mgonzalez', 'maria.gonzalez@ejemplo.com', 'Mesero')">Editar</button>
-                        <button class="btn btn-danger btn-sm" onclick="cambiarEstado(2)">Inhabilitar</button>
-                        <button class "btn btn-seconday btn-sm" onclink="eliminarusuario(2)">Eliminar</button>
+                        <button class="btn btn-primary btn-sm" onclick="openEditModal({{ usuario.id }}, '{{ usuario.first_name }}', '{{ usuario.last_name }}', '{{ usuario.username }}', '{{ usuario.email }}', '{{ usuario.rol }}')">Editar</button>
                         
+                        {% if usuario.is_active %}
+                        <button class="btn btn-danger btn-sm" onclick="cambiarEstado({{ usuario.id }}, false)">Inhabilitar</button>
+                        {% else %}
+                        <button class="btn btn-warning btn-sm" onclick="cambiarEstado({{ usuario.id }}, true)">Habilitar</button>
+                        {% endif %}
+                        
+                        {% if user.id != usuario.id %}
+                        <button class="btn btn-secondary btn-sm" onclick="eliminarUsuario({{ usuario.id }})">Eliminar</button>
+                        {% endif %}
                     </td>
                 </tr>
-                <tr>
-                    <td>3</td>
-                    <td>Carlos</td>
-                    <td>Rodríguez</td>
-                    <td>crodriguez</td>
-                    <td>carlos.rodriguez@ejemplo.com</td>
-                    <td>Mesero</td>
-                    <td><span class="estado-inactivo">Inactivo</span></td>
-                    <td class="action-buttons">
-                        <button class="btn btn-primary btn-sm" onclick="openEditModal(3, 'Carlos', 'Rodríguez', 'crodriguez', 'carlos.rodriguez@ejemplo.com', 'Mesero')">Editar</button>
-                        <button class="btn btn-warning btn-sm" onclick="cambiarEstado(3)">Habilitar</button>
-                    </td>
-                </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
 
-    <!-- agregar usuario -->
     <div id="addUserModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeAddModal()">&times;</span>
             <h2>Agregar Nuevo Usuario</h2>
-            <form id="addUserForm">
+            <form method="POST" id="addUserForm" action = "{% url 'crear_usuario' %}">
+                {% csrf_token %}
+                {{ form_crear_usuario.as_p }}
                 <div class="form-group">
                     <label for="nombre">Nombre:</label>
                     <input type="text" class="form-control" id="nombre" required>
@@ -119,6 +110,7 @@
                     <label for="rol">Cargo:</label>
                     <select class="form-control" id="rol" required>
                         <option value="">Seleccione cargo</option>
+                        <option value="Administrador">Administrador</option>
                         <option value="Mesero">Mesero</option>
                     </select>
                 </div>
@@ -130,12 +122,12 @@
         </div>
     </div>
 
-    <!-- editar usuario -->
     <div id="editUserModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeEditModal()">&times;</span>
             <h2>Editar Usuario</h2>
             <form id="editUserForm">
+                {% csrf_token %}
                 <input type="hidden" id="edit_id">
                 <div class="form-group">
                     <label for="edit_nombre">Nombre:</label>
@@ -154,7 +146,7 @@
                     <input type="email" class="form-control" id="edit_email" required>
                 </div>
                 <div class="form-group">
-                    <label for="edit_password">Nueva Contraseña (en blanco por ahora):</label>
+                    <label for="edit_password">Nueva Contraseña (dejar en blanco para mantener la actual):</label>
                     <input type="password" class="form-control" id="edit_password">
                 </div>
                 <div class="form-group">
@@ -173,6 +165,5 @@
     </div>
     
     <script src="{% static '/js/usuarios.js' %}"></script>
-
 </body>
 </html>

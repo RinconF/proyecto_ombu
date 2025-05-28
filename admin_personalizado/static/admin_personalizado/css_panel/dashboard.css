@@ -1,0 +1,161 @@
+/* admin_personalizado/css_panel/dashboard.css */
+
+/* --- GENERALES DEL CONTENIDO PRINCIPAL --- */
+.dashboard-page-container {
+    padding: 30px;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.dashboard-main-area {
+    background-color: #212B36;
+    color: #E0E0E0;
+    padding: 35px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    background-image: none;
+    margin-bottom: 25px;
+}
+
+.dashboard-title {
+    color: #63B3ED;
+    font-family: 'Inter', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 25px;
+    border-bottom: 1px solid rgba(99, 179, 237, 0.3);
+    padding-bottom: 15px;
+}
+
+.dashboard-intro-text,
+.dashboard-card-body p {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: #B0B9C2;
+    margin-bottom: 1.2rem;
+}
+
+/* --- TARJETAS (CARDS) --- */
+.dashboard-info-card {
+    background-color: #2D3748;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.25s ease-out, box-shadow 0.25s ease-out;
+    margin-bottom: 25px;
+    overflow: hidden;
+}
+
+.dashboard-info-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+.dashboard-card-header {
+    background-color: #374253;
+    color: #63B3ED;
+    font-size: 1.3rem;
+    font-weight: 600;
+    padding: 1.3rem 25px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.dashboard-card-body {
+    padding: 25px;
+    color: #E0E0E0;
+}
+
+/* --- BARRA LATERAL DE ACTIVIDAD RECIENTE --- */
+.dashboard-sidebar {
+    background-color: #1A222B;
+    padding: 30px 0;
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: -3px 0 15px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    height: fit-content;
+}
+
+.dashboard-recent-actions {
+    padding: 0 25px;
+}
+
+.dashboard-sidebar-title {
+    color: #63B3ED;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.7em;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(99, 179, 237, 0.3);
+}
+
+.dashboard-actions-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-radius: 1%;
+}
+
+.dashboard-actions-list li{
+    list-style: none;
+}
+
+.dashboard-action-item {
+    background: #40916c;
+    margin-bottom: 15px;
+    padding: 18px;
+    border-radius: 8px;
+    transition: all 0.2s ease-out;
+    cursor: pointer;
+    border-left: 5px solid #63B3ED;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.dashboard-action-item:hover {
+    background: #374253;
+    transform: translateX(5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.dashboard-action-content {
+    color: #E0E0E0;
+    font-size: 0.95em;
+    line-height: 1.5;
+}
+
+.dashboard-action-timestamp {
+    color: #A0AEC0;
+    font-size: 0.78em;
+    display: block;
+    margin-top: 8px;
+    font-style: italic;
+}
+
+.dashboard-action-item.no-activities {
+    background: #2D3748;
+    border-left: 5px solid #7B68EE;
+    text-align: center;
+    padding: 20px;
+    font-style: italic;
+    color: #B0B9C2;
+}
+
+/* Asegurar que no haya conflictos con estilos de Django */
+#content {
+    background: none;
+    padding: 0;
+}
+
+/* Responsividad */
+@media (max-width: 992px) {
+    .dashboard-main-area,
+    .dashboard-sidebar {
+        margin-bottom: 25px;
+    }
+    
+    .dashboard-sidebar {
+        border-left: none;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+}

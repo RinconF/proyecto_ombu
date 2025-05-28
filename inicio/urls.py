@@ -9,6 +9,9 @@ from django.contrib.auth.views import PasswordResetView
 from admin_personalizado.views import perfil_view
 
 
+
+# app_name = 'inicio' 
+
 urlpatterns = [
     # PRINCIPAL
     path('', views.index, name='index'),
@@ -33,6 +36,8 @@ urlpatterns = [
     # path('usuarios/', views.usuarios, name = 'usuarios'),
     path('logout/', views.logout_view, name='logout'),
 
+    # URL del Dashboard
+    path('dashboard/', views.dashboard, name='dashboard'),
 
 
     # API de usuarios

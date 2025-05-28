@@ -138,6 +138,11 @@ class ProductoAdmin(admin.ModelAdmin):
         )
     acciones.short_description = 'Acciones'
     acciones.allow_tags = True 
+    
+    def changelist_view(self, request, extra_context=None):
+        extra_context = extra_context or {}
+        extra_context['categorias'] = Producto.CATEGORIAS
+        return super().changelist_view(request, extra_context=extra_context)
 
     class Media:
         css = {
@@ -151,6 +156,10 @@ admin.site.register(Inventario)
 admin.site.register(Usuario, UsuarioAdmin)  # Con la clase personalizada
 admin.site.register(Producto, ProductoAdmin)
 admin.site.register(Reserva)
+# admin.site.register(ActividadReciente)
+# admin.site.register(Perfil)
+
+
 
 
 

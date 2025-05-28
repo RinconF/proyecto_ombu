@@ -73,6 +73,13 @@
                 </button>
             {% endif %}
 
+            {% if cl.opts.model_name == 'producto' %}  {# Condicional para productos #}
+                <button type="button" class="button custom-filter-button" id="openFilterModal">
+                    <img src="{% static 'admin/img/filter-icon.svg' %}" alt="Filtro" width="16" height="16">
+                    Filtros
+                </button>
+            {% endif %}            
+
 
             {% comment %} boton de añadir usuarios/productos/inventario {% endcomment %}
             {% block object-tools %}
@@ -87,7 +94,7 @@
         </div>
         {# --- FIN DE TU NUEVA ESTRUCTURA --- #}
 
-        {# --- INICIO DEL MODAL DE FILTROS --- #}
+        {# --- INICIO DEL MODAL DE FILTROS PARA USUARIOS ------------------------- #}
         {% if cl.opts.model_name == 'usuario' %}
             <div id="filterModal" class="modal">
                 <div class="modal-content">
@@ -167,7 +174,47 @@
                     <button id="cancel-delete-button" class="button">Cancelar</button>
                 </div>
             </div>
-        </div>      
+        </div>   
+        
+        {# --- INICIO DEL MODAL DE FILTROS PARA PRODUCTOS --- #}
+        {% if cl.opts.model_name == 'producto' %}
+            <div id="filterModal" class="modal">
+                <div class="modal-content">
+                    <span class="close-button">&times;</span>
+                    <h2>Opciones de Filtro para Productos</h2>
+                
+                    <div class="modal-filters-body">
+                        {# FILTRO POR CATEGORÍA #}
+                        <div class="filter-group">
+                            <h3>Por Categoría</h3>
+                            <ul>
+                                {% for categoria_valor, categoria_nombre in categorias %}  {# AHORA ITEERAS SOBRE LA TUPLA #}
+                                    <li><a href="?categoria__exact={{ categoria_valor }}{% for key, value in cl.params.items %}{% if key != 'categoria__exact' and key != 'q' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ categoria_nombre }}</a></li>
+                                {% endfor %}
+                                <li><a href="?{% for key, value in cl.params.items %}{% if key != 'categoria__exact' and key != 'q' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Todas</a></li>
+                            </ul>
+                        </div>
+                      
+                        {# FILTRO POR ESTADO (Este permanece igual ya que el 'estado' es un CharField con choices también) #}
+                        <div class="filter-group">
+                            <h3>Por Estado</h3>
+                            <ul>
+                                <li><a href="?estado__exact=disponible{% for key, value in cl.params.items %}{% if key != 'estado__exact' and key != 'q' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Disponible</a></li>
+                                <li><a href="?estado__exact=no_disponible{% for key, value in cl.params.items %}{% if key != 'estado__exact' and key != 'q' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">No Disponible</a></li>
+                                <li><a href="?{% for key, value in cl.params.items %}{% if key != 'estado__exact' and key != 'q' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Todos</a></li>
+                            </ul>
+                        </div>
+                      
+                        {# ... (restos de filtros, como rango de precio si lo implementas) ... #}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="button default" id="resetFiltersButton">Reiniciar filtros</button>
+                        <button type="button" class="button" id="applyFiltersButton">Aplicar filtros</button>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {# --- FIN DEL MODAL DE FILTROS PARA PRODUCTOS --- #}        
 
         
       </div>
@@ -195,7 +242,7 @@
 {% block extrajs %}
     {{ block.super }} {# ¡IMPORTANTE! Esto carga los JS base de Django Admin #}
     {# CONDICIONAL: Solo carga el JS del modal si el modelo es 'usuario' #}
-    {% if cl.opts.model_name == 'usuario' %}
+    {% if cl.opts.model_name == 'usuario' or cl.opts.model_name == 'producto' %}
         <script src="{% static 'admin_personalizado/js_panel/bar_filtro.js' %}"></script>
     {% endif %}
 {% endblock %}

@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 
                 try {
                     // Verificar si hay opciones para este producto
-                    const options = card.getAttribute('data-options');
+                  const options = card.getAttribute('data-options');
                   if (options) {
                     const optionsArray = options.split(',').map(opt => opt.trim()).filter(opt => opt.length > 0);
                     optionsArray.forEach(option => {

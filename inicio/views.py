@@ -496,44 +496,107 @@ def usuarios(request):
 @never_cache
 @login_required
 def bebidas_calientes(request):
-    return render(request, 'pages/menu_mesero/bebidas_calientes.html')
+    productos = Producto.objects.filter(estado='disponible', categoria='bebida_caliente')
+    return render(request, 'pages/menu_mesero/bebidas_calientes.html', {'productos': productos})
+
 
 @never_cache
 @login_required
 def bebidas_frias(request):
-    return render(request, 'pages/menu_mesero/bebidas_frias.html')
+    productos = Producto.objects.filter(estado='disponible', categoria='Bebida_fria')
+    return render(request, 'pages/menu_mesero/bebidas_frias.html', {'productos': productos})
 
 
 @never_cache
 @login_required
 def cervezas(request):
-    return render(request, 'pages/menu_mesero/Cervezas.html')
+    productos = Producto.objects.filter(estado='disponible', categoria='Cerveza')
+    return render(request, 'pages/menu_mesero/Cervezas.html', {'productos': productos})
 
 @never_cache
 @login_required
 def cigarrillos(request):
-    return render(request, 'pages/menu_mesero/Cigarrillos.html')
+    productos = Producto.objects.filter(estado='disponible', categoria='Cigarrillo')
+    return render(request, 'pages/menu_mesero/Cigarrillos.html', {'productos': productos})
 
 @never_cache
 @login_required
 def cocteles(request):
-    return render(request, 'pages/menu_mesero/Cocteles.html')
+    productos = Producto.objects.filter(estado='disponible', categoria='Coctel')
+    return render(request, 'pages/menu_mesero/Cocteles.html', {'productos': productos})
 
 @never_cache
 @login_required
 def para_picar(request):
-    return render(request, 'pages/menu_mesero/Para_picar.html')
+    productos = Producto.objects.filter(estado='disponible', categoria='Picar')
+    return render(request, 'pages/menu_mesero/Para_picar.html', {'productos': productos})
 
 
-def productos_por_categoria(request, categoria):
-    productos = Producto.objects.filter(estado='disponible', categoria=categoria)
+# def productos_por_categoria(request, categoria):
+#     productos = Producto.objects.filter(estado='disponible', categoria=categoria)
 
-    try:
+#     try:
         
-        template_name = f'pages/productos_menu/{categoria}.html'
-        return render(request, template_name, {'productos': productos})
-    except:
-        return render(request, 'pages/productos_menu/no_encontrado.html', {'categoria': categoria})
+#         template_name = f'pages/menu_mesero/{categoria}.html'
+#         return render(request, template_name, {'productos': productos})
+#     except:
+#         return render(request, 'pages/menu_mesero/no_encontrado.html', {'categoria': categoria})
+
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+
+template_map = {
+    'bebida_caliente': {
+        'cliente': 'pages/productos_menu/bebida_caliente.html',
+        'mesero': 'pages/menu_mesero/bebidas_calientes.html',
+    },
+    'Bebida_fria': {
+        'cliente': 'pages/productos_menu/bebida_fria.html',
+        'mesero': 'pages/menu_mesero/bebidas_frias.html',
+    },
+    'Coctel': {
+        'cliente': 'pages/productos_menu/Coctel.html',
+        'mesero': 'pages/menu_mesero/Cocteles.html',
+    },
+    'Cerveza': {
+        'cliente': 'pages/productos_menu/Cervezas.html',
+        'mesero': 'pages/menu_mesero/CervezasArtesanales.html',
+    },
+    'Cigarrillo': {
+        'cliente': 'pages/productos_menu/Cigarrillo.html',
+        'mesero': 'pages/menu_mesero/Cigarrillos.html',
+    },
+    'Picar': {
+        'cliente': 'pages/productos_menu/Picar.html',
+        'mesero': 'pages/menu_mesero/Para_picar.html',
+    },
+}
+
+def productos_cliente(request, categoria):
+    productos = Producto.objects.filter(estado='disponible', categoria=categoria)
+    template_path = template_map.get(categoria, {}).get('cliente')
+    
+    if template_path:
+        return render(request, template_path, {'productos': productos})
+    
+    return render(request, 'pages/productos_menu/no_encontrado.html', {
+        'categoria': categoria,
+        'tipo': 'cliente',
+    })
+
+# Vista para meseros (interfaz interna)
+def productos_mesero(request, categoria):
+    productos = Producto.objects.filter(estado='disponible', categoria=categoria)
+    template_path = template_map.get(categoria, {}).get('mesero')
+    
+    if template_path:
+        return render(request, template_path, {'productos': productos})
+    
+    return render(request, 'pages/productos_menu/no_encontrado.html', {
+        'categoria': categoria,
+        'tipo': 'mesero',
+    })
+
 
 
 

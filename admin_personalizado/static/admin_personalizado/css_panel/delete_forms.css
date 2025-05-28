@@ -192,3 +192,67 @@ body.delete-confirmation #content-main > p:first-of-type {
 body.modal-open {
     overflow: hidden;
 }
+
+/* --- Media Queries para responsividad en delete_forms.css --- */
+
+@media screen and (max-width: 768px) {
+    body.delete-confirmation #content-main {
+        padding: 1.5rem !important; /* Reducir padding */
+        margin: 20px auto !important; /* Ajustar margen */
+        max-width: 90%; /* Permitir que ocupe más ancho */
+    }
+
+    body.delete-confirmation #content-main h1 {
+        font-size: 2rem !important; /* Reducir tamaño de título */
+        margin-bottom: 1rem !important;
+    }
+
+    body.delete-confirmation #content-main p {
+        font-size: 1rem !important; /* Reducir tamaño de texto */
+        margin-bottom: 1.5rem !important;
+    }
+
+    body.delete-confirmation #content-main .submit-row {
+        flex-direction: column; /* Apilar botones */
+        gap: 15px; /* Espacio entre botones apilados */
+    }
+
+    body.delete-confirmation #content-main button[type="submit"],
+    body.delete-confirmation #content-main a.cancellink {
+        width: 100%; /* Que los botones ocupen todo el ancho */
+        text-align: center; /* Centrar el texto en los botones */
+        padding: 0.7rem 1.5rem !important; /* Ajustar padding */
+        font-size: 1rem !important;
+    }
+
+    /* Ajustes para el modal en sí */
+    .modal-content {
+        padding: 15px;
+        width: 95%;
+    }
+
+    .close-button {
+        font-size: 28px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    body.delete-confirmation #content-main {
+        padding: 1rem !important;
+        margin: 15px auto !important;
+    }
+
+    body.delete-confirmation #content-main h1 {
+        font-size: 1.7rem !important;
+    }
+
+    body.delete-confirmation #content-main p {
+        font-size: 0.95rem !important;
+    }
+
+    body.delete-confirmation #content-main button[type="submit"],
+    body.delete-confirmation #content-main a.cancellink {
+        padding: 0.6rem 1rem !important;
+        font-size: 0.95rem !important;
+    }
+}

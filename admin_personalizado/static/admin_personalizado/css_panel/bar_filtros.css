@@ -367,3 +367,45 @@
         width: 100%; /* Botones de ancho completo */
     }
 }
+
+@media screen and (max-width: 480px) {
+    .search-filter-group {
+        flex-direction: column; /* Apilar búsqueda y filtro */
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    #changelist-search {
+        width: 100%; /* Ocupar todo el ancho */
+    }
+
+    .search-button,
+    .filter-button {
+        width: 100%; /* Ocupar todo el ancho */
+        text-align: center;
+    }
+
+    .add-button {
+        width: 100%; /* Ocupar todo el ancho */
+    }
+
+    .modal-content {
+        padding: 15px;
+    }
+
+    .modal-content h2 {
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+
+    .filter-group label {
+        font-size: 0.9em;
+    }
+
+    .filter-group select,
+    .filter-group input[type="text"],
+    .filter-group input[type="date"] {
+        padding: 8px 10px;
+        font-size: 14px;
+    }
+}

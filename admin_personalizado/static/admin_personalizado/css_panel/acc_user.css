@@ -56,3 +56,38 @@
     width: 1%; /* Intenta darle un ancho mínimo para que no ocupe demasiado espacio */
     white-space: nowrap; /* Evita que los botones se envuelvan */
 }
+
+/* --- Media Queries para responsividad en acc_user.css --- */
+
+/* En pantallas más pequeñas (móviles y tablets), los botones pueden volverse más compactos */
+@media screen and (max-width: 768px) {
+    #result_list td.field-acciones .button {
+        padding: 5px 10px; /* Reducir padding */
+        font-size: 13px;   /* Reducir tamaño de fuente */
+        margin-right: 6px; /* Reducir margen entre botones */
+    }
+
+    #result_list td.field-acciones .button i {
+        margin-right: 4px; /* Reducir espacio del icono */
+    }
+}
+
+/* En pantallas muy pequeñas, los botones pueden apilarse o reducirse aún más */
+@media screen and (max-width: 480px) {
+    #result_list td.field-acciones .button {
+        display: flex; /* Cambiar a flex para apilar si el contenedor lo permite */
+        flex-basis: 100%; /* Ocupar todo el ancho disponible si se apilan */
+        margin-right: 0; /* Eliminar margen horizontal si se apilan verticalmente */
+        margin-bottom: 5px; /* Añadir margen vertical */
+        justify-content: center; /* Centrar el contenido del botón */
+        padding: 8px; /* Un poco más de padding cuando se apilan */
+        font-size: 14px; /* Restaurar un poco el tamaño de fuente si se apilan */
+    }
+
+    /* Ajustar el contenedor de los botones para que se apilen */
+    #result_list td.field-acciones {
+        display: flex;
+        flex-direction: column; /* Apilar los botones verticalmente */
+        align-items: center; /* Centrar los botones apilados */
+    }
+}

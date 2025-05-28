@@ -34,6 +34,9 @@
             <h1 id="site-name">
                 <a href="{% url 'admin:index' %}">{{ site_header|default:_('OMBÚ') }}</a></h1>
         </div>
+        <button class="hamburger-menu" aria-label="Toggle navigation">
+            <i class="fas fa-bars"></i>
+        </button>
         <ul class="main-nav">
             {% for app in available_apps %}
                 {% if app.app_label == 'inicio' %}
@@ -139,6 +142,15 @@
                 `;  
             }
         }    
+        // JS para el menú de hamburguesa
+        const hamburgerBtn = document.querySelector('.hamburger-menu');
+        const mainNav = document.querySelector('.main-nav');
+        
+        if (hamburgerBtn && mainNav) {
+            hamburgerBtn.addEventListener('click', () => {
+                mainNav.classList.toggle('active');
+            });
+        }
     });
     </script>
     {% endblock %}

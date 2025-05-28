@@ -53,6 +53,41 @@
 
 .action-content a {
     color: white;
+    text-decoration: none;
+    display: block;
 
 }
 
+/* --- Media Queries para responsividad en barraside.css --- */
+
+@media screen and (max-width: 992px) {
+    /* Ajustes cuando el sidebar es más estrecho (en tablets) */
+    .action-item {
+        padding: 8px; /* Reducir padding */
+        font-size: 0.9em; /* Reducir tamaño de fuente */
+        margin-right: 5px; /* Reducir margen */
+    }
+
+    .recent-actions-container h2 {
+        font-size: 1em; /* Reducir tamaño del título */
+    }
+}
+
+@media screen and (max-width: 768px) {
+    /* Ajustes cuando el sidebar está oculto o en formato móvil */
+    /* Si el sidebar se muestra como un overlay de ancho completo, estos estilos pueden ser relevantes */
+    .action-item {
+        margin-right: 0; /* Eliminar margen derecho si no hay otros elementos al lado */
+        width: 90%; /* Asegurar que ocupe un buen ancho si se muestra */
+        padding: 10px 15px; /* Restaurar padding para mejor clicabilidad */
+        font-size: 1em; /* Restaurar tamaño de fuente */
+    }
+
+    .recent-actions-list {
+        padding: 0; /* Asegurar que no haya padding que lo desplace */
+    }
+
+    .recent-actions-list li {
+        margin-right: 0; /* Asegurar que no haya margen extra */
+    }
+}

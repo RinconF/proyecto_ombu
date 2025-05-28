@@ -107,3 +107,48 @@
 
 
 }
+
+:root {
+    --menu-text-color: black; /* Define la variable */
+}
+
+/* --- Media Queries para responsividad en menu_despleg.css --- */
+
+@media screen and (max-width: 768px) {
+    .user-menu-toggle {
+        padding: 5px; /* Reducir padding del toggle */
+        font-size: 14px; /* Ocultar el texto del nombre de usuario si es muy largo */
+    }
+
+    .user-menu-toggle span {
+        display: none; /* Ocultar el nombre de usuario en móviles */
+    }
+
+    .user-menu-toggle img {
+        width: 28px; /* Reducir tamaño de la imagen */
+        height: 28px;
+        margin-right: 0; /* Eliminar margen si no hay texto */
+    }
+
+    .user-menu {
+        right: 5px; /* Ajustar posición en pantallas pequeñas */
+        min-width: 120px; /* Reducir ancho mínimo */
+    }
+
+    .user-menu li {
+        padding: 8px 12px; /* Reducir padding de los items */
+        font-size: 0.9em; /* Reducir tamaño de fuente */
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .user-menu {
+        min-width: 100px;
+        right: 2px;
+    }
+
+    .user-menu li {
+        padding: 6px 10px;
+        font-size: 0.85em;
+    }
+}

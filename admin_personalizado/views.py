@@ -7,7 +7,7 @@ from django.http import FileResponse # <--- ¡IMPORTA FileResponse aquí!
 
 # Si el modelo 'Perfil' está en 'inicio/models.py', impórtalo así:
 from inicio.models import Perfil
-from django.contrib.admin.models import LogEntry
+
 
 
 

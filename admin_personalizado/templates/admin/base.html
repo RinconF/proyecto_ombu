@@ -188,16 +188,16 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('resize', adjustSidebar);
     
     // Opcional: Botón toggle para móviles
-    if (window.innerWidth <= 1024) {
-        const toggleBtn = document.createElement('button');
-        toggleBtn.className = 'sidebar-toggle';
-        toggleBtn.innerHTML = '☰ Actividades';
-        document.querySelector('#branding').prepend(toggleBtn);
-        
-        toggleBtn.addEventListener('click', function() {
-            document.querySelector('.custom-sidebar').classList.toggle('active');
-        });
-    }
+    //if (window.innerWidth <= 1024) {
+    //    const toggleBtn = document.createElement('button');
+    //    toggleBtn.className = 'sidebar-toggle';
+    //    toggleBtn.innerHTML = '☰ Actividades';
+    //    document.querySelector('#branding').prepend(toggleBtn);
+    //    
+    //    toggleBtn.addEventListener('click', function() {
+    //        document.querySelector('.custom-sidebar').classList.toggle('active');
+    //    });
+    //}
 });
 </script> 
 {{ block.super }}

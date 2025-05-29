@@ -13,6 +13,8 @@ from django.db import transaction
 from django.views.decorators.csrf import csrf_exempt
 from .decorators import role_required
 
+from .models import Mesa, Producto, Pedido, PedidoDetalle
+
 # from .models import Reserva
 # from django.core.mail import send_mail
 import json
@@ -519,15 +521,69 @@ def productos_mesero(request, categoria):
 
 #NUMERO DE MESAS
 def mesas(request):
-    # Puedes definir cuántas mesas quieres aquí
-    num_mesas = 12
-    # Creamos una lista de números del 1 al num_mesas
-    mesas_list = list(range(1, num_mesas + 1)) 
-    
+    mesas = Mesa.objects.all().order_by('numero')  # Ordenar por número para mostrar ordenadas
     context = {
-        'mesas': mesas_list,
+        'mesas': mesas,
     }
     return render(request, 'pages/Admin/mesas.html', context)
+
+
+
+
+
+
+
+
+
+
+# -----------------------------------------------------------PEDIDOS------------------------------------
+
+@csrf_exempt
+def guardar_pedido(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+
+
+        print("DATOS RECIBIDOS:", data)
+
+
+
+        mesa_numero = data.get('mesa')
+        medio_pago = data.get('medio_pago')
+        productos = data.get('productos')  # Lista con {id_producto, cantidad}
+
+        try:
+            mesa = Mesa.objects.get(numero=mesa_numero)
+        except Mesa.DoesNotExist:
+            return JsonResponse({'error': 'Mesa no existe'}, status=400)
+
+        total_pedido = 0
+        detalles = []
+
+        for item in productos:
+            try:
+                producto = Producto.objects.get(id=item['id'])
+                cantidad = int(item['cantidad'])
+                subtotal = producto.precio * cantidad
+                total_pedido += subtotal
+                detalles.append({'producto': producto, 'cantidad': cantidad, 'precio_unitario': producto.precio})
+            except Producto.DoesNotExist:
+                return JsonResponse({'error': 'Producto no existe'}, status=400)
+
+        pedido = Pedido.objects.create(mesa=mesa, total=total_pedido, medio_pago=medio_pago)
+
+        for detalle in detalles:
+            PedidoDetalle.objects.create(
+                pedido=pedido,
+                producto=detalle['producto'],
+                cantidad=detalle['cantidad'],
+                precio_unitario=detalle['precio_unitario']
+            )
+
+        return JsonResponse({'message': 'Pedido guardado correctamente'})
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+
 
 
 # PRODUCTOS

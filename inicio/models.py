@@ -74,14 +74,14 @@ class Mesa(models.Model):
     def __str__(self):
         return f"Mesa {self.numero}"
 
-class Pedidos(models.Model):
-    fechahoraPedido = models.DateTimeField(auto_now_add=True)
-    precio = models.DecimalField(max_digits=10, decimal_places=2)
-    id_mesa = models.ForeignKey(Mesa, on_delete=models.CASCADE)  # Cambié IntegerField por ForeignKey
-    Usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+class Pedido(models.Model):
+    mesa = models.ForeignKey(Mesa, on_delete=models.CASCADE)
+    fecha = models.DateTimeField(auto_now_add=True)
+    total = models.DecimalField(max_digits=10, decimal_places=2)
+    medio_pago = models.CharField(max_length=50)
 
     def __str__(self):
-        return f"Pedido en mesa {self.id_mesa.numero} - ${self.precio}"  # Modifiqué para mostrar el número de la mesa
+        return f"Pedido en mesa {self.mesa.numero} - ${self.precio}"  # Modifiqué para mostrar el número de la mesa
 
 
 
@@ -115,29 +115,21 @@ class Producto(models.Model):
         return self.titulo
 
 
+# -------------------------PEDIDOS-------------------------------------------------------------
 
 
-class Inventario(models.Model):
-    nombreProducto = models.CharField(max_length=45)
-    Cantidad = models.CharField(max_length=50)
-    precioProducto = models.DecimalField(max_digits=10, decimal_places=2)
-    Producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
-    def __str__(self):
-        return self.nombreProducto
+class PedidoDetalle(models.Model):
+    pedido = models.ForeignKey(Pedido, related_name='detalles', on_delete=models.CASCADE)
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    cantidad = models.PositiveIntegerField()
+    precio_unitario = models.DecimalField(max_digits=8, decimal_places=2)
+
+# ---------------------------------------------------------------------------------------------------
 
 
 
 
 
-class Reserva(models.Model):
-    nombreperReserva = models.CharField(max_length=45, default="sin nombre")
-    fecha = models.DateField()
-    hora = models.TimeField()
-    cantidadPersonas = models.IntegerField()
-    Usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f"Reserva {self.id} - Mesa {self.mesa.numero} el {self.fecha} a las {self.hora}"
 
 User = get_user_model()
 

@@ -1,3 +1,19 @@
+function eliminarProducto(mesaId, index) {
+    const clavePedidoMesa = `pedido_mesa_${mesaId}`;
+    const pedidoActual = JSON.parse(localStorage.getItem(clavePedidoMesa)) || [];
+
+    // Eliminar el producto en la posición 'index'
+    pedidoActual.splice(index, 1);
+
+    // Guardar los cambios en localStorage
+    localStorage.setItem(clavePedidoMesa, JSON.stringify(pedidoActual));
+
+    // **Vuelve a llamar a cargarPedido() para actualizar la vista**
+    cargarPedido(mesaId);
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+
 // Seleccionar todas las mesas
 const mesas = document.querySelectorAll('.mesa');
 const pedidoSection = document.getElementById('pedido-section');
@@ -9,7 +25,7 @@ let mesaActivaId = localStorage.getItem('mesaActivaId') || null;
 
 mesas.forEach(mesa => {
     mesa.addEventListener('click', function() {
-        const mesaId = mesa.getAttribute('data-mesa');  // Obtener ID de la mesa seleccionada
+        const mesaId = mesa.getAttribute('data-mesa-id');  // Obtener ID de la mesa seleccionada
         mesaActivaId = mesaId; // Guardar el ID de la mesa activa
 
         
@@ -25,15 +41,7 @@ mesas.forEach(mesa => {
     });
 // Seleccionar una mesa
 });
-document.querySelectorAll('.mesa').forEach(mesa => {
-    mesa.addEventListener('click', () => {
-        mesaSeleccionada = mesa.getAttribute('data-mesa');
-        document.getElementById('mesa-seleccionada').textContent = mesaSeleccionada;
-        document.querySelector('.pedido-section').style.display = 'block';
-        actualizarPedido();
-    });
-    //        window.location.href = `/pages/menu_mesero/bebidas_frias.html?mesa=${mesaId}`; guardar esta linea por si algo//
-});
+
 
 // Función para cargar el pedido del localStorage y actualizar la vista
  function cargarPedido(mesaId) {
@@ -51,13 +59,15 @@ document.querySelectorAll('.mesa').forEach(mesa => {
         pedido.forEach((producto, index) => {
             console.log("Índice del producto:", index, "Producto:", producto.title);
             const row = document.createElement('tr');
+            row.setAttribute('data-producto-id', producto.id);  // <-- añade el id
             row.innerHTML = `
                 <td>${producto.title}</td>
                 <td>$${producto.price.toFixed(2)}</td>
-                <td><span>${producto.quantity}</span></td>
+                <td><input class="cantidad-input" type="number" value="${producto.quantity}" min="1" /></td>
                 <td>$${(producto.price * producto.quantity).toFixed(2)}</td>
                 <td><button onclick="eliminarProducto('${mesaId}', ${index})">Eliminar</button></td>
             `;
+
             tbody.appendChild(row);
 
             // Sumar al total
@@ -91,19 +101,6 @@ if (agregarProductoBtn) {
 
 
 // Eliminar un producto específico del pedido
-function eliminarProducto(mesaId, index) {
-    const clavePedidoMesa = `pedido_mesa_${mesaId}`;
-    const pedidoActual = JSON.parse(localStorage.getItem(clavePedidoMesa)) || [];
-
-    // Eliminar el producto en la posición 'index'
-    pedidoActual.splice(index, 1);
-
-    // Guardar los cambios en localStorage
-    localStorage.setItem(clavePedidoMesa, JSON.stringify(pedidoActual));
-
-    // **Vuelve a llamar a cargarPedido() para actualizar la vista**
-    cargarPedido(mesaId);
-}
 
 
 
@@ -121,20 +118,68 @@ function eliminarPedido(mesaId) {
 function finalizarPedido() {
     const mesaId = document.getElementById('mesa-seleccionada').textContent;
     const medioPago = document.getElementById('medio-pago').value;
-    const totalPedido = document.getElementById('total-pedido').textContent;
+    const filas = document.querySelectorAll('#pedido-body tr');
 
-    alert(`Pedido de la Mesa ${mesaId} finalizado. Total: ${totalPedido}. Medio de pago: ${medioPago}`);
+    const productos = [];
 
-    // Limpiar el pedido de la mesa actual en localStorage
-    eliminarPedido(mesaId);
+    filas.forEach(fila => {
+        const id = parseInt(fila.dataset.productoId); // ID del producto desde dataset
+        const cantidad = parseInt(fila.querySelector('input').value);
+
+        productos.push({ id, cantidad });
+    });
+
+    fetch('/guardar_pedido/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken') // si estás usando CSRF
+        },
+        body: JSON.stringify({
+            mesa: parseInt(mesaId), // Este campo debe llamarse "mesa"
+            medio_pago: medioPago,
+            productos: productos
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message) {
+            alert('Pedido guardado exitosamente.');
+            window.location.href = '/mesas/';
+        } else {
+            alert('Error al guardar pedido: ' + (data.error || 'desconocido'));
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error en la solicitud');
+    });
 }
 
+
+// Función para obtener cookie CSRF (útil para fetch con Django)
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 function actualizarEstadoMesas() {
     const mesas = document.querySelectorAll('.mesa');
     
     mesas.forEach(mesa => {
-        const mesaId = mesa.getAttribute('data-mesa');
+        const mesaId = mesa.getAttribute('data-mesa-id');
         const clavePedidoMesa = `pedido_mesa_${mesaId}`;
         const pedido = JSON.parse(localStorage.getItem(clavePedidoMesa)) || [];
         
@@ -156,4 +201,4 @@ function actualizarEstadoMesas() {
             }
         }
     });
-}
+}});

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Pedidos, Inventario, Usuario, Producto, Reserva
+from .models import Pedido, Usuario, Producto, Mesa
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 # from .models import Rol, Categoria, Usuario, Producto, Mesa, Pedido, Reserva
 from .forms import CustomUserCreationForm, CustomUserChangeForm
@@ -146,11 +146,10 @@ class ProductoAdmin(admin.ModelAdmin):
     
      
 # Registros
-admin.site.register(Pedidos)
-admin.site.register(Inventario)
+admin.site.register(Pedido)
 admin.site.register(Usuario, UsuarioAdmin)  # Con la clase personalizada
 admin.site.register(Producto, ProductoAdmin)
-admin.site.register(Reserva)
+admin.site.register(Mesa)
 
 
 

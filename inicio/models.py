@@ -68,20 +68,14 @@ class Usuario(AbstractUser):
     def __str__(self):
         return f"{self.first_name} {self.last_name} ({self.username})"
 
+
+
 class Mesa(models.Model):
     numero = models.PositiveIntegerField(unique=True)
     
     def __str__(self):
         return f"Mesa {self.numero}"
 
-class Pedido(models.Model):
-    mesa = models.ForeignKey(Mesa, on_delete=models.CASCADE)
-    fecha = models.DateTimeField(auto_now_add=True)
-    total = models.DecimalField(max_digits=10, decimal_places=2)
-    medio_pago = models.CharField(max_length=50)
-
-    def __str__(self):
-        return f"Pedido en mesa {self.mesa.numero} - ${self.precio}"  # Modifiqué para mostrar el número de la mesa
 
 
 
@@ -116,6 +110,14 @@ class Producto(models.Model):
 
 
 # -------------------------PEDIDOS-------------------------------------------------------------
+class Pedido(models.Model):
+    mesa = models.ForeignKey(Mesa, on_delete=models.CASCADE)
+    fecha = models.DateTimeField(auto_now_add=True)
+    total = models.DecimalField(max_digits=10, decimal_places=2)
+    medio_pago = models.CharField(max_length=50)
+
+    def __str__(self):
+            return f"Pedido en mesa {self.mesa.numero} - ${self.total}"  # Modifiqué para mostrar el número de la mesa
 
 
 class PedidoDetalle(models.Model):

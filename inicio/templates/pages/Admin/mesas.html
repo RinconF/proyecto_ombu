@@ -1,4 +1,5 @@
 {% load static %}
+{% csrf_token %}
 {% load custom_tags %}
 <!DOCTYPE html>
 <html lang="es">
@@ -22,7 +23,7 @@
         <h2>Mesas</h2>
         <div class="mesas-grid">
             {% for mesa in mesas %}
-                <div class="mesa" data-mesa-id="{{ mesa.id }}">
+                <div class="mesa" data-mesa-id="{{ mesa.id }}" data-numero-mesa="{{ mesa.numero }}">
                     <i class="fas fa-chair"></i>
                     <h3>Mesa {{ mesa.numero }}</h3>
                 </div>
@@ -36,7 +37,7 @@
         <table>
             <thead>
                 <tr>
-                    <th>Producto</th>
+                    <th >Producto</th>
                     <th>Precio</th>
                     <th>Cantidad</th>
                     <th>Total</th>
@@ -47,15 +48,21 @@
                 <!-- Aquí se agregan filas de productos dinámicamente -->
             </tbody>
         </table>
+        <div class="pedido">
+            <button id="agregar-producto-btn" data-url="{% url 'cervezas' %}">Agregar Producto</button>
 
-        <button id="agregar-producto-btn" data-url="{% url 'cervezas' %}">Agregar Producto</button>
-        <p>Total del Pedido: $<span id="cantidad-total-pedido">0.00</span></p>
-        <select id="medio-pago">
-            <option value="efectivo">Efectivo</option>
-            <option value="tarjeta">Tarjeta</option>
-            <option value="transferencia">Transferencia</option>
-        </select>
-        <button onclick="finalizarPedido()">Finalizar Pedido</button>
+            <p>Total del Pedido: $<span id="total-pedido">0.00</span></p>
+            <p>Cantidad total: <span id="cantidad-total-pedido">0</span></p>
+
+            <select class="medio-pago">
+                <option value="efectivo">Efectivo</option>
+                <option value="tarjeta">Tarjeta</option>
+                <option value="transferencia">Transferencia</option>
+            </select>
+
+            <button class="finalizar-pedido-btn">Finalizar Pedido</button>
+        </div>
+
     </div>
 
     <!-- Footer -->

@@ -35,33 +35,33 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // --- Ocultar/Mostrar Menú de Escritorio al Hacer Scroll ---
-    // Escucha el scroll de la ventana, ya que el cuerpo es donde ocurre el desbordamiento para el scroll de página completa
-    window.addEventListener("scroll", function() {
-        // Aplica solo en escritorio
-        if (window.innerWidth > 768) { // Usa 768px para consistencia con la media query CSS
-            let currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    // // --- Ocultar/Mostrar Menú de Escritorio al Hacer Scroll ---
+    // // Escucha el scroll de la ventana, ya que el cuerpo es donde ocurre el desbordamiento para el scroll de página completa
+    // window.addEventListener("scroll", function() {
+    //     // Aplica solo en escritorio
+    //     if (window.innerWidth > 768) { // Usa 768px para consistencia con la media query CSS
+    //         let currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
-            if (currentScrollTop > 1) { // Cuando se ha hecho scroll más de 150px
-                menuContainer.classList.add("menu-fixed"); // Mantiene fijo
-                if (currentScrollTop > lastScrollTop) {
-                    // Bajando el scroll
-                    menuContainer.classList.add("menu-hidden");
-                } else {
-                    // Subiendo el scroll
-                    menuContainer.classList.remove("menu-hidden");
-                }
-            } else {
-                // En la parte superior de la página
-                menuContainer.classList.remove("menu-fixed", "menu-hidden");
-            }
+    //         if (currentScrollTop > 1) { // Cuando se ha hecho scroll más de 150px
+    //             menuContainer.classList.add("menu-fixed"); // Mantiene fijo
+    //             if (currentScrollTop > lastScrollTop) {
+    //                 // Bajando el scroll
+    //                 menuContainer.classList.add("menu-hidden");
+    //             } else {
+    //                 // Subiendo el scroll
+    //                 menuContainer.classList.remove("menu-hidden");
+    //             }
+    //         } else {
+    //             // En la parte superior de la página
+    //             menuContainer.classList.remove("menu-fixed", "menu-hidden");
+    //         }
 
-            lastScrollTop = currentScrollTop;
-        } else {
-            // Asegura que las clases se eliminen al cambiar a móvil
-            menuContainer.classList.remove("menu-fixed", "menu-hidden");
-        }
-    });
+    //         lastScrollTop = currentScrollTop;
+    //     } else {
+    //         // Asegura que las clases se eliminen al cambiar a móvil
+    //         menuContainer.classList.remove("menu-fixed", "menu-hidden");
+    //     }
+    // });
 
     // Maneja el estado inicial al cargar la página y al redimensionar la ventana
     function handleResize() {

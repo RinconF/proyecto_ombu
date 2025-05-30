@@ -85,7 +85,7 @@ urlpatterns = [
 
 
     #PEDIDOS
-    path('guardar-pedido/', guardar_pedido, name='guardar_pedido'),
+    path('guardar-pedido/', views.guardar_pedido, name='guardar_pedido'),
 ]
 
 

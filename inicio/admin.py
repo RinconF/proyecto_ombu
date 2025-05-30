@@ -15,17 +15,17 @@ class UsuarioAdmin(BaseUserAdmin):
     ordering = ('username',)
     
     
-     
-    add_form = CustomUserCreationForm 
+    
+    add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     
     
     fieldsets = (
-         (None, {'fields': ('username',)}),
-         ('Información Personal', {'fields': ('first_name', 'last_name', 'email')}),
-         ('Roles y Permisos', {'fields': ('rol', 'is_active', 'is_staff', 'is_superuser','groups', 'user_permissions')}),  
-         ('Fechas Importantes', {'fields': ('last_login', 'date_joined')}),
-     )
+        (None, {'fields': ('username',)}),
+        ('Información Personal', {'fields': ('first_name', 'last_name', 'email')}),
+        ('Roles y Permisos', {'fields': ('rol', 'is_active', 'is_staff', 'is_superuser','groups', 'user_permissions')}),  
+        ('Fechas Importantes', {'fields': ('last_login', 'date_joined')}),
+    )
     readonly_fields = ('last_login', 'date_joined')
     def get_add_fieldsets(self, request, obj=None):
         return (

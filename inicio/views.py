@@ -538,88 +538,58 @@ def mesas(request):
 
 # -----------------------------------------------------------PEDIDOS------------------------------------
 
-@csrf_exempt
+
+
 def guardar_pedido(request):
     if request.method == 'POST':
-        data = json.loads(request.body)
-
-
-        print("DATOS RECIBIDOS:", data)
-
-
-
-        mesa_numero = data.get('mesa')
-        medio_pago = data.get('medio_pago')
-        productos = data.get('productos')  # Lista con {id_producto, cantidad}
-
         try:
-            mesa = Mesa.objects.get(numero=mesa_numero)
-        except Mesa.DoesNotExist:
-            return JsonResponse({'error': 'Mesa no existe'}, status=400)
+            data = json.loads(request.body)
+            mesa_id = data.get('mesa')
+            medio_pago = data.get('medio_pago')
+            productos = data.get('productos', [])
 
-        total_pedido = 0
-        detalles = []
+            mesa = Mesa.objects.get(id=mesa_id)
+            pedido = Pedido.objects.create(mesa=mesa, medio_pago=medio_pago, total=0)
 
-        for item in productos:
-            try:
+            total = 0
+            for item in productos:
                 producto = Producto.objects.get(id=item['id'])
-                cantidad = int(item['cantidad'])
+                cantidad = item['cantidad']
                 subtotal = producto.precio * cantidad
-                total_pedido += subtotal
-                detalles.append({'producto': producto, 'cantidad': cantidad, 'precio_unitario': producto.precio})
-            except Producto.DoesNotExist:
-                return JsonResponse({'error': 'Producto no existe'}, status=400)
+                PedidoDetalle.objects.create(
+                    pedido=pedido,
+                    producto=producto,
+                    cantidad=cantidad,
+                    subtotal=subtotal
+                )
+                total += subtotal
 
-        pedido = Pedido.objects.create(mesa=mesa, total=total_pedido, medio_pago=medio_pago)
+            pedido.total = total
+            pedido.save()
 
-        for detalle in detalles:
-            PedidoDetalle.objects.create(
-                pedido=pedido,
-                producto=detalle['producto'],
-                cantidad=detalle['cantidad'],
-                precio_unitario=detalle['precio_unitario']
-            )
+            return JsonResponse({'message': 'Pedido guardado correctamente.'}, status=200)
 
-        return JsonResponse({'message': 'Pedido guardado correctamente'})
-    return JsonResponse({'error': 'Método no permitido'}, status=405)
-
-
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+    else:
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
 
 
-# PRODUCTOS
 
-# def productos_disponibles(request):
-#     productos = Producto.objects.filter(estado='disponible')
-#     return render(request, 'principal/index.html', {'productos': productos})
 
-#EMAIL RESERVA
+# from django.http import JsonResponse
+# from django.views.decorators.csrf import csrf_exempt
+# import json
 
-# @login_required
-# def generar_reserva (request):
+# @csrf_exempt  # temporal para evitar problemas de CSRF
+# def guardar_pedido(request):
 #     if request.method == 'POST':
-#         nombre = request.POST['nombre']
-#         email = request.POST['email']
-#         fecha = request.POST['fecha']
-#         hora = request.POST['hora']
-#         cantidad = request.POST['cantidad']
-        
-#         reserva.Reserva.objects.create(
-#             nombreperReserva=nombre,
-#             fecha=fecha, 
-#             hora=hora,
-#             cantidadPersonas=cantidad,
-#             Usuario=request.user
-#         )
-        
-#         send_mail(
-#             subject='Confirmación de la reserva',
-#             message=f'Hola {nombre}, tu reserva fue realizada para el {fecha} a las {hora}.',
-#             from_email='correo@gmail.com',  # Remplaza con tu email configurado en settings.py
-#             recipient_list=[email],
-#             fail_silently=False,
-        
-#         )
-    
-#         return JsonResponse({'Success': True})
-#     return render(request,'reserva.html')
-
+#         try:
+#             data = json.loads(request.body)
+#             print('Datos recibidos:', data)  # para debug en consola
+#             # Aquí debes procesar y guardar el pedido en la BD
+#             return JsonResponse({'message': 'Pedido guardado correctamente'})
+#         except Exception as e:
+#             return JsonResponse({'error': str(e)}, status=400)
+#     else:
+#         return JsonResponse({'error': 'Método no permitido'}, status=405)

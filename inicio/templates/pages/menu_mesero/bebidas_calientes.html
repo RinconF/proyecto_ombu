@@ -1,5 +1,6 @@
 {% load static %}
 {% load humanize %}
+{% csrf_token %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -157,30 +158,35 @@
          
 
 
-     {% for producto in productos %}
-          <div class="card"  data-title="{{ producto.titulo }}" data-image="{{ producto.foto.url }} " data-options='{{ producto.opciones|safe }}'>
-            <div class="img-container">
-              <img
-                src="{{ producto.foto.url }}"
-                alt="{{ producto.titulo }}"
-              />
-            </div>
+{% for producto in productos %}
+  <div class="card"  
+       data-id="{{ producto.id }}"  
+       data-title="{{ producto.titulo }}" 
+       data-price="{{ producto.precio }}"  
+       data-image="{{ producto.foto.url }}" 
+       data-options='{{ producto.opciones|safe }}'>
 
-            <div class="main-card">
-              <span>{{ producto.titulo|upper }}</span>
-              <p class="truncated-text">
-                {{ producto.descripcion|truncatechars:250 }}
-              </p>
-            </div>
+    <div class="img-container">
+      <img src="{{ producto.foto.url }}" alt="{{ producto.titulo }}" />
+    </div>
 
-            <div class="footer-card">
-              <span> ${{ producto.precio|floatformat:0|intcomma }}</span>
-              <button>ver mas</button>
-            </div>
-          </div>
+    <div class="main-card">
+      <span>{{ producto.titulo|upper }}</span>
+      <p class="truncated-text">
+        {{ producto.descripcion|truncatechars:250 }}
+      </p>
+    </div>
+
+    <div class="footer-card">
+      <span> ${{ producto.precio|floatformat:0|intcomma }}</span>
+      <button onclick="agregarAlPedidoConMesaActiva(this)">ver más</button>  <!-- ✅ botón llama a la función JS -->
+    </div>
+
+  </div>
 {% empty %}
   <p>No hay productos disponibles en esta categoría.</p>
 {% endfor %}
+
 
 
 

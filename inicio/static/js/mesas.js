@@ -1,3 +1,19 @@
+function getCSRFToken() {
+    let cookieValue = null;
+    const name = 'csrftoken';
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 function eliminarProducto(mesaId, index) {
     const clavePedidoMesa = `pedido_mesa_${mesaId}`;
     const pedidoActual = JSON.parse(localStorage.getItem(clavePedidoMesa)) || [];
@@ -12,7 +28,16 @@ function eliminarProducto(mesaId, index) {
     cargarPedido(mesaId);
 }
 
-document.addEventListener('DOMContentLoaded', function () {
+document.querySelectorAll('.finalizar-pedido-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        if (!mesaActivaId) {
+            alert('Por favor, selecciona una mesa primero.');
+            return;
+        }
+        finalizarPedido(mesaActivaId);
+    });
+});
+
 
 // Seleccionar todas las mesas
 const mesas = document.querySelectorAll('.mesa');
@@ -26,7 +51,8 @@ let mesaActivaId = localStorage.getItem('mesaActivaId') || null;
 mesas.forEach(mesa => {
     mesa.addEventListener('click', function() {
         const mesaId = mesa.getAttribute('data-mesa-id');  // Obtener ID de la mesa seleccionada
-        mesaActivaId = mesaId; // Guardar el ID de la mesa activa
+        mesaActivaId = mesaId;
+        localStorage.setItem('mesaActivaId', mesaId); // Guardar el ID de la mesa activa
 
         
         // Si la mesa seleccionada ya está abierta, ocultar el pedido
@@ -70,6 +96,12 @@ mesas.forEach(mesa => {
 
             tbody.appendChild(row);
 
+            const eliminarBtn = document.createElement('button');
+eliminarBtn.textContent = 'Eliminar';
+eliminarBtn.classList.add('btn-eliminar');
+eliminarBtn.addEventListener('click', () => eliminarProducto(mesaId, index));
+row.appendChild(eliminarBtn);
+
             // Sumar al total
             total += producto.price * producto.quantity;
             cantidadTotalProductos += parseInt(producto.quantity); // Sumar la cantidad de cada producto
@@ -96,6 +128,37 @@ if (agregarProductoBtn) {
     });
 }
 
+function agregarAlPedido(mesaId, elemento) {
+    const card = elemento.closest('.card');
+    console.log("ID del producto:", card.dataset.id);
+    const id = parseInt(card.dataset.id);
+    const title = card.dataset.title;
+    const price = parseFloat(card.dataset.price);
+    const image = card.dataset.image;
+    const options = card.dataset.options;
+
+    const clavePedidoMesa = `pedido_mesa_${mesaId}`;
+    let pedido = JSON.parse(localStorage.getItem(clavePedidoMesa)) || [];
+
+    // Verificar si el producto ya está en el pedido
+    const productoExistente = pedido.find(producto => producto.id === id && producto.options === options);
+    if (productoExistente) {
+        productoExistente.quantity += 1; // Sumar una unidad
+    } else {
+        pedido.push({
+            id,
+            title,
+            price,
+            image,
+            options,
+            quantity: 1
+        });
+    }
+
+    localStorage.setItem(clavePedidoMesa, JSON.stringify(pedido));
+    cargarPedido(mesaId); // Para refrescar la tabla de productos (si la tienes)
+}
+
 
 
 
@@ -115,46 +178,54 @@ function eliminarPedido(mesaId) {
 }
 
 // Finalizar el pedido
-function finalizarPedido() {
-    const mesaId = document.getElementById('mesa-seleccionada').textContent;
-    const medioPago = document.getElementById('medio-pago').value;
-    const filas = document.querySelectorAll('#pedido-body tr');
+function finalizarPedido(mesaId) {
+    const pedidoDiv = document.querySelector('.pedido');
+    if (!pedidoDiv) {
+        alert('No se encontró el contenedor de pedido para esta mesa.');
+        return;
+    }
+    const medioPago = pedidoDiv.querySelector('.medio-pago').value;
 
-    const productos = [];
+    // Construir el array de productos seleccionados
+    const productosSeleccionados = [];
 
-    filas.forEach(fila => {
-        const id = parseInt(fila.dataset.productoId); // ID del producto desde dataset
-        const cantidad = parseInt(fila.querySelector('input').value);
+    document.querySelectorAll(`#pedido-body tr`).forEach(row => {
+        const id = parseInt(row.getAttribute('data-producto-id'));
+        const cantidad = parseInt(row.querySelector('.cantidad-input').value);
 
-        productos.push({ id, cantidad });
+        if (cantidad > 0) {
+            productosSeleccionados.push({ id, cantidad });
+        }
     });
-
-    fetch('/guardar_pedido/', {
+    console.log("Productos a enviar:", productosSeleccionados);
+      console.log("Mesa:", mesaId);
+    console.log("Medio de pago:", medioPago);
+    fetch('/guardar-pedido/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRFToken': getCookie('csrftoken') // si estás usando CSRF
+            'X-CSRFToken': getCSRFToken()
         },
         body: JSON.stringify({
-            mesa: parseInt(mesaId), // Este campo debe llamarse "mesa"
+            mesa: mesaId,
             medio_pago: medioPago,
-            productos: productos
+            productos: productosSeleccionados
         })
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.message) {
-            alert('Pedido guardado exitosamente.');
-            window.location.href = '/mesas/';
-        } else {
-            alert('Error al guardar pedido: ' + (data.error || 'desconocido'));
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(error => { throw new Error(error.error); });
         }
+        return response.json();
+    })
+    .then(data => {
+        alert(data.message);
+        window.location.href = '/mesas/';
     })
     .catch(error => {
-        console.error('Error:', error);
-        alert('Error en la solicitud');
+        alert("Error: " + error.message);
     });
-}
+}   
 
 
 // Función para obtener cookie CSRF (útil para fetch con Django)
@@ -201,4 +272,37 @@ function actualizarEstadoMesas() {
             }
         }
     });
-}});
+}
+function agregarAlPedidoConMesaActiva(elemento) {
+    if (!mesaActivaId) {
+        alert("Selecciona una mesa primero");
+        return;
+    }
+    agregarAlPedido(mesaActivaId, elemento);
+}
+
+
+
+
+
+
+
+
+
+function agregarProductoAlPedido(producto) {
+    // producto debe ser un objeto con id, nombre, precio, cantidad, etc.
+    const tbody = document.getElementById('pedido-body');
+
+    const tr = document.createElement('tr');
+    tr.setAttribute('data-producto-id', producto.id);  // <-- Aquí pones el ID
+
+    tr.innerHTML = `
+        <td>${producto.nombre}</td>
+        <td>${producto.precio}</td>
+        <td><input type="number" class="cantidad-input" value="${producto.cantidad}" min="0"></td>
+        <td>${producto.precio * producto.cantidad}</td>
+        <td><button class="eliminar-producto-btn">Eliminar</button></td>
+    `;
+
+    tbody.appendChild(tr);
+}

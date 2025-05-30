@@ -12,6 +12,8 @@ from django.urls import reverse
 from django.db import transaction
 from django.views.decorators.csrf import csrf_exempt
 from .decorators import role_required
+
+from .models import Mesa, Producto, Pedido, PedidoDetalle
 # from .models import Reserva
 # from django.core.mail import send_mail
 import json
@@ -617,51 +619,93 @@ def index(request):
 
 #NUMERO DE MESAS
 def mesas(request):
-    # Puedes definir cuántas mesas quieres aquí
-    num_mesas = 12
-    # Creamos una lista de números del 1 al num_mesas
-    mesas_list = list(range(1, num_mesas + 1)) 
-    
+    mesas = Mesa.objects.all().order_by('numero')  # Ordenar por número para mostrar ordenadas
     context = {
-        'mesas': mesas_list,
+        'mesas': mesas,
     }
     return render(request, 'pages/Admin/mesas.html', context)
 
 
-# PRODUCTOS
 
-# def productos_disponibles(request):
-#     productos = Producto.objects.filter(estado='disponible')
-#     return render(request, 'principal/index.html', {'productos': productos})
 
-#EMAIL RESERVA
 
-# @login_required
-# def generar_reserva (request):
+
+
+
+
+
+# -----------------------------------------------------------PEDIDOS------------------------------------
+
+
+
+def guardar_pedido(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            mesa_id = data.get('mesa')
+            medio_pago = data.get('medio_pago')
+            productos = data.get('productos', [])
+
+            if not mesa_id or not productos:
+                return JsonResponse({'error': 'Datos incompletos'}, status=400)
+
+            try:
+                mesa = Mesa.objects.get(id=mesa_id)
+            except Mesa.DoesNotExist:
+                return JsonResponse({'error': 'Mesa no encontrada'}, status=400)
+
+            pedido = Pedido.objects.create(mesa=mesa, medio_pago=medio_pago, total=0)
+
+            total = 0
+            for item in productos:
+                try:
+                    
+                    
+                    print(data)  # para ver en consola qué llega
+
+                    producto = Producto.objects.get(id=item['id'])
+                except Producto.DoesNotExist:
+                    return JsonResponse({'error': f"Producto con id {item['id']} no existe"}, status=400)
+
+                cantidad = item['cantidad']
+                subtotal = producto.precio * cantidad
+                PedidoDetalle.objects.create(
+                    pedido=pedido,
+                    producto=producto,
+                    cantidad=cantidad,
+                    subtotal=subtotal
+                )
+                total += subtotal
+
+            pedido.total = total
+            pedido.save()
+
+            return JsonResponse({'message': 'Pedido guardado correctamente.'}, status=200)
+
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'JSON inválido'}, status=400)
+
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+    else:
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+
+
+
+# from django.http import JsonResponse
+# from django.views.decorators.csrf import csrf_exempt
+# import json
+
+# @csrf_exempt  # temporal para evitar problemas de CSRF
+# def guardar_pedido(request):
 #     if request.method == 'POST':
-#         nombre = request.POST['nombre']
-#         email = request.POST['email']
-#         fecha = request.POST['fecha']
-#         hora = request.POST['hora']
-#         cantidad = request.POST['cantidad']
-        
-#         reserva.Reserva.objects.create(
-#             nombreperReserva=nombre,
-#             fecha=fecha, 
-#             hora=hora,
-#             cantidadPersonas=cantidad,
-#             Usuario=request.user
-#         )
-        
-#         send_mail(
-#             subject='Confirmación de la reserva',
-#             message=f'Hola {nombre}, tu reserva fue realizada para el {fecha} a las {hora}.',
-#             from_email='correo@gmail.com',  # Remplaza con tu email configurado en settings.py
-#             recipient_list=[email],
-#             fail_silently=False,
-        
-#         )
-    
-#         return JsonResponse({'Success': True})
-#     return render(request,'reserva.html')
-
+#         try:
+#             data = json.loads(request.body)
+#             print('Datos recibidos:', data)  # para debug en consola
+#             # Aquí debes procesar y guardar el pedido en la BD
+#             return JsonResponse({'message': 'Pedido guardado correctamente'})
+#         except Exception as e:
+#             return JsonResponse({'error': str(e)}, status=400)
+#     else:
+#         return JsonResponse({'error': 'Método no permitido'}, status=405)

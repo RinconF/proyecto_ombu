@@ -7,6 +7,7 @@ from django.contrib import admin
 from .forms import CustomPasswordResetForm
 from django.contrib.auth.views import PasswordResetView
 from admin_personalizado.views import perfil_view
+from .views import guardar_pedido
 
 
 
@@ -88,6 +89,10 @@ urlpatterns = [
 
     path('cliente/productos/<str:categoria>/', views.productos_cliente, name='productos_cliente'),
     path('mesero/productos/<str:categoria>/', views.productos_mesero, name='productos_mesero'),
+
+
+    #PEDIDOS
+    path('guardar-pedido/', views.guardar_pedido, name='guardar_pedido'),
 ]
 
 

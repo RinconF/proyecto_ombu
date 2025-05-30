@@ -1,5 +1,5 @@
 from django.contrib import admin, messages
-from .models import Pedidos, Inventario, Usuario, Producto, Reserva, GaleriaFoto
+from .models import Pedido, Usuario, Producto, Mesa, GaleriaFoto, Mesa
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 # from .models import Rol, Categoria, Usuario, Producto, Mesa, Pedido, Reserva
 from .forms import CustomUserCreationForm, CustomUserChangeForm
@@ -17,17 +17,17 @@ class UsuarioAdmin(BaseUserAdmin):
     ordering = ('username',)
     
     
-     
-    add_form = CustomUserCreationForm 
+    
+    add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     
     
     fieldsets = (
-         (None, {'fields': ('username',)}),
-         ('Información Personal', {'fields': ('first_name', 'last_name', 'email')}),
-         ('Roles y Permisos', {'fields': ('rol', 'is_active', 'is_staff', 'is_superuser','groups', 'user_permissions')}),  
-         ('Fechas Importantes', {'fields': ('last_login', 'date_joined')}),
-     )
+        (None, {'fields': ('username',)}),
+        ('Información Personal', {'fields': ('first_name', 'last_name', 'email')}),
+        ('Roles y Permisos', {'fields': ('rol', 'is_active', 'is_staff', 'is_superuser','groups', 'user_permissions')}),  
+        ('Fechas Importantes', {'fields': ('last_login', 'date_joined')}),
+    )
     readonly_fields = ('last_login', 'date_joined')
     def get_add_fieldsets(self, request, obj=None):
         return (
@@ -242,16 +242,11 @@ class GaleriaFotoAdmin(admin.ModelAdmin):
     
 
 # Registros
-custom_admin_site.register(Pedidos)
-# admin.site.register(Inventario)
-custom_admin_site.register(Usuario, UsuarioAdmin)  # Con la clase personalizada
-# custom_admin_site.register(Producto, ProductoAdmin)
-# admin.site.register(Reserva)
-# admin.site.register(ActividadReciente)
-# admin.site.register(Perfil)
-# custom_admin_site.register(GaleriaFoto,GaleriaFotoAdmin)
-
-
+custom_admin_site.register(Pedido)
+# admin.site.register(Usuario, UsuarioAdmin)  # Con la clase personalizada
+# admin.site.register(Producto, ProductoAdmin)
+custom_admin_site.register(Mesa)
+custom_admin_site.register(Usuario, UsuarioAdmin)
 
 
 

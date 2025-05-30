@@ -290,29 +290,43 @@ section {
 
 /* --------------------------------------------------- Reservas  ---------------------------------------------------*/
 
-#reservas{
-        background-color: rgba(0, 0, 0, 0.3);    
-
-    height: 200px; /* Ajusta la altura que desees */
-    width: 100%; /* Asegura que ocupe el ancho completo */
+#reservas {
+    background-color: rgba(0, 0, 0, 0.466);   
+    height: 200px; /* Ajusta la altura según tu diseño */
+    width: 100%;
+    
+    display: flex;               /* Flexbox para centrar */
+    flex-direction: column;     /* Elementos en columna */
+    align-items: center;        /* Centrado horizontal */
+    justify-content: center;    /* Centrado vertical */
+    text-align: center;
 }
 
-#reservas h1{
-    color: rgb(255, 255, 255);
+#reservas h2 {
+    color: white;
+    margin-bottom: 15px; /* Espacio entre título y botón */
 }
 
-.btn-reservas{
-    padding: 8px 16px; 
-    font-size: 14px; 
-    background-color: #000000; 
-    color: white; 
-    border: none; 
-    border-radius: 4px; 
-    cursor: pointer; /* El cursor se convierte en una mano al pasar por encima */
-    transition: background-color 0.3s ease, transform 0.2s ease; /* Efectos de transición */
+.btn-reservas {
+    padding: 12px 20px;
+    font-size: 16px;
+    background-color: #245b3d; /* Verde WhatsApp */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
 }
 
-
+.btn-reservas img {
+    width: 30px; /* Tamaño del icono */
+    height: 30px;
+}
 
 
 
@@ -381,8 +395,9 @@ section {
     gap: 10%;
     text-align: justify;
     margin-bottom: 150px;
+    background-color: rgba(0, 0, 0, 0.466);
+    transition: transform 0.3s ease;
 }
-
 
 .mapa iframe {
     width: 500px;
@@ -393,38 +408,50 @@ section {
 
 .empresa {
     display: flex;
-    flex-direction: column; /* Hace que los elementos se apilen verticalmente */
-    justify-content: center; /* Centra los elementos verticalmente */
-    align-items: center; /* Centra los elementos horizontalmente */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     margin-bottom: 20px;
-    text-align: center; /* Centra el texto dentro de los elementos */
-}
-.empresa h3 {
-    color: rgb(253, 253, 253);
-    font-size: 24px;
     text-align: center;
+    color: white;
 }
 
-.empresa p {
-    color: rgb(255, 255, 255);
-    font-size: 16px;
+.empresa h3 {
+    color: #00ff00; /* Verde neón */
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    margin-bottom: 20px;
+    font-family: 'Playfair Display', serif;
 }
+
+.fila-horario {
+    display: flex;
+    justify-content: space-between;
+    width: 200px; /* Puedes ajustar este valor según el diseño */
+    font-size: 16px;
+    margin: 3px 0;
+}
+
+.dia, .hora {
+    color: white;
+}
+
 
 
 /*  --------------------------------------------------- whatsapp ---------------------------------------------------*/
 
 .icon-whatsapp img {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     object-fit: contain;
     position: fixed;
     bottom: 100px;  /* Asegura que el ícono esté cerca del borde inferior */
     left: 20px;    /* Asegura que el ícono esté cerca del borde izquierdo */
     z-index: 999;  /* Asegura que el ícono esté por encima de otros elementos */
-    background-color: #40916c;
+    background-color: #245b3d;
     border-radius: 50%;  /* Hace que el ícono tenga bordes redondeados */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Agrega sombra para hacerlo más visible */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Agrega sombra para hacerlo más visible */
     cursor: pointer; /* Cambia el cursor para indicar que es interactivo */
+    transition: all 0.3s ease;
 }
 
 .icon-whatsapp {
@@ -466,8 +493,9 @@ section {
             margin: 0 auto;
             padding: 0 2rem;
             display: flex;
-            justify-content: space-between;
+            justify-content: space-around;
             align-items: center;
+            gap: 2rem; /* también puedes usar gap para más control */
         }
         
         /* Logo del footer */
@@ -491,9 +519,8 @@ section {
         
         /* Sección de contacto */
         .footer-contact {
-            flex: 1;
-            max-width: 500px;
-            padding: 0 2rem;
+            flex: 0 1 300px; /* No crecer más de 300px */
+            padding: 0 1rem;
         }
         
         .footer-contact h2 {
@@ -643,12 +670,11 @@ section {
 
 /* --------------------------------------------------- Estilos para el contenido de la información  ---------------------------------------------------*/
 #contacto {
-    flex-grow: 1; /* Esto hace que el contenido ocupe más espacio hacia el centro */
     display: flex;
-    justify-content: center;
+    justify-content: center; /* o 'space-between', según el diseño general */
     align-items: center;
-    margin-right: 100px;
-    
+    margin-right: 10px;
+    flex-grow: 0; /* Omitir si no es necesario */
 }
 
 

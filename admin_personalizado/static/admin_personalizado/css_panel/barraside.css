@@ -1,55 +1,62 @@
+/* Estilo general de la barra lateral */
 .custom-sidebar {
     background-color: #060606;
+    padding: 10px;
+    height: 100vh; /* Asegura que la barra lateral ocupe toda la altura */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
 }
 
+/* Contenedor de Actividad Reciente */
+.recent-actions-container {
+    height: 50vh; /* Ocupa la mitad de la altura */
+    overflow-y: auto; /* Scroll si el contenido excede */
+    margin-bottom: 20px;
+    background-color: #121212;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+/* Título de la sección */
+.recent-actions-container h2 {
+    color: white;
+    margin-top: 0;
+}
+
+/* Lista de acciones recientes */
+.recent-actions-list {
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+}
+
+/* Estilo de cada ítem de acción */
+.recent-actions-list li {
+    list-style-type: none;
+    width: 100%;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+/* Estilo individual de la acción */
 .action-item {
     background: #34495e;
-    margin-bottom: 10px;
     padding: 10px;
     border-radius: 4px;
     transition: all 0.3s ease;
     cursor: pointer;
-    margin-right: 10px;
 }
 
-.recent-actions-container{
-    justify-items: center;
-    
-}
-
-
-.recent-actions-container h2{
-    color: white;
-}
-
-.recent-actions-list {
-    color: rgb(255, 255, 255);
-    display: flex; /* Convertir la lista en un contenedor flex */
-    flex-direction: column; /* Alinear los items verticalmente (uno debajo del otro) */
-    align-items: center; /* Centrar los items horizontalmente dentro del contenedor flex */
-    padding: 0 10px; /* Eliminar el padding predeterminado de la lista si lo deseas */
-
-}
-
-.recent-actions-list li {
-    list-style-type: none;
-    margin-right: 10px; /* Mantiene el espaciado a la derecha de cada item */
-    width: 100%; /* Asegura que los items ocupen todo el ancho para que align-items funcione */
-    text-align: center; /* Centrar el texto dentro de cada item li */
-}
-
-
-
-.recent-actions-scroll{
-
-}
-
-/* .action-header {
-    color: white;
-} */
-
+/* Enlaces dentro de las acciones */
 .action-content a {
     color: white;
-
+    text-decoration: none;
 }
 
+.action-content a:hover {
+    text-decoration: underline;
+}

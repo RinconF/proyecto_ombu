@@ -1,4 +1,5 @@
 {% load static %}
+{% load humanize %}
 
 
 <!DOCTYPE html>
@@ -146,373 +147,30 @@
 
 
 <!-- SECCION BROWNIES -->
-
-
-          <div class="card" data-title="SODA ITALIANA" data-image="https://png.pngtree.com/png-vector/20240416/ourmid/pngtree-fruit-juice-splash-with-flying-fruits-png-image_12290367.png"
-          data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]'>
+     {% for producto in productos %}
+          <div class="card"  data-title="{{ producto.titulo }}" data-image="{{ producto.foto.url }} " data-options='{{ producto.opciones|safe }}'>
             <div class="img-container">
               <img
-                src="https://png.pngtree.com/png-vector/20240416/ourmid/pngtree-fruit-juice-splash-with-flying-fruits-png-image_12290367.png"
-                alt="Sodas italianas"
-              />
-            </div>
-            
-            <div class="main-card">
-              <span>BROWNIES</span>
-              <p class="truncated-text">
-                
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <span>$ 7.000</span>
-              <button>ver mas</button>
-            </div>
-          </div>
-
-
-<!-- SECCION CHEETOS -->
-
-
-          <div class="card"  data-title="JUGO NATURAL EN AGUA " data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
-          data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]' >
-            <div class="img-container">
-              <img
-                src="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
-                alt="Lulada saha"
+                src="{{ producto.foto.url }}"
+                alt="{{ producto.titulo }}"
               />
             </div>
 
             <div class="main-card">
-              <span>CHEETOS</span>
+              <span>{{ producto.titulo|upper }}</span>
               <p class="truncated-text">
+                {{ producto.descripcion|truncatechars:250 }}
               </p>
             </div>
 
             <div class="footer-card">
-              <span>$ 3.000</span>
+              <span> ${{ producto.precio|floatformat:0|intcomma }}</span>
               <button>ver mas</button>
             </div>
           </div>
-
-<!-- SECCION CHOCLITOS -->
-
-          <div class="card" data-title="JUGO NATURAL EN AGUA " data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
-          data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]'>
-            <div class="img-container">
-              <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>CHOCLITOS</span>
-              <p class="truncated-text">
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <span>$ 2.500</span>
-              <button>ver mas</button>
-            </div>
-          </div>
-
-
-<!-- SECCION CROQUETAS DE POLLLO           -->
-
-
-          <div class="card" data-title="JUGO NATURAL EN AGUA " data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
-          data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]'>
-            <div class="img-container">
-              <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>CROQUETAS DE POLLO</span>
-              <p class="truncated-text">
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <span>$ 4.000</span>
-              <button>ver mas</button>
-            </div>
-          </div>
-
-
-<!-- SECCION DE TODITO           -->
-
-
-          <div class="card" data-title="JUGO NATURAL EN AGUA " data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
-          data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]'>
-            <div class="img-container">
-              <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>DE TODITO</span>
-              <p class="truncated-text">
-                Disfrute una rica y cremosa bebida de lulo la reina y recomendada de nuestro cheff
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <span>$ 3.900</span>
-              <button>ver mas</button>
-            </div>
-          </div>
-
-
-<!-- SECCION DORITOS -->
-
-
-          <div class="card" data-title="JUGO NATURAL EN AGUA " data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
-          data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]'>
-            <div class="img-container">
-              <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>DORITOS</span>
-              <p class="truncated-text">
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <span>$ 3.500</span>
-              <button>ver mas</button>
-            </div>
-          </div>
-
-
-<!-- SECCION EMPANADAS -->
-
-
-          <div class="card" data-title="JUGO NATURAL EN AGUA " data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
-          data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]'>
-            <div class="img-container">
-              <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>EMPANADAS</span>
-              <p class="truncated-text">
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <span>$ 4.000</span>
-              <button>ver mas</button>
-            </div>
-          </div>
-
-
-<!-- SECCION GALLETAS CHOKIS -->
-
-
-          <div class="card" data-title="JUGO NATURAL EN AGUA " data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
-          data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]'>
-            <div class="img-container">
-              <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>GALLETAS CHOKIS</span>
-              <p class="truncated-text">
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <span>$ 2.000</span>
-              <button>ver mas</button>
-            </div>
-          </div>
-
-
-<!-- SECCION HALLS -->
-
-
-          <div class="card" data-title="JUGO NATURAL EN AGUA " data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
-          data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]'>
-            <div class="img-container">
-              <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>HALLS</span>
-              <p class="truncated-text">
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <span>$ 1.500</span>
-              <button>ver mas</button>
-            </div>
-          </div>
-
-
-<!-- SECCION MADURTIOS NATUCHIPS -->
-
-
-          <div class="card" data-title="JUGO NATURAL EN AGUA " data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
-          data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]'>
-            <div class="img-container">
-              <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>MADUTIROS NATUCHIPS</span>
-              <p class="truncated-text">
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <span>$ 2.600</span>
-              <button>ver mas</button>
-            </div>
-          </div>
-
-
-<!-- SECCION MINI-HAMBURGUESAS           -->
-
-
-          <div class="card">
-            <div class="img-container">
-              <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>MINI-HAMBURGUESAS</span>
-              <p class="truncated-text">
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <span>$ 3.700</span>
-              <button>ver mas</button>
-            </div>
-          </div>
-
-
-<!-- SECCION PAPAS MARGARITAS -->
-
-
-          <div class="card">
-            <div class="img-container">
-              <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>PAPAS MARGARITAS</span>
-              <p class="truncated-text">
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <span>$ 3.000</span>
-              <button>ver mas</button>
-            </div>
-          </div>
-
-
-<!-- SECCION PASTEL DE POLLO           -->
-
-
-          <div class="card">
-            <div class="img-container">
-              <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>PASTEL DE POLLO</span>
-              <p class="truncated-text">
-              </p>
-            </div>
-            
-            <div class="footer-card">
-              <span>$ 3.500</span>
-              <button>ver mas</button>
-            </div>
-          </div>
-
-          
-<!-- SECCION TORTA DE NARANJA -->
-
-
-          <div class="card">
-              <div class="img-container">
-                <img
-                  src="https://png.pngtree.com/png-vector/20240530/ourmid/pngtree-low-calories-beverage-natural-lemonade-drinks-png-image_12548297.png"
-                  alt="Limonada natural"
-                />
-              </div>
-            
-              <div class="main-card">
-                <span>TORTA DE NARANJA Y SEMILLAS DE AMAPOLA</span>
-                <p class="truncated-text">
-                </p>
-              </div>
-            
-              <div class="footer-card">
-                <span>$ 5.000</span>
-                <button>ver mas
-  </button>
-              </div>
-            </div>
-
-
-
-<!-- SECCION TRIDENT -->
-          <div class="card">
-            <div class="img-container">
-              <img
-                src="https://png.pngtree.com/png-vector/20240528/ourmid/pngtree-minty-fresh-delight-savoring-the-flavorful-experience-of-mint-slush-png-image_12511571.png"
-                alt="Limonada hierbabuena"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>TRINDENT</span>
-              <p class="truncated-text">
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <span>$ 1.500</span>
-              <button>ver mas</button>
-            </div>
-          </div>
+{% empty %}
+  <p>No hay productos disponibles en esta categoría.</p>
+{% endfor %}
  
 <div id="cart-container" class="cart-container">
   <div class="cart-header">
@@ -550,15 +208,15 @@
 
         
         </div>
-
+          {% for producto in productos %}
         <div id="modal" class="modal">
           <div class="modal-content">
               <span class="close">&times;</span>
               <img id="modal-image" src="" alt="Producto">
               <div class="modal-info">
                   <h2 id="modal-title"></h2>
-                  <p>Más detalles sobre el producto seleccionado.</p>
-                  <h4 class="opcion">Opción</h4>
+                  <p>{{ producto.descripcion }}</p>
+                  <h4 class="opcion">opciones</h4>
                   <select id="modal-select"></select>
                   <button id="modal-add-to-cart">Agregar al carrito</button>
 
@@ -567,6 +225,7 @@
 
           
       </div>
+  {% endfor %}
       </section>
 
 

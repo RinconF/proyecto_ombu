@@ -1,4 +1,5 @@
 {% load static %}
+{% load humanize %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -137,521 +138,30 @@
     
     <div class="cards-container" >
 
-<!-- AGUILA -->
-          <div class="card" data-title="SODA ITALIANA" data-image="https://png.pngtree.com/png-vector/20240416/ourmid/pngtree-fruit-juice-splash-with-flying-fruits-png-image_12290367.png"
-          data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]'>
+     {% for producto in productos %}
+          <div class="card"  data-title="{{ producto.titulo }}" data-image="{{ producto.foto.url }} " data-options='{{ producto.opciones|safe }}'>
             <div class="img-container">
               <img
-                src="https://png.pngtree.com/png-vector/20240416/ourmid/pngtree-fruit-juice-splash-with-flying-fruits-png-image_12290367.png"
-                alt="Sodas italianas"
-              />
-            </div>
-            
-            <div class="main-card">
-              <span>AGUILA</span>
-              <p class="truncated-text">
-                Cerveza nacional Aguila.
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <span>$ 3.900</span>
-              <button>ver mas</button>
-            </div>
-          </div>
-
-<!-- SECCION BBC           -->
-          <div class="card"  data-title="JUGO NATURAL EN AGUA " data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
-          data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]' >
-            <div class="img-container">
-              <img
-                src="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
-                alt="Lulada saha"
+                src="{{ producto.foto.url }}"
+                alt="{{ producto.titulo }}"
               />
             </div>
 
             <div class="main-card">
-              <span>BBC</span>
+              <span>{{ producto.titulo|upper }}</span>
               <p class="truncated-text">
-                Cerverza nacional BBC con ingredientes naturales.
+                {{ producto.descripcion|truncatechars:250 }}
               </p>
             </div>
 
             <div class="footer-card">
-              <span>$ 6.500</span>
+              <span> ${{ producto.precio|floatformat:0|intcomma }}</span>
               <button>ver mas</button>
             </div>
           </div>
-
-<!-- SECCION BUDWEISER -->
-          <div class="card" data-title="JUGO NATURAL EN AGUA " data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
-          data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]'>
-            <div class="img-container">
-              <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>BUDWEISER</span>
-              <p class="truncated-text">
-                Cerveza Budweiker, ideal como complemento para los aperitivos 
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <span>$ 4.500</span>
-              <button>ver mas</button>
-            </div>
-          </div>
-
-<!-- SECCION CLUB COLOMBIA -->
-          <div class="card" data-title="JUGO NATURAL EN AGUA " data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
-          data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]'>
-            <div class="img-container">
-              <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>CLUB COLOMBIA</span>
-              <p class="truncated-text">
-                Cerveza Club Colombia, reconocida con varias medallas de oro.
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <span>$ 4.500</span>
-              <button>ver mas</button>
-            </div>
-          </div>
-
-<!-- SECCION COSTEÑA BACANA -->
-          <div class="card" data-title="JUGO NATURAL EN AGUA " data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
-          data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]'>
-            <div class="img-container">
-              <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>COSTEÑA BACANA</span>
-              <p class="truncated-text">
-                Cerveza Costeña Bacana.
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <span>$ 3.900</span>
-              <button>ver mas</button>
-            </div>
-          </div>
-
-<!-- SECCION CERVEZA COSTEÑA TRADICIONAL -->
-          <div class="card" data-title="JUGO NATURAL EN AGUA " data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
-          data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]'>
-            <div class="img-container">
-              <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>COSTEÑA TRADICIONAL</span>
-              <p class="truncated-text">
-                Costeña Tradicional.
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <span>$ 3.500</span>
-              <button>ver mas</button>
-            </div>
-          </div>
-
-<!-- FOUR LOKO -->
-          <div class="card" data-title="JUGO NATURAL EN AGUA " data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
-          data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]'>
-            <div class="img-container">
-              <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>FOUR LOKO</span>
-              <p class="truncated-text">
-                Bebida en lata de diferentes sabores.
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <span>$ 19.000</span>
-              <button>ver mas</button>
-            </div>
-          </div>
-
-<!-- HEINIKEN -->
-          <div class="card" data-title="JUGO NATURAL EN AGUA " data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
-          data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]'>
-            <div class="img-container">
-              <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>HEINIKEN</span>
-              <p class="truncated-text">
-                Cerveza Heiniken con toques sutiles a frutas.
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <span>$ 3.700</span>
-              <button>ver mas</button>
-            </div>
-          </div>
-
-<!-- SECCION JARA DE CERVEZA -->
-          <div class="card" data-title="JUGO NATURAL EN AGUA " data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
-          data-options='["Aguila Poker Light", "Costeña"]'>
-            <div class="img-container">
-              <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>JARRA DE CERVEZA</span>
-              <p class="truncated-text">
-                Disfrute de una jarra de cerveza a su gusto.
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <span>$  11.000</span>
-              <button>ver mas</button>
-            </div>
-          </div>
-
-<!-- SECCION CERVEZA POKER -->
-          <div class="card" data-title="JUGO NATURAL EN AGUA " data-image="https://png.pngtree.com/png-clipart/20220125/original/pngtree-fruit-juice-combination-png-image_7207990.png"
-          data-options='["Soda Lychee", "Soda Durazno", "Soda Sandía","CUALQIER"]'>
-            <div class="img-container">
-              <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>POKER</span>
-              <p class="truncated-text">
-                Cerveza nacional Poker.
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <span>$ 3.900</span>
-              <button>ver mas</button>
-            </div>
-          </div>
-
-<!-- SECCION REDDS -->
-          <div class="card">
-            <div class="img-container">
-              <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>REDDS</span>
-              <p class="truncated-text">
-                Disfrute de la versatilidad que ofree la cerveza Redds
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <span>$ 4.000</span>
-              <button>ver mas</button>
-            </div>
-          </div>
-
-<!-- SECCION SMIRNOFF -->
-          <div class="card">
-            <div class="img-container">
-              <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>SMIRNOFF</span>
-              <p class="truncated-text">
-                Disfrute de mejor estilo ruso con SMIRNOFF
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <span>$ 12.000</span>
-              <button>ver mas</button>
-            </div>
-          </div>
-
-<!-- SECCION SOL -->
-          <div class="card">
-            <div class="img-container">
-              <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>SOL</span>
-              <p class="truncated-text">
-                Bebida Mexicana con sabor suave.
-              </p>
-            </div>
-            
-            <div class="footer-card">
-              <span>$ 4.400</span>
-              <button>ver mas</button>
-            </div>
-          </div>
-          
-<!-- SECCION SOLECITO -->
-          <div class="card">
-              <div class="img-container">
-                <img
-                  src="https://png.pngtree.com/png-vector/20240530/ourmid/pngtree-low-calories-beverage-natural-lemonade-drinks-png-image_12548297.png"
-                  alt="Limonada natural"
-                />
-              </div>
-            
-              <div class="main-card">
-                <span>SOLECITO</span>
-                <p class="truncated-text">
-                </p>
-              </div>
-            
-              <div class="footer-card">
-                <span>$ 3.000</span>
-                <button>ver mas</button>
-              </div>
-            </div>
-
-<!-- SECCION STELLA ARTOIS-->
-          <div class="card">
-            <div class="img-container">
-              <img
-                src="https://png.pngtree.com/png-vector/20240528/ourmid/pngtree-minty-fresh-delight-savoring-the-flavorful-experience-of-mint-slush-png-image_12511571.png"
-                alt="Limonada hierbabuena"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>STELLA ARTOIS</span>
-              <p class="truncated-text">
-                Bebida Belgica con su sabor equilibrado entre lo dulce y lo amargo.
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <span>$ 8.500</span>
-              <button>ver mas</button>
-            </div>
-          </div>
-
-<!-- SECCION 3 CORDILLERAS -->
-          <div class="card">
-            <div class="img-container">
-              <img
-                src="https://png.pngtree.com/png-vector/20230325/ourmid/pngtree-summer-iced-coconut-water-png-image_6667753.png"
-                alt="Limonada de coco"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>3 CORDILLERAS</span>
-              <p class="truncated-text">
-                Cerveza nacional con fuertes sensaciones.
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <span>$ 8.000</span>
-              <button>ver mas</button>
-            </div>
-          </div>
-
-<!-- SECCION AGUARDIENTES  -->
-          <div class="card">
-            <div class="img-container">
-              <img
-                src="https://png.pngtree.com/png-vector/20240426/ourmid/pngtree-glass-of-fresh-cherry-juice-isolated-on-transparent-background-png-image_12315190.png"
-                alt="Limonada cerezada"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>AGUARDIENTE LIDER</span>
-              <p class="truncated-text">
-                Aguardiente LIDER para el disfrute a su gusto.
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <span>$ 110.000</span>
-              <button>ver mas</button>
-            </div>
-          </div>
-
-<!-- SECCION RONES -->
-          <div class="card">
-            <div class="img-container">
-              <img
-              src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-              alt="Lulada saha"
-              />
-            </div>
-            
-            <div class="main-card">
-              <span>RONES</span>
-              <p class="truncated-text">
-                Disfute de la gran variedad de RONES para su disfrute.
-              </p>
-            </div>
-            
-            <div class="footer-card">
-              <span>$ 90.000</span>
-              <button>ver mas</button>
-            </div>
-          </div>
-          
-<!-- SECCION SHOTS -->
-          <div class="card">
-            <div class="img-container">
-              <img
-              src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-              alt="Lulada saha"
-              />
-            </div>
-            
-            <div class="main-card">
-              <span>SHOTS</span>
-              <p class="truncated-text">
-                Disfrute de un SHOT de licor para pasar el rato.
-              </p>
-            </div>
-            
-            <div class="footer-card">
-              <span>$ 18.000</span>
-              <button>ver mas</button>
-            </div>
-            
-          </div>
-          
-<!-- SECCION DE TEQUILA -->
-          <div class="card">
-            <div class="img-container">
-              <img
-              src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>TEQUILA</span>
-              <p class="truncated-text">
-                Ofrecemos TEQUILA a su gusto.
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <span>$ 350.000</span>
-              <button>ver mas</button>
-            </div>
-          </div>
-
-<!-- SECCION VINOS -->
-          <div class="card">
-            <div class="img-container">
-              <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>VINOS</span>
-              <p class="truncated-text">
-                Disfrute de copas o VINOS completos de su preferencia.
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <span>$ 120.000</span>
-              <button>ver mas</button>
-            </div>
-          </div>
-
-<!-- SECCION DE VODKAS Y GINEBRAS -->
-          <div class="card">
-            <div class="img-container">
-              <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>VODKAS Y GINEBRAS</span>
-              <p class="truncated-text">
-                Ofrecemos VODKAS y Ginebras que se adapten a su gusto.
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <span>$ 120.000</span>
-              <button>ver mas</button>
-            </div>
-          </div>
-
-<!-- SECCION DE WHISKYS -->
-          <div class="card">
-            <div class="img-container">
-              <img
-                src="https://res.cloudinary.com/dw2nknocv/image/upload/v1720116511/inventario_gastrobar/hv3vvntjkj5dhmho8p8o.png"
-                alt="Lulada saha"
-              />
-            </div>
-
-            <div class="main-card">
-              <span>WHISKYS</span>
-              <p class="truncated-text">
-                Gran variedad de WHISKYS para que disfrute como mas le guste. 
-              </p>
-            </div>
-
-            <div class="footer-card">
-              <span>$ 420.000</span>
-              <button>ver mas</button>
-            </div>
-          </div>
+{% empty %}
+  <p>No hay productos disponibles en esta categoría.</p>
+{% endfor %}
 
 <div id="cart-container" class="cart-container">
   <div class="cart-header">
@@ -684,20 +194,24 @@
         </div>
       </div>
 
+          {% for producto in productos %}
         <div id="modal" class="modal">
           <div class="modal-content">
               <span class="close">&times;</span>
               <img id="modal-image" src="" alt="Producto">
               <div class="modal-info">
                   <h2 id="modal-title"></h2>
-                  <p>Más detalles sobre el producto seleccionado.</p>
-                  <h4 class="opcion">Opción</h4>
+                  <p>{{ producto.descripcion }}</p>
+                  <h4 class="opcion">opciones</h4>
                   <select id="modal-select"></select>
                   <button id="modal-add-to-cart">Agregar al carrito</button>
 
               </div>
           </div>
+
+          
       </div>
+  {% endfor %}
       </section>
 
       <script src="{% static '/js/script_menu.js' %}"></script>

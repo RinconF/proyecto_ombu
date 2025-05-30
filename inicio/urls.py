@@ -37,7 +37,7 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
 
     # URL del Dashboard
-    path('dashboard/', views.dashboard, name='dashboard'),
+    # path('dashboard/', views.dashboard, name='dashboard'),
 
 
     # API de usuarios
@@ -84,8 +84,10 @@ urlpatterns = [
     
     
     # PRODUCTOS
-    path('productos/<str:categoria>/', views.productos_por_categoria, name='productos_por_categoria'),
+    # path('productos/<str:categoria>/', views.productos_por_categoria, name='productos_por_categoria'),
 
+    path('cliente/productos/<str:categoria>/', views.productos_cliente, name='productos_cliente'),
+    path('mesero/productos/<str:categoria>/', views.productos_mesero, name='productos_mesero'),
 ]
 
 

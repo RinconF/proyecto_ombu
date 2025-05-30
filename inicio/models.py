@@ -114,7 +114,13 @@ class Producto(models.Model):
     categoria = models.CharField(max_length=30, choices=CATEGORIAS)
     opciones = models.TextField(blank=True,help_text="Escribe las opciones separadas por comas. Ej: Capuchino vainilla, Capuchino caramelo") # lista de strings    
     
-
+    
+    categoria = models.CharField(
+        max_length=50, # Ajusta la longitud máxima según tus categorías
+        choices=CATEGORIAS,
+        default='bebida_fria' # Establece un valor por defecto si lo deseas
+    )
+    
     def __str__(self):
         return self.titulo
 
@@ -165,3 +171,51 @@ class ActividadReciente(models.Model):
 
     def __str__(self):
         return f"{self.accion} por {self.usuario.username if self.usuario else 'Desconocido'} el {self.fecha_hora.strftime('%Y-%m-%d %H:%M')}"
+    
+    
+class GaleriaFoto(models.Model):
+    ESTADO_USO_CHOICES = [
+        ('en_uso', 'En Uso'),       
+        ('no_en_uso', 'No En Uso'), 
+    ]
+
+    titulo = models.CharField(max_length=100, blank=True, null=True)
+    imagen = models.ImageField(upload_to='galeria/') 
+    descripcion = models.TextField(blank=True, null=True)
+    
+    # Campo 'uso' con las choices definidas
+    uso = models.CharField(
+        max_length=20, 
+        choices=ESTADO_USO_CHOICES, 
+        default='no_en_uso' 
+    )
+    
+    fecha_subida = models.DateTimeField(auto_now_add=True)
+
+    # # Opcional: Para indicar si la foto debe mostrarse en la página principal
+    # # Considera si este campo 'es_principal' es redundante con 'uso'
+    # # Si 'uso' es para el index, quizás 'es_principal' ya no sea necesario.
+    # es_principal = models.BooleanField(default=False) 
+
+    def __str__(self):
+        return self.titulo if self.titulo else f"Foto {self.id}"
+
+    class Meta:
+        verbose_name = "Foto de Galería"
+        verbose_name_plural = "Fotos de Galería"
+        # Esto asegura que las fotos más recientes aparezcan primero por defecto
+        ordering = ['-fecha_subida']
+
+
+    # # Opcional: Para mostrar una previsualización en el admin
+    # from django.utils.html import mark_safe
+    # def admin_thumbnail(self):
+    #     if self.imagen:
+    #         return mark_safe(f'<img src="{self.imagen.url}" width="100" height="auto" />')
+    #     return "No Image"
+    # admin_thumbnail.short_description = 'Miniatura'
+    
+    
+    
+    
+    

@@ -78,7 +78,7 @@
     {% block nav-global %}{% endblock %}
 
 
-    {% block content %}
+    {% comment %} {% block content %}
     {{ block.super }}
     <div class="module">
         <h2>{% translate 'Personalización del Fondo' %}</h2>
@@ -87,9 +87,9 @@
             <input type="text" id="admin-bg-image" name="admin-bg-image" placeholder="{% translate 'Ingrese la URL de la imagen' %}">
         </div>
     </div>
-    {% endblock %}
+    {% endblock %} {% endcomment %}
 
-    {# ¡AQUÍ ES DONDE DEBE IR EL MODAL! #}
+
     {% block footer %}
         <div id="delete-confirmation-modal" class="modal">
             <div class="modal-content">
@@ -102,7 +102,6 @@
                 </div>
             </div>
         </div>
-        {# Esto es CRUCIAL para que el footer original de Django Admin también se renderice #}
         {{ block.super }} 
     {% endblock %}
 

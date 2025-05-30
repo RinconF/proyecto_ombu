@@ -1,12 +1,14 @@
-from django.contrib import admin
-from .models import Pedidos, Inventario, Usuario, Producto, Reserva
+from django.contrib import admin, messages
+from .models import Pedidos, Inventario, Usuario, Producto, Reserva, GaleriaFoto
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 # from .models import Rol, Categoria, Usuario, Producto, Mesa, Pedido, Reserva
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 from django.contrib.admin.utils import flatten_fieldsets
 from django.utils.html import format_html
 from django.urls import reverse
-
+from django.utils.html import mark_safe
+from django.db.models import Q
+from admin_personalizado.admin import custom_admin_site
 
 class UsuarioAdmin(BaseUserAdmin):
     list_display = ('username', 'email', 'first_name', 'last_name', 'rol', 'is_active', 'date_joined', 'acciones')
@@ -103,10 +105,10 @@ class UsuarioAdmin(BaseUserAdmin):
     
 
 # --- CLASE ProductoAdmin (Esta es la importante para las columnas) ---
-@admin.register(Producto) 
+@admin.register(Producto, site=custom_admin_site) 
 class ProductoAdmin(admin.ModelAdmin):
     # ¡AQUÍ DEFINES LAS COLUMNAS PARA LA TABLA DE PRODUCTOS!
-    list_display = ('titulo', 'precio', 'get_estado_display', 'acciones')
+    list_display = ('titulo', 'precio', 'get_estado_display','get_categoria_display','acciones',)
     list_filter = ('estado', 'categoria',)
     search_fields = ('titulo', 'descripcion','categoria')
     ordering = ('titulo',) 
@@ -136,8 +138,20 @@ class ProductoAdmin(admin.ModelAdmin):
             delete_url,
             obj 
         )
+           
+
     acciones.short_description = 'Acciones'
     acciones.allow_tags = True 
+    
+    
+    # --- MÉTODO CORREGIDO PARA MOSTRAR LA CATEGORÍA ---
+    def get_categoria_display(self, obj):
+        # Aquí estaba el error tipográfico: 'caregoria' debe ser 'categoria'
+        # obj.get_CAMPO_display() es la forma estándar de obtener el valor legible de un campo con choices.
+        return obj.get_categoria_display()
+    
+    get_categoria_display.short_description = 'Categoría'
+        
     
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
@@ -149,15 +163,93 @@ class ProductoAdmin(admin.ModelAdmin):
             'all': ('admin_personalizado/css_panel/acc_user.css',) 
         }
     
-     
+@admin.register(GaleriaFoto, site= custom_admin_site)
+class GaleriaFotoAdmin(admin.ModelAdmin):
+
+    list_display = ('titulo', 'get_uso_display', 'fecha_subida', 'admin_thumbnail_preview', 'acciones',)
+    list_filter = ('uso', 'fecha_subida') 
+    search_fields = ('titulo', 'descripcion')
+    readonly_fields = ('fecha_subida', 'admin_thumbnail_preview')
+
+    # Los campos que aparecerán en el formulario de edición/creación
+    fieldsets = (
+        (None, {
+            'fields': ('titulo', 'imagen', 'descripcion', 'uso'), # Asegúrate de que 'uso' esté aquí
+        }),
+    )
+
+    # --- Método para la columna 'Miniatura' ---
+    def admin_thumbnail_preview(self, obj):
+        if obj.imagen:
+            return mark_safe(f'<img src="{obj.imagen.url}" width="100" height="auto" style="border-radius: 5px;" />')
+        return "No Image"
+    admin_thumbnail_preview.short_description = 'Miniatura'
+
+    # --- Método para la columna 'Acciones' (Editar/Eliminar) ---
+    def acciones(self, obj):
+        app_label = obj._meta.app_label
+        model_name = obj._meta.model_name
+
+        edit_url = reverse(f'admin:{app_label}_{model_name}_change', args=[obj.pk])
+        delete_url = reverse(f'admin:{app_label}_{model_name}_delete', args=[obj.pk])
+
+        return format_html(
+            '<a class="button action-edit" href="{}"><i class="fa fa-pencil"></i> Editar</a>&nbsp;'
+            '<a class="button deletelink custom-delete-button" href="{}" data-object-name="{}"><i class="fa fa-trash"></i> Eliminar</a>',
+            edit_url,
+            delete_url,
+            obj # Pasamos el objeto completo para el atributo data-object-name si lo usas en JS
+        )
+    acciones.short_description = 'Acciones'
+    # 'allow_tags = True' es redundante con 'format_html' pero no hace daño
+    # acciones.allow_tags = True 
+
+    # --- NUEVO MÉTODO para la columna 'Estado' ---
+    def get_uso_display(self, obj):
+        # Utiliza get_FOO_display() para obtener la representación legible de un campo con choices
+        display_value = obj.get_uso_display() 
+        
+        # Puedes añadir estilos condicionales si quieres
+        if obj.uso == 'en_uso':
+            return format_html('<span style="color: green; font-weight: bold;">{}</span>', display_value)
+        elif obj.uso == 'no_en_uso':
+            return format_html('<span style="color: red; font-weight: bold;">{}</span>', display_value)
+        return display_value
+    get_uso_display.short_description = 'Estado de Uso' # Nombre de la columna
+
+    # --- Lógica de validación para el límite de 2 imágenes 'en_uso' ---
+    def save_model(self, request, obj, form, change):
+        if obj.uso == 'en_uso':
+            # Contar cuántas imágenes ya están 'en_uso', excluyendo la imagen actual si ya existe
+            en_uso_count = GaleriaFoto.objects.filter(uso='en_uso').exclude(pk=obj.pk).count()
+
+            if en_uso_count >= 2:
+                messages.error(request, '¡Error! Solo se pueden tener 2 imágenes "En Uso" a la vez. Desactiva otra imagen primero.')
+                # No llamar a super().save_model() evita que el objeto se guarde
+                return 
+        
+        # Si la validación pasa o el 'uso' no es 'en_uso', guardamos el objeto
+        super().save_model(request, obj, form, change)
+
+    # --- Configuración de recursos estáticos (CSS/JS) ---
+    class Media:
+        css = {
+            'all': (
+                'admin_personalizado/css_panel/acc_user.css', # Tu CSS personalizado para los botones
+                'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css', # Font Awesome para los íconos
+            )
+        }
+    
+
 # Registros
-admin.site.register(Pedidos)
-admin.site.register(Inventario)
-admin.site.register(Usuario, UsuarioAdmin)  # Con la clase personalizada
-admin.site.register(Producto, ProductoAdmin)
-admin.site.register(Reserva)
+custom_admin_site.register(Pedidos)
+# admin.site.register(Inventario)
+custom_admin_site.register(Usuario, UsuarioAdmin)  # Con la clase personalizada
+# custom_admin_site.register(Producto, ProductoAdmin)
+# admin.site.register(Reserva)
 # admin.site.register(ActividadReciente)
 # admin.site.register(Perfil)
+# custom_admin_site.register(GaleriaFoto,GaleriaFotoAdmin)
 
 
 

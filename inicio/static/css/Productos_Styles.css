@@ -674,7 +674,7 @@ main {
       position: relative !important;
       display: flex !important;
       justify-content: center !important;
-      padding-top: 5px !important;
+      padding-top: 10px !important;
       
   }
 }

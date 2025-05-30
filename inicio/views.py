@@ -12,7 +12,6 @@ from django.urls import reverse
 from django.db import transaction
 from django.views.decorators.csrf import csrf_exempt
 from .decorators import role_required
-
 # from .models import Reserva
 # from django.core.mail import send_mail
 import json
@@ -21,6 +20,8 @@ from .forms import CustomUserCreationForm, CustomUserChangeForm, PasswordChangeF
 from django.contrib.auth.models import User
 from .models import Producto
 from django.contrib.admin.views.decorators import staff_member_required
+
+from .models import ActividadReciente
 
 from .decorators import group_required
 # from .models import Categoria, Producto, Pedido, Mesa
@@ -34,6 +35,13 @@ from django.db.models.functions import TruncMonth
 from django.utils.dateformat import DateFormat
 from .decorators import group_required
 from django.db.utils import ProgrammingError
+from admin_personalizado import templates
+from django.contrib.admin.models import LogEntry
+from django.utils.translation import gettext as _
+
+
+
+
 
 # PRINCIPAL
 def index(request):
@@ -81,11 +89,11 @@ def login_view(request):
             if user.is_active:
                 login(request, user)
                 # Redireccionar según el rol del usuario
-                print(f"Inicio de sesión exitoso para: {user.username}, rol: {user.rol}")  # Para depurar
-                if user.is_superuser:
+                # print(f"Inicio de sesión exitoso para: {user.username}, rol: {user.rol}")  # Para depurar
+                if user.is_superuser or (user.rol.lower() == 'administrador' and user.is_staff):
                     return redirect('admin:index')  
                 elif user.rol.lower() == 'ombu':
-                    return redirect('dashboard')  # Corregido a 'dashboard' (ver urls.py)
+                    return redirect('admin:index')  # Corregido a 'dashboard' (ver urls.py)
                 elif user.rol.lower() == 'mesero':  # Nueva condición para mesero
                     return redirect('mesero_principal')  # Redirige a la vista de mesero
                 else:
@@ -97,11 +105,11 @@ def login_view(request):
 
     # Si el usuario ya está autenticado, redirigir según su rol
     if request.user.is_authenticated:
-        print(f"Usuario ya autenticado: {request.user.username}, rol: {request.user.rol}") 
-        if request.user.is_superuser:
+        # print(f"Usuario ya autenticado: {request.user.username}, rol: {request.user.rol}") 
+        if request.user.is_superuser or (request.user.rol.lower() == 'administrador' and request.user.is_staff):
             return redirect('admin:index')  # Redirige al panel de administración de Django
         elif request.user.rol.lower() == 'ombu':
-            return redirect('dashboard')  # Corregido a 'dashboard'
+            return redirect('admin:index')  # Corregido a 'dashboard'
         elif request.user.rol.lower() == 'mesero':  # Nueva condición para mesero
             return redirect('mesero_principal')  # Redirige a la vista de mesero
         else:
@@ -128,57 +136,132 @@ def mesero_principal(request):
     return render(request, 'pages/menu_mesero/mesero_principal.html') # Renderiza el nuevo HTM
 
 
-
 @never_cache
-@group_required('ombu')
+# @group_required('administrador')
 def dashboard(request):
-    # Ventas por mes
-    hoy = datetime.date.today()
-    ventas_mensuales = []
-    ventas_mensuales_labels = []
-    ventas_mensuales_data = []
+    # Obtener las 10 actividades administrativas más recientes
+    recent_activities = LogEntry.objects.order_by('-action_time')[:10]
+    
 
-    for i in range(1, 13):
-        total = Pedido.objects.filter(fecha__month=i).aggregate(Sum('total'))['total__sum'] or 0
-        ventas_mensuales.append({'month': calendar.month_name[i], 'total': float(total)})
-        ventas_mensuales_labels.append(calendar.month_name[i])
-        ventas_mensuales_data.append(float(total))
+    # Formatear las actividades para mostrarlas en el template
+    formatted_activities = []
+    for entry in recent_activities:
+        action_detail_message = "" 
+        
+        object_display_name = entry.object_repr if entry.object_repr else _("un objeto desconocido")
+        
+        # Determinar la acción principal y la descripción inicial
+        if entry.is_addition():
+            action_description = _(f"Añadido '{object_display_name}'")
+        elif entry.is_change():
+            action_description = _(f"Modificado '{object_display_name}'")
+            if entry.change_message:
+                try:
+                    message_data = json.loads(entry.change_message)
+                    
+                    if isinstance(message_data, list):
+                        for msg in message_data:
+                            if 'changed' in msg and 'fields' in msg['changed']:
+                                changed_fields = ', '.join(msg['changed']['fields'])
+                                action_detail_message = _(f"Se actualizaron los campos: {changed_fields}.")
+                            elif 'added' in msg and 'name' in msg['added'] and 'object' in msg['added']:
+                                added_name = msg['added']['name'] # Nombre del campo relacionado (ej. 'permissions')
+                                added_object = msg['added']['object'] # Representación del objeto añadido (ej. 'can_view_report')
+                                action_detail_message = _(f"Se añadió '{added_object}' a '{added_name}'.")
+                            elif 'deleted' in msg and 'name' in msg['deleted'] and 'object' in msg['deleted']:
+                                # Si se eliminó un objeto relacionado
+                                deleted_name = msg['deleted']['name']
+                                deleted_object = msg['deleted']['object']
+                                action_detail_message = _(f"Se eliminó '{deleted_object}' de '{deleted_name}'.")
+                    else:
+                        if entry.change_message.strip():
+                            action_detail_message = _(f"Detalles del cambio: {entry.change_message.strip()}.")
 
-    # Top mesas más usadas
-    mesas_usadas = (
-        Pedido.objects.values('mesa__numero')
-        .annotate(total=Count('id'))
-        .order_by('-total')[:5]
-    )
+                except json.JSONDecodeError:
+                    if entry.change_message.strip():
+                        action_detail_message = _(f"Detalles del cambio: {entry.change_message.strip()}.")
+                    else:
+                        action_detail_message = _("No se especificaron detalles del cambio.")
+        elif entry.is_deletion():
+            action_description = _(f"Eliminado '{object_display_name}'")
+        else:
+            action_description = _(f"Acción desconocida sobre '{object_display_name}'")
+            
 
-    # Top productos más vendidos
-    productos_vendidos = (
-        Producto.objects.annotate(total=Count('pedido'))
-        .order_by('-total')[:5]
-    )
 
-    # Cálculos simples para los 4 recuadros:
-    ventas_totales = Pedido.objects.aggregate(Sum('total'))['total__sum'] or 0
-    hoy = datetime.date.today()
-    ventas_dia = Pedido.objects.filter(fecha__date=hoy).aggregate(Sum('total'))['total__sum'] or 0
-    ventas_mes = Pedido.objects.filter(fecha__month=hoy.month).aggregate(Sum('total'))['total__sum'] or 0
-    ventas_anio = Pedido.objects.filter(fecha__year=hoy.year).aggregate(Sum('total'))['total__sum'] or 0
+        final_action_text = action_description
+        if action_detail_message:
+            final_action_text += f": {action_detail_message}"
+        
+        # Añadir quién realizó la acción
+        final_action_text += f" por {entry.user.username}"
 
-    return render(request, 'dashboard.html', {
-        'ventas_mensuales_labels': ventas_mensuales_labels,
-        'ventas_mensuales_data': ventas_mensuales_data,
-        'mesas_usadas': mesas_usadas,
-        'productos_vendidos': productos_vendidos,
-        'ventas_totales': ventas_totales,
-        'ventas_dia': ventas_dia,
-        'ventas_mes': ventas_mes,
-        'productos_top': productos_top,
-        'mesas_top': mesas_top,
-        'ventas_labels': ventas_labels,
-        'ventas_data': ventas_data,
-    })
+        formatted_activities.append({
+            'accion': final_action_text,
+            'fecha_hora': entry.action_time,
+        })
 
-    return render(request, 'pages/Admin/dashboard.html', context)
+    context = {
+        'actividades_recientes': formatted_activities,
+        # ... (añade aquí cualquier otra variable que tu dashboard necesite en el contexto)
+    }
+    return render(request, 'admin/dashboard.html', context)
+    
+    
+    
+    
+    # # Ventas por mes
+    # hoy = datetime.date.today()
+    # ventas_mensuales = []
+    # ventas_mensuales_labels = []
+    # ventas_mensuales_data = []
+
+    # for i in range(1, 13):
+    #     total = Pedido.objects.filter(fecha__month=i).aggregate(Sum('total'))['total__sum'] or 0
+    #     ventas_mensuales.append({'month': calendar.month_name[i], 'total': float(total)})
+    #     ventas_mensuales_labels.append(calendar.month_name[i])
+    #     ventas_mensuales_data.append(float(total))
+
+    # # Top mesas más usadas
+    # mesas_usadas = (
+    #     Pedido.objects.values('mesa__numero')
+    #     .annotate(total=Count('id'))
+    #     .order_by('-total')[:5]
+    # )
+
+    # # Top productos más vendidos
+    # productos_vendidos = (
+    #     Producto.objects.annotate(total=Count('pedido'))
+    #     .order_by('-total')[:5]
+    # )
+
+    # # Cálculos simples para los 4 recuadros:
+    # ventas_totales = Pedido.objects.aggregate(Sum('total'))['total__sum'] or 0
+    # hoy = datetime.date.today()
+    # ventas_dia = Pedido.objects.filter(fecha__date=hoy).aggregate(Sum('total'))['total__sum'] or 0
+    # ventas_mes = Pedido.objects.filter(fecha__month=hoy.month).aggregate(Sum('total'))['total__sum'] or 0
+    # ventas_anio = Pedido.objects.filter(fecha__year=hoy.year).aggregate(Sum('total'))['total__sum'] or 0
+
+    # return render(request, 'dashboard.html', {
+    #     'ventas_mensuales_labels': ventas_mensuales_labels,
+    #     'ventas_mensuales_data': ventas_mensuales_data,
+    #     'mesas_usadas': mesas_usadas,
+    #     'productos_vendidos': productos_vendidos,
+    #     'ventas_totales': ventas_totales,
+    #     'ventas_dia': ventas_dia,
+    #     'ventas_mes': ventas_mes,
+    #     'productos_top': productos_top,
+    #     'mesas_top': mesas_top,
+    #     'ventas_labels': ventas_labels,
+    #     'ventas_data': ventas_data,
+    # })
+
+    # return render(request, 'pages/Admin/dashboard.html', context)
+
+
+
+
+
 
 def admin_login_page(request):
     return render(request, 'pages/Admin/login.html')

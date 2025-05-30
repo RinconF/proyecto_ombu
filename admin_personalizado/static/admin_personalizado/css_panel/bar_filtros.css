@@ -1,0 +1,411 @@
+/* Contenedor de buscador y botón de filtro */
+.search-and-filter-trigger-container {
+    display: flex;
+    /* justify-content: space-between; */ /* Eliminar o comentar esta línea */
+    justify-content: flex-end; /* Alinea los elementos al final (derecha) del contenedor */
+    align-items: center; /* Centra verticalmente los elementos */
+    margin-bottom: 20px;
+    padding: 10px 0;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #eee;
+    padding-right: 10px;
+    flex-wrap: wrap;
+    padding-top: 10px;
+    gap: 20px; /* Añade un espacio entre el grupo de búsqueda/filtro y el botón de añadir */
+}
+
+/* Grupo para el buscador y el botón de filtro (izquierda) */
+.search-filter-group {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    /* flex-grow: 1; */ /* Eliminar esta línea para que no ocupe todo el espacio disponible */
+    flex-shrink: 0; /* Asegura que no se encoja más de lo necesario */
+}
+
+
+#changelist-search {
+    /* Ajustes para el buscador, ahora dentro de .search-filter-group */
+    flex-shrink: 1;
+    min-width: 150px;
+    max-width: 400px;
+}
+
+#changelist-search #toolbar {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+#changelist-search input[type="text"] {
+    flex-grow: 1; /* El input de texto puede expandirse */
+}
+
+
+
+/* Estilos del botón de filtro */
+.custom-filter-button {
+    background-color: #007bff !important;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s ease;
+    white-space: nowrap;
+}
+
+.custom-filter-button:hover {
+    background-color: #0056b3;
+}
+
+
+/*----------------------------------- Estilos para el botón "Añadir usuario" (derecha) -----------------------------------*/
+.search-and-filter-trigger-container .object-tools {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    margin-top: 0 !important;
+    margin-bottom: 17px;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+.search-and-filter-trigger-container .object-tools li {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+}
+
+.search-and-filter-trigger-container .object-tools .addlink {
+    display: inline-block;
+    padding: 10px 25px 10px 10px;
+    background-color: #28a745;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    white-space: nowrap;
+    border: none;
+    cursor: pointer;
+    line-height: normal;
+    /* Ajusta la altura si es necesario para que coincida con la del buscador/filtro */
+    height: auto; /* Permite que la altura se ajuste al contenido */
+    display: flex; /* Para centrar el contenido del botón si tiene íconos o texto */
+    align-items: center;
+    justify-content: center;
+}
+
+.search-and-filter-trigger-container .object-tools .addlink:hover {
+    background-color: #218838;
+}
+
+
+
+/* ------------------------------------------------------- MODAL -----------------------------------------------------*/
+.modal {
+    display: none; /* Se controla con JS para mostrar/ocultar */
+    position: fixed;
+    z-index: 1050; /* Alto para estar encima de casi todo */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.6); /* Fondo más oscuro para mayor contraste */
+    display: flex; /* Usar flexbox para centrar contenido */
+    justify-content: center;
+    align-items: center;
+    opacity: 0; /* Para la transición de entrada */
+    visibility: hidden; /* Para la transición de entrada */
+    transition: opacity 0.3s ease, visibility 0.3s ease; /* Transición suave */
+}
+
+/* Estado activo para mostrar el modal */
+.modal.is-active { /* Asume que JavaScript añade esta clase para mostrar el modal */
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background-color: #ffffff; /* Blanco puro para un look limpio */
+    margin: auto;
+    padding: 30px; /* Más padding para espacio */
+    border: none; /* Elimina el borde */
+    border-radius: 12px; /* Bordes más redondeados */
+    width: 90%;
+    max-width: 650px; /* Un poco más de ancho máximo */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25); /* Sombra más pronunciada y suave */
+    position: relative;
+    transform: translateY(-20px); /* Efecto de "slide-in" desde arriba */
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out; /* Transición para el contenido */
+}
+
+/* Efecto de entrada del modal-content */
+.modal.is-active .modal-content {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    margin-bottom: 25px; /* Más espacio bajo el título */
+    color: #333333; /* Tono de gris oscuro */
+    border-bottom: 1px solid #e0e0e0; /* Borde más sutil */
+    padding-bottom: 15px; /* Más padding bajo el borde */
+    font-size: 24px; /* Título más grande */
+    font-weight: 700; /* Más negrita */
+}
+
+.close-button {
+    color: #999999; /* Color más suave */
+    font-size: 32px; /* Un poco más grande */
+    font-weight: normal; /* No tan negrita */
+    position: absolute;
+    top: 15px; /* Ajusta la posición */
+    right: 20px; /* Ajusta la posición */
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-filters-body {
+    max-height: 450px; /* Aumenta un poco la altura máxima */
+    overflow-y: auto;
+    padding-right: 15px;
+    margin-bottom: 20px; /* Espacio antes del footer */
+}
+
+/* Estilos para los elementos de lista de filtros dentro del modal
+.modal-filters-body .filter-group li {
+    background-color: #e9e9e9;
+    padding: 5px 10px;
+    border-radius: 3px;
+    transition: background-color 0.2s ease, color 0.2s ease; 
+}
+
+.modal-filters-body .filter-group li:hover {
+    background-color: #d9d9d9;
+}
+
+.modal-filters-body .filter-group a {
+    text-decoration: none;
+    color: #333;
+    display: block;
+}
+
+
+.modal-filters-body .filter-group li.active-filter {
+    background-color: #28a745; 
+    color: white; 
+    font-weight: bold;
+}
+
+.modal-filters-body .filter-group li.active-filter a {
+    color: white; 
+}
+
+.modal-filters-body .filter-group li.active-filter:hover {
+    background-color: #218838; 
+} */
+
+.filter-group {
+    margin-bottom: 25px; /* Más espacio entre grupos de filtros */
+}
+
+.filter-group h3 {
+    margin-top: 0;
+    margin-bottom: 12px; /* Más espacio bajo el título de grupo */
+    color: #555555;
+    font-size: 18px; /* Título de grupo un poco más grande */
+    font-weight: 600; /* Negrita */
+}
+
+.filter-group ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px; /* Más espacio entre las opciones de filtro */
+}
+
+.filter-group li {
+    background-color: #f0f4f7; /* Fondo más claro y moderno */
+    padding: 8px 15px; /* Más padding */
+    border-radius: 6px; /* Bordes más redondeados */
+    transition: background-color 0.2s ease, transform 0.1s ease; /* Transición al hover y click */
+    list-style: none;
+    flex-shrink: 0; /* Asegura que no se encoja */
+}
+
+.filter-group li:hover {
+    background-color: #e2eaf0; /* Color un poco más oscuro al pasar el cursor */
+    transform: translateY(-2px); /* Pequeña elevación al pasar el cursor */
+}
+
+.filter-group a {
+    text-decoration: none;
+    color: #444444; /* Color de texto más definido */
+    display: block;
+    font-weight: 500; /* Ligeramente en negrita */
+}
+
+/* Estilo para un filtro activo (si tu JS añade esta clase)
+.filter-group li.active-filter {
+    background-color: #28a745 !important; 
+    color: white !important;
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3); 
+} */
+
+.filter-group li.active-filter a {
+    color: rgb(0, 0, 0) !important;
+}
+
+
+.filter-group li.active-filter:hover {
+    background-color: #218838 !important;
+    transform: translateY(-2px);
+}
+
+/* Estilos para el footer del modal */
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px; /* Más espacio entre botones */
+    margin-top: 25px;
+    padding-top: 20px; /* Más padding superior */
+    border-top: 1px solid #e0e0e0; /* Borde más sutil */
+}
+
+/* Estilos específicos para los botones del footer */
+.modal-footer .button {
+    padding: 12px 25px; /* Más padding para botones */
+    border: none;
+    border-radius: 6px; /* Bordes redondeados */
+    cursor: pointer;
+    font-size: 16px; /* Letra más grande */
+    font-weight: 600; /* Más negrita */
+    transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+}
+
+.modal-footer #resetFiltersButton {
+    background-color: #e9e9e9; /* Gris más claro */
+    color: #555555;
+}
+
+.modal-footer #resetFiltersButton:hover {
+    background-color: #dcdcdc;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.modal-footer #applyFiltersButton {
+    background-color: #007bff; /* Azul primario para "Aplicar" */
+    color: white;
+}
+
+.modal-footer #applyFiltersButton:hover {
+    background-color: #0056b3;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0,123,255,0.2);
+}
+
+/* Media Queries para responsividad (mantener y ajustar si es necesario) */
+@media (max-width: 768px) {
+    .modal-content {
+        padding: 20px;
+        width: 95%;
+        max-width: none; /* Eliminar el ancho máximo para móviles */
+    }
+
+    .modal-content h2 {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+
+    .close-button {
+        font-size: 28px;
+        top: 10px;
+        right: 10px;
+    }
+
+    .modal-filters-body {
+        max-height: 300px; /* Ajusta la altura para pantallas pequeñas */
+    }
+
+    .filter-group ul {
+        gap: 8px; /* Reducir el espacio entre opciones en móviles */
+    }
+
+    .filter-group li {
+        padding: 6px 12px;
+    }
+
+    .modal-footer {
+        flex-direction: column; /* Apila los botones en columnas */
+        gap: 10px;
+    }
+
+    .modal-footer .button {
+        width: 100%; /* Botones de ancho completo */
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .search-filter-group {
+        flex-direction: column; /* Apilar búsqueda y filtro */
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    #changelist-search {
+        width: 100%; /* Ocupar todo el ancho */
+    }
+
+    .search-button,
+    .filter-button {
+        width: 100%; /* Ocupar todo el ancho */
+        text-align: center;
+    }
+
+    .add-button {
+        width: 100%; /* Ocupar todo el ancho */
+    }
+
+    .modal-content {
+        padding: 15px;
+    }
+
+    .modal-content h2 {
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+
+    .filter-group label {
+        font-size: 0.9em;
+    }
+
+    .filter-group select,
+    .filter-group input[type="text"],
+    .filter-group input[type="date"] {
+        padding: 8px 10px;
+        font-size: 14px;
+    }
+}

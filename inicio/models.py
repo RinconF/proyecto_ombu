@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.utils import timezone 
 
 
 class usuario_manager(BaseUserManager):
@@ -151,3 +152,16 @@ class Perfil(models.Model):
 
     def __str__(self):
         return self.user.username
+    
+    
+
+class ActividadReciente(models.Model):
+    accion = models.CharField(max_length=255)
+    fecha_hora = models.DateTimeField(default=timezone.now)
+    usuario = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+
+    class Meta:
+        ordering = ['-fecha_hora'] # Para que las actividades más recientes aparezcan primero
+
+    def __str__(self):
+        return f"{self.accion} por {self.usuario.username if self.usuario else 'Desconocido'} el {self.fecha_hora.strftime('%Y-%m-%d %H:%M')}"

@@ -75,6 +75,9 @@ class Mesa(models.Model):
         return f"Mesa {self.numero}"
 
 class Pedidos(models.Model):
+    ############################
+    
+    #################################
     fechahoraPedido = models.DateTimeField(auto_now_add=True)
     precio = models.DecimalField(max_digits=10, decimal_places=2)
     id_mesa = models.ForeignKey(Mesa, on_delete=models.CASCADE)  # Cambié IntegerField por ForeignKey

@@ -81,7 +81,6 @@ urlpatterns = [
     # PRODUCTOS
     path('productos/<str:categoria>/', views.productos_por_categoria, name='productos_por_categoria'),
 
-
 ]
 
 

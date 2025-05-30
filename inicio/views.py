@@ -548,12 +548,27 @@ def guardar_pedido(request):
             medio_pago = data.get('medio_pago')
             productos = data.get('productos', [])
 
-            mesa = Mesa.objects.get(id=mesa_id)
+            if not mesa_id or not productos:
+                return JsonResponse({'error': 'Datos incompletos'}, status=400)
+
+            try:
+                mesa = Mesa.objects.get(id=mesa_id)
+            except Mesa.DoesNotExist:
+                return JsonResponse({'error': 'Mesa no encontrada'}, status=400)
+
             pedido = Pedido.objects.create(mesa=mesa, medio_pago=medio_pago, total=0)
 
             total = 0
             for item in productos:
-                producto = Producto.objects.get(id=item['id'])
+                try:
+                    
+                    
+                    print(data)  # para ver en consola qué llega
+
+                    producto = Producto.objects.get(id=item['id'])
+                except Producto.DoesNotExist:
+                    return JsonResponse({'error': f"Producto con id {item['id']} no existe"}, status=400)
+
                 cantidad = item['cantidad']
                 subtotal = producto.precio * cantidad
                 PedidoDetalle.objects.create(
@@ -568,6 +583,9 @@ def guardar_pedido(request):
             pedido.save()
 
             return JsonResponse({'message': 'Pedido guardado correctamente.'}, status=200)
+
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'JSON inválido'}, status=400)
 
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)

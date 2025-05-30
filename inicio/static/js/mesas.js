@@ -96,12 +96,6 @@ mesas.forEach(mesa => {
 
             tbody.appendChild(row);
 
-            const eliminarBtn = document.createElement('button');
-eliminarBtn.textContent = 'Eliminar';
-eliminarBtn.classList.add('btn-eliminar');
-eliminarBtn.addEventListener('click', () => eliminarProducto(mesaId, index));
-row.appendChild(eliminarBtn);
-
             // Sumar al total
             total += producto.price * producto.quantity;
             cantidadTotalProductos += parseInt(producto.quantity); // Sumar la cantidad de cada producto
@@ -200,6 +194,12 @@ function finalizarPedido(mesaId) {
     console.log("Productos a enviar:", productosSeleccionados);
       console.log("Mesa:", mesaId);
     console.log("Medio de pago:", medioPago);
+
+    if (!mesaId) {
+  alert("No se ha seleccionado una mesa válida.");
+  return;
+}
+
     fetch('/guardar-pedido/', {
         method: 'POST',
         headers: {
@@ -229,20 +229,7 @@ function finalizarPedido(mesaId) {
 
 
 // Función para obtener cookie CSRF (útil para fetch con Django)
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let cookie of cookies) {
-            cookie = cookie.trim();
-            if (cookie.startsWith(name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
+
 
 // -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -274,6 +261,9 @@ function actualizarEstadoMesas() {
     });
 }
 function agregarAlPedidoConMesaActiva(elemento) {
+    const card = boton.closest('.card');
+    const productoId = card.dataset.id;
+    console.log('ID del producto:', productoId);
     if (!mesaActivaId) {
         alert("Selecciona una mesa primero");
         return;

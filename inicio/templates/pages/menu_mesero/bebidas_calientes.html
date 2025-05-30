@@ -164,7 +164,13 @@
        data-title="{{ producto.titulo }}" 
        data-price="{{ producto.precio }}"  
        data-image="{{ producto.foto.url }}" 
-       data-options='{{ producto.opciones|safe }}'>
+       data-options='{{ producto.opciones|safe }}'
+       data-id="1" 
+     data-title="Café" 
+     data-price="2500" 
+     data-image="cafe.jpg" 
+     data-options="sin azucar">
+       
 
     <div class="img-container">
       <img src="{{ producto.foto.url }}" alt="{{ producto.titulo }}" />

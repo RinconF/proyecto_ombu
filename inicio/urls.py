@@ -37,7 +37,7 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
 
     # URL del Dashboard
-    path('dashboard/', views.dashboard, name='dashboard'),
+    # path('dashboard/', views.dashboard, name='dashboard'),
 
 
     # API de usuarios

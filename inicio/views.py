@@ -15,14 +15,11 @@ from .decorators import role_required
 # from .models import Reserva
 # from django.core.mail import send_mail
 import json
-from .models import Usuario
+from .models import Usuario,Producto,GaleriaFoto
 from .forms import CustomUserCreationForm, CustomUserChangeForm, PasswordChangeForm
 from django.contrib.auth.models import User
-from .models import Producto
 from django.contrib.admin.views.decorators import staff_member_required
-
 from .models import ActividadReciente
-
 from .decorators import group_required
 # from .models import Categoria, Producto, Pedido, Mesa
 from django.db.models import Sum, Count
@@ -136,76 +133,78 @@ def mesero_principal(request):
     return render(request, 'pages/menu_mesero/mesero_principal.html') # Renderiza el nuevo HTM
 
 
-@never_cache
-# @group_required('administrador')
-def dashboard(request):
-    # Obtener las 10 actividades administrativas más recientes
-    recent_activities = LogEntry.objects.order_by('-action_time')[:10]
-    
+# @never_cache
+# @staff_member_required # Asegura que solo el personal del admin pueda acceder a esta vista
+# def dashboard(request): # Renombrado a dashboard_view para consistencia
+#     # Obtener las 10 actividades administrativas más recientes
+#     recent_activities = LogEntry.objects.order_by('-action_time')[:10]
 
-    # Formatear las actividades para mostrarlas en el template
-    formatted_activities = []
-    for entry in recent_activities:
-        action_detail_message = "" 
-        
-        object_display_name = entry.object_repr if entry.object_repr else _("un objeto desconocido")
-        
-        # Determinar la acción principal y la descripción inicial
-        if entry.is_addition():
-            action_description = _(f"Añadido '{object_display_name}'")
-        elif entry.is_change():
-            action_description = _(f"Modificado '{object_display_name}'")
-            if entry.change_message:
-                try:
-                    message_data = json.loads(entry.change_message)
-                    
-                    if isinstance(message_data, list):
-                        for msg in message_data:
-                            if 'changed' in msg and 'fields' in msg['changed']:
-                                changed_fields = ', '.join(msg['changed']['fields'])
-                                action_detail_message = _(f"Se actualizaron los campos: {changed_fields}.")
-                            elif 'added' in msg and 'name' in msg['added'] and 'object' in msg['added']:
-                                added_name = msg['added']['name'] # Nombre del campo relacionado (ej. 'permissions')
-                                added_object = msg['added']['object'] # Representación del objeto añadido (ej. 'can_view_report')
-                                action_detail_message = _(f"Se añadió '{added_object}' a '{added_name}'.")
-                            elif 'deleted' in msg and 'name' in msg['deleted'] and 'object' in msg['deleted']:
-                                # Si se eliminó un objeto relacionado
-                                deleted_name = msg['deleted']['name']
-                                deleted_object = msg['deleted']['object']
-                                action_detail_message = _(f"Se eliminó '{deleted_object}' de '{deleted_name}'.")
-                    else:
-                        if entry.change_message.strip():
-                            action_detail_message = _(f"Detalles del cambio: {entry.change_message.strip()}.")
+#     # Formatear las actividades para mostrarlas en el template
+#     formatted_activities = []
+#     for entry in recent_activities:
+#         action_detail_message = ""
 
-                except json.JSONDecodeError:
-                    if entry.change_message.strip():
-                        action_detail_message = _(f"Detalles del cambio: {entry.change_message.strip()}.")
-                    else:
-                        action_detail_message = _("No se especificaron detalles del cambio.")
-        elif entry.is_deletion():
-            action_description = _(f"Eliminado '{object_display_name}'")
-        else:
-            action_description = _(f"Acción desconocida sobre '{object_display_name}'")
-            
+#         # Usar get_text_for_log_entry para obtener una descripción más detallada
+#         # Si no tienes esta función, puedes usar object_repr
+#         object_display_name = str(entry.get_admin_url(entry.content_type_id, entry.object_id, entry.object_repr)) \
+#                               if entry.content_type and entry.object_id and entry.object_repr \
+#                               else (entry.object_repr if entry.object_repr else _("un objeto desconocido"))
+
+#         # Determinar la acción principal y la descripción inicial
+#         if entry.is_addition():
+#             action_description = _(f"Añadido '{object_display_name}'")
+#         elif entry.is_change():
+#             action_description = _(f"Modificado '{object_display_name}'")
+#             if entry.change_message:
+#                 try:
+#                     message_data = json.loads(entry.change_message)
+
+#                     if isinstance(message_data, list):
+#                         for msg in message_data:
+#                             if 'changed' in msg and 'fields' in msg['changed']:
+#                                 changed_fields = ', '.join(msg['changed']['fields'])
+#                                 action_detail_message = _(f"Se actualizaron los campos: {changed_fields}.")
+#                             elif 'added' in msg and 'name' in msg['added'] and 'object' in msg['added']:
+#                                 added_name = msg['added']['name'] # Nombre del campo relacionado (ej. 'permissions')
+#                                 added_object = msg['added']['object'] # Representación del objeto añadido (ej. 'can_view_report')
+#                                 action_detail_message = _(f"Se añadió '{added_object}' a '{added_name}'.")
+#                             elif 'deleted' in msg and 'name' in msg['deleted'] and 'object' in msg['deleted']:
+#                                 deleted_name = msg['deleted']['name']
+#                                 deleted_object = msg['deleted']['object']
+#                                 action_detail_message = _(f"Se eliminó '{deleted_object}' de '{deleted_name}'.")
+#                     else:
+#                         if entry.change_message.strip():
+#                             action_detail_message = _(f"Detalles del cambio: {entry.change_message.strip()}.")
+
+#                 except json.JSONDecodeError:
+#                     if entry.change_message.strip():
+#                         action_detail_message = _(f"Detalles del cambio: {entry.change_message.strip()}.")
+#                     else:
+#                         action_detail_message = _("No se especificaron detalles del cambio.")
+#         elif entry.is_deletion():
+#             action_description = _(f"Eliminado '{object_display_name}'")
+#         else:
+#             action_description = _(f"Acción desconocida sobre '{object_display_name}'")
 
 
-        final_action_text = action_description
-        if action_detail_message:
-            final_action_text += f": {action_detail_message}"
-        
-        # Añadir quién realizó la acción
-        final_action_text += f" por {entry.user.username}"
+#         final_action_text = action_description
+#         if action_detail_message:
+#             final_action_text += f": {action_detail_message}"
 
-        formatted_activities.append({
-            'accion': final_action_text,
-            'fecha_hora': entry.action_time,
-        })
+#         # Añadir quién realizó la acción
+#         final_action_text += f" por {entry.user.username}"
 
-    context = {
-        'actividades_recientes': formatted_activities,
-        # ... (añade aquí cualquier otra variable que tu dashboard necesite en el contexto)
-    }
-    return render(request, 'admin/dashboard.html', context)
+#         formatted_activities.append({
+#             'accion': final_action_text,
+#             'fecha_hora': entry.action_time,
+#         })
+
+#     context = {
+#         'title': 'Dashboard Administrativo OMBÚ', # Título que aparecerá en el breadcrumbs
+#         'actividades_recientes': formatted_activities,
+#     }
+#     # LA RUTA DE LA PLANTILLA ES CLAVE AQUÍ: APUNTA A LA APP admin_personalizado
+#     return render(request, 'admin/dashboard.html', context)
     
     
     
@@ -598,6 +597,22 @@ def productos_mesero(request, categoria):
     })
 
 
+
+
+# Vista para manejar fotos de index
+def index(request):
+    
+    # Opción 1: Obtener las dos fotos más recientes
+    galeria_fotos = GaleriaFoto.objects.all().order_by('-fecha_subida')[:2]
+
+    # Opción 2: Obtener las dos fotos marcadas como principales (si existen)
+    # Si tienes más de 2 principales y quieres solo 2, ajusta el orden o la lógica.
+    # galeria_fotos = GaleriaFoto.objects.filter(es_principal=True).order_by('-fecha_subida')[:2]
+
+    context = {
+        'galeria_fotos': galeria_fotos
+    }
+    return render(request, 'pages/principal/index.html', context)
 
 
 #NUMERO DE MESAS

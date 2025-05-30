@@ -1,63 +1,169 @@
 /* admin_personalizado/css_panel/dashboard.css */
 
+/* --- ANULACIÓN DE ESTILOS DE DJANGO ADMIN --- */
+
+/* Anular la clase colMS en #content y cualquier otra cosa que interfiera */
+#content {
+    background: none !important; /* Eliminar el fondo por defecto */
+    padding: 0 !important; /* Eliminar padding por defecto */
+    margin: 0 !important; /* Eliminar margen por defecto */
+    width: 100% !important; /* Asegurar que ocupe todo el ancho */
+    float: none !important; /* Desactivar cualquier flotación */
+    display: block !important; /* Asegurar que sea un bloque normal */
+    min-width: unset !important; /* Eliminar cualquier min-width de Django */
+    box-sizing: border-box !important;
+}
+
+/* El contenedor interno #content-main también debe ser flexible */
+#content-main {
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    float: none !important;
+    display: block !important;
+    box-sizing: border-box !important;
+}
+
 /* --- GENERALES DEL CONTENIDO PRINCIPAL --- */
+
+/* Contenedor de la página que envuelve todo (centrado y con ancho máximo) */
 .dashboard-page-container {
     padding: 30px;
     max-width: 1600px;
-    margin: 0 auto;
+    margin: 0 auto; /* Centra el contenedor en la página */
+    /* NO display: flex; aquí. El flex container es .row-index */
 }
 
+/* EL CONTENEDOR FLEX PRINCIPAL: .row-index */
+/* Este es el elemento que debe tener display: flex para que sus hijos se coloquen en línea. */
+.row-index { /* ¡Selector CAMBIADO de .row a .row-index! */
+    display: flex !important; /* ¡FUERZA Flexbox! */
+    flex-wrap: wrap; /* Permite que los elementos se envuelvan en pantallas pequeñas */
+    gap: 30px; /* Espacio entre los contenedores */
+    align-items: flex-start; /* Alinea los elementos al inicio (parte superior) */
+    justify-content: center; /* Centra los elementos horizontalmente si hay espacio extra */
+    width: 100%; /* Asegura que el .row-index ocupe todo el ancho disponible */
+    box-sizing: border-box; /* Incluye padding y border en el ancho total */
+}
+
+/* --- ESTILOS DE LAS COLUMNAS INDIVIDUALES --- */
+
 .dashboard-main-area {
+    /* Ajustes para que ocupe la mitad o un poco más */
+    flex: 1 1 55%; /* Proporción 1, se encoge, base del 55% */
+    min-width: 500px; /* Ancho mínimo razonable antes de envolverse */
+    max-width: calc(100% - 330px); /* Para dejar espacio al sidebar y al gap */
+
     background-color: #212B36;
     color: #E0E0E0;
     padding: 35px;
     border-radius: 10px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
     background-image: none;
-    margin-bottom: 25px;
+    box-sizing: border-box;
 }
 
+.dashboard-sidebar {
+    /* Ajustes para que ocupe la otra mitad o un poco menos */
+    flex: 1 1 300px; /* Proporción 1, se encoge, base de 300px (su min-width) */
+    min-width: 300px; /* Ancho mínimo para la barra lateral */
+    max-width: 40%; /* Para que no crezca demasiado en pantallas grandes */
+
+    background-color: #1A222B;
+    padding: 30px 25px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+    height: fit-content; /* Se ajusta a su contenido */
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-sizing: border-box;
+}
+
+/* --- TÍTULOS --- */
 .dashboard-title {
     color: #63B3ED;
     font-family: 'Inter', sans-serif;
-    font-size: 2.2rem;
+    font-size: 2rem; /* REDUCIDO para que no sea tan grande */
     font-weight: 700;
-    margin-bottom: 25px;
-    border-bottom: 1px solid rgba(99, 179, 237, 0.3);
+    margin-bottom: 20px;
+    border-bottom: 2px solid rgba(99, 179, 237, 0.4);
     padding-bottom: 15px;
+    letter-spacing: 0.5px;
 }
 
 .dashboard-intro-text,
 .dashboard-card-body p {
-    font-size: 1.05rem;
-    line-height: 1.7;
+    font-size: 1.05rem; /* Ligeramente reducido */
+    line-height: 1.8;
     color: #B0B9C2;
-    margin-bottom: 1.2rem;
+    margin-bottom: 1.5rem;
 }
 
-/* --- TARJETAS (CARDS) --- */
+.dashboard-sidebar-title {
+    color: #63B3ED;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.6em; /* Reducido para que coincida con el principal */
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid rgba(99, 179, 237, 0.4);
+}
+
+
+/* --- Responsividad --- */
+@media (max-width: 992px) {
+    .row-index { /* ¡Selector CAMBIADO a .row-index! */
+        flex-direction: column !important; /* Apila los contenedores */
+        gap: 20px; /* Reduce el espacio entre ellos */
+        align-items: stretch; /* Estira los elementos para que ocupen todo el ancho */
+        padding: 0 20px; /* Añade un padding horizontal al contenedor principal */
+    }
+
+    .dashboard-main-area,
+    .dashboard-sidebar {
+        flex: 1 1 100% !important; /* Ocupan todo el ancho disponible */
+        max-width: 100% !important; /* Asegura que no haya desbordamiento */
+        min-width: unset !important; /* Elimina el min-width para móviles */
+        padding: 25px; /* Reducir padding en móviles */
+    }
+
+    .dashboard-sidebar {
+        border-left: none !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+    }
+
+    .dashboard-title {
+        font-size: 1.8rem; /* Ajuste para pantallas más pequeñas */
+    }
+    .dashboard-sidebar-title {
+        font-size: 1.4em;
+    }
+}
+
+/* --- Resto de tus estilos (Tarjetas, lista de actividad, etc.) --- */
 .dashboard-info-card {
     background-color: #2D3748;
     border: none;
     border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    transition: transform 0.25s ease-out, box-shadow 0.25s ease-out;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+    transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
     margin-bottom: 25px;
     overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .dashboard-info-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    transform: translateY(-7px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .dashboard-card-header {
     background-color: #374253;
     color: #63B3ED;
-    font-size: 1.3rem;
+    font-size: 1.4rem;
     font-weight: 600;
-    padding: 1.3rem 25px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 1.5rem 25px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .dashboard-card-body {
@@ -65,29 +171,8 @@
     color: #E0E0E0;
 }
 
-/* --- BARRA LATERAL DE ACTIVIDAD RECIENTE --- */
-.dashboard-sidebar {
-    background-color: #1A222B;
-    padding: 30px 0;
-    border-left: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: -3px 0 15px rgba(0, 0, 0, 0.25);
-    border-radius: 10px;
-    height: fit-content;
-}
-
 .dashboard-recent-actions {
-    padding: 0 25px;
-}
-
-.dashboard-sidebar-title {
-    color: #63B3ED;
-    font-family: 'Inter', sans-serif;
-    font-size: 1.7em;
-    font-weight: 600;
-    text-align: center;
-    margin-bottom: 30px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid rgba(99, 179, 237, 0.3);
+    padding: 0;
 }
 
 .dashboard-actions-list {
@@ -102,34 +187,53 @@
 }
 
 .dashboard-action-item {
-    background: #40916c;
+    background: #2D3748;
     margin-bottom: 15px;
     padding: 18px;
     border-radius: 8px;
-    transition: all 0.2s ease-out;
+    transition: all 0.25s ease-out;
     cursor: pointer;
-    border-left: 5px solid #63B3ED;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    border-left: 5px solid #4CAF50;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
 }
+
+.dashboard-action-item .action-add { border-left-color: #4CAF50; }
+.dashboard-action-item .action-change { border-left-color: #FBC02D; }
+.dashboard-action-item .action-delete { border-left-color: #D32F2F; }
 
 .dashboard-action-item:hover {
     background: #374253;
-    transform: translateX(5px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.4);
 }
 
 .dashboard-action-content {
     color: #E0E0E0;
-    font-size: 0.95em;
-    line-height: 1.5;
+    font-size: 1em;
+    line-height: 1.6;
+    margin-bottom: 5px;
+}
+
+.dashboard-action-content a {
+    color: #63B3ED;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.dashboard-action-content a:hover {
+    text-decoration: underline;
 }
 
 .dashboard-action-timestamp {
     color: #A0AEC0;
-    font-size: 0.78em;
+    font-size: 0.8em;
     display: block;
-    margin-top: 8px;
+    margin-top: 5px;
     font-style: italic;
+    text-align: right;
+    opacity: 0.8;
 }
 
 .dashboard-action-item.no-activities {
@@ -139,23 +243,36 @@
     padding: 20px;
     font-style: italic;
     color: #B0B9C2;
-}
-
-/* Asegurar que no haya conflictos con estilos de Django */
-#content {
-    background: none;
-    padding: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* Responsividad */
 @media (max-width: 992px) {
+    .dashboard-page-container {
+        flex-direction: column; /* Apila los contenedores en pantallas pequeñas */
+        gap: 25px; /* Reduce el espacio entre ellos */
+    }
     .dashboard-main-area,
     .dashboard-sidebar {
-        margin-bottom: 25px;
+        min-width: 100%; /* Ocupa todo el ancho disponible */
+        margin-bottom: 0; /* Eliminar márgenes inferiores si ya usamos gap */
+        padding: 25px; /* Reducir padding en móviles */
     }
-    
     .dashboard-sidebar {
         border-left: none;
-        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        border-top: 1px solid rgba(255, 255, 255, 0.08); /* Borde superior en lugar de izquierdo */
     }
+    .dashboard-title {
+        font-size: 2rem; /* Ajuste de tamaño de fuente para móviles */
+    }
+    .dashboard-sidebar-title {
+        font-size: 1.5em;
+    }
+    .dashboard-page-container,
+    .row { /* Aplica esto también al .row si es tu contenedor flex */
+        flex-direction: column; /* Apila los contenedores en pantallas pequeñas */
+        gap: 20px; /* Reduce el espacio entre ellos cuando están apilados */
+        padding: 20px; /* Ajusta el padding general en pantallas pequeñas */
+    }
+    
 }

@@ -1418,6 +1418,89 @@ html {
   border-radius: 10px;
 }
 
+/*tarjetas de imagenes*/
+.galeria-seccion {
+    width: 100%;
+    max-width: 1200px; /* Ancho máximo para la sección */
+    margin: 40px auto; /* Centrar y dar espacio arriba/abajo */
+    padding: 0 20px; /* Relleno a los lados */
+    text-align: center; /* Centrar el título */
+}
+
+.galeria-seccion h2 {
+    font-family: 'Playfair Display', serif; /* O la fuente que uses para títulos */
+    font-size: 2.5em;
+    color: var(--text-light); /* O el color de texto de tu sitio */
+    margin-bottom: 30px;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.galeria-seccion h2::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    width: 80px;
+    height: 3px;
+    background-color: var(--accent-color); /* O el color de acento de tu sitio */
+    border-radius: 5px;
+}
+
+.galeria-container {
+    display: flex;
+    flex-wrap: wrap; /* Permite que las tarjetas se envuelvan a la siguiente línea en pantallas pequeñas */
+    justify-content: center; /* Centra las tarjetas horizontalmente */
+    gap: 20px; /* Espacio entre las tarjetas */
+    padding: 20px 0;
+}
+
+.galeria-card {
+    background-color: var(--card-bg); /* Fondo de tarjeta, usa tu variable o un color sólido */
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    overflow: hidden; /* Asegura que la imagen no se salga del borde redondeado */
+    width: calc(50% - 10px); /* Ocupa el 50% menos la mitad del gap */
+    max-width: 450px; /* Limita el ancho de cada tarjeta */
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.galeria-card:hover {
+    transform: translateY(-5px); /* Pequeño efecto al pasar el ratón */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.galeria-img {
+    width: 100%;
+    height: 250px; /* Altura fija para las imágenes */
+    object-fit: cover; /* Recorta la imagen para que cubra el espacio */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.card-content {
+    padding: 20px;
+    text-align: left;
+    color: var(--primary-color); /* Color de texto para el contenido de la tarjeta */
+}
+
+.card-content h3 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: var(--primary-color); /* Asegura que el título sea visible */
+}
+
+.card-content p {
+    font-size: 1em;
+    line-height: 1.6;
+    color: #333; /* Un color de texto más oscuro para la descripción */
+}
+
+
+/*responsividad*/
+
 @-webkit-keyframes smoke {
   0% {
     transform: translateY(0px);
@@ -1480,4 +1563,36 @@ html {
   100% {
     transform: translateY(100%);
   }
+}
+
+@media (max-width: 768px) {
+    .galeria-seccion h2 {
+        font-size: 2em;
+    }
+
+    .galeria-card {
+        width: 100%; /* Una sola tarjeta por fila en móviles */
+        max-width: 400px; /* Limita el ancho en el centro de la pantalla */
+    }
+}
+
+@media (max-width: 480px) {
+    .galeria-seccion {
+        padding: 0 15px;
+    }
+    .galeria-seccion h2 {
+        font-size: 1.8em;
+    }
+    .galeria-img {
+        height: 200px; /* Ajusta la altura de la imagen en pantallas muy pequeñas */
+    }
+    .card-content {
+        padding: 15px;
+    }
+    .card-content h3 {
+        font-size: 1.3em;
+    }
+    .card-content p {
+        font-size: 0.9em;
+    }
 }

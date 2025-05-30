@@ -60,8 +60,8 @@
                   </button>
                   <ul class="user-menu">
                       <li><a href="{% url 'admin_panel:perfil' %}">{% translate 'Ver perfil' %}</a></li>
-                      {# Este es el nuevo enlace para el Dashboard #}
-                      <li><a href="{% url 'admin:inicio_dashboard' %}">Dashboard</a></li> 
+                      {% comment %} {# Este es el nuevo enlace para el Dashboard #}
+                      <li><a href="{% url 'admin:inicio_dashboard' %}">Dashboard</a></li>  {% endcomment %}
                       {% if site_url %}
                           <li><a href="{{ site_url }}">{% translate 'Ver sitio web' %}</a></li>
                       {% endif %}

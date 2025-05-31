@@ -13,7 +13,6 @@ from django.db import transaction
 from django.views.decorators.csrf import csrf_exempt
 from .decorators import role_required
 
-from .models import Mesa, Producto, Pedido, PedidoDetalle
 # from .models import Reserva
 # from django.core.mail import send_mail
 import json

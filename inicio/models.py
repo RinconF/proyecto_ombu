@@ -161,8 +161,12 @@ class PedidoDetalle(models.Model):
     cantidad = models.PositiveIntegerField()
     precio_unitario = models.DecimalField(max_digits=8, decimal_places=2)
     
+    @property
+    def subtotal(self):
+        return self.cantidad * self.precio_unitario
+    
     def __str__(self):
-        return f"{self.cantidad} x {self.producto.nombre} para Pedido #{self.pedido.id}"
+        return f"{self.cantidad} x {self.producto.titulo} para Pedido #{self.pedido.id}"
 
     class Meta:
         verbose_name = "Detalle de Pedido"

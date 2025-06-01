@@ -12,11 +12,7 @@ from django.urls import reverse
 from django.db import transaction
 from django.views.decorators.csrf import csrf_exempt
 from .decorators import role_required
-
 from .models import Mesa, Producto, Pedido, PedidoDetalle
-
-# from .models import Reserva
-# from django.core.mail import send_mail
 import json
 from .models import Usuario,Producto,GaleriaFoto
 from .forms import CustomUserCreationForm, CustomUserChangeForm, PasswordChangeForm
@@ -24,12 +20,10 @@ from django.contrib.auth.models import User
 from django.contrib.admin.views.decorators import staff_member_required
 from .models import ActividadReciente
 from .decorators import group_required
-# from .models import Categoria, Producto, Pedido, Mesa
 from django.db.models import Sum, Count
 import datetime
 import calendar
 from django.utils.timezone import now
-# # import openpyxl
 from django.http import HttpResponse
 from django.db.models.functions import TruncMonth
 from django.utils.dateformat import DateFormat
@@ -38,10 +32,6 @@ from django.db.utils import ProgrammingError
 from admin_personalizado import templates
 from django.contrib.admin.models import LogEntry
 from django.utils.translation import gettext as _
-
-
-
-
 
 # PRINCIPAL
 def index(request):
@@ -87,15 +77,11 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             if user.is_active:
-                login(request, user) # Usa la función 'login' de Django para autenticar al usuario en la sesión
+                login(request, user) 
 
-                # Captura el parámetro 'next' si existe en la URL o en el POST del formulario
                 next_url = request.POST.get('next') or request.GET.get('next')
 
-                # Redireccionar según el rol del usuario
                 if user.is_superuser or (user.rol.lower() == 'administrador' and user.is_staff) or user.rol.lower() == 'ombu':
-                    # Si el usuario es admin y hay una URL 'next', redirigimos ahí.
-                    # Si no hay 'next', redirigimos al índice del admin.
                     return redirect(next_url or 'admin:index') 
                 elif user.rol.lower() == 'mesero':
                     return redirect('mesero_principal') 
@@ -138,136 +124,6 @@ def mesero_principal(request):
     """Panel principal para usuarios con rol 'Mesero'"""
     return render(request, 'pages/menu_mesero/mesero_principal.html') # Renderiza el nuevo HTM
 
-
-# @never_cache
-# @staff_member_required # Asegura que solo el personal del admin pueda acceder a esta vista
-# def dashboard(request): # Renombrado a dashboard_view para consistencia
-#     # Obtener las 10 actividades administrativas más recientes
-#     recent_activities = LogEntry.objects.order_by('-action_time')[:10]
-
-#     # Formatear las actividades para mostrarlas en el template
-#     formatted_activities = []
-#     for entry in recent_activities:
-#         action_detail_message = ""
-
-#         # Usar get_text_for_log_entry para obtener una descripción más detallada
-#         # Si no tienes esta función, puedes usar object_repr
-#         object_display_name = str(entry.get_admin_url(entry.content_type_id, entry.object_id, entry.object_repr)) \
-#                               if entry.content_type and entry.object_id and entry.object_repr \
-#                               else (entry.object_repr if entry.object_repr else _("un objeto desconocido"))
-
-#         # Determinar la acción principal y la descripción inicial
-#         if entry.is_addition():
-#             action_description = _(f"Añadido '{object_display_name}'")
-#         elif entry.is_change():
-#             action_description = _(f"Modificado '{object_display_name}'")
-#             if entry.change_message:
-#                 try:
-#                     message_data = json.loads(entry.change_message)
-
-#                     if isinstance(message_data, list):
-#                         for msg in message_data:
-#                             if 'changed' in msg and 'fields' in msg['changed']:
-#                                 changed_fields = ', '.join(msg['changed']['fields'])
-#                                 action_detail_message = _(f"Se actualizaron los campos: {changed_fields}.")
-#                             elif 'added' in msg and 'name' in msg['added'] and 'object' in msg['added']:
-#                                 added_name = msg['added']['name'] # Nombre del campo relacionado (ej. 'permissions')
-#                                 added_object = msg['added']['object'] # Representación del objeto añadido (ej. 'can_view_report')
-#                                 action_detail_message = _(f"Se añadió '{added_object}' a '{added_name}'.")
-#                             elif 'deleted' in msg and 'name' in msg['deleted'] and 'object' in msg['deleted']:
-#                                 deleted_name = msg['deleted']['name']
-#                                 deleted_object = msg['deleted']['object']
-#                                 action_detail_message = _(f"Se eliminó '{deleted_object}' de '{deleted_name}'.")
-#                     else:
-#                         if entry.change_message.strip():
-#                             action_detail_message = _(f"Detalles del cambio: {entry.change_message.strip()}.")
-
-#                 except json.JSONDecodeError:
-#                     if entry.change_message.strip():
-#                         action_detail_message = _(f"Detalles del cambio: {entry.change_message.strip()}.")
-#                     else:
-#                         action_detail_message = _("No se especificaron detalles del cambio.")
-#         elif entry.is_deletion():
-#             action_description = _(f"Eliminado '{object_display_name}'")
-#         else:
-#             action_description = _(f"Acción desconocida sobre '{object_display_name}'")
-
-
-#         final_action_text = action_description
-#         if action_detail_message:
-#             final_action_text += f": {action_detail_message}"
-
-#         # Añadir quién realizó la acción
-#         final_action_text += f" por {entry.user.username}"
-
-#         formatted_activities.append({
-#             'accion': final_action_text,
-#             'fecha_hora': entry.action_time,
-#         })
-
-#     context = {
-#         'title': 'Dashboard Administrativo OMBÚ', # Título que aparecerá en el breadcrumbs
-#         'actividades_recientes': formatted_activities,
-#     }
-#     # LA RUTA DE LA PLANTILLA ES CLAVE AQUÍ: APUNTA A LA APP admin_personalizado
-#     return render(request, 'admin/dashboard.html', context)
-    
-    
-    
-    
-    # # Ventas por mes
-    # hoy = datetime.date.today()
-    # ventas_mensuales = []
-    # ventas_mensuales_labels = []
-    # ventas_mensuales_data = []
-
-    # for i in range(1, 13):
-    #     total = Pedido.objects.filter(fecha__month=i).aggregate(Sum('total'))['total__sum'] or 0
-    #     ventas_mensuales.append({'month': calendar.month_name[i], 'total': float(total)})
-    #     ventas_mensuales_labels.append(calendar.month_name[i])
-    #     ventas_mensuales_data.append(float(total))
-
-    # # Top mesas más usadas
-    # mesas_usadas = (
-    #     Pedido.objects.values('mesa__numero')
-    #     .annotate(total=Count('id'))
-    #     .order_by('-total')[:5]
-    # )
-
-    # # Top productos más vendidos
-    # productos_vendidos = (
-    #     Producto.objects.annotate(total=Count('pedido'))
-    #     .order_by('-total')[:5]
-    # )
-
-    # # Cálculos simples para los 4 recuadros:
-    # ventas_totales = Pedido.objects.aggregate(Sum('total'))['total__sum'] or 0
-    # hoy = datetime.date.today()
-    # ventas_dia = Pedido.objects.filter(fecha__date=hoy).aggregate(Sum('total'))['total__sum'] or 0
-    # ventas_mes = Pedido.objects.filter(fecha__month=hoy.month).aggregate(Sum('total'))['total__sum'] or 0
-    # ventas_anio = Pedido.objects.filter(fecha__year=hoy.year).aggregate(Sum('total'))['total__sum'] or 0
-
-    # return render(request, 'dashboard.html', {
-    #     'ventas_mensuales_labels': ventas_mensuales_labels,
-    #     'ventas_mensuales_data': ventas_mensuales_data,
-    #     'mesas_usadas': mesas_usadas,
-    #     'productos_vendidos': productos_vendidos,
-    #     'ventas_totales': ventas_totales,
-    #     'ventas_dia': ventas_dia,
-    #     'ventas_mes': ventas_mes,
-    #     'productos_top': productos_top,
-    #     'mesas_top': mesas_top,
-    #     'ventas_labels': ventas_labels,
-    #     'ventas_data': ventas_data,
-    # })
-
-    # return render(request, 'pages/Admin/dashboard.html', context)
-
-
-
-
-
-
 def admin_login_page(request):
     return render(request, 'pages/Admin/login.html')
 
@@ -276,14 +132,13 @@ def admin_login_page(request):
 @never_cache
 @login_required
 def mesas(request):
-    # **** CAMBIO CLAVE AQUI ****
-    # Solo recuperamos las mesas que están activas
+
     mesas_activas = Mesa.objects.filter(is_active=True).order_by('numero')
     context = {
         'mesas': mesas_activas,
         'selected_page': 'mesas'
     }
-    return render(request, 'mesas.html', context)
+    return render(request, 'pages/Admin/mesas.html', context)
 
 
 @login_required
@@ -399,8 +254,6 @@ def usuarios_view(request):
     """Vista principal de la administración de usuarios"""
     usuarios = Usuario.objects.all().order_by('id')
     return render(request, 'pages/Admin/usuarios.html', {'usuarios': usuarios})
-
-
 
 
 #CREACION DE USUARIOS
@@ -536,10 +389,6 @@ def actualizar_estado_usuario(request, user_id):
         return JsonResponse({'success': False, 'message': 'Formato JSON inválido'}, status=400)
     except Exception as e:
         return JsonResponse({'success': False, 'message': f'Error al actualizar estado: {str(e)}'}, status=500)
-
-
-
-
 
 #ELIMINACION DE USUARIO
 @login_required
@@ -701,46 +550,25 @@ def productos_mesero(request, categoria):
         'tipo': 'mesero',
     })
 
-
-
-
 # Vista para manejar fotos de index
 def index(request):
     
-    # Opción 1: Obtener las dos fotos más recientes
     galeria_fotos = GaleriaFoto.objects.all().order_by('-fecha_subida')[:2]
-
-    # Opción 2: Obtener las dos fotos marcadas como principales (si existen)
-    # Si tienes más de 2 principales y quieres solo 2, ajusta el orden o la lógica.
-    # galeria_fotos = GaleriaFoto.objects.filter(es_principal=True).order_by('-fecha_subida')[:2]
 
     context = {
         'galeria_fotos': galeria_fotos
     }
     return render(request, 'pages/principal/index.html', context)
 
-
-#NUMERO DE MESAS
-def mesas(request):
-    mesas = Mesa.objects.all().order_by('numero')  # Ordenar por número para mostrar ordenadas
-    context = {
-        'mesas': mesas,
-    }
-    return render(request, 'pages/Admin/mesas.html', context)
-
-
-
-
-
-
-
-
-
+# #NUMERO DE MESAS
+# def mesas(request):
+#     mesas = Mesa.objects.all().order_by('numero')  # Ordenar por número para mostrar ordenadas
+#     context = {
+#         'mesas': mesas,
+#     }
+#     return render(request, 'pages/Admin/mesas.html', context)
 
 # -----------------------------------------------------------PEDIDOS------------------------------------
-
-
-
 @require_POST # Asegura que solo se acepta el método POST
 @csrf_exempt # Considera quitar esto en producción y usar el token CSRF apropiadamente
 def guardar_pedido(request):
@@ -839,23 +667,3 @@ def guardar_pedido(request):
         # Esto capturará cualquier otro error inesperado
         print(f"Error inesperado al guardar pedido: {e}")
         return JsonResponse({'error': 'Error interno del servidor al procesar el pedido.'}, status=500)
-
-
-
-
-# from django.http import JsonResponse
-# from django.views.decorators.csrf import csrf_exempt
-# import json
-
-# @csrf_exempt  # temporal para evitar problemas de CSRF
-# def guardar_pedido(request):
-#     if request.method == 'POST':
-#         try:
-#             data = json.loads(request.body)
-#             print('Datos recibidos:', data)  # para debug en consola
-#             # Aquí debes procesar y guardar el pedido en la BD
-#             return JsonResponse({'message': 'Pedido guardado correctamente'})
-#         except Exception as e:
-#             return JsonResponse({'error': str(e)}, status=400)
-#     else:
-#         return JsonResponse({'error': 'Método no permitido'}, status=405)

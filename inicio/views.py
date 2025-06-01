@@ -32,6 +32,9 @@ from django.db.utils import ProgrammingError
 from admin_personalizado import templates
 from django.contrib.admin.models import LogEntry
 from django.utils.translation import gettext as _
+from django.conf import settings
+import subprocess
+
 
 # PRINCIPAL
 def index(request):
@@ -667,3 +670,44 @@ def guardar_pedido(request):
         # Esto capturará cualquier otro error inesperado
         print(f"Error inesperado al guardar pedido: {e}")
         return JsonResponse({'error': 'Error interno del servidor al procesar el pedido.'}, status=500)
+    
+
+
+
+def generar_backup(request):
+    fecha = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+    filename = f"backup_{fecha}.sql"
+    
+    response = HttpResponse(content_type='application/sql')
+    response['Content-Disposition'] = f'attachment; filename="{filename}"'
+
+    db_name = settings.DATABASES['default']['NAME']
+    db_user = settings.DATABASES['default']['USER']
+    db_password = settings.DATABASES['default']['PASSWORD']
+    db_host = settings.DATABASES['default'].get('HOST', 'localhost')
+    db_port = settings.DATABASES['default'].get('PORT', '5432')
+
+    # Solo para PostgreSQL
+    command = [
+        'pg_dump',
+        '-h', db_host,
+        '-p', db_port,
+        '-U', db_user,
+        '-d', db_name
+    ]
+
+    env = {
+        **dict(**subprocess.os.environ),
+        'PGPASSWORD': db_password,
+    }
+
+    try:
+        result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env)
+        if result.returncode != 0:
+            response.write("Error al generar el backup:\n" + result.stderr.decode())
+        else:
+            response.write(result.stdout.decode())
+    except Exception as e:
+        response.write(f"Error ejecutando el comando: {e}")
+
+    return response

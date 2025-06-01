@@ -1,10 +1,10 @@
 document.addEventListener("DOMContentLoaded", function() {
     const defaultOptions = {
-        buttonColor: '#40916c',          // Verde medio equilibrado (botón principal)
-        buttonIconColor: '#ffffff',      // Blanco para contraste legible
-        highlightColor: '#52b788',       // Verde vibrante para hover o resaltado
-        menuBackgroundColor: '#1b4332',  // Verde oscuro para fondo principal
-        menuTextColor: '#d8f3dc',        // Verde claro para texto legible sobre fondo
+        buttonColor: '#2d6a4f',          // Verde bosque suave (botón principal)
+        buttonIconColor: '#ffffff',      // Blanco para buen contraste
+        highlightColor: '#74c69d',       // Verde claro agradable para hover
+        menuBackgroundColor: '#081c15',  // Verde muy oscuro (casi negro) para fondo
+        menuTextColor: '#d8f3dc',        // Verde menta claro para buena legibilidad
         customLabels: {}    
     };
 

@@ -1,5 +1,5 @@
 from django.contrib import admin, messages
-from .models import Pedido, Usuario, Producto, Mesa, GaleriaFoto, Mesa
+from .models import Pedido, Usuario, Producto, Mesa, GaleriaFoto, ConfiguracionGeneral, ActividadReciente
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 # from .models import Rol, Categoria, Usuario, Producto, Mesa, Pedido, Reserva
 from .forms import CustomUserCreationForm, CustomUserChangeForm
@@ -9,6 +9,21 @@ from django.urls import reverse
 from django.utils.html import mark_safe
 from django.db.models import Q
 from admin_personalizado.admin import custom_admin_site
+from django.db import IntegrityError
+from django.utils.translation import gettext_lazy as _
+from django.conf import settings
+from django.shortcuts import get_object_or_404
+from django.template.loader import get_template
+import os
+from django.http import HttpResponse
+
+# Agregar imports para pdfs
+from io import BytesIO
+from xhtml2pdf import pisa
+from django.utils.translation import ngettext
+
+
+
 
 class UsuarioAdmin(BaseUserAdmin):
     list_display = ('username', 'email', 'first_name', 'last_name', 'rol', 'is_active', 'date_joined', 'acciones')
@@ -241,55 +256,242 @@ class GaleriaFotoAdmin(admin.ModelAdmin):
         }
     
 
+@admin.register(Mesa, site=custom_admin_site)
+class MesaAdmin(admin.ModelAdmin):
+    # Asegúrate de incluir 'is_active' en list_display
+    list_display = ('numero', 'capacidad', 'estado', 'is_active', 'total_pedido_actual', 'fecha_ultima_actividad', 'acciones_mesa')
+    list_filter = ('is_active', 'estado', 'capacidad') # Agrega 'is_active' al filtro
+    search_fields = ('numero',)
+    actions = ['activar_mesas_seleccionadas', 'desactivar_mesas_seleccionadas']
+    # Permite editar el estado activo directamente desde la lista
+    list_editable = ('is_active',)
+
+
+    def fecha_ultima_actividad(self, obj):
+        # Para obtener la última actividad (pedido) de la mesa
+        ultimo_pedido = obj.pedido_set.order_by('-fecha').first()
+        if ultimo_pedido:
+            # Puedes ajustar el formato de fecha y hora como necesites
+            return ultimo_pedido.fecha.strftime('%Y-%m-%d %H:%M')
+        return "N/A"
+    fecha_ultima_actividad.short_description = "Última Actividad"
+
+
+    def total_pedido_actual(self, obj):
+        # Filtra por pedidos pendientes para esta mesa
+        ultimo_pedido_pendiente = obj.pedido_set.filter(estado='pendiente').order_by('-fecha').first()
+        if ultimo_pedido_pendiente:
+            return f"${ultimo_pedido_pendiente.total:.2f}"
+        return "N/A"
+    total_pedido_actual.short_description = 'Total Pedido Actual'
+
+
+    def acciones_mesa(self, obj):
+        app_label = obj._meta.app_label
+        model_name = obj._meta.model_name
+
+        # Enlace para editar la MESA (ahora correctamente dirigido a la mesa)
+        edit_url = reverse(f'admin:{app_label}_{model_name}_change', args=[obj.pk])
+        # Enlace para ver los pedidos de esa MESA
+        pedidos_url = reverse('admin:%s_%s_changelist' % (obj._meta.app_label, 'pedido')) + f'?mesa__id__exact={obj.pk}'
+
+        return format_html(
+            '<a class="button action-edit" href="{}"><i class="fa fa-pencil"></i> Editar Mesa</a>&nbsp;' # Botón para editar la mesa
+            '<a class="button" href="{}">Ver Pedidos</a>', # Botón para ver los pedidos de la mesa
+            edit_url,
+            pedidos_url
+        )
+
+    acciones_mesa.short_description = 'Acciones'
+
+
+    def activar_mesas_seleccionadas(self, request, queryset):
+        config = ConfiguracionGeneral.objects.first()
+        if not config:
+            self.message_user(request, "Error: No se ha configurado el límite de mesas activas.", level=messages.ERROR)
+            return
+
+        limite_mesas = config.limite_mesas
+        mesas_activas_actuales = Mesa.objects.filter(is_active=True).count()
+        mesas_a_activar = queryset.filter(is_active=False)
+
+        num_activadas = 0
+        for mesa in mesas_a_activar:
+            if mesas_activas_actuales < limite_mesas:
+                mesa.is_active = True
+                mesa.save()
+                num_activadas += 1
+                mesas_activas_actuales += 1
+                ActividadReciente.objects.create(
+                    usuario=request.user,
+                    accion=f'Activó la Mesa {mesa.numero} (ID: {mesa.id}).'
+                )
+            else:
+                messages.warning(request, f"No se pudo activar la Mesa {mesa.numero}. Se alcanzó el límite de {limite_mesas} mesas activas.")
+                break
+
+        if num_activadas > 0:
+            self.message_user(request, ngettext(
+                '%d mesa fue activada correctamente.',
+                '%d mesas fueron activadas correctamente.',
+                num_activadas
+            ) % num_activadas, messages.SUCCESS) # Uso ngettext para el plural
+        else:
+            messages.info(request, "Ninguna mesa seleccionada pudo ser activada debido al límite o ya estaban activas.")
+
+    activar_mesas_seleccionadas.short_description = "Activar mesas seleccionadas"
+
+    def desactivar_mesas_seleccionadas(self, request, queryset):
+        count = queryset.update(is_active=False)
+        for mesa in queryset:
+            ActividadReciente.objects.create(
+                usuario=request.user,
+                accion=f'Desactivó la Mesa {mesa.numero} (ID: {mesa.id}).'
+            )
+        self.message_user(request, ngettext(
+            '%d mesa fue desactivada correctamente.',
+            '%d mesas fueron desactivadas correctamente.',
+            count
+        ) % count, messages.SUCCESS) # Uso ngettext para el plural
+
+    desactivar_mesas_seleccionadas.short_description = "Desactivar mesas seleccionadas"
+
+    # Este método ya lo tenías, y es la forma correcta de mostrar un booleano con un ícono.
+    @admin.display(
+        description='Estado Activa',
+        boolean=True,
+    )
+    def mostrar_estado_activo(self, obj):
+        return obj.is_active
+
+@admin.register(Pedido, site=custom_admin_site)
+class PedidoAdmin(admin.ModelAdmin):
+    # Asegúrate de que estos campos sean correctos según tu models.py
+    list_display = ('id', 'mesa', 'fecha', 'estado', 'total_pedido_display', 'realizado_por', 'acciones_pedido')
+    list_filter = ('estado', 'fecha', 'mesa') 
+    search_fields = ('id', 'mesa__numero__icontains', 'mesero__username__icontains')
+    ordering = ('-fecha',) # Ahora usa 'fecha'
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def total_pedido_display(self, obj):
+        return f"${obj.total:.2f}"
+    total_pedido_display.short_description = _("Total del Pedido")
+    
+    def realizado_por(self, obj):
+        return obj.mesero.username if obj.mesero else _("Desconocido")
+    realizado_por.short_description = _("Realizado por")
+
+    # Método para añadir URLs personalizadas al admin (para el PDF)
+    def get_urls(self):
+        # Importa las urls de admin por defecto
+        from django.urls import path
+        urls = super().get_urls()
+        
+        # Define la URL personalizada para la descarga del PDF
+        # El 'name' debe coincidir con cómo lo llamas en reverse() en acciones_pedido
+        custom_urls = [
+            path('<int:pedido_id>/download_pdf/', 
+                 self.admin_site.admin_view(self.download_pedido_pdf_view), 
+                 name='{}_{}_download_pdf'.format(self.model._meta.app_label, self.model._meta.model_name)),
+        ]
+        return custom_urls + urls # Añade tus URLs personalizadas antes de las por defecto
+
+    # Método para la columna "Acciones"
+    def acciones_pedido(self, obj):
+        # Enlace para ver el detalle del pedido (usa la vista de edición/cambio por defecto del admin)
+        # Esto te lleva a la página donde puedes ver/editar el pedido completo en el admin
+        view_url = reverse('admin:{}_{}_change'.format(obj._meta.app_label, obj._meta.model_name), args=[obj.pk])
+        
+        # Enlace para descargar el PDF
+        # Usa el nombre de la URL personalizada que definimos en get_urls()
+        pdf_url = reverse('admin:{}_{}_download_pdf'.format(obj._meta.app_label, obj._meta.model_name), args=[obj.pk])
+
+        return format_html(
+            '<a class="button" href="{}">Ver Contenido</a>&nbsp;' # El '&nbsp;' es un espacio en HTML
+            '<a class="button" href="{}">Descargar PDF</a>',
+            view_url,
+            pdf_url
+        )
+    acciones_pedido.short_description = 'Acciones' # Título de la columna en el panel
+
+    # La vista que genera el PDF (definida como un método de la clase PedidoAdmin)
+    def download_pedido_pdf_view(self, request, pedido_id):
+        pedido = get_object_or_404(Pedido, pk=pedido_id)
+        # Asume que Pedido tiene un related_name 'detalles' para PedidoDetalle
+        detalles_pedido = pedido.detalles.all() 
+
+        context = {
+            'pedido': pedido,
+            'detalles_pedido': detalles_pedido,
+            # Puedes pasar más contexto si lo necesitas en tu plantilla PDF, como un logo
+            'request': request, # Útil para generar URLs absolutas si las necesitas en el PDF
+            'STATIC_URL': settings.STATIC_URL, # Pasa la URL estática para usar en la plantilla
+            'MEDIA_URL': settings.MEDIA_URL, # Pasa la URL de medios para usar en la plantilla
+        }
+        
+        # Llama a la función auxiliar para generar el PDF
+        response = render_to_pdf('pages/Admin/pedidos_pdf.html', context)
+        
+        # Establece el nombre del archivo PDF al descargarse
+        response['Content-Disposition'] = f'attachment; filename="pedido_{pedido.id}.pdf"'
+        return response
+
+
+
+
+#FUNCION PARA LA TOMA DE LOS PDFS.
+def render_to_pdf(template_src, context_dict={}):
+    template = get_template(template_src)
+    html = template.render(context_dict)
+    response = BytesIO()
+
+    # Función de callback para xhtml2pdf para encontrar archivos estáticos y de medios
+    # Esto es CRUCIAL si tu plantilla de PDF usa CSS o imágenes de STATIC_URL/MEDIA_URL
+    def link_callback(uri, rel):
+        # Asegúrate de que settings.STATIC_URL y settings.MEDIA_URL estén definidos
+        # Y que settings.STATIC_ROOT y settings.MEDIA_ROOT apunten a directorios reales
+        if uri.startswith(settings.STATIC_URL):
+            path = os.path.join(settings.STATIC_ROOT, uri.replace(settings.STATIC_URL, ""))
+        elif uri.startswith(settings.MEDIA_URL):
+            path = os.path.join(settings.MEDIA_ROOT, uri.replace(settings.MEDIA_URL, ""))
+        else:
+            return uri # Retorna la URI original si no es un archivo estático/media
+
+        # Asegúrate de que el archivo exista antes de devolver la ruta
+        if not os.path.isfile(path):
+            print(f"Advertencia: Archivo no encontrado para PDF: {path}") # Para depuración
+            return uri # Fallback a la URI original si el archivo no existe
+        return path
+
+    pisa_status = pisa.CreatePDF(
+        html,
+        dest=response,
+        link_callback=link_callback # Usa el callback para los archivos estáticos
+    )
+    if pisa_status.err:
+        return HttpResponse('Tuvimos algunos errores al generar el PDF <pre>%s</pre>' % html, status=400)
+    
+    response_pdf = HttpResponse(response.getvalue(), content_type='application/pdf')
+    return response_pdf
+
+
 # Registros
-custom_admin_site.register(Pedido)
-# admin.site.register(Usuario, UsuarioAdmin)  # Con la clase personalizada
-# admin.site.register(Producto, ProductoAdmin)
-custom_admin_site.register(Mesa)
-custom_admin_site.register(Usuario, UsuarioAdmin)
+# custom_admin_site.register(Pedido)
+# admin.site.register(Inventario)
+custom_admin_site.register(Usuario, UsuarioAdmin)  # Con la clase personalizada
+# custom_admin_site.register(Producto, ProductoAdmin)
+# admin.site.register(Reserva)
+# admin.site.register(ActividadReciente)
+# admin.site.register(Perfil)
+# custom_admin_site.register(GaleriaFoto,GaleriaFotoAdmin)
+# custom_admin_site.register(Mesa)
 
 
-
-
-# from .models import Rol, Categoria, Usuario, Producto, Mesa, Pedido, Reserva
-
-# @admin.register(Rol)
-# class RolAdmin(admin.ModelAdmin):
-#     list_display = ('tipoRol',)
-
-# @admin.register(Categoria)
-# class CategoriaAdmin(admin.ModelAdmin):
-#     list_display = ('nombreCategoria',)
-#     search_fields = ('nombreCategoria',)
-#     ordering      = ('nombreCategoria',)
-
-# @admin.register(Usuario)
-# class UsuarioAdmin(admin.ModelAdmin):
-#     list_display  = ('nombre', 'apellido', 'correo', 'rol')
-#     search_fields = ('nombre', 'apellido', 'correo')
-#     list_filter   = ('rol',)
-#     ordering      = ('apellido',)
-
-# @admin.register(Producto)
-# class ProductoAdmin(admin.ModelAdmin):
-#     list_display  = ('nombreProducto', 'precio', 'categoria')
-#     search_fields = ('nombreProducto',)
-#     list_filter   = ('categoria',)
-#     ordering      = ('nombreProducto',)
-
-# @admin.register(Mesa)
-# class MesaAdmin(admin.ModelAdmin):
-#     list_display = ('numero',)
-#     ordering     = ('numero',)
-
-# @admin.register(Pedido)
-# class PedidoAdmin(admin.ModelAdmin):
-#     list_display    = ('id', 'usuario', 'mesa', 'total', 'fecha')
-#     list_filter     = ('fecha', 'mesa')
-#     date_hierarchy  = 'fecha'
-
-# @admin.register(Reserva)
-# class ReservaAdmin(admin.ModelAdmin):
-#     list_display    = ('id', 'usuario', 'mesa', 'fecha', 'estado')
-#     list_filter     = ('estado', 'fecha')
-#     date_hierarchy  = 'fecha'

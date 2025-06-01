@@ -12,9 +12,7 @@ from django.urls import reverse
 from django.db import transaction
 from django.views.decorators.csrf import csrf_exempt
 from .decorators import role_required
-
-# from .models import Reserva
-# from django.core.mail import send_mail
+from .models import Mesa, Producto, Pedido, PedidoDetalle
 import json
 from .models import Usuario,Producto,GaleriaFoto
 from .forms import CustomUserCreationForm, CustomUserChangeForm, PasswordChangeForm
@@ -22,12 +20,10 @@ from django.contrib.auth.models import User
 from django.contrib.admin.views.decorators import staff_member_required
 from .models import ActividadReciente
 from .decorators import group_required
-# from .models import Categoria, Producto, Pedido, Mesa
 from django.db.models import Sum, Count
 import datetime
 import calendar
 from django.utils.timezone import now
-# # import openpyxl
 from django.http import HttpResponse
 from django.db.models.functions import TruncMonth
 from django.utils.dateformat import DateFormat
@@ -36,10 +32,6 @@ from django.db.utils import ProgrammingError
 from admin_personalizado import templates
 from django.contrib.admin.models import LogEntry
 from django.utils.translation import gettext as _
-
-
-
-
 
 # PRINCIPAL
 def index(request):
@@ -85,17 +77,16 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             if user.is_active:
-                login(request, user)
-                # Redireccionar según el rol del usuario
-                # print(f"Inicio de sesión exitoso para: {user.username}, rol: {user.rol}")  # Para depurar
-                if user.is_superuser or (user.rol.lower() == 'administrador' and user.is_staff):
-                    return redirect('admin:index')  
-                elif user.rol.lower() == 'ombu':
-                    return redirect('admin:index')  # Corregido a 'dashboard' (ver urls.py)
-                elif user.rol.lower() == 'mesero':  # Nueva condición para mesero
-                    return redirect('mesero_principal')  # Redirige a la vista de mesero
+                login(request, user) 
+
+                next_url = request.POST.get('next') or request.GET.get('next')
+
+                if user.is_superuser or (user.rol.lower() == 'administrador' and user.is_staff) or user.rol.lower() == 'ombu':
+                    return redirect(next_url or 'admin:index') 
+                elif user.rol.lower() == 'mesero':
+                    return redirect('mesero_principal') 
                 else:
-                    return redirect('index')  # Redirige a la página principal por defecto
+                    return redirect('index') 
             else:
                 messages.error(request, 'Tu cuenta está desactivada. Contacta al administrador.')
         else:
@@ -103,17 +94,17 @@ def login_view(request):
 
     # Si el usuario ya está autenticado, redirigir según su rol
     if request.user.is_authenticated:
-        # print(f"Usuario ya autenticado: {request.user.username}, rol: {request.user.rol}") 
-        if request.user.is_superuser or (request.user.rol.lower() == 'administrador' and request.user.is_staff):
-            return redirect('admin:index')  # Redirige al panel de administración de Django
-        elif request.user.rol.lower() == 'ombu':
-            return redirect('admin:index')  # Corregido a 'dashboard'
-        elif request.user.rol.lower() == 'mesero':  # Nueva condición para mesero
-            return redirect('mesero_principal')  # Redirige a la vista de mesero
-        else:
-            return redirect('index')  # Redirige a la página principal por defecto
+        # Captura el parámetro 'next' si existe, incluso si ya está autenticado
+        next_url = request.POST.get('next') or request.GET.get('next')
 
-    return render(request, 'pages/Admin/login.html')
+        if request.user.is_superuser or (request.user.rol.lower() == 'administrador' and request.user.is_staff) or request.user.rol.lower() == 'ombu':
+            return redirect(next_url or 'admin:index') 
+        elif request.user.rol.lower() == 'mesero':
+            return redirect('mesero_principal') 
+        else:
+            return redirect('index') 
+
+    return render(request, 'pages/Admin/login.html') # Asegúrate que esta sea la ruta correcta a tu plantilla de login personalizada.
 
 def logout_view(request):
     logout(request)
@@ -133,144 +124,112 @@ def mesero_principal(request):
     """Panel principal para usuarios con rol 'Mesero'"""
     return render(request, 'pages/menu_mesero/mesero_principal.html') # Renderiza el nuevo HTM
 
-
-# @never_cache
-# @staff_member_required # Asegura que solo el personal del admin pueda acceder a esta vista
-# def dashboard(request): # Renombrado a dashboard_view para consistencia
-#     # Obtener las 10 actividades administrativas más recientes
-#     recent_activities = LogEntry.objects.order_by('-action_time')[:10]
-
-#     # Formatear las actividades para mostrarlas en el template
-#     formatted_activities = []
-#     for entry in recent_activities:
-#         action_detail_message = ""
-
-#         # Usar get_text_for_log_entry para obtener una descripción más detallada
-#         # Si no tienes esta función, puedes usar object_repr
-#         object_display_name = str(entry.get_admin_url(entry.content_type_id, entry.object_id, entry.object_repr)) \
-#                               if entry.content_type and entry.object_id and entry.object_repr \
-#                               else (entry.object_repr if entry.object_repr else _("un objeto desconocido"))
-
-#         # Determinar la acción principal y la descripción inicial
-#         if entry.is_addition():
-#             action_description = _(f"Añadido '{object_display_name}'")
-#         elif entry.is_change():
-#             action_description = _(f"Modificado '{object_display_name}'")
-#             if entry.change_message:
-#                 try:
-#                     message_data = json.loads(entry.change_message)
-
-#                     if isinstance(message_data, list):
-#                         for msg in message_data:
-#                             if 'changed' in msg and 'fields' in msg['changed']:
-#                                 changed_fields = ', '.join(msg['changed']['fields'])
-#                                 action_detail_message = _(f"Se actualizaron los campos: {changed_fields}.")
-#                             elif 'added' in msg and 'name' in msg['added'] and 'object' in msg['added']:
-#                                 added_name = msg['added']['name'] # Nombre del campo relacionado (ej. 'permissions')
-#                                 added_object = msg['added']['object'] # Representación del objeto añadido (ej. 'can_view_report')
-#                                 action_detail_message = _(f"Se añadió '{added_object}' a '{added_name}'.")
-#                             elif 'deleted' in msg and 'name' in msg['deleted'] and 'object' in msg['deleted']:
-#                                 deleted_name = msg['deleted']['name']
-#                                 deleted_object = msg['deleted']['object']
-#                                 action_detail_message = _(f"Se eliminó '{deleted_object}' de '{deleted_name}'.")
-#                     else:
-#                         if entry.change_message.strip():
-#                             action_detail_message = _(f"Detalles del cambio: {entry.change_message.strip()}.")
-
-#                 except json.JSONDecodeError:
-#                     if entry.change_message.strip():
-#                         action_detail_message = _(f"Detalles del cambio: {entry.change_message.strip()}.")
-#                     else:
-#                         action_detail_message = _("No se especificaron detalles del cambio.")
-#         elif entry.is_deletion():
-#             action_description = _(f"Eliminado '{object_display_name}'")
-#         else:
-#             action_description = _(f"Acción desconocida sobre '{object_display_name}'")
-
-
-#         final_action_text = action_description
-#         if action_detail_message:
-#             final_action_text += f": {action_detail_message}"
-
-#         # Añadir quién realizó la acción
-#         final_action_text += f" por {entry.user.username}"
-
-#         formatted_activities.append({
-#             'accion': final_action_text,
-#             'fecha_hora': entry.action_time,
-#         })
-
-#     context = {
-#         'title': 'Dashboard Administrativo OMBÚ', # Título que aparecerá en el breadcrumbs
-#         'actividades_recientes': formatted_activities,
-#     }
-#     # LA RUTA DE LA PLANTILLA ES CLAVE AQUÍ: APUNTA A LA APP admin_personalizado
-#     return render(request, 'admin/dashboard.html', context)
-    
-    
-    
-    
-    # # Ventas por mes
-    # hoy = datetime.date.today()
-    # ventas_mensuales = []
-    # ventas_mensuales_labels = []
-    # ventas_mensuales_data = []
-
-    # for i in range(1, 13):
-    #     total = Pedido.objects.filter(fecha__month=i).aggregate(Sum('total'))['total__sum'] or 0
-    #     ventas_mensuales.append({'month': calendar.month_name[i], 'total': float(total)})
-    #     ventas_mensuales_labels.append(calendar.month_name[i])
-    #     ventas_mensuales_data.append(float(total))
-
-    # # Top mesas más usadas
-    # mesas_usadas = (
-    #     Pedido.objects.values('mesa__numero')
-    #     .annotate(total=Count('id'))
-    #     .order_by('-total')[:5]
-    # )
-
-    # # Top productos más vendidos
-    # productos_vendidos = (
-    #     Producto.objects.annotate(total=Count('pedido'))
-    #     .order_by('-total')[:5]
-    # )
-
-    # # Cálculos simples para los 4 recuadros:
-    # ventas_totales = Pedido.objects.aggregate(Sum('total'))['total__sum'] or 0
-    # hoy = datetime.date.today()
-    # ventas_dia = Pedido.objects.filter(fecha__date=hoy).aggregate(Sum('total'))['total__sum'] or 0
-    # ventas_mes = Pedido.objects.filter(fecha__month=hoy.month).aggregate(Sum('total'))['total__sum'] or 0
-    # ventas_anio = Pedido.objects.filter(fecha__year=hoy.year).aggregate(Sum('total'))['total__sum'] or 0
-
-    # return render(request, 'dashboard.html', {
-    #     'ventas_mensuales_labels': ventas_mensuales_labels,
-    #     'ventas_mensuales_data': ventas_mensuales_data,
-    #     'mesas_usadas': mesas_usadas,
-    #     'productos_vendidos': productos_vendidos,
-    #     'ventas_totales': ventas_totales,
-    #     'ventas_dia': ventas_dia,
-    #     'ventas_mes': ventas_mes,
-    #     'productos_top': productos_top,
-    #     'mesas_top': mesas_top,
-    #     'ventas_labels': ventas_labels,
-    #     'ventas_data': ventas_data,
-    # })
-
-    # return render(request, 'pages/Admin/dashboard.html', context)
-
-
-
-
-
-
 def admin_login_page(request):
     return render(request, 'pages/Admin/login.html')
 
+
+# mesas----------------------------------------------------------------------------------------------
 @never_cache
 @login_required
 def mesas(request):
-    return render(request, 'pages/Admin/mesas.html')
 
+    mesas_activas = Mesa.objects.filter(is_active=True).order_by('numero')
+    context = {
+        'mesas': mesas_activas,
+        'selected_page': 'mesas'
+    }
+    return render(request, 'pages/Admin/mesas.html', context)
+
+
+@login_required
+@group_required(['Administrador'])
+@require_POST
+def eliminar_mesa_logicamente(request, mesa_id):
+    """
+    Vista para marcar una mesa como inactiva (eliminación lógica).
+    """
+    try:
+        mesa = get_object_or_404(Mesa, pk=mesa_id)
+        mesa.is_active = False # Marcar como inactiva
+        mesa.save()
+        # Registrar actividad
+        ActividadReciente.objects.create(
+            usuario=request.user,
+            accion=f'Desactivó la Mesa {mesa.numero} (ID: {mesa.id})'
+        )
+        messages.success(request, f'Mesa {mesa.numero} desactivada correctamente.')
+    except Exception as e:
+        messages.error(request, f'Error al desactivar la mesa: {e}')
+    return redirect('mesas') # Redirige a la vista principal de mesas
+
+
+@login_required
+@group_required(['Administrador'])
+@require_http_methods(["GET", "POST"]) # Permitimos GET para mostrar el formulario y POST para procesarlo
+def gestionar_mesa(request):
+    """
+    Vista para agregar una nueva mesa o reactivar una existente.
+    """
+    if request.method == 'POST':
+        numero_mesa = request.POST.get('numero')
+        capacidad_mesa = request.POST.get('capacidad')
+        
+        if not numero_mesa or not capacidad_mesa:
+            messages.error(request, 'El número y la capacidad de la mesa son obligatorios.')
+            return redirect('gestionar_mesa') # Redirige de nuevo a la página de gestión si faltan datos
+
+        try:
+            numero_mesa = int(numero_mesa)
+            capacidad_mesa = int(capacidad_mesa)
+
+            # Intentar encontrar una mesa existente (activa o inactiva) con ese número
+            mesa_existente = Mesa.objects.filter(numero=numero_mesa).first()
+
+            if mesa_existente:
+                if not mesa_existente.is_active:
+                    # Si existe pero está inactiva, la reactivamos
+                    mesa_existente.is_active = True
+                    mesa_existente.capacidad = capacidad_mesa
+                    mesa_existente.estado = 'disponible' # Asegurar que esté disponible al reactivar
+                    mesa_existente.save()
+                    messages.success(request, f'Mesa {numero_mesa} reactivada correctamente (ID: {mesa_existente.id}).')
+                    # Registrar actividad
+                    ActividadReciente.objects.create(
+                        usuario=request.user,
+                        accion=f'Reactivó la Mesa {mesa_existente.numero} (ID: {mesa_existente.id})'
+                    )
+                else:
+                    # Si existe y ya está activa, es una advertencia o error
+                    messages.warning(request, f'Ya existe una Mesa {numero_mesa} activa.')
+                    # Puedes redirigir a una página de edición o simplemente volver
+                    return redirect('mesas') # O a la página de gestión
+            else:
+                # Si no existe ninguna mesa con ese número, creamos una nueva
+                nueva_mesa = Mesa.objects.create(
+                    numero=numero_mesa,
+                    capacidad=capacidad_mesa,
+                    is_active=True,
+                    estado='disponible'
+                )
+                messages.success(request, f'Mesa {numero_mesa} agregada correctamente (ID: {nueva_mesa.id}).')
+                # Registrar actividad
+                ActividadReciente.objects.create(
+                    usuario=request.user,
+                    accion=f'Agregó una nueva Mesa {nueva_mesa.numero} (ID: {nueva_mesa.id})'
+                )
+        except ValueError:
+            messages.error(request, 'El número y la capacidad de la mesa deben ser números enteros.')
+        except Exception as e:
+            messages.error(request, f'Error al gestionar la mesa: {e}')
+
+        return redirect('mesas') # Redirige a la vista principal de mesas después de la operación
+    else:
+        # Si es un GET, renderiza un formulario simple para añadir/reactivar mesas
+        # Esto es opcional, si ya lo haces desde el admin puedes omitir esta parte de la vista o hacerla más compleja
+        return render(request, 'gestionar_mesa.html', {'selected_page': 'mesas'}) # Necesitarás crear este HTML
+
+
+# fin mesas-----------------------------------------------------------------------------------------------------------
 @never_cache
 @group_required('ombu')
 def reserva(request):
@@ -295,8 +254,6 @@ def usuarios_view(request):
     """Vista principal de la administración de usuarios"""
     usuarios = Usuario.objects.all().order_by('id')
     return render(request, 'pages/Admin/usuarios.html', {'usuarios': usuarios})
-
-
 
 
 #CREACION DE USUARIOS
@@ -432,10 +389,6 @@ def actualizar_estado_usuario(request, user_id):
         return JsonResponse({'success': False, 'message': 'Formato JSON inválido'}, status=400)
     except Exception as e:
         return JsonResponse({'success': False, 'message': f'Error al actualizar estado: {str(e)}'}, status=500)
-
-
-
-
 
 #ELIMINACION DE USUARIO
 @login_required
@@ -597,114 +550,120 @@ def productos_mesero(request, categoria):
         'tipo': 'mesero',
     })
 
-
-
-
 # Vista para manejar fotos de index
 def index(request):
     
-    # Opción 1: Obtener las dos fotos más recientes
     galeria_fotos = GaleriaFoto.objects.all().order_by('-fecha_subida')[:2]
-
-    # Opción 2: Obtener las dos fotos marcadas como principales (si existen)
-    # Si tienes más de 2 principales y quieres solo 2, ajusta el orden o la lógica.
-    # galeria_fotos = GaleriaFoto.objects.filter(es_principal=True).order_by('-fecha_subida')[:2]
 
     context = {
         'galeria_fotos': galeria_fotos
     }
     return render(request, 'pages/principal/index.html', context)
 
-
-#NUMERO DE MESAS
-def mesas(request):
-    mesas = Mesa.objects.all().order_by('numero')  # Ordenar por número para mostrar ordenadas
-    context = {
-        'mesas': mesas,
-    }
-    return render(request, 'pages/Admin/mesas.html', context)
-
-
-
-
-
-
-
-
-
+# #NUMERO DE MESAS
+# def mesas(request):
+#     mesas = Mesa.objects.all().order_by('numero')  # Ordenar por número para mostrar ordenadas
+#     context = {
+#         'mesas': mesas,
+#     }
+#     return render(request, 'pages/Admin/mesas.html', context)
 
 # -----------------------------------------------------------PEDIDOS------------------------------------
-
-
-
+@require_POST # Asegura que solo se acepta el método POST
+@csrf_exempt # Considera quitar esto en producción y usar el token CSRF apropiadamente
 def guardar_pedido(request):
-    if request.method == 'POST':
+    try:
+        data = json.loads(request.body)
+        
+        mesa_id = data.get('mesa_id')
+        items = data.get('items')
+        total_recibido = data.get('total')
+        medio_pago = data.get('medio_pago')
+
+        if not mesa_id or not items:
+            return JsonResponse({'error': 'Faltan datos en el pedido (mesa_id o items).'}, status=400)
+
+        if not isinstance(items, list) or len(items) == 0:
+            return JsonResponse({'error': 'El pedido no contiene productos válidos.'}, status=400)
+
         try:
-            data = json.loads(request.body)
-            mesa_id = data.get('mesa')
-            medio_pago = data.get('medio_pago')
-            productos = data.get('productos', [])
+            mesa = Mesa.objects.get(id=mesa_id)
+        except Mesa.DoesNotExist:
+            return JsonResponse({'error': 'La mesa seleccionada no existe.'}, status=404)
 
-            if not mesa_id or not productos:
-                return JsonResponse({'error': 'Datos incompletos'}, status=400)
+        # Usar una transacción para asegurar la atomicidad de la operación
+        with transaction.atomic():
+            # Obtener el mesero actual si el usuario está autenticado y es un mesero
+            mesero = None
+            if request.user.is_authenticated and hasattr(request.user, 'rol') and request.user.rol == 'mesero':
+                mesero = request.user # Asume que request.user es una instancia de tu modelo Usuario
 
-            try:
-                mesa = Mesa.objects.get(id=mesa_id)
-            except Mesa.DoesNotExist:
-                return JsonResponse({'error': 'Mesa no encontrada'}, status=400)
+            # Crear el pedido principal
+            pedido = Pedido.objects.create(
+                mesa=mesa,
+                total=total_recibido, # Usar el total calculado desde el frontend, se puede recalcular para validación
+                mesero=mesero,
+                medio_pago=medio_pago,
+                estado='finalizado' # Establecemos el estado a 'finalizado' directamente aquí
+            )
 
-            pedido = Pedido.objects.create(mesa=mesa, medio_pago=medio_pago, total=0)
+            total_calculado_backend = 0
+            # Crear los detalles del pedido
+            for item_data in items:
+                producto_id = item_data.get('producto_id')
+                cantidad = item_data.get('cantidad')
+                precio_unitario_recibido = item_data.get('precio_unitario')
 
-            total = 0
-            for item in productos:
+                if not producto_id or not cantidad or cantidad <= 0:
+                    raise ValueError(f"Datos de producto inválidos: {item_data}")
+
                 try:
-                    
-                    
-                    print(data)  # para ver en consola qué llega
-
-                    producto = Producto.objects.get(id=item['id'])
+                    producto = Producto.objects.get(id=producto_id)
                 except Producto.DoesNotExist:
-                    return JsonResponse({'error': f"Producto con id {item['id']} no existe"}, status=400)
+                    raise ValueError(f"Producto con ID {producto_id} no encontrado.")
+                
+                # Opcional: Validar que el precio_unitario recibido coincida con el del producto en BD
+                # Esto es importante para evitar manipulaciones de precios desde el cliente
+                if float(precio_unitario_recibido) != float(producto.precio):
+                    # Podrías decidir usar el precio de la BD o lanzar un error
+                    # Para este ejemplo, usaremos el de la BD para mayor seguridad
+                    precio_para_detalle = producto.precio
+                    # print(f"Advertencia: Precio de producto {producto.titulo} difiere. Usando precio de BD: {producto.precio}")
+                else:
+                    precio_para_detalle = precio_unitario_recibido
 
-                cantidad = item['cantidad']
-                subtotal = producto.precio * cantidad
                 PedidoDetalle.objects.create(
                     pedido=pedido,
                     producto=producto,
                     cantidad=cantidad,
-                    subtotal=subtotal
+                    precio_unitario=precio_para_detalle
                 )
-                total += subtotal
-
-            pedido.total = total
-            pedido.save()
-
-            return JsonResponse({'message': 'Pedido guardado correctamente.'}, status=200)
-
-        except json.JSONDecodeError:
-            return JsonResponse({'error': 'JSON inválido'}, status=400)
-
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=400)
-    else:
-        return JsonResponse({'error': 'Método no permitido'}, status=405)
+                total_calculado_backend += (precio_para_detalle * cantidad)
+            
+            # Opcional: Validar que el total calculado en el backend coincida con el del frontend
+            # Puedes tener una pequeña tolerancia debido a problemas de precisión de flotantes
+            if abs(total_calculado_backend - float(total_recibido)) > 0.01:
+                print(f"Advertencia: Discrepancia en el total. Frontend: {total_recibido}, Backend: {total_calculado_backend}")
+                # return JsonResponse({'error': 'Discrepancia en el total del pedido.'}, status=400)
+                # O podrías simplemente actualizar el total del pedido con el calculado en backend
+                pedido.total = total_calculado_backend
+                pedido.save()
 
 
+            # Registrar actividad reciente
+            accion_log = f'Finalizó pedido #{pedido.id} para la Mesa {mesa.numero} (Total: ${pedido.total:.2f}, Pago: {medio_pago}).'
+            ActividadReciente.objects.create(
+                usuario=request.user if request.user.is_authenticated else None,
+                accion=accion_log
+            )
 
+            return JsonResponse({'message': f'Pedido #{pedido.id} finalizado y guardado correctamente.'}, status=200)
 
-# from django.http import JsonResponse
-# from django.views.decorators.csrf import csrf_exempt
-# import json
-
-# @csrf_exempt  # temporal para evitar problemas de CSRF
-# def guardar_pedido(request):
-#     if request.method == 'POST':
-#         try:
-#             data = json.loads(request.body)
-#             print('Datos recibidos:', data)  # para debug en consola
-#             # Aquí debes procesar y guardar el pedido en la BD
-#             return JsonResponse({'message': 'Pedido guardado correctamente'})
-#         except Exception as e:
-#             return JsonResponse({'error': str(e)}, status=400)
-#     else:
-#         return JsonResponse({'error': 'Método no permitido'}, status=405)
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Solicitud JSON inválida.'}, status=400)
+    except ValueError as e: # Captura los errores de validación personalizados
+        return JsonResponse({'error': str(e)}, status=400)
+    except Exception as e:
+        # Esto capturará cualquier otro error inesperado
+        print(f"Error inesperado al guardar pedido: {e}")
+        return JsonResponse({'error': 'Error interno del servidor al procesar el pedido.'}, status=500)

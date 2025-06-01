@@ -1,17 +1,19 @@
+/* ombu-django/proyecto_ombu/admin_personalizado/static/admin_personalizado/css_panel/bar_filtros.css */
+
 /* Contenedor de buscador y botón de filtro */
 .search-and-filter-trigger-container {
     display: flex;
-    /* justify-content: space-between; */ /* Eliminar o comentar esta línea */
-    justify-content: flex-end; /* Alinea los elementos al final (derecha) del contenedor */
+    justify-content: space-between; /* Distribuye el espacio para que el grupo de búsqueda/filtro esté a la izquierda y los botones de acción a la derecha */
     align-items: center; /* Centra verticalmente los elementos */
     margin-bottom: 20px;
-    padding: 10px 0;
+    padding: 15px 0;
     background-color: #f9f9f9;
     border-bottom: 1px solid #eee;
     padding-right: 10px;
-    flex-wrap: wrap;
+    flex-wrap: wrap; /* Permite que los elementos se envuelvan en pantallas pequeñas */
     padding-top: 10px;
-    gap: 20px; /* Añade un espacio entre el grupo de búsqueda/filtro y el botón de añadir */
+    gap: 10px; /* Reducir el espacio entre los principales bloques (grupo de búsqueda y cada ul.object-tools) */
+    border-radius: 8px; /* Pequeños bordes redondeados */
 }
 
 /* Grupo para el buscador y el botón de filtro (izquierda) */
@@ -19,13 +21,12 @@
     display: flex;
     align-items: center;
     gap: 15px;
-    /* flex-grow: 1; */ /* Eliminar esta línea para que no ocupe todo el espacio disponible */
+    flex-grow: 1; /* Permitir que ocupe todo el espacio disponible, empujando los botones a la derecha */
     flex-shrink: 0; /* Asegura que no se encoja más de lo necesario */
 }
 
 
 #changelist-search {
-    /* Ajustes para el buscador, ahora dentro de .search-filter-group */
     flex-shrink: 1;
     min-width: 150px;
     max-width: 400px;
@@ -40,10 +41,8 @@
 }
 
 #changelist-search input[type="text"] {
-    flex-grow: 1; /* El input de texto puede expandirse */
+    flex-grow: 1;
 }
-
-
 
 /* Estilos del botón de filtro */
 .custom-filter-button {
@@ -66,18 +65,21 @@
 }
 
 
-/*----------------------------------- Estilos para el botón "Añadir usuario" (derecha) -----------------------------------*/
-.search-and-filter-trigger-container .object-tools {
+/*----------------------------------- Estilos para los botones de acción (derecha) -----------------------------------*/
+/* Aplicar estilos a ambos ul.object-tools dentro de search-and-filter-trigger-container */
+.search-and-filter-trigger-container > ul.object-tools {
     list-style: none;
-    margin: 0;
+    margin: 0; /* Eliminar márgenes externos para que estén pegados al borde del contenedor */
     padding: 0;
     flex-shrink: 0;
     display: flex;
     align-items: center;
-    margin-top: 0 !important;
-    margin-bottom: 17px;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
+    gap: 10px; /* Espacio entre los elementos li dentro de esta lista (e.g., entre Añadir y Eliminar) */
+}
+
+/* Estilo específico para el primer ul.object-tools para empujarlo (y los siguientes) a la derecha */
+.search-and-filter-trigger-container > ul.object-tools:first-of-type {
+    margin-left: auto; /* Esto empuja este ul y cualquier ul siguiente a la derecha, agrupándolos */
 }
 
 .search-and-filter-trigger-container .object-tools li {
@@ -86,9 +88,10 @@
     padding: 0;
 }
 
+/* Estilos del botón de añadir personalizado */
 .search-and-filter-trigger-container .object-tools .addlink {
     display: inline-block;
-    padding: 10px 25px 10px 10px;
+    padding: 8px 25px 10px 10px; /* Reducir padding para que sean más compactos */
     background-color: #28a745;
     color: white;
     text-decoration: none;
@@ -98,9 +101,8 @@
     border: none;
     cursor: pointer;
     line-height: normal;
-    /* Ajusta la altura si es necesario para que coincida con la del buscador/filtro */
-    height: auto; /* Permite que la altura se ajuste al contenido */
-    display: flex; /* Para centrar el contenido del botón si tiene íconos o texto */
+    height: auto;
+    display: flex;
     align-items: center;
     justify-content: center;
 }
@@ -109,7 +111,30 @@
     background-color: #218838;
 }
 
+/* Estilos para el botón de eliminar global */
+.delete-button-global {
+    background-color: #604447; /* Rojo */
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s ease;
+}
 
+.delete-button-global:hover:not(:disabled) {
+    background-color: #c82333;
+}
+
+.delete-button-global:disabled {
+    background-color: #e0e0e0;
+    color: #a0a0a0;
+    cursor: not-allowed;
+}
 
 /* ------------------------------------------------------- MODAL -----------------------------------------------------*/
 .modal {
@@ -122,9 +147,6 @@
     height: 100%;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.6); /* Fondo más oscuro para mayor contraste */
-    display: flex; /* Usar flexbox para centrar contenido */
-    justify-content: center;
-    align-items: center;
     opacity: 0; /* Para la transición de entrada */
     visibility: hidden; /* Para la transición de entrada */
     transition: opacity 0.3s ease, visibility 0.3s ease; /* Transición suave */
@@ -134,6 +156,9 @@
 .modal.is-active { /* Asume que JavaScript añade esta clase para mostrar el modal */
     opacity: 1;
     visibility: visible;
+    display: flex; /* AÑADE ESTAS LÍNEAS AQUÍ */
+    justify-content: center; /* AÑADE ESTAS LÍNEAS AQUÍ */
+    align-items: center; /* AÑADE ESTAS LÍNEAS AQUÍ */
 }
 
 .modal-content {
@@ -166,7 +191,9 @@
     font-weight: 700; /* Más negrita */
 }
 
-.close-button {
+/* Estilos para ambos botones de cierre (modal de eliminar y modal de filtro) */
+.close-button,
+.close-button-filter { /* Se agregó la nueva clase aquí */
     color: #999999; /* Color más suave */
     font-size: 32px; /* Un poco más grande */
     font-weight: normal; /* No tan negrita */
@@ -178,7 +205,9 @@
 }
 
 .close-button:hover,
-.close-button:focus {
+.close-button:focus,
+.close-button-filter:hover, /* Agregado para la nueva clase */
+.close-button-filter:focus { /* Agregado para la nueva clase */
     color: black;
     text-decoration: none;
     cursor: pointer;
@@ -190,39 +219,6 @@
     padding-right: 15px;
     margin-bottom: 20px; /* Espacio antes del footer */
 }
-
-/* Estilos para los elementos de lista de filtros dentro del modal
-.modal-filters-body .filter-group li {
-    background-color: #e9e9e9;
-    padding: 5px 10px;
-    border-radius: 3px;
-    transition: background-color 0.2s ease, color 0.2s ease; 
-}
-
-.modal-filters-body .filter-group li:hover {
-    background-color: #d9d9d9;
-}
-
-.modal-filters-body .filter-group a {
-    text-decoration: none;
-    color: #333;
-    display: block;
-}
-
-
-.modal-filters-body .filter-group li.active-filter {
-    background-color: #28a745; 
-    color: white; 
-    font-weight: bold;
-}
-
-.modal-filters-body .filter-group li.active-filter a {
-    color: white; 
-}
-
-.modal-filters-body .filter-group li.active-filter:hover {
-    background-color: #218838; 
-} */
 
 .filter-group {
     margin-bottom: 25px; /* Más espacio entre grupos de filtros */
@@ -266,18 +262,9 @@
     font-weight: 500; /* Ligeramente en negrita */
 }
 
-/* Estilo para un filtro activo (si tu JS añade esta clase)
-.filter-group li.active-filter {
-    background-color: #28a745 !important; 
-    color: white !important;
-    font-weight: bold;
-    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3); 
-} */
-
 .filter-group li.active-filter a {
     color: rgb(0, 0, 0) !important;
 }
-
 
 .filter-group li.active-filter:hover {
     background-color: #218838 !important;
@@ -409,3 +396,6 @@
         font-size: 14px;
     }
 }
+
+
+

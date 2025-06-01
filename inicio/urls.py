@@ -32,11 +32,22 @@ urlpatterns = [
     # path('admin/', admin.site.urls),
     # path('dashboard/', views.dashboard, name='dashboard'),
     path('login/', views.login_view, name='login'),
-    path('mesas/', views.mesas, name='mesas'),
     path('reserva/', views.reserva, name='reserva'),
     # path('usuarios/', views.usuarios, name = 'usuarios'),
     path('logout/', views.logout_view, name='logout'),
 
+
+    # MESAS
+    path('mesas/', views.mesas, name='mesas'),
+    path('eliminar-mesa-logicamente/<int:mesa_id>/', views.eliminar_mesa_logicamente, name='eliminar_mesa_logicamente'),
+    path('gestionar-mesa/', views.gestionar_mesa, name='gestionar_mesa'),
+
+
+    #PEDIDOS
+    path('guardar_pedido/', views.guardar_pedido, name='guardar_pedido'),
+    
+    
+    
     # URL del Dashboard
     # path('dashboard/', views.dashboard, name='dashboard'),
 
@@ -91,8 +102,6 @@ urlpatterns = [
     path('mesero/productos/<str:categoria>/', views.productos_mesero, name='productos_mesero'),
 
 
-    #PEDIDOS
-    path('guardar-pedido/', views.guardar_pedido, name='guardar_pedido'),
 ]
 
 

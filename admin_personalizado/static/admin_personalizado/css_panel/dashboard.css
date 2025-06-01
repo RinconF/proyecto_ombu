@@ -52,11 +52,12 @@
     /* Ajustes para que ocupe la mitad o un poco más */
     flex: 1 1 55%; /* Proporción 1, se encoge, base del 55% */
     min-width: 500px; /* Ancho mínimo razonable antes de envolverse */
-    max-width: calc(100% - 330px); /* Para dejar espacio al sidebar y al gap */
+    max-width: calc(100% - 300px); /* Para dejar espacio al sidebar y al gap */
 
+    
     background-color: #212B36;
     color: #E0E0E0;
-    padding: 35px;
+    padding: 25px;
     border-radius: 10px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
     background-image: none;
@@ -64,10 +65,9 @@
 }
 
 .dashboard-sidebar {
-    /* Ajustes para que ocupe la otra mitad o un poco menos */
-    flex: 1 1 300px; /* Proporción 1, se encoge, base de 300px (su min-width) */
-    min-width: 300px; /* Ancho mínimo para la barra lateral */
-    max-width: 40%; /* Para que no crezca demasiado en pantallas grandes */
+    flex: 1 1 300px; 
+    min-width: 300px; 
+    max-width: 40%; 
 
     background-color: #1A222B;
     padding: 30px 25px;

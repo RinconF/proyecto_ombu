@@ -46,7 +46,7 @@
         </p>
         {{ adminform.form.non_field_errors }}
         {# DEBUGGING: Inicio del bloque de depuración #}
-        {% if adminform.form.errors %}
+        {% comment %} {% if adminform.form.errors %}
             <div style="background-color: #ffe0b2; border: 2px solid #ff9800; padding: 15px; margin: 20px 0; border-radius: 8px; font-family: monospace; color: #333;">
                 <h3 style="color: #d35400; margin-top: 0; border-bottom: 1px solid #ff9800; padding-bottom: 5px;">
                     DEBUG: ERRORES DE FORMULARIO DETECTADOS
@@ -97,7 +97,7 @@
             <div style="background-color: #e8f5e9; border: 2px solid #66bb6a; padding: 10px; margin: 20px 0; border-radius: 8px; font-family: monospace; color: #333;">
                 <p>DEBUG: No se detectaron errores de formulario (adminform.form.errors es False).</p>
             </div>
-        {% endif %}
+        {% endif %} {% endcomment %}
         {# DEBUGGING: Fin del bloque de depuración #}
     {% endif %}
 

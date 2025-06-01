@@ -34,6 +34,11 @@
                 <div class="forgot-link">
                     <a href="{% url 'password_reset' %}">¿Olvidaste tu contraseña?</a>
                 </div>
+                
+                {# ¡IMPORTANTE! Campo oculto 'next' para la redirección #}
+                {# Esto asegura que si la URL de login original tenía ?next=/admin/algo, se envíe con el POST #}
+                <input type="hidden" name="next" value="{{ request.GET.next|default:'' }}">
+                
                 <button type="submit" class="btn">Ingresar</button>
             </form>
             <a href="{% url 'index' %}"><button class="btn-inicio">Inicio</button></a>

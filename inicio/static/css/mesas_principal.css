@@ -335,3 +335,95 @@ body.no-scroll {
     color: rgb(200, 58, 58);
     top: 10px
 }
+
+/* CONTENEDOR DE SECCION DE PEDIDOS ------------------------------------*/
+/* Estilos básicos para las secciones de pedidos, puedes mover esto a mesas_principal.css */
+.pedidos-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap; /* Permite que los contenedores se envuelvan en pantallas pequeñas */
+    gap: 20px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.pedidos-card {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    width: 45%; /* Ajusta el ancho para que quepan dos en una fila */
+    box-shadow: var(--shadow-normal);
+    color: white;
+    text-align: left;
+    max-height: 600px; /* Limita la altura para el scroll */
+    overflow-y: auto; /* Habilita el scroll vertical */
+}
+
+.pedidos-card h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--accent-color); /* Color de acento de tu CSS */
+}
+
+.pedido-item {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    margin-bottom: 15px;
+    padding: 15px;
+    position: relative;
+}
+.pedido-item h4 {
+    margin-top: 0;
+    color: #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.pedido-item p {
+    margin: 5px 0;
+    font-size: 0.9em;
+}
+.pedido-item ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+}
+.pedido-item ul li {
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 8px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85em;
+}
+.finalizar-pedido-btn-dashboard {
+    background-color: var(--accent-color);
+    color: var(--primary-color);
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+.finalizar-pedido-btn-dashboard:hover {
+    background-color: #39cc2c; /* Un tono más oscuro del color de acento */
+}
+.pedido-finalizado-details {
+    font-size: 0.8em;
+    color: #ccc;
+    margin-top: 10px;
+}
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .pedidos-card {
+        width: 90%; /* En móviles, cada tarjeta ocupa casi todo el ancho */
+    }
+    .pedidos-container {
+        flex-direction: column; /* Apila las tarjetas verticalmente */
+        align-items: center;
+    }
+}

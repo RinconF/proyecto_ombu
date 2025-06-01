@@ -72,10 +72,25 @@ class Usuario(AbstractUser):
 
 
 class Mesa(models.Model):
-    numero = models.PositiveIntegerField(unique=True)
-    
+    ESTADO_CHOICES = [
+        ('disponible', 'Disponible'),
+        ('ocupada', 'Ocupada'),
+        ('limpieza', 'En Limpieza'),
+    ]
+    numero = models.IntegerField(unique=True, help_text="Número único de la mesa (ej. 1, 2, 3)")
+    capacidad = models.IntegerField(help_text="Capacidad de personas que la mesa puede albergar")
+    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='disponible')
+    is_active = models.BooleanField(default=True, help_text="Indica si la mesa está activa para su uso.")
+
+    class Meta:
+        verbose_name = "Mesa"
+        verbose_name_plural = "Mesas"
+        ordering = ['numero']
+
     def __str__(self):
-        return f"Mesa {self.numero}"
+        # Muestra el número y si está activa o inactiva
+        status = "Activa" if self.is_active else "Inactiva"
+        return f"Mesa {self.numero} ({status})"
 
 
 
@@ -118,13 +133,26 @@ class Producto(models.Model):
 
 # -------------------------PEDIDOS-------------------------------------------------------------
 class Pedido(models.Model):
+    ESTADO_PEDIDO_CHOICES = [
+        ('pendiente', 'Pendiente'),
+        ('finalizado', 'Finalizado'),
+    ]
+    
+    
     mesa = models.ForeignKey(Mesa, on_delete=models.CASCADE)
     fecha = models.DateTimeField(auto_now_add=True)
     total = models.DecimalField(max_digits=10, decimal_places=2)
+    estado = models.CharField(max_length=20, choices=ESTADO_PEDIDO_CHOICES, default='pendiente')
+    mesero = models.ForeignKey(Usuario, on_delete=models.SET_NULL, null=True, blank=True)
     medio_pago = models.CharField(max_length=50)
 
     def __str__(self):
             return f"Pedido en mesa {self.mesa.numero} - ${self.total}"  # Modifiqué para mostrar el número de la mesa
+
+    class Meta:
+        verbose_name = "Pedido"
+        verbose_name_plural = "Pedidos"
+        ordering = ['-fecha']
 
 
 class PedidoDetalle(models.Model):
@@ -132,6 +160,18 @@ class PedidoDetalle(models.Model):
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     cantidad = models.PositiveIntegerField()
     precio_unitario = models.DecimalField(max_digits=8, decimal_places=2)
+    
+    @property
+    def subtotal(self):
+        return self.cantidad * self.precio_unitario
+    
+    def __str__(self):
+        return f"{self.cantidad} x {self.producto.titulo} para Pedido #{self.pedido.id}"
+
+    class Meta:
+        verbose_name = "Detalle de Pedido"
+        verbose_name_plural = "Detalles de Pedidos"
+        unique_together = ('pedido', 'producto')
 
 # ---------------------------------------------------------------------------------------------------
 
@@ -198,14 +238,40 @@ class GaleriaFoto(models.Model):
         ordering = ['-fecha_subida']
 
 
-    # # Opcional: Para mostrar una previsualización en el admin
+class ConfiguracionGeneral(models.Model):
+    # Límite máximo de mesas que el bar puede tener
+    # Valor predeterminado de 15, mínimo 10, máximo 20 (se valida en el admin y la vista)
+    limite_mesas = models.IntegerField(default=15) 
+
+    class Meta:
+        verbose_name = "Configuración General"
+        verbose_name_plural = "Configuración General"
+
+    def __str__(self):
+        return "Configuración del Sistema"
+
+    def save(self, *args, **kwargs):
+        # Asegurar que solo haya una instancia de esta configuración
+        if not self.pk and ConfiguracionGeneral.objects.exists():
+            raise ValueError("Solo puede haber una instancia de Configuración General.")
+        # Validar el límite de mesas antes de guardar
+        if not (10 <= self.limite_mesas <= 20):
+            raise ValueError("El límite de mesas debe estar entre 10 y 20.")
+        super().save(*args, **kwargs)
+
+
+
+
+
+
+
+
     # from django.utils.html import mark_safe
     # def admin_thumbnail(self):
     #     if self.imagen:
     #         return mark_safe(f'<img src="{self.imagen.url}" width="100" height="auto" />')
     #     return "No Image"
     # admin_thumbnail.short_description = 'Miniatura'
-    
     
     
     

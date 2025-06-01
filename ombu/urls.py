@@ -22,9 +22,13 @@ from django.views.static import serve
 from django.conf import settings
 from django.conf.urls.static import static
 from admin_personalizado.admin import custom_admin_site
+from django.urls import path, include, reverse_lazy 
+from django.views.generic import RedirectView
 
 
 urlpatterns = [
+    path('admin/login/', RedirectView.as_view(url=reverse_lazy('login'), permanent=False), name='admin_login_redirect'),
+    path('admin', RedirectView.as_view(url=reverse_lazy('login'), permanent=False), name='admin_base_redirect'),
     path('admin/', custom_admin_site.urls),
     path('', include('inicio.urls')),
     path('admin_panel/', include('admin_personalizado.urls', namespace='admin_panel')),
@@ -34,5 +38,5 @@ urlpatterns += [
     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 ]
 
-if settings.DEBUG: # <--- Esto es importante
+if settings.DEBUG: 
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

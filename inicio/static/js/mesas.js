@@ -1,3 +1,49 @@
+function getCSRFToken() {
+    let cookieValue = null;
+    const name = 'csrftoken';
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function eliminarProducto(mesaId, index) {
+    const clavePedidoMesa = `pedido_mesa_${mesaId}`;
+    const pedidoActual = JSON.parse(localStorage.getItem(clavePedidoMesa)) || [];
+
+    // Eliminar el producto en la posición 'index'
+    pedidoActual.splice(index, 1);
+
+    // Guardar los cambios en localStorage
+    localStorage.setItem(clavePedidoMesa, JSON.stringify(pedidoActual));
+
+    // **Vuelve a llamar a cargarPedido() para actualizar la vista**
+    cargarPedido(mesaId);
+}
+
+document.querySelectorAll('.finalizar-pedido-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        if (!mesaActivaId) {
+            alert('Por favor, selecciona una mesa primero.');
+            return;
+        }
+        // Obtener el medio de pago seleccionado
+        const medioPagoSelect = document.querySelector('.medio-pago');
+        const medioPago = medioPagoSelect ? medioPagoSelect.value : 'efectivo'; // Default si no se encuentra el select
+
+        // AHORA PASAMOS EL MEDIO DE PAGO A LA FUNCIÓN
+        finalizarPedido(mesaActivaId, medioPago); 
+    });
+});
+
+
 // Seleccionar todas las mesas
 const mesas = document.querySelectorAll('.mesa');
 const pedidoSection = document.getElementById('pedido-section');
@@ -9,8 +55,9 @@ let mesaActivaId = localStorage.getItem('mesaActivaId') || null;
 
 mesas.forEach(mesa => {
     mesa.addEventListener('click', function() {
-        const mesaId = mesa.getAttribute('data-mesa');  // Obtener ID de la mesa seleccionada
-        mesaActivaId = mesaId; // Guardar el ID de la mesa activa
+        const mesaId = mesa.getAttribute('data-mesa-id');  // Obtener ID de la mesa seleccionada
+        mesaActivaId = mesaId;
+        localStorage.setItem('mesaActivaId', mesaId); // Guardar el ID de la mesa activa
 
         
         // Si la mesa seleccionada ya está abierta, ocultar el pedido
@@ -25,15 +72,7 @@ mesas.forEach(mesa => {
     });
 // Seleccionar una mesa
 });
-document.querySelectorAll('.mesa').forEach(mesa => {
-    mesa.addEventListener('click', () => {
-        mesaSeleccionada = mesa.getAttribute('data-mesa');
-        document.getElementById('mesa-seleccionada').textContent = mesaSeleccionada;
-        document.querySelector('.pedido-section').style.display = 'block';
-        actualizarPedido();
-    });
-    //        window.location.href = `/pages/menu_mesero/bebidas_frias.html?mesa=${mesaId}`; guardar esta linea por si algo//
-});
+
 
 // Función para cargar el pedido del localStorage y actualizar la vista
  function cargarPedido(mesaId) {
@@ -51,13 +90,15 @@ document.querySelectorAll('.mesa').forEach(mesa => {
         pedido.forEach((producto, index) => {
             console.log("Índice del producto:", index, "Producto:", producto.title);
             const row = document.createElement('tr');
+            row.setAttribute('data-producto-id', producto.id);  // <-- añade el id
             row.innerHTML = `
                 <td>${producto.title}</td>
                 <td>$${producto.price.toFixed(2)}</td>
-                <td><span>${producto.quantity}</span></td>
+                <td><input class="cantidad-input" type="number" value="${producto.quantity}" min="1" /></td>
                 <td>$${(producto.price * producto.quantity).toFixed(2)}</td>
                 <td><button onclick="eliminarProducto('${mesaId}', ${index})">Eliminar</button></td>
             `;
+
             tbody.appendChild(row);
 
             // Sumar al total
@@ -86,24 +127,42 @@ if (agregarProductoBtn) {
     });
 }
 
+function agregarAlPedido(mesaId, elemento) {
+    const card = elemento.closest('.card');
+    console.log("ID del producto:", card.dataset.id);
+    const id = parseInt(card.dataset.id);
+    const title = card.dataset.title;
+    const price = parseFloat(card.dataset.price);
+    const image = card.dataset.image;
+    const options = card.dataset.options;
+
+    const clavePedidoMesa = `pedido_mesa_${mesaId}`;
+    let pedido = JSON.parse(localStorage.getItem(clavePedidoMesa)) || [];
+
+    // Verificar si el producto ya está en el pedido
+    const productoExistente = pedido.find(producto => producto.id === id && producto.options === options);
+    if (productoExistente) {
+        productoExistente.quantity += 1; // Sumar una unidad
+    } else {
+        pedido.push({
+            id,
+            title,
+            price,
+            image,
+            options,
+            quantity: 1
+        });
+    }
+
+    localStorage.setItem(clavePedidoMesa, JSON.stringify(pedido));
+    cargarPedido(mesaId); // Para refrescar la tabla de productos (si la tienes)
+}
+
 
 
 
 
 // Eliminar un producto específico del pedido
-function eliminarProducto(mesaId, index) {
-    const clavePedidoMesa = `pedido_mesa_${mesaId}`;
-    const pedidoActual = JSON.parse(localStorage.getItem(clavePedidoMesa)) || [];
-
-    // Eliminar el producto en la posición 'index'
-    pedidoActual.splice(index, 1);
-
-    // Guardar los cambios en localStorage
-    localStorage.setItem(clavePedidoMesa, JSON.stringify(pedidoActual));
-
-    // **Vuelve a llamar a cargarPedido() para actualizar la vista**
-    cargarPedido(mesaId);
-}
 
 
 
@@ -117,24 +176,75 @@ function eliminarPedido(mesaId) {
     cargarPedido(mesaId);
 }
 
-// Finalizar el pedido
-function finalizarPedido() {
-    const mesaId = document.getElementById('mesa-seleccionada').textContent;
-    const medioPago = document.getElementById('medio-pago').value;
-    const totalPedido = document.getElementById('total-pedido').textContent;
+// funcion de finalizar pedido xdxd
+function finalizarPedido(mesaId, medioPago) {
+    const clavePedidoMesa = `pedido_mesa_${mesaId}`;
+    const pedidoActual = JSON.parse(localStorage.getItem(clavePedidoMesa)) || [];
 
-    alert(`Pedido de la Mesa ${mesaId} finalizado. Total: ${totalPedido}. Medio de pago: ${medioPago}`);
+    if (pedidoActual.length === 0) {
+        alert('El pedido está vacío. Agrega productos antes de finalizar.');
+        return;
+    }
 
-    // Limpiar el pedido de la mesa actual en localStorage
-    eliminarPedido(mesaId);
+    // Calcula el total del pedido
+    // *** CAMBIO AQUI: USAR item.quantity y item.price ***
+    const totalPedido = pedidoActual.reduce((sum, item) => sum + (item.quantity * item.price), 0); 
+
+    // Recolectar solo los datos esenciales para la API
+    const itemsParaEnviar = pedidoActual.map(item => ({
+        producto_id: item.id,
+        // *** CAMBIO AQUI: USAR item.quantity y item.price ***
+        cantidad: item.quantity, 
+        precio_unitario: item.price 
+    }));
+
+    // Datos a enviar al servidor
+    const data = {
+        mesa_id: mesaId,
+        items: itemsParaEnviar,
+        total: totalPedido,
+        medio_pago: medioPago
+    };
+
+    fetch('/guardar_pedido/', { 
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCSRFToken()
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(errorData => {
+                throw new Error(errorData.error || 'Error desconocido al finalizar el pedido.');
+            });
+        }
+        return response.json();
+    })
+    .then(data => {
+        alert(data.message);
+        localStorage.removeItem(clavePedidoMesa);
+        cargarPedido(mesaId);
+        actualizarEstadoMesas();
+    })
+    .catch(error => {
+        console.error('Error al finalizar el pedido:', error);
+        alert('Error al finalizar el pedido: ' + error.message);
+    });
 }
 
+
+// Función para obtener cookie CSRF (útil para fetch con Django)
+
+
+// -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 function actualizarEstadoMesas() {
     const mesas = document.querySelectorAll('.mesa');
     
     mesas.forEach(mesa => {
-        const mesaId = mesa.getAttribute('data-mesa');
+        const mesaId = mesa.getAttribute('data-mesa-id');
         const clavePedidoMesa = `pedido_mesa_${mesaId}`;
         const pedido = JSON.parse(localStorage.getItem(clavePedidoMesa)) || [];
         
@@ -156,4 +266,40 @@ function actualizarEstadoMesas() {
             }
         }
     });
+}
+function agregarAlPedidoConMesaActiva(elemento) {
+    const card = boton.closest('.card');
+    const productoId = card.dataset.id;
+    console.log('ID del producto:', productoId);
+    if (!mesaActivaId) {
+        alert("Selecciona una mesa primero");
+        return;
+    }
+    agregarAlPedido(mesaActivaId, elemento);
+}
+
+
+
+
+
+
+
+
+
+function agregarProductoAlPedido(producto) {
+    // producto debe ser un objeto con id, nombre, precio, cantidad, etc.
+    const tbody = document.getElementById('pedido-body');
+
+    const tr = document.createElement('tr');
+    tr.setAttribute('data-producto-id', producto.id);  // <-- Aquí pones el ID
+
+    tr.innerHTML = `
+        <td>${producto.nombre}</td>
+        <td>${producto.precio}</td>
+        <td><input type="number" class="cantidad-input" value="${producto.cantidad}" min="0"></td>
+        <td>${producto.precio * producto.cantidad}</td>
+        <td><button class="eliminar-producto-btn">Eliminar</button></td>
+    `;
+
+    tbody.appendChild(tr);
 }

@@ -69,20 +69,29 @@ class Usuario(AbstractUser):
     def __str__(self):
         return f"{self.first_name} {self.last_name} ({self.username})"
 
+
+
 class Mesa(models.Model):
-    numero = models.PositiveIntegerField(unique=True)
-    
-    def __str__(self):
-        return f"Mesa {self.numero}"
+    ESTADO_CHOICES = [
+        ('disponible', 'Disponible'),
+        ('ocupada', 'Ocupada'),
+        ('limpieza', 'En Limpieza'),
+    ]
+    numero = models.IntegerField(unique=True, help_text="Número único de la mesa (ej. 1, 2, 3)")
+    capacidad = models.IntegerField(help_text="Capacidad de personas que la mesa puede albergar")
+    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='disponible')
+    is_active = models.BooleanField(default=True, help_text="Indica si la mesa está activa para su uso.")
 
-class Pedidos(models.Model):
-    fechahoraPedido = models.DateTimeField(auto_now_add=True)
-    precio = models.DecimalField(max_digits=10, decimal_places=2)
-    id_mesa = models.ForeignKey(Mesa, on_delete=models.CASCADE)  # Cambié IntegerField por ForeignKey
-    Usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    class Meta:
+        verbose_name = "Mesa"
+        verbose_name_plural = "Mesas"
+        ordering = ['numero']
 
     def __str__(self):
-        return f"Pedido en mesa {self.id_mesa.numero} - ${self.precio}"  # Modifiqué para mostrar el número de la mesa
+        # Muestra el número y si está activa o inactiva
+        status = "Activa" if self.is_active else "Inactiva"
+        return f"Mesa {self.numero} ({status})"
+
 
 
 
@@ -122,29 +131,50 @@ class Producto(models.Model):
         return self.titulo
 
 
-
-
-class Inventario(models.Model):
-    nombreProducto = models.CharField(max_length=45)
-    Cantidad = models.CharField(max_length=50)
-    precioProducto = models.DecimalField(max_digits=10, decimal_places=2)
-    Producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
-    def __str__(self):
-        return self.nombreProducto
-
-
-
-
-
-class Reserva(models.Model):
-    nombreperReserva = models.CharField(max_length=45, default="sin nombre")
-    fecha = models.DateField()
-    hora = models.TimeField()
-    cantidadPersonas = models.IntegerField()
-    Usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+# -------------------------PEDIDOS-------------------------------------------------------------
+class Pedido(models.Model):
+    ESTADO_PEDIDO_CHOICES = [
+        ('pendiente', 'Pendiente'),
+        ('finalizado', 'Finalizado'),
+    ]
+    
+    
+    mesa = models.ForeignKey(Mesa, on_delete=models.CASCADE)
+    fecha = models.DateTimeField(auto_now_add=True)
+    total = models.DecimalField(max_digits=10, decimal_places=2)
+    estado = models.CharField(max_length=20, choices=ESTADO_PEDIDO_CHOICES, default='pendiente')
+    mesero = models.ForeignKey(Usuario, on_delete=models.SET_NULL, null=True, blank=True)
+    medio_pago = models.CharField(max_length=50)
 
     def __str__(self):
-        return f"Reserva {self.id} - Mesa {self.mesa.numero} el {self.fecha} a las {self.hora}"
+            return f"Pedido en mesa {self.mesa.numero} - ${self.total}"  # Modifiqué para mostrar el número de la mesa
+
+    class Meta:
+        verbose_name = "Pedido"
+        verbose_name_plural = "Pedidos"
+        ordering = ['-fecha']
+
+
+class PedidoDetalle(models.Model):
+    pedido = models.ForeignKey(Pedido, related_name='detalles', on_delete=models.CASCADE)
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    cantidad = models.PositiveIntegerField()
+    precio_unitario = models.DecimalField(max_digits=8, decimal_places=2)
+    
+    def __str__(self):
+        return f"{self.cantidad} x {self.producto.nombre} para Pedido #{self.pedido.id}"
+
+    class Meta:
+        verbose_name = "Detalle de Pedido"
+        verbose_name_plural = "Detalles de Pedidos"
+        unique_together = ('pedido', 'producto')
+
+# ---------------------------------------------------------------------------------------------------
+
+
+
+
+
 
 User = get_user_model()
 
@@ -204,14 +234,40 @@ class GaleriaFoto(models.Model):
         ordering = ['-fecha_subida']
 
 
-    # # Opcional: Para mostrar una previsualización en el admin
+class ConfiguracionGeneral(models.Model):
+    # Límite máximo de mesas que el bar puede tener
+    # Valor predeterminado de 15, mínimo 10, máximo 20 (se valida en el admin y la vista)
+    limite_mesas = models.IntegerField(default=15) 
+
+    class Meta:
+        verbose_name = "Configuración General"
+        verbose_name_plural = "Configuración General"
+
+    def __str__(self):
+        return "Configuración del Sistema"
+
+    def save(self, *args, **kwargs):
+        # Asegurar que solo haya una instancia de esta configuración
+        if not self.pk and ConfiguracionGeneral.objects.exists():
+            raise ValueError("Solo puede haber una instancia de Configuración General.")
+        # Validar el límite de mesas antes de guardar
+        if not (10 <= self.limite_mesas <= 20):
+            raise ValueError("El límite de mesas debe estar entre 10 y 20.")
+        super().save(*args, **kwargs)
+
+
+
+
+
+
+
+
     # from django.utils.html import mark_safe
     # def admin_thumbnail(self):
     #     if self.imagen:
     #         return mark_safe(f'<img src="{self.imagen.url}" width="100" height="auto" />')
     #     return "No Image"
     # admin_thumbnail.short_description = 'Miniatura'
-    
     
     
     

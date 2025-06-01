@@ -1,4 +1,4 @@
-let fontSice = 100;
+                                                                                                                                                    let fontSice = 100;
 
 document.getElementById('accessibility-toggle').addEventListener("click", () => {
     document.getElementById('accessibility-menu').classList.toggle('hidden');

@@ -1,5 +1,5 @@
 from django.contrib import admin, messages
-from .models import Pedidos, Inventario, Usuario, Producto, Reserva, GaleriaFoto
+from .models import Pedido, Usuario, Producto, Mesa, GaleriaFoto, ConfiguracionGeneral, ActividadReciente
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 # from .models import Rol, Categoria, Usuario, Producto, Mesa, Pedido, Reserva
 from .forms import CustomUserCreationForm, CustomUserChangeForm
@@ -9,6 +9,8 @@ from django.urls import reverse
 from django.utils.html import mark_safe
 from django.db.models import Q
 from admin_personalizado.admin import custom_admin_site
+from django.db import IntegrityError
+from django.utils.translation import gettext_lazy as _
 
 class UsuarioAdmin(BaseUserAdmin):
     list_display = ('username', 'email', 'first_name', 'last_name', 'rol', 'is_active', 'date_joined', 'acciones')
@@ -17,17 +19,17 @@ class UsuarioAdmin(BaseUserAdmin):
     ordering = ('username',)
     
     
-     
-    add_form = CustomUserCreationForm 
+    
+    add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     
     
     fieldsets = (
-         (None, {'fields': ('username',)}),
-         ('Información Personal', {'fields': ('first_name', 'last_name', 'email')}),
-         ('Roles y Permisos', {'fields': ('rol', 'is_active', 'is_staff', 'is_superuser','groups', 'user_permissions')}),  
-         ('Fechas Importantes', {'fields': ('last_login', 'date_joined')}),
-     )
+        (None, {'fields': ('username',)}),
+        ('Información Personal', {'fields': ('first_name', 'last_name', 'email')}),
+        ('Roles y Permisos', {'fields': ('rol', 'is_active', 'is_staff', 'is_superuser','groups', 'user_permissions')}),  
+        ('Fechas Importantes', {'fields': ('last_login', 'date_joined')}),
+    )
     readonly_fields = ('last_login', 'date_joined')
     def get_add_fieldsets(self, request, obj=None):
         return (
@@ -241,8 +243,129 @@ class GaleriaFotoAdmin(admin.ModelAdmin):
         }
     
 
+@admin.register(Mesa, site=custom_admin_site) # <<-- MUY IMPORTANTE: Asegúrate que 'site=custom_admin_site' esté aquí
+class MesaAdmin(admin.ModelAdmin):
+    list_display = ('numero', 'estado', 'mostrar_estado_activo', 'total_pedido_actual', 'fecha_ultima_actividad', 'acciones_mesa')
+    list_filter = ('estado', 'is_active',)
+    search_fields = ('numero',)
+    actions = ['activar_mesas_seleccionadas', 'desactivar_mesas_seleccionadas']
+    
+    search_fields = ['numero']
+
+    def fecha_ultima_actividad(self, obj):
+        # Placeholder por ahora.
+        return "N/A"
+    fecha_ultima_actividad.short_description = "Última Actividad"
+
+
+    def total_pedido_actual(self, obj):
+        # CORRECCIÓN AQUÍ: Cambia 'obj.pedidos' a 'obj.pedido_set'
+        ultimo_pedido = obj.pedido_set.filter(estado='pendiente').order_by('-fecha').first()
+        if ultimo_pedido:
+            return f"${ultimo_pedido.total:.2f}"
+        return "N/A"
+    total_pedido_actual.short_description = 'Total Pedido Actual' 
+
+
+    def acciones_mesa(self, obj):
+        app_label = obj._meta.app_label
+        model_name = obj._meta.model_name
+        url = reverse('admin:%s_%s_changelist' % (obj._meta.app_label, 'pedido'))
+
+        edit_url = reverse(f'admin:{app_label}_{model_name}_change', args=[obj.pk])
+        
+        
+        return format_html(
+            '<a class="button action-edit" href="{}"><i class="fa fa-pencil"></i> Editar</a>&nbsp;'
+            '<a class="button" href="{}?mesa__id__exact={}">Ver Pedidos</a>&nbsp;',
+            url,
+            edit_url,
+            obj.pk
+        )
+        
+        
+        
+        
+    acciones_mesa.short_description = 'Acciones'
+
+
+    def activar_mesas_seleccionadas(self, request, queryset):
+        config = ConfiguracionGeneral.objects.first()
+        if not config:
+            self.message_user(request, "Error: No se ha configurado el límite de mesas activas.", level=messages.ERROR)
+            return
+
+        limite_mesas = config.limite_mesas
+        mesas_activas_actuales = Mesa.objects.filter(is_active=True).count()
+        mesas_a_activar = queryset.filter(is_active=False)
+        
+        num_activadas = 0
+        for mesa in mesas_a_activar:
+            if mesas_activas_actuales < limite_mesas:
+                mesa.is_active = True
+                mesa.save()
+                num_activadas += 1
+                mesas_activas_actuales += 1
+                ActividadReciente.objects.create(
+                    usuario=request.user,
+                    accion=f'Activó la Mesa {mesa.numero} (ID: {mesa.id}).'
+                )
+            else:
+                messages.warning(request, f"No se pudo activar la Mesa {mesa.numero}. Se alcanzó el límite de {limite_mesas} mesas activas.")
+                break
+
+        if num_activadas > 0:
+            self.message_user(request, f"{num_activadas} mesa(s) activada(s) correctamente.")
+        else:
+            messages.info(request, "Ninguna mesa seleccionada pudo ser activada debido al límite o ya estaban activas.")
+
+    activar_mesas_seleccionadas.short_description = "Activar mesas seleccionadas"
+
+    def desactivar_mesas_seleccionadas(self, request, queryset):
+        count = queryset.update(is_active=False)
+        for mesa in queryset:
+            ActividadReciente.objects.create(
+                usuario=request.user,
+                accion=f'Desactivó la Mesa {mesa.numero} (ID: {mesa.id}).'
+            )
+        self.message_user(request, f"{count} mesa(s) desactivada(s) correctamente.")
+    desactivar_mesas_seleccionadas.short_description = "Desactivar mesas seleccionadas"
+
+    @admin.display(
+        description='Estado Activa',
+        boolean=True,
+    )
+    def mostrar_estado_activo(self, obj):
+        return obj.is_active
+
+@admin.register(Pedido, site=custom_admin_site)
+class PedidoAdmin(admin.ModelAdmin):
+    # Asegúrate de que estos campos sean correctos según tu models.py
+    list_display = ('id', 'mesa', 'fecha', 'estado', 'total_pedido_display', 'realizado_por')
+    list_filter = ('estado', 'fecha', 'mesa') 
+    search_fields = ('id', 'mesa__numero', 'mesero__username')
+    ordering = ('-fecha',) # Ahora usa 'fecha'
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def total_pedido_display(self, obj):
+        return f"${obj.total:.2f}"
+    total_pedido_display.short_description = _("Total del Pedido")
+    
+    def realizado_por(self, obj):
+        return obj.mesero.username if obj.mesero else _("Desconocido")
+    realizado_por.short_description = _("Realizado por")
+
+
 # Registros
-custom_admin_site.register(Pedidos)
+# custom_admin_site.register(Pedido)
 # admin.site.register(Inventario)
 custom_admin_site.register(Usuario, UsuarioAdmin)  # Con la clase personalizada
 # custom_admin_site.register(Producto, ProductoAdmin)
@@ -250,51 +373,6 @@ custom_admin_site.register(Usuario, UsuarioAdmin)  # Con la clase personalizada
 # admin.site.register(ActividadReciente)
 # admin.site.register(Perfil)
 # custom_admin_site.register(GaleriaFoto,GaleriaFotoAdmin)
+# custom_admin_site.register(Mesa)
 
 
-
-
-
-
-# from .models import Rol, Categoria, Usuario, Producto, Mesa, Pedido, Reserva
-
-# @admin.register(Rol)
-# class RolAdmin(admin.ModelAdmin):
-#     list_display = ('tipoRol',)
-
-# @admin.register(Categoria)
-# class CategoriaAdmin(admin.ModelAdmin):
-#     list_display = ('nombreCategoria',)
-#     search_fields = ('nombreCategoria',)
-#     ordering      = ('nombreCategoria',)
-
-# @admin.register(Usuario)
-# class UsuarioAdmin(admin.ModelAdmin):
-#     list_display  = ('nombre', 'apellido', 'correo', 'rol')
-#     search_fields = ('nombre', 'apellido', 'correo')
-#     list_filter   = ('rol',)
-#     ordering      = ('apellido',)
-
-# @admin.register(Producto)
-# class ProductoAdmin(admin.ModelAdmin):
-#     list_display  = ('nombreProducto', 'precio', 'categoria')
-#     search_fields = ('nombreProducto',)
-#     list_filter   = ('categoria',)
-#     ordering      = ('nombreProducto',)
-
-# @admin.register(Mesa)
-# class MesaAdmin(admin.ModelAdmin):
-#     list_display = ('numero',)
-#     ordering     = ('numero',)
-
-# @admin.register(Pedido)
-# class PedidoAdmin(admin.ModelAdmin):
-#     list_display    = ('id', 'usuario', 'mesa', 'total', 'fecha')
-#     list_filter     = ('fecha', 'mesa')
-#     date_hierarchy  = 'fecha'
-
-# @admin.register(Reserva)
-# class ReservaAdmin(admin.ModelAdmin):
-#     list_display    = ('id', 'usuario', 'mesa', 'fecha', 'estado')
-#     list_filter     = ('estado', 'fecha')
-#     date_hierarchy  = 'fecha'

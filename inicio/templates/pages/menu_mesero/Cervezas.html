@@ -139,7 +139,12 @@
     <div class="cards-container" >
 
      {% for producto in productos %}
-          <div class="card"  data-title="{{ producto.titulo }}" data-image="{{ producto.foto.url }} " data-options='{{ producto.opciones|safe }}'>
+          <div class="card" 
+              data-id="{{ producto.id }}" 
+              data-title="{{ producto.titulo }}" 
+              data-image="{{ producto.foto.url }} " 
+              data-options='{{ producto.opciones|safe }}'
+              data-price="{{ producto.precio }}">
             <div class="img-container">
               <img
                 src="{{ producto.foto.url }}"

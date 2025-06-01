@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Función para regresar a la página de mesas manteniendo información
     function volverAMesas() {
         const mesaId = localStorage.getItem('mesaActivaId');
-        window.location.href = '/pages/mesas.html?ultima_mesa=' + mesaId;
+        window.location.href = `/mesas/?mesa=${mesaId}`;
     }
 
     // Función para navegar a una categoría manteniendo la mesa
@@ -287,6 +287,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const priceElement = card.querySelector('.footer-card > span');
             const price = priceElement ? priceElement.textContent : '$0';
             const priceValue = parseInt(price.replace(/\D/g, '')) || 0;
+            const productId = card.dataset.id;
 
             // Verificar si el artículo ya está en el carrito
             const existingItemIndex = cart.findIndex(item => item.title === title && item.option === 'Regular');
@@ -298,7 +299,7 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
                 // Nuevo artículo, agregar al carrito
                 const cartItem = {
-                    id: Date.now() + index,
+                    id: productId,
                     imgSrc,
                     title,
                     price: priceValue,
@@ -323,6 +324,7 @@ document.addEventListener("DOMContentLoaded", () => {
     modalAddToCartBtn.addEventListener('click', function() {
         const title = modalTitle.textContent;
         const imgSrc = modalImage.src;
+        const productId = currentProductData.card.dataset.id;
 
         // Obtener opción seleccionada del modal
         let option = 'Regular';
@@ -344,7 +346,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 cart[existingItemIndex].quantity += 1;
             } else {
                 const cartItem = {
-                    id: Date.now(),
+                    id: productId,
                     imgSrc,
                     title,
                     price: price,
@@ -601,5 +603,3 @@ document.addEventListener('DOMContentLoaded', function() {
     // Agrega el evento de scroll al `main` en lugar de `window`
     main.addEventListener("scroll", handleScroll);
 });
-
-

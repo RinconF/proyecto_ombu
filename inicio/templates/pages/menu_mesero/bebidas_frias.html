@@ -153,7 +153,13 @@
         <div class="cards-container" >
 
      {% for producto in productos %}
-          <div class="card"  data-title="{{ producto.titulo }}" data-image="{{ producto.foto.url }} " data-options='{{ producto.opciones|safe }}'>
+          <div class="card" 
+              data-id="{{ producto.id }}" 
+              data-title="{{ producto.titulo }}" 
+              data-image="{{ producto.foto.url }} " 
+              data-options='{{ producto.opciones|safe }}'
+              data-price="{{ producto.precio }}">
+              
             <div class="img-container">
               <img
                 src="{{ producto.foto.url }}"
@@ -192,10 +198,8 @@
       <span>Total:</span>
       <span id="cart-total-amount">$0</span>
     </div>
-    <a href="/pages/Admin/mesas.html">
       <button id="checkout-button" class="checkout-button"></button>
-    </a>
-    <button id="empty-cart" class="empty-cart-button">Vaciar Carrito</button>
+      <button id="empty-cart" class="empty-cart-button">Vaciar Carrito</button>
   </div>
 </div>
 

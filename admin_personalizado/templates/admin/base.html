@@ -109,16 +109,40 @@
 
       </header>
     {% endblock %}
-    {% block nav-breadcrumbs %}
-      <nav aria-label="{% translate 'Breadcrumbs' %}">
-        {% block breadcrumbs %}
-          <div class="breadcrumbs">
-            <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
-            {% if title %} &rsaquo; {{ title }}{% endif %}
-          </div>
-        {% endblock %}
-      </nav>
-    {% endblock %}
+
+{% block nav-breadcrumbs %}
+<nav aria-label="{% translate 'Migas de pan' %}">
+    <div class="breadcrumbs">
+        <a href="{% url 'admin:index' %}">{% translate 'Inicio' %}</a>
+        
+        {# Debugging (para que veamos los valores si sigue habiendo problemas) #}
+        {# Si estamos en una página de modelo (opts está disponible) #}
+        {% if opts %}
+            {# Enlace a la lista de aplicaciones (ej. "Usuarios") si la app no es 'inicio' #}
+            {% if app_label and app_label|lower != 'inicio'|lower and app_label|lower != 'home'|lower %}
+                {% with app_list_view_name='admin:app_list' %}
+                    &rsaquo; <a href="{% url app_list_view_name app_label=opts.app_label %}">{{ app_label|capfirst }}</a>
+                {% endwith %}
+            {% endif %}
+
+            {# Enlace a la lista de cambios del modelo (ej. "Pedidos") #}
+            {% if opts.verbose_name_plural %}
+                {% with changelist_view_name='admin:'|add:opts.app_label|add:'_'|add:opts.model_name|add:'_changelist' %}
+                    &rsaquo; <a href="{% url changelist_view_name %}">{{ opts.verbose_name_plural|capfirst }}</a>
+                {% endwith %}
+            {% endif %}
+        {% endif %}
+
+        {# Título de la página actual (ej. "Añadir pedido", "Seleccionar pedido") #}
+        {# Solo se muestra si el título no es igual al nombre plural del modelo ni al nombre de la app (para evitar duplicados) #}
+        {% if title and title|lower != opts.verbose_name_plural|lower and title|lower != app_label|lower and title|lower != 'panel de administración'|lower and title|lower != 'home'|lower and title|lower != 'inicio'|lower %}
+            &rsaquo; {{ title }}
+        {% endif %}
+    </div>
+</nav>
+{% endblock %}
+
+
     {% endif %}
 
     <div class="main shifted" id="main">

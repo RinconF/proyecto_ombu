@@ -54,6 +54,7 @@
     min-width: 500px; /* Ancho mínimo razonable antes de envolverse */
     max-width: calc(100% - 300px); /* Para dejar espacio al sidebar y al gap */
 
+    
     background-color: #212B36;
     color: #E0E0E0;
     padding: 25px;

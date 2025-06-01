@@ -7,6 +7,7 @@ from django.contrib import admin
 from .forms import CustomPasswordResetForm
 from django.contrib.auth.views import PasswordResetView
 from admin_personalizado.views import perfil_view
+from .views import guardar_pedido
 
 
 
@@ -31,11 +32,22 @@ urlpatterns = [
     # path('admin/', admin.site.urls),
     # path('dashboard/', views.dashboard, name='dashboard'),
     path('login/', views.login_view, name='login'),
-    path('mesas/', views.mesas, name='mesas'),
     path('reserva/', views.reserva, name='reserva'),
     # path('usuarios/', views.usuarios, name = 'usuarios'),
     path('logout/', views.logout_view, name='logout'),
 
+
+    # MESAS
+    path('mesas/', views.mesas, name='mesas'),
+    path('eliminar-mesa-logicamente/<int:mesa_id>/', views.eliminar_mesa_logicamente, name='eliminar_mesa_logicamente'),
+    path('gestionar-mesa/', views.gestionar_mesa, name='gestionar_mesa'),
+
+
+    #PEDIDOS
+    path('guardar_pedido/', views.guardar_pedido, name='guardar_pedido'),
+    
+    
+    
     # URL del Dashboard
     # path('dashboard/', views.dashboard, name='dashboard'),
 
@@ -86,6 +98,8 @@ urlpatterns = [
     # PRODUCTOS
     path('cliente/productos/<str:categoria>/', views.productos_cliente, name='productos_cliente'),
     path('mesero/productos/<str:categoria>/', views.productos_mesero, name='productos_mesero'),
+
+
 ]
 
 

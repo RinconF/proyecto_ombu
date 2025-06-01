@@ -1,3 +1,5 @@
+{# ombu-django/proyecto_ombu/admin_personalizado/templates/admin/change_list.html #}
+
 {% extends "admin/base_site.html" %}
 {% load i18n admin_urls static admin_list %}
 
@@ -18,6 +20,10 @@
       #changelist table thead th:first-child {width: inherit}
     </style>
   {% endif %}
+  
+  {# ¡IMPORTANTE! Hemos movido los estilos CSS para el botón de eliminar y la ocultación de acciones a admin.css #}
+  {# <style> ... </style> bloque eliminado de aquí #}
+
 {% endblock %}
 
 {% block extrahead %}
@@ -58,39 +64,45 @@
     {% endif %}
     <div class="module{% if cl.has_filters %} filtered{% endif %}" id="changelist">
       <div class="changelist-form-container">
-        {% comment %} {% block search %}{% search_form cl %}{% endblock %}
-        {% block date_hierarchy %}{% if cl.date_hierarchy %}{% date_hierarchy cl %}{% endif %}{% endblock %} {% endcomment %}
-        {# --- INICIO DE TU NUEVA ESTRUCTURA DE BUSCADOR Y BOTÓN DE MODAL --- #}
+        
+        {# --- INICIO DE TU NUEVA ESTRUCTURA DE BUSCADOR, FILTROS Y BOTONES DE ACCIÓN --- #}
         <div class="search-and-filter-trigger-container">
-            <div id="changelist-search">
-                {% search_form cl %}
+            {# Grupo del buscador y el botón de filtro #}
+            <div class="search-filter-group">
+                <div id="changelist-search">
+                    {% search_form cl %}
+                </div>
+                            
+                {# Botón de filtro modal (solo si aplica) #}
+                {% if cl.opts.model_name == 'usuario' or cl.opts.model_name == 'producto' %}
+                    <button type="button" class="button custom-filter-button" id="openFilterModal">
+                        <img src="{% static 'admin/img/filter-icon.svg' %}" alt="Filtro" width="16" height="16">
+                        Filtros
+                    </button>
+                {% endif %}
             </div>
-                        
-            {% if cl.opts.model_name == 'usuario' %}
-                <button type="button" class="button custom-filter-button" id="openFilterModal">
-                    <img src="{% static 'admin/img/filter-icon.svg' %}" alt="Filtro" width="16" height="16">
-                    Filtros
-                </button>
-            {% endif %}
 
-            {% if cl.opts.model_name == 'producto' %}  {# Condicional para productos #}
-                <button type="button" class="button custom-filter-button" id="openFilterModal">
-                    <img src="{% static 'admin/img/filter-icon.svg' %}" alt="Filtro" width="16" height="16">
-                    Filtros
-                </button>
-            {% endif %}            
+                {% block object-tools %}
+                <ul class="object-tools">
+                    {% block object-tools-items %}
+                     {% change_list_object_tools %}
+                    {% endblock %}
+                </ul>
+                {% endblock %}
 
-
-            {% comment %} boton de añadir usuarios/productos/inventario {% endcomment %}
-            {% block object-tools %}
+            {# Botones de añadir y eliminar (parte derecha de la barra superior) #}
             <ul class="object-tools">
-              {% block object-tools-items %}
-                {% change_list_object_tools %}
-              {% endblock %}
+                {# Botón de "Añadir [Modelo]" #}
+                {% url cl.opts.app_label|add:'_'|add:cl.opts.model_name|add:'_add' as add_url %}
+                {% if add_url %}<li class="addlink-container"><a href="{{ add_url }}" class="addlink button">{% blocktranslate with cl.opts.verbose_name as name %}Añadir {{ name }}{% endblocktranslate %}</a></li>{% endif %}
+                
+                {# TU NUEVO BOTÓN DE ELIMINAR GLOBAL #}
+                <li>
+                    <button type="submit" class="button button-delete-button-global" id="global-delete-button" disabled>
+                        {% translate "Eliminar Seleccionados" %}
+                    </button>
+                </li>
             </ul>
-            {% endblock %}
-
-
         </div>
         {# --- FIN DE TU NUEVA ESTRUCTURA --- #}
 
@@ -98,7 +110,7 @@
         {% if cl.opts.model_name == 'usuario' %}
             <div id="filterModal" class="modal">
                 <div class="modal-content">
-                    <span class="close-button">&times;</span>
+                    <span class="close-button-filter">&times;</span>
                     <h2>Opciones de Filtro</h2>
 
                     <div class="modal-filters-body">
@@ -138,110 +150,201 @@
                                 <li><a href="?{% for key, value in cl.params.items %}{% if key != 'is_superuser__exact' and key != 'q' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Todo</a></li>
                             </ul>
                         </div>
-                    </div> {# Fin modal-filters-body #}
-
-                    <div class="modal-footer">
-                        <button type="button" class="button default" id="resetFiltersButton">Reiniciar filtros</button>
-                        <button type="button" class="button" id="applyFiltersButton">Aplicar filtros</button>
                     </div>
                 </div>
             </div>
         {% endif %}
-        {# --- FIN DEL MODAL DE FILTROS --- #}
+        {# --- FIN DEL MODAL DE FILTROS PARA USUARIOS --------------------------- #}
 
-        <form id="changelist-form" method="post"{% if cl.formset and cl.formset.is_multipart %} enctype="multipart/form-data"{% endif %} novalidate>{% csrf_token %}
-        {% if cl.formset %}
-          <div>{{ cl.formset.management_form }}</div>
-        {% endif %}
-
-        {% block result_list %}
-          {% if action_form and actions_on_top and cl.show_admin_actions %}{% admin_actions %}{% endif %}
-          {% result_list cl %}
-          {% if action_form and actions_on_bottom and cl.show_admin_actions %}{% admin_actions %}{% endif %}
-        {% endblock %}
-        {% block pagination %}{% pagination cl %}{% endblock %}
-        </form>
-
-        {% comment %} MODAL PARA ELIMINAR USUARIOS {% endcomment %}
-
-        <div id="delete-confirmation-modal" class="modal">
-            <div class="modal-content">
-                <span class="close-button">&times;</span>
-                <h2>Confirmar Eliminación</h2>
-                <p>¿Estás seguro de que quieres eliminar <strong id="object-name-to-delete"></strong>?</p>
-                <div class="modal-buttons">
-                    <button id="confirm-delete-button" class="button button-red">Eliminar</button>
-                    <button id="cancel-delete-button" class="button">Cancelar</button>
-                </div>
-            </div>
-        </div>   
-        
-        {# --- INICIO DEL MODAL DE FILTROS PARA PRODUCTOS --- #}
+        {# --- INICIO DEL MODAL DE FILTROS PARA PRODUCTOS ------------------------- #}
         {% if cl.opts.model_name == 'producto' %}
             <div id="filterModal" class="modal">
                 <div class="modal-content">
-                    <span class="close-button">&times;</span>
-                    <h2>Opciones de Filtro para Productos</h2>
-                
+                    <span class="close-button-filter">&times;</span>
+                    <h2>Opciones de Filtro</h2>
                     <div class="modal-filters-body">
-                        {# FILTRO POR CATEGORÍA #}
-                        <div class="filter-group">
-                            <h3>Por Categoría</h3>
-                            <ul>
-                                {% for categoria_valor, categoria_nombre in categorias %}  {# AHORA ITEERAS SOBRE LA TUPLA #}
-                                    <li><a href="?categoria__exact={{ categoria_valor }}{% for key, value in cl.params.items %}{% if key != 'categoria__exact' and key != 'q' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ categoria_nombre }}</a></li>
-                                {% endfor %}
-                                <li><a href="?{% for key, value in cl.params.items %}{% if key != 'categoria__exact' and key != 'q' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Todas</a></li>
-                            </ul>
-                        </div>
-                      
-                        {# FILTRO POR ESTADO (Este permanece igual ya que el 'estado' es un CharField con choices también) #}
+                        {# FILTROS DE PRODUCTOS #}
                         <div class="filter-group">
                             <h3>Por Estado</h3>
                             <ul>
                                 <li><a href="?estado__exact=disponible{% for key, value in cl.params.items %}{% if key != 'estado__exact' and key != 'q' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Disponible</a></li>
-                                <li><a href="?estado__exact=no_disponible{% for key, value in cl.params.items %}{% if key != 'estado__exact' and key != 'q' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">No Disponible</a></li>
+                                <li><a href="?estado__exact=agotado{% for key, value in cl.params.items %}{% if key != 'estado__exact' and key != 'q' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Agotado</a></li>
                                 <li><a href="?{% for key, value in cl.params.items %}{% if key != 'estado__exact' and key != 'q' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Todos</a></li>
                             </ul>
                         </div>
-                      
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="button default" id="resetFiltersButton">Reiniciar filtros</button>
-                        <button type="button" class="button" id="applyFiltersButton">Aplicar filtros</button>
+                        <div class="filter-group">
+                            <h3>Por Categoría</h3>
+                            <ul>
+                                <li><a href="?categoria__exact=bebida_caliente{% for key, value in cl.params.items %}{% if key != 'categoria__exact' and key != 'q' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Bebida Caliente</a></li>
+                                <li><a href="?categoria__exact=Bebida_fria{% for key, value in cl.params.items %}{% if key != 'categoria__exact' and key != 'q' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Bebida Fría</a></li>
+                                <li><a href="?categoria__exact=Cerveza{% for key, value in cl.params.items %}{% if key != 'categoria__exact' and key != 'q' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Cerveza</a></li>
+                                <li><a href="?categoria__exact=Cigarrillo{% for key, value in cl.params.items %}{% if key != 'categoria__exact' and key != 'q' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Cigarrillo</a></li>
+                                <li><a href="?categoria__exact=Coctel{% for key, value in cl.params.items %}{% if key != 'categoria__exact' and key != 'q' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Coctel</a></li>
+                                <li><a href="?categoria__exact=Picar{% for key, value in cl.params.items %}{% if key != 'categoria__exact' and key != 'q' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Picar</a></li>
+                                <li><a href="?{% for key, value in cl.params.items %}{% if key != 'categoria__exact' and key != 'q' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Todas</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
         {% endif %}
-        {# --- FIN DEL MODAL DE FILTROS PARA PRODUCTOS --- #}        
+        {# --- FIN DEL MODAL DE FILTROS PARA PRODUCTOS -------------------------- #}
 
-        
+        {# --- INICIO DEL MODAL DE CONFIRMACIÓN DE ELIMINACIÓN (FALTA EN TU HTML) --- #}
+        <div id="delete-confirmation-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <h2>Confirmar Eliminación</h2>
+                <p id="modal-delete-message">¿Estás seguro de que quieres eliminar este(s) elemento(s)?</p>
+                <div class="modal-footer">
+                    <button type="button" class="button" id="cancel-delete-button">Cancelar</button>
+                    <button type="button" class="button delete-button" id="confirm-delete-button">Eliminar</button>
+                </div>
+            </div>
+        </div>
+        {# --- FIN DEL MODAL DE CONFIRMACIÓN DE ELIMINACIÓN --- #}
+
+
+        <form id="changelist-form" action="" method="post" {% if cl.formset.is_multipart %}enctype="multipart/form-data"{% endif %} novalidate>
+            {% csrf_token %}
+            {% block result_list %}
+                {% if cl.formset %}
+                    <div>{{ cl.formset.management_form }}</div>
+                {% endif %}
+                {% result_list cl %}
+            {% endblock %}
+            
+            {# Este es un campo oculto que Django usa para las acciones. Es CRUCIAL que el 'value' sea 'delete_selected' #}
+            <input type="hidden" name="action" value="delete_selected"> 
+            <input type="hidden" name="select_across" value="0" class="action-select-all"> 
+            
+        </form>
       </div>
-      {% comment %} {% block filters %}
-        {% if cl.has_filters %}
-          <nav id="changelist-filter" aria-labelledby="changelist-filter-header">
-            <h2 id="changelist-filter-header">{% translate 'Filter' %}</h2>
-            {% if cl.is_facets_optional or cl.has_active_filters %}<div id="changelist-filter-extra-actions">
-              {% if cl.is_facets_optional %}<h3>
-                {% if cl.add_facets %}<a href="{{ cl.remove_facet_link }}" class="hidelink">{% translate "Hide counts" %}</a>
-                {% else %}<a href="{{ cl.add_facet_link }}" class="viewlink">{% translate "Show counts" %}</a>{% endif %}
-              </h3>{% endif %}
-              {% if cl.has_active_filters %}<h3>
-                <a href="{{ cl.clear_all_filters_qs }}">&#10006; {% translate "Clear all filters" %}</a>
-              </h3>{% endif %}
-            </div>{% endif %}
-            {% for spec in cl.filter_specs %}{% admin_list_filter cl spec %}{% endfor %}
-          </nav>
-        {% endif %}
-      {% endblock %} {% endcomment %}
+      {% comment %} {% block filters %}{% if cl.has_filters %}{% for spec in cl.filter_specs %}{% admin_list_filter cl spec %}{% endfor %}{% endif %}{% endblock %} {% endcomment %}
     </div>
   </div>
-{% endblock %}
 
-{% block extrajs %}
-    {{ block.super }} {# ¡IMPORTANTE! Esto carga los JS base de Django Admin #}
-    {# CONDICIONAL: Solo carga el JS del modal si el modelo es 'usuario' #}
-    {% if cl.opts.model_name == 'usuario' or cl.opts.model_name == 'producto' %}
-        <script src="{% static 'admin_personalizado/js_panel/bar_filtro.js' %}"></script>
-    {% endif %}
+  {# JavaScript para habilitar/deshabilitar el botón de eliminar y la lógica de submit #}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+      const globalDeleteButton = document.getElementById('global-delete-button');
+      const changelistForm = document.getElementById('changelist-form');
+      const checkboxes = changelistForm.querySelectorAll('input[name="_selected_action"]');
+      const selectAllCheckbox = changelistForm.querySelector('th input[type="checkbox"]');
+
+      // Modal de eliminación elements
+      const deleteModal = document.getElementById('delete-confirmation-modal');
+      const closeModalDeleteButton = deleteModal ? deleteModal.querySelector('.close-button') : null;
+      const confirmDeleteButton = document.getElementById('confirm-delete-button');
+      const cancelDeleteButton = document.getElementById('cancel-delete-button');
+      const modalDeleteMessage = document.getElementById('modal-delete-message');
+
+      // Modal de filtro elements (NUEVO)
+      const openFilterModalButton = document.getElementById('openFilterModal');
+      const filterModal = document.getElementById('filterModal');
+      const closeModalFilterButton = filterModal ? filterModal.querySelector('.close-button-filter') : null;
+
+      function updateDeleteButtonState() {
+        let anyChecked = false;
+        checkboxes.forEach(checkbox => {
+          if (checkbox.checked && checkbox.name === '_selected_action') {
+            anyChecked = true;
+          }
+        });
+        globalDeleteButton.disabled = !anyChecked;
+      }
+
+      checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateDeleteButtonState);
+      });
+
+      if (selectAllCheckbox) {
+        selectAllCheckbox.addEventListener('change', function() {
+          checkboxes.forEach(checkbox => {
+            if (checkbox.name === '_selected_action') {
+              checkbox.checked = selectAllCheckbox.checked;
+            }
+          });
+          updateDeleteButtonState();
+        });
+      }
+
+      updateDeleteButtonState();
+
+        // Lógica para el botón global de eliminación
+        globalDeleteButton.addEventListener('click', function(event) {
+            event.preventDefault();
+            if (!this.disabled) {
+                if (deleteModal) {
+                    deleteModal.style.display = 'flex';
+                    deleteModal.classList.add('is-active');
+                    modalDeleteMessage.textContent = `¿Estás seguro de que quieres eliminar los ${Array.from(checkboxes).filter(cb => cb.checked).length} elementos seleccionados?`;
+                }
+            }
+        });
+
+        // Cuando se confirma la eliminación
+        confirmDeleteButton.addEventListener('click', function() {
+            changelistForm.querySelector('input[name="action"]').value = 'delete_selected';
+            changelistForm.submit();
+            if (deleteModal) {
+                deleteModal.classList.remove('is-active');
+                deleteModal.style.display = 'none';
+            }
+        });
+
+        // Cuando se cancela la eliminación o se cierra el modal de eliminación
+        cancelDeleteButton.addEventListener('click', function() {
+            if (deleteModal) {
+                deleteModal.classList.remove('is-active');
+                deleteModal.style.display = 'none';
+            }
+        });
+
+        if (closeModalDeleteButton) {
+            closeModalDeleteButton.addEventListener('click', function() {
+                if (deleteModal) {
+                    deleteModal.classList.remove('is-active');
+                    deleteModal.style.display = 'none';
+                }
+            });
+        }
+
+        // Cerrar el modal de eliminación si se hace clic fuera de él
+        window.addEventListener('click', function(event) {
+            if (deleteModal && event.target == deleteModal) {
+                deleteModal.classList.remove('is-active');
+                deleteModal.style.display = 'none';
+            }
+        });
+
+//--------------------filtros-----------------------------
+
+
+    // Lógica para el modal de filtros (NUEVO)
+    if (openFilterModalButton && filterModal) { // Asegúrate de que los elementos existan
+        openFilterModalButton.addEventListener('click', function() {
+        filterModal.style.display = 'flex';
+        filterModal.classList.add('is-active');
+        });
+
+        if (closeModalFilterButton) {
+            closeModalFilterButton.addEventListener('click', function() {
+                filterModal.classList.remove('is-active');
+                filterModal.style.display = 'none';
+            });
+        }
+
+        // Cerrar el modal de filtro si se hace clic fuera de él
+        window.addEventListener('click', function(event) {
+            if (event.target == filterModal) {
+                filterModal.classList.remove('is-active');
+                filterModal.style.display = 'none';
+            }
+            });
+    } // This curly brace closes the 'if (openFilterModalButton && filterModal)' block.
+
+}); // <--- This is where the DOMContentLoaded listener should close.
+
+</script>
 {% endblock %}

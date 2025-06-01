@@ -597,3 +597,100 @@ body {
     margin-left: 100%; // O el ancho del sidebar si se desliza encima
 }
 */
+
+/*boton eliminar--------------------------*/
+/* Estilos para el botón global de eliminar y ocultar acciones de Django */
+.button-delete-button-global {
+    background-color: #dc3545 !important; /* Rojo de Bootstrap para peligro/eliminar */
+    color: white;
+    border: none;
+    /* Ajusta el padding para que sea similar al addlink si es necesario */
+    padding: 8px 20px 8px 10px !important; /* Un poco menos de padding horizontal que addlink si addlink es 25px */
+    border-radius: 5px; /* Consistente con addlink */
+    cursor: pointer;
+    font-size: 14px; /* O puedes dejarlo igual que addlink si quieres */
+    transition: background-color 0.3s ease;
+    margin-left: 10px; /* Espacio con el botón de añadir */
+    line-height: normal; /* Consistente con addlink */
+    height: auto; /* Consistente con addlink, dejar que el padding defina la altura */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    margin-bottom: 10px;
+}
+
+.button.delete-button-global:hover:not(:disabled) {
+    background-color: #c82333; /* Rojo más oscuro al pasar el ratón */
+}
+
+.button.delete-button-global:disabled {
+    background-color: #e0a8ad; /* Color más claro cuando está deshabilitado */
+    cursor: not-allowed;
+    opacity: 0.6; /* Un poco de opacidad para indicar inhabilitación */
+}
+
+/* Ocultar completamente la sección de acciones de Django Admin */
+div.actions {
+    display: none !important;
+}
+
+/* Asegurar que cualquier contenedor de acciones con la clase 'action-form-container' también se oculte */
+ul.object-tools:has(> .action-form-container) {
+    display: none !important;
+}
+
+
+/* ESTILOS PARA LA BARRA DE BUSQUEDA GLOBAL DEL PANEL - VERSIÓN SIMPLIFICADA */
+
+#changelist-search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    background-color: #f8f9fa;
+    border: 1px solid #e1e5e9;
+    border-radius: 6px;
+    margin-bottom: 16px;
+}
+
+#changelist-search input[type="text"] {
+    flex-grow: 1;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    background-color: transparent;
+    color: #495057;
+    font-size: 14px;
+    outline: none;
+    transition: background-color 0.2s ease;
+}
+
+#changelist-search input[type="text"]::placeholder {
+    color: #6c757d;
+}
+
+#changelist-search input[type="text"]:focus {
+    background-color: #fff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+#changelist-search input[type="submit"] {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+}
+
+#changelist-search input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+#changelist-search input[type="submit"]:active {
+    background-color: #004085;
+}

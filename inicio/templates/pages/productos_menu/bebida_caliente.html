@@ -6,9 +6,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title> OMBÚ | Bebidas Calientes 🍹 </title>
     <link rel="stylesheet" href="{% static '/css/Productos_Styles.css' %}" type="text/css" />
+<<<<<<< HEAD
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        const inputBusqueda = document.getElementById('inputBusqueda');
+        const resultadoDiv = document.getElementById('resultado');
+  
+        // Se activa en cada cambio del input
+        inputBusqueda.addEventListener('input', function() {
+          const query = inputBusqueda.value.trim();
+  
+          fetch(`/productos/buscar-especifico/?q=${encodeURIComponent(query)}`)
+            .then(response => response.json())
+            .then(data => {
+              // Limpia el contenedor de resultados
+              resultadoDiv.innerHTML = '';
+  
+              if (data.producto) {
+                const producto = data.producto;
+                const divProducto = document.createElement('div');
+                divProducto.innerHTML = `<strong>${producto.nombre}</strong><br>${producto.descripcion}`;
+                resultadoDiv.appendChild(divProducto);
+              } else {
+                resultadoDiv.textContent = data.mensaje;
+              }
+            })
+            .catch(error => {
+              console.error('Error en la petición:', error);
+            });
+        });
+      });
+    </script>
+  
+=======
     <link rel="stylesheet" href="{% static '/css/index.css' %}">
     <link rel="stylesheet" href="{% static '/css/index.css' %}">
     <link rel="stylesheet" href="{% static '/css/accesibilidad.css' %}">
+    <link rel="stylesheet" href="{% static '/css/buscador.css' %}">
+>>>>>>> 461e5f94370d99c62f75f0956a7849eec044216a
   </head>
   <body>
     <header></header>
@@ -112,10 +147,29 @@
         </div>
       </div>
       
+<!--BUSCADOR-->
+    
+    <!-- Contenedor del buscador -->
+    <div class="search-container">
+      <div class="search-box">
+          <input 
+              type="text" 
+              id="product-search" 
+              class="search-input" 
+              placeholder="Buscar bebidas calientes..." 
+              aria-label="Buscar productos"
+          >
+          <button id="search-btn" class="search-button" aria-label="Buscar">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+          </button>
+      </div>
+    </div>
 
 
-
-        <div class="cards-container" >
+  <div class="cards-container" >
 
 
 
@@ -137,20 +191,11 @@
       <button>ver mas</button>
     </div>
   </div>
+</div>
 {% empty %}
   <p>No hay productos disponibles en esta categoría.</p>
 {% endfor %}
 
-
-
-
-
-
-
-
-
-
-        </div>
 
 
 
@@ -220,5 +265,6 @@
           </footer>
         </main>
     <script src="{% static '/js/script_accesibilidad.js' %}"></script>
+    <script src="{% static '/js/buscador.js' %}"></script>
   </body>
 </html>

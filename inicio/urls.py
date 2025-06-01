@@ -7,7 +7,11 @@ from django.contrib import admin
 from .forms import CustomPasswordResetForm
 from django.contrib.auth.views import PasswordResetView
 from admin_personalizado.views import perfil_view
+from .views import guardar_pedido
 
+
+
+# app_name = 'inicio' 
 
 urlpatterns = [
     # PRINCIPAL
@@ -33,6 +37,8 @@ urlpatterns = [
     # path('usuarios/', views.usuarios, name = 'usuarios'),
     path('logout/', views.logout_view, name='logout'),
 
+    # URL del Dashboard
+    # path('dashboard/', views.dashboard, name='dashboard'),
 
 
     # API de usuarios
@@ -53,8 +59,10 @@ urlpatterns = [
     path('cocteles/', views.cocteles, name='cocteles'),
     path('Para_picar/', views.para_picar, name='Para_picar'),
     
-
-
+    # NUEVA URL PARA EL PANEL DE MESEROS
+    path('mesero_principal/', views.mesero_principal, name='mesero_principal'),
+    
+    
     # # RECUPERAR CONTRASEÑA
     path('password_reset/', PasswordResetView.as_view(
     form_class=CustomPasswordResetForm,
@@ -77,9 +85,14 @@ urlpatterns = [
     
     
     # PRODUCTOS
-    path('productos/<str:categoria>/', views.productos_por_categoria, name='productos_por_categoria'),
+    # path('productos/<str:categoria>/', views.productos_por_categoria, name='productos_por_categoria'),
+
+    path('cliente/productos/<str:categoria>/', views.productos_cliente, name='productos_cliente'),
+    path('mesero/productos/<str:categoria>/', views.productos_mesero, name='productos_mesero'),
 
 
+    #PEDIDOS
+    path('guardar-pedido/', views.guardar_pedido, name='guardar_pedido'),
 ]
 
 

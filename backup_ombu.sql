@@ -1243,4 +1243,3 @@ ALTER TABLE ONLY public.inicio_usuario
 --
 -- PostgreSQL database dump complete
 --
-

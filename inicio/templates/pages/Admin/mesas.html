@@ -1,4 +1,5 @@
 {% load static %}
+{% csrf_token %}
 {% load custom_tags %}
 <!DOCTYPE html>
 <html lang="es">
@@ -7,23 +8,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mesas - Gastro Bar</title>
     <link rel="stylesheet" href="{% static 'css/mesas.css' %}">
+    <link rel="stylesheet" href="{% static 'css/mesas_principal.css' %}">
+
+    
 </head>
 <body>
-    <!-- Menú superior -->
-    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-    <ul class="main-menu" id="mainMenu">
-        <li class="admin-item"><a href="{% url 'admin' %}">Inicio</a></li>
-        {% if user.is_authenticated %}
-            <li class="admin-item"><a href="{% url 'cervezas' %}">Productos</a></li>
-            <li class="admin-item"><a href="{% url 'mesas' %}">Mesas</a></li>
-            {% if user|has_group:"ombu" %}
-                <li class="admin-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
-                <li class="admin-item"><a href="{% url 'reserva' %}">Reserva</a></li>
-                <li class="admin-item"><a href="#">Usuarios</a></li>
-            {% endif %}
-            <li class="admin-item"><a href="{% url 'logout' %}">CERRAR SESIÓN</a></li>
-        {% endif %}
-    </ul>
+    <!-- Menú superior ... (igual que tu código) -->
+
     <!-- Fondo con capa oscura -->
     <div class="background-overlay"></div>
 
@@ -31,10 +22,10 @@
     <div class="mesas-section">
         <h2>Mesas</h2>
         <div class="mesas-grid">
-            {% for i in "123456789101112"|make_list %}
-                <div class="mesa" data-mesa="{{ i }}">
+            {% for mesa in mesas %}
+                <div class="mesa" data-mesa-id="{{ mesa.id }}" data-numero-mesa="{{ mesa.numero }}">
                     <i class="fas fa-chair"></i>
-                    <h3>Mesa {{ i }}</h3>
+                    <h3>Mesa {{ mesa.numero }}</h3>
                 </div>
             {% endfor %}
         </div>
@@ -46,26 +37,32 @@
         <table>
             <thead>
                 <tr>
-                    <th>Producto</th>
-                    <th>Precio Unitario</th>
+                    <th >Producto</th>
+                    <th>Precio</th>
                     <th>Cantidad</th>
                     <th>Total</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
             <tbody id="pedido-body">
-                <!-- Productos dinámicos -->
+                <!-- Aquí se agregan filas de productos dinámicamente -->
             </tbody>
         </table>
+        <div class="pedido">
+            <button id="agregar-producto-btn" data-url="{% url 'cervezas' %}">Agregar Producto</button>
 
-        <button id="agregar-producto-btn" data-url="{% url 'cervezas' %}">Agregar Producto</button>
-        <p>Total del Pedido: $<span id="total-pedido">0.00</span></p>
-        <select id="medio-pago">
-            <option value="efectivo">Efectivo</option>
-            <option value="tarjeta">Tarjeta</option>
-            <option value="transferencia">Transferencia</option>
-        </select>
-        <button onclick="finalizarPedido()">Finalizar Pedido</button>
+            <p>Total del Pedido: $<span id="total-pedido">0.00</span></p>
+            <p>Cantidad total: <span id="cantidad-total-pedido">0</span></p>
+
+            <select class="medio-pago">
+                <option value="efectivo">Efectivo</option>
+                <option value="tarjeta">Tarjeta</option>
+                <option value="transferencia">Transferencia</option>
+            </select>
+
+            <button class="finalizar-pedido-btn">Finalizar Pedido</button>
+        </div>
+
     </div>
 
     <!-- Footer -->
@@ -76,5 +73,8 @@
     </footer>
 
     <script src="{% static 'js/mesas.js' %}"></script>
+    <script src="{% static 'js/mesero_principal.js' %}"></script> 
 </body>
+
+
 </html>

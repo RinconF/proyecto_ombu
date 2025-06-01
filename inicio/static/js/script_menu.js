@@ -199,41 +199,42 @@ document.addEventListener("DOMContentLoaded", () => {
             // Manejar opciones de precios
             modalSelect.innerHTML = '';
 
-            try {
-                // Verificar si hay opciones para este producto
-                const options = card.getAttribute('data-options');
-                if (options) {
-                    const optionsArray = JSON.parse(options);
+                try {
+                    // Verificar si hay opciones para este producto
+                  const options = card.getAttribute('data-options');
+                  if (options) {
+                    const optionsArray = options.split(',').map(opt => opt.trim()).filter(opt => opt.length > 0);
                     optionsArray.forEach(option => {
                         const optionElement = document.createElement('option');
                         optionElement.value = option;
                         optionElement.textContent = option;
                         modalSelect.appendChild(optionElement);
 
-                        // Establecer el mismo precio para todas las opciones (puedes modificar esto si las opciones tienen diferentes precios)
+                        // Establecer el mismo precio para todas las opciones
                         currentProductData.options[option] = {
                             price: basePriceValue,
                             priceDisplay: basePrice
                         };
                     });
-                } else {
-                    // Opción predeterminada si no hay data-options
+                
+                    } else {
+                        // Opción predeterminada si no hay data-options
+                        const optionElement = document.createElement('option');
+                        optionElement.value = "Regular";
+                        optionElement.textContent = "Regular";
+                        modalSelect.appendChild(optionElement);
+                    }
+                } catch (e) {
+                    console.error("Error al analizar opciones:", e);
+                    // Opción alternativa
                     const optionElement = document.createElement('option');
                     optionElement.value = "Regular";
                     optionElement.textContent = "Regular";
                     modalSelect.appendChild(optionElement);
                 }
-            } catch (e) {
-                console.error("Error al analizar opciones:", e);
-                // Opción alternativa
-                const optionElement = document.createElement('option');
-                optionElement.value = "Regular";
-                optionElement.textContent = "Regular";
-                modalSelect.appendChild(optionElement);
-            }
-
-            // Mostrar el modal
-            modal.style.display = "flex";
+                
+                // Mostrar el modal
+                modal.style.display = "flex";
         });
     });
 
@@ -582,7 +583,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         let currentScrollTop = main.scrollTop || document.documentElement.scrollTop;
 
-        if (currentScrollTop > 150) {
+        if (currentScrollTop > 350) {
             menuContainer.classList.add("menu-fixed");
         } else {
             menuContainer.classList.remove("menu-fixed");

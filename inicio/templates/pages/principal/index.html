@@ -181,6 +181,30 @@
     </section>
 
 
+      <section class="galeria-seccion">
+          <h2>Nuestras Productos Destacadas</h2>
+          <div class="galeria-container">
+              {% for foto in galeria_fotos %}
+              <div class="galeria-card">
+                  {% if foto.imagen %}
+                  <img src="{{ foto.imagen.url }}" alt="{{ foto.titulo }}" class="galeria-img">
+                  {% else %}
+                  <img src="{% static 'path/to/default_image.jpg' %}" alt="Imagen por defecto" class="galeria-img">
+                  {% endif %}
+                  <div class="card-content">
+                      <h3>{{ foto.titulo }}</h3>
+                      <p>{{ foto.descripcion|default:"Sin descripción." }}</p>
+                  </div>
+              </div>
+              {% empty %}
+              <p>No hay imágenes destacadas disponibles en este momento.</p>
+              {% endfor %}
+          </div>
+      </section>
+
+
+
+
     <!-- seccion reserva -->
     <section id="reservas">
         <h2 class="subtitulo">Reservas</h2>

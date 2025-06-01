@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 
                 try {
                     // Verificar si hay opciones para este producto
-                    const options = card.getAttribute('data-options');
+                  const options = card.getAttribute('data-options');
                   if (options) {
                     const optionsArray = options.split(',').map(opt => opt.trim()).filter(opt => opt.length > 0);
                     optionsArray.forEach(option => {
@@ -191,9 +191,12 @@ document.addEventListener("DOMContentLoaded", () => {
     // Agrega el evento de scroll al `main` en lugar de `window`
     main.addEventListener("scroll", handleScroll);
 });
+<<<<<<< HEAD
+=======
 
 
 
 // buscador
 
 
+>>>>>>> 461e5f94370d99c62f75f0956a7849eec044216a

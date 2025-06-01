@@ -7,22 +7,22 @@ from django.template.loader import render_to_string
 from django.conf import settings
 
 
-class CustomUserCreationForm(UserCreationForm):
+class CustomUserCreationForm (UserCreationForm):
     class Meta:
         model = Usuario 
-        fields = ('username','first_name', 'last_name', 'email', 'rol')
+        fields = ('username', 'email', 'first_name', 'last_name', 'rol')
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['first_name'].label = "Nombre"
         self.fields['last_name'].label = "Apellido"
         for field_name, field in self.fields.items():
-            field.widget.attrs['class'] = 'form-control'   #aplicar bootstrap
+           field.widget.attrs['class'] = 'form-control'   
            
 class CustomUserChangeForm(UserChangeForm):
-    password = None
+
     
-    class Meta:
+    class Meta: 
         model = Usuario
         fields = ('username', 'email', 'first_name', 'last_name', 'rol', 'is_active')
     
@@ -32,7 +32,7 @@ class CustomUserChangeForm(UserChangeForm):
         self.fields['last_name'].label = "Apellido"
         self.fields['is_active'].label = "Estado activo"
         for field_name, field in self.fields.items():
-            field.widget.attrs['class'] = 'form-control'  #bootstrap
+            field.widget.attrs['class'] = 'form-control'  
             
 
 

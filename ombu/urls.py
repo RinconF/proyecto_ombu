@@ -20,9 +20,12 @@ from django.conf import settings
 from django.urls import re_path
 from django.views.static import serve
 from django.conf import settings
+from django.conf.urls.static import static
+from admin_personalizado.admin import custom_admin_site
+
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', custom_admin_site.urls),
     path('', include('inicio.urls')),
     path('admin_panel/', include('admin_personalizado.urls', namespace='admin_panel')),
 ]
@@ -30,3 +33,6 @@ urlpatterns = [
 urlpatterns += [
     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 ]
+
+if settings.DEBUG: # <--- Esto es importante
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

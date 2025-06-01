@@ -16,12 +16,11 @@ from .decorators import role_required
 # from .models import Reserva
 # from django.core.mail import send_mail
 import json
-from .models import Usuario
+from .models import Usuario,Producto,GaleriaFoto
 from .forms import CustomUserCreationForm, CustomUserChangeForm, PasswordChangeForm
 from django.contrib.auth.models import User
-from .models import Producto
 from django.contrib.admin.views.decorators import staff_member_required
-
+from .models import ActividadReciente
 from .decorators import group_required
 # from .models import Categoria, Producto, Pedido, Mesa
 from django.db.models import Sum, Count
@@ -34,6 +33,13 @@ from django.db.models.functions import TruncMonth
 from django.utils.dateformat import DateFormat
 from .decorators import group_required
 from django.db.utils import ProgrammingError
+from admin_personalizado import templates
+from django.contrib.admin.models import LogEntry
+from django.utils.translation import gettext as _
+
+
+
+
 
 # PRINCIPAL
 def index(request):
@@ -75,21 +81,19 @@ def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username').strip()
         password = request.POST.get('password').strip()
-        
-        print(f"Intento de inicio de sesión: username='{username}', password='{password}'")  # Para depurar
 
         user = authenticate(request, username=username, password=password)
         if user is not None:
             if user.is_active:
                 login(request, user)
                 # Redireccionar según el rol del usuario
-                print(f"Inicio de sesión exitoso para: {user.username}, rol: {user.rol}")  # Para depurar
-                if user.is_superuser:
+                # print(f"Inicio de sesión exitoso para: {user.username}, rol: {user.rol}")  # Para depurar
+                if user.is_superuser or (user.rol.lower() == 'administrador' and user.is_staff):
                     return redirect('admin:index')  
-                elif user.rol == 'ombu':
-                    return redirect('dashboard')  # Corregido a 'dashboard' (ver urls.py)
-                elif user.rol.strip().lower()  == 'mesero':  # Nueva condición para mesero
-                    return redirect('admin')  # Redirige a la vista de mesero
+                elif user.rol.lower() == 'ombu':
+                    return redirect('admin:index')  # Corregido a 'dashboard' (ver urls.py)
+                elif user.rol.lower() == 'mesero':  # Nueva condición para mesero
+                    return redirect('mesero_principal')  # Redirige a la vista de mesero
                 else:
                     return redirect('index')  # Redirige a la página principal por defecto
             else:
@@ -99,13 +103,13 @@ def login_view(request):
 
     # Si el usuario ya está autenticado, redirigir según su rol
     if request.user.is_authenticated:
-        print(f"Usuario ya autenticado: {request.user.username}, rol: {request.user.rol}") 
-        if request.user.is_superuser:
+        # print(f"Usuario ya autenticado: {request.user.username}, rol: {request.user.rol}") 
+        if request.user.is_superuser or (request.user.rol.lower() == 'administrador' and request.user.is_staff):
             return redirect('admin:index')  # Redirige al panel de administración de Django
-        elif request.user.rol == 'Administrador':
-            return redirect('dashboard')  # Corregido a 'dashboard'
-        elif request.user.rol == 'mesero':  # Nueva condición para mesero
-            return redirect('bebidas_calientes')  # Redirige a la vista de mesero
+        elif request.user.rol.lower() == 'ombu':
+            return redirect('admin:index')  # Corregido a 'dashboard'
+        elif request.user.rol.lower() == 'mesero':  # Nueva condición para mesero
+            return redirect('mesero_principal')  # Redirige a la vista de mesero
         else:
             return redirect('index')  # Redirige a la página principal por defecto
 
@@ -120,51 +124,144 @@ def logout_view(request):
 def admin_principal(request):
     return render(request, 'pages/Admin/admin_principal.html')
 
+
+# NUEVA VISTA PARA MESEROS
+@never_cache
+@login_required
+@user_passes_test(lambda u: u.rol == 'mesero' or u.rol == 'administrador') # Permite a administradores también acceder si es necesario
+def mesero_principal(request):
+    """Panel principal para usuarios con rol 'Mesero'"""
+    return render(request, 'pages/menu_mesero/mesero_principal.html') # Renderiza el nuevo HTM
+
+
 # @never_cache
-# @group_required('ombu')
-# def dashboard_view(request):
-#     # Datos generales
-#     total_productos = Producto.objects.count()
-#     total_mesas = Mesa.objects.count()
-#     pedidos_hoy = Pedido.objects.filter(fecha__date=date.today()).count()
-#     ventas_mes = Pedido.objects.filter(fecha__month=date.today().month).aggregate(
-#         total=Sum('total')
-#     )['total'] or 0
+# @staff_member_required # Asegura que solo el personal del admin pueda acceder a esta vista
+# def dashboard(request): # Renombrado a dashboard_view para consistencia
+#     # Obtener las 10 actividades administrativas más recientes
+#     recent_activities = LogEntry.objects.order_by('-action_time')[:10]
 
-#     # Top productos y mesas
-#     productos_top = Producto.objects.annotate(
-#         cantidad_vendida=Sum('pedido__cantidad')
-#     ).order_by('-cantidad_vendida')[:5]
+#     # Formatear las actividades para mostrarlas en el template
+#     formatted_activities = []
+#     for entry in recent_activities:
+#         action_detail_message = ""
 
-#     mesas_top = Mesa.objects.annotate(
-#         cantidad_reservas=Count('reserva')
-#     ).order_by('-cantidad_reservas')[:5]
+#         # Usar get_text_for_log_entry para obtener una descripción más detallada
+#         # Si no tienes esta función, puedes usar object_repr
+#         object_display_name = str(entry.get_admin_url(entry.content_type_id, entry.object_id, entry.object_repr)) \
+#                               if entry.content_type and entry.object_id and entry.object_repr \
+#                               else (entry.object_repr if entry.object_repr else _("un objeto desconocido"))
 
-#     # 🎯 Paso 6: Ventas mensuales para el gráfico
-#     ventas = (
-#         Pedido.objects
-#         .annotate(month=TruncMonth('fecha'))
-#         .values('month')
-#         .annotate(total=Sum('total'))
-#         .order_by('month')
+#         # Determinar la acción principal y la descripción inicial
+#         if entry.is_addition():
+#             action_description = _(f"Añadido '{object_display_name}'")
+#         elif entry.is_change():
+#             action_description = _(f"Modificado '{object_display_name}'")
+#             if entry.change_message:
+#                 try:
+#                     message_data = json.loads(entry.change_message)
+
+#                     if isinstance(message_data, list):
+#                         for msg in message_data:
+#                             if 'changed' in msg and 'fields' in msg['changed']:
+#                                 changed_fields = ', '.join(msg['changed']['fields'])
+#                                 action_detail_message = _(f"Se actualizaron los campos: {changed_fields}.")
+#                             elif 'added' in msg and 'name' in msg['added'] and 'object' in msg['added']:
+#                                 added_name = msg['added']['name'] # Nombre del campo relacionado (ej. 'permissions')
+#                                 added_object = msg['added']['object'] # Representación del objeto añadido (ej. 'can_view_report')
+#                                 action_detail_message = _(f"Se añadió '{added_object}' a '{added_name}'.")
+#                             elif 'deleted' in msg and 'name' in msg['deleted'] and 'object' in msg['deleted']:
+#                                 deleted_name = msg['deleted']['name']
+#                                 deleted_object = msg['deleted']['object']
+#                                 action_detail_message = _(f"Se eliminó '{deleted_object}' de '{deleted_name}'.")
+#                     else:
+#                         if entry.change_message.strip():
+#                             action_detail_message = _(f"Detalles del cambio: {entry.change_message.strip()}.")
+
+#                 except json.JSONDecodeError:
+#                     if entry.change_message.strip():
+#                         action_detail_message = _(f"Detalles del cambio: {entry.change_message.strip()}.")
+#                     else:
+#                         action_detail_message = _("No se especificaron detalles del cambio.")
+#         elif entry.is_deletion():
+#             action_description = _(f"Eliminado '{object_display_name}'")
+#         else:
+#             action_description = _(f"Acción desconocida sobre '{object_display_name}'")
+
+
+#         final_action_text = action_description
+#         if action_detail_message:
+#             final_action_text += f": {action_detail_message}"
+
+#         # Añadir quién realizó la acción
+#         final_action_text += f" por {entry.user.username}"
+
+#         formatted_activities.append({
+#             'accion': final_action_text,
+#             'fecha_hora': entry.action_time,
+#         })
+
+#     context = {
+#         'title': 'Dashboard Administrativo OMBÚ', # Título que aparecerá en el breadcrumbs
+#         'actividades_recientes': formatted_activities,
+#     }
+#     # LA RUTA DE LA PLANTILLA ES CLAVE AQUÍ: APUNTA A LA APP admin_personalizado
+#     return render(request, 'admin/dashboard.html', context)
+    
+    
+    
+    
+    # # Ventas por mes
+    # hoy = datetime.date.today()
+    # ventas_mensuales = []
+    # ventas_mensuales_labels = []
+    # ventas_mensuales_data = []
+
+    # for i in range(1, 13):
+    #     total = Pedido.objects.filter(fecha__month=i).aggregate(Sum('total'))['total__sum'] or 0
+    #     ventas_mensuales.append({'month': calendar.month_name[i], 'total': float(total)})
+    #     ventas_mensuales_labels.append(calendar.month_name[i])
+    #     ventas_mensuales_data.append(float(total))
+
+    # # Top mesas más usadas
+    # mesas_usadas = (
+    #     Pedido.objects.values('mesa__numero')
+    #     .annotate(total=Count('id'))
+    #     .order_by('-total')[:5]
     # )
 
-    # Etiquetas y datos para Chart.js
-    ventas_labels = [DateFormat(v['month']).format('F') for v in ventas]
-    ventas_data = [float(v['total']) for v in ventas]
+    # # Top productos más vendidos
+    # productos_vendidos = (
+    #     Producto.objects.annotate(total=Count('pedido'))
+    #     .order_by('-total')[:5]
+    # )
 
-    context = {
-        'total_productos': total_productos,
-        'total_mesas': total_mesas,
-        'pedidos_hoy': pedidos_hoy,
-        'ventas_mes': ventas_mes,
-        'productos_top': productos_top,
-        'mesas_top': mesas_top,
-        'ventas_labels': ventas_labels,
-        'ventas_data': ventas_data,
-    }
+    # # Cálculos simples para los 4 recuadros:
+    # ventas_totales = Pedido.objects.aggregate(Sum('total'))['total__sum'] or 0
+    # hoy = datetime.date.today()
+    # ventas_dia = Pedido.objects.filter(fecha__date=hoy).aggregate(Sum('total'))['total__sum'] or 0
+    # ventas_mes = Pedido.objects.filter(fecha__month=hoy.month).aggregate(Sum('total'))['total__sum'] or 0
+    # ventas_anio = Pedido.objects.filter(fecha__year=hoy.year).aggregate(Sum('total'))['total__sum'] or 0
 
-    return render(request, 'pages/Admin/dashboard.html', context)
+    # return render(request, 'dashboard.html', {
+    #     'ventas_mensuales_labels': ventas_mensuales_labels,
+    #     'ventas_mensuales_data': ventas_mensuales_data,
+    #     'mesas_usadas': mesas_usadas,
+    #     'productos_vendidos': productos_vendidos,
+    #     'ventas_totales': ventas_totales,
+    #     'ventas_dia': ventas_dia,
+    #     'ventas_mes': ventas_mes,
+    #     'productos_top': productos_top,
+    #     'mesas_top': mesas_top,
+    #     'ventas_labels': ventas_labels,
+    #     'ventas_data': ventas_data,
+    # })
+
+    # return render(request, 'pages/Admin/dashboard.html', context)
+
+
+
+
+
 
 def admin_login_page(request):
     return render(request, 'pages/Admin/login.html')
@@ -399,79 +496,215 @@ def usuarios(request):
 @never_cache
 @login_required
 def bebidas_calientes(request):
-    return render(request, 'pages/menu_mesero/bebidas_calientes.html')
+    productos = Producto.objects.filter(estado='disponible', categoria='bebida_caliente')
+    return render(request, 'pages/menu_mesero/bebidas_calientes.html', {'productos': productos})
+
 
 @never_cache
 @login_required
 def bebidas_frias(request):
-    return render(request, 'pages/menu_mesero/bebidas_frias.html')
+    productos = Producto.objects.filter(estado='disponible', categoria='Bebida_fria')
+    return render(request, 'pages/menu_mesero/bebidas_frias.html', {'productos': productos})
 
 
 @never_cache
 @login_required
 def cervezas(request):
-    return render(request, 'pages/menu_mesero/Cervezas.html')
+    productos = Producto.objects.filter(estado='disponible', categoria='Cerveza')
+    return render(request, 'pages/menu_mesero/Cervezas.html', {'productos': productos})
 
 @never_cache
 @login_required
 def cigarrillos(request):
-    return render(request, 'pages/menu_mesero/Cigarrillos.html')
+    productos = Producto.objects.filter(estado='disponible', categoria='Cigarrillo')
+    return render(request, 'pages/menu_mesero/Cigarrillos.html', {'productos': productos})
 
 @never_cache
 @login_required
 def cocteles(request):
-    return render(request, 'pages/menu_mesero/Cocteles.html')
+    productos = Producto.objects.filter(estado='disponible', categoria='Coctel')
+    return render(request, 'pages/menu_mesero/Cocteles.html', {'productos': productos})
 
 @never_cache
 @login_required
 def para_picar(request):
-    return render(request, 'pages/menu_mesero/Para_picar.html')
+    productos = Producto.objects.filter(estado='disponible', categoria='Picar')
+    return render(request, 'pages/menu_mesero/Para_picar.html', {'productos': productos})
 
 
-def productos_por_categoria(request, categoria):
+# def productos_por_categoria(request, categoria):
+#     productos = Producto.objects.filter(estado='disponible', categoria=categoria)
+
+#     try:
+        
+#         template_name = f'pages/menu_mesero/{categoria}.html'
+#         return render(request, template_name, {'productos': productos})
+#     except:
+#         return render(request, 'pages/menu_mesero/no_encontrado.html', {'categoria': categoria})
+
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+
+template_map = {
+    'bebida_caliente': {
+        'cliente': 'pages/productos_menu/bebida_caliente.html',
+        'mesero': 'pages/menu_mesero/bebidas_calientes.html',
+    },
+    'Bebida_fria': {
+        'cliente': 'pages/productos_menu/bebida_fria.html',
+        'mesero': 'pages/menu_mesero/bebidas_frias.html',
+    },
+    'Coctel': {
+        'cliente': 'pages/productos_menu/Coctel.html',
+        'mesero': 'pages/menu_mesero/Cocteles.html',
+    },
+    'Cerveza': {
+        'cliente': 'pages/productos_menu/Cervezas.html',
+        'mesero': 'pages/menu_mesero/CervezasArtesanales.html',
+    },
+    'Cigarrillo': {
+        'cliente': 'pages/productos_menu/Cigarrillo.html',
+        'mesero': 'pages/menu_mesero/Cigarrillos.html',
+    },
+    'Picar': {
+        'cliente': 'pages/productos_menu/Picar.html',
+        'mesero': 'pages/menu_mesero/Para_picar.html',
+    },
+}
+
+def productos_cliente(request, categoria):
     productos = Producto.objects.filter(estado='disponible', categoria=categoria)
-
-    try:
-        
-        template_name = f'pages/productos_menu/{categoria}.html'
-        return render(request, template_name, {'productos': productos})
-    except:
-        return render(request, 'pages/productos_menu/no_encontrado.html', {'categoria': categoria})
-
-# PRODUCTOS
-
-# def productos_disponibles(request):
-#     productos = Producto.objects.filter(estado='disponible')
-#     return render(request, 'principal/index.html', {'productos': productos})
-
-#EMAIL RESERVA
-
-# @login_required
-# def generar_reserva (request):
-#     if request.method == 'POST':
-#         nombre = request.POST['nombre']
-#         email = request.POST['email']
-#         fecha = request.POST['fecha']
-#         hora = request.POST['hora']
-#         cantidad = request.POST['cantidad']
-        
-#         reserva.Reserva.objects.create(
-#             nombreperReserva=nombre,
-#             fecha=fecha, 
-#             hora=hora,
-#             cantidadPersonas=cantidad,
-#             Usuario=request.user
-#         )
-        
-#         send_mail(
-#             subject='Confirmación de la reserva',
-#             message=f'Hola {nombre}, tu reserva fue realizada para el {fecha} a las {hora}.',
-#             from_email='correo@gmail.com',  # Remplaza con tu email configurado en settings.py
-#             recipient_list=[email],
-#             fail_silently=False,
-        
-#         )
+    template_path = template_map.get(categoria, {}).get('cliente')
     
-#         return JsonResponse({'Success': True})
-#     return render(request,'reserva.html')
+    if template_path:
+        return render(request, template_path, {'productos': productos})
+    
+    return render(request, 'pages/productos_menu/no_encontrado.html', {
+        'categoria': categoria,
+        'tipo': 'cliente',
+    })
 
+# Vista para meseros (interfaz interna)
+def productos_mesero(request, categoria):
+    productos = Producto.objects.filter(estado='disponible', categoria=categoria)
+    template_path = template_map.get(categoria, {}).get('mesero')
+    
+    if template_path:
+        return render(request, template_path, {'productos': productos})
+    
+    return render(request, 'pages/productos_menu/no_encontrado.html', {
+        'categoria': categoria,
+        'tipo': 'mesero',
+    })
+
+
+
+
+# Vista para manejar fotos de index
+def index(request):
+    
+    # Opción 1: Obtener las dos fotos más recientes
+    galeria_fotos = GaleriaFoto.objects.all().order_by('-fecha_subida')[:2]
+
+    # Opción 2: Obtener las dos fotos marcadas como principales (si existen)
+    # Si tienes más de 2 principales y quieres solo 2, ajusta el orden o la lógica.
+    # galeria_fotos = GaleriaFoto.objects.filter(es_principal=True).order_by('-fecha_subida')[:2]
+
+    context = {
+        'galeria_fotos': galeria_fotos
+    }
+    return render(request, 'pages/principal/index.html', context)
+
+
+#NUMERO DE MESAS
+def mesas(request):
+    mesas = Mesa.objects.all().order_by('numero')  # Ordenar por número para mostrar ordenadas
+    context = {
+        'mesas': mesas,
+    }
+    return render(request, 'pages/Admin/mesas.html', context)
+
+
+
+
+
+
+
+
+
+
+# -----------------------------------------------------------PEDIDOS------------------------------------
+
+
+
+def guardar_pedido(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            mesa_id = data.get('mesa')
+            medio_pago = data.get('medio_pago')
+            productos = data.get('productos', [])
+
+            if not mesa_id or not productos:
+                return JsonResponse({'error': 'Datos incompletos'}, status=400)
+
+            try:
+                mesa = Mesa.objects.get(id=mesa_id)
+            except Mesa.DoesNotExist:
+                return JsonResponse({'error': 'Mesa no encontrada'}, status=400)
+
+            pedido = Pedido.objects.create(mesa=mesa, medio_pago=medio_pago, total=0)
+
+            total = 0
+            for item in productos:
+                try:
+                    
+                    
+                    print(data)  # para ver en consola qué llega
+
+                    producto = Producto.objects.get(id=item['id'])
+                except Producto.DoesNotExist:
+                    return JsonResponse({'error': f"Producto con id {item['id']} no existe"}, status=400)
+
+                cantidad = item['cantidad']
+                subtotal = producto.precio * cantidad
+                PedidoDetalle.objects.create(
+                    pedido=pedido,
+                    producto=producto,
+                    cantidad=cantidad,
+                    subtotal=subtotal
+                )
+                total += subtotal
+
+            pedido.total = total
+            pedido.save()
+
+            return JsonResponse({'message': 'Pedido guardado correctamente.'}, status=200)
+
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'JSON inválido'}, status=400)
+
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+    else:
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+
+
+
+# from django.http import JsonResponse
+# from django.views.decorators.csrf import csrf_exempt
+# import json
+
+# @csrf_exempt  # temporal para evitar problemas de CSRF
+# def guardar_pedido(request):
+#     if request.method == 'POST':
+#         try:
+#             data = json.loads(request.body)
+#             print('Datos recibidos:', data)  # para debug en consola
+#             # Aquí debes procesar y guardar el pedido en la BD
+#             return JsonResponse({'message': 'Pedido guardado correctamente'})
+#         except Exception as e:
+#             return JsonResponse({'error': str(e)}, status=400)
+#     else:
+#         return JsonResponse({'error': 'Método no permitido'}, status=405)

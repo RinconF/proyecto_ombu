@@ -412,7 +412,7 @@ body {
 .breadcrumbs > span + a:before,
 .breadcrumbs > a + span:before {
     content: "›"; /* Utiliza el carácter de comilla angular */
-    color: #080808; /* Color más sutil para el separador */
+    color: #b8262600; /* Color más sutil para el separador */
     padding: 0 8px; /* Espaciado alrededor del separador */
 }
 

@@ -1,7 +1,7 @@
 /* Estilos para el formulario de agregar productos (y otros si se generaliza el selector) */
 body #content-main form#producto_form, /* Cambiado de #usuario_form a #producto_form */
 body #content-main form.change-form { /* Opcional: si quieres que afecte a todos los change-form */
-    background-color: #f8f9fa;
+    background-color: #2d6a4f;
     border: 1px solid #dee2e6;
     border-radius: 0.25rem;
     padding: 20px;
@@ -14,7 +14,7 @@ body #content-main form.change-form { /* Opcional: si quieres que afecte a todos
 }
 
 body #content-main .form-row {
-    display: flex;
+    display: block;
     align-items: center;
     margin-bottom: 15px;
     flex-wrap: wrap; 
@@ -24,7 +24,7 @@ body #content-main .form-row label {
     flex-basis: 150px;
     margin-right: 10px;
     font-weight: 500;
-    color: #495057;
+    color: hsl(130, 88%, 46%);
     text-align: right;
 }
 
@@ -35,7 +35,7 @@ body #content-main .form-row input[type="number"], /* Agregado para campos numé
 body #content-main .form-row textarea, /* Agregado para campos de texto largos */
 body #content-main .form-row select {
     flex: 1; 
-    padding: 0.75rem;
+    padding: 1px;
     border: 1px solid #ced4da;
     border-radius: 0.25rem;
     box-sizing: border-box;
@@ -82,7 +82,7 @@ body #content-main .submit-row {
 
 body #content-main .submit-row input[type="submit"],
 body #content-main .submit-row button {
-    background-color: #c4bfbf;
+    background-color: #326b3a;
     color: #000000;
     padding: 0.75rem 1.5rem;
     border: none;

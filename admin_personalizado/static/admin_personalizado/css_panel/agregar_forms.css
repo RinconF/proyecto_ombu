@@ -35,7 +35,7 @@ body #content-main .form-row input[type="number"], /* Agregado para campos numé
 body #content-main .form-row textarea, /* Agregado para campos de texto largos */
 body #content-main .form-row select {
     flex: 1; 
-    padding: 0.75rem;
+    padding: 1px;
     border: 1px solid #ced4da;
     border-radius: 0.25rem;
     box-sizing: border-box;

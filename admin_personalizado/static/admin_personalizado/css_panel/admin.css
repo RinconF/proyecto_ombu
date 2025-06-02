@@ -368,14 +368,14 @@ body {
 /*breadcrumb*/
 /* ===== ESTILOS PARA BREADCRUMB PERSONALIZADO ===== */
 .breadcrumbs {
-    background-color: #f8f8f8 !important; /* Un fondo blanco suave o un gris claro */
+    background-color: #4d4b4b !important; /* Un fondo blanco suave o un gris claro */
     padding: 15px 30px; /* Más padding para mayor espacio */
     margin: 0; /* Eliminar margen si lo tiene por defecto */
     border-bottom: 1px solid #ddd; /* Un borde inferior sutil */
     font-family: 'Open Sans', sans-serif; /* Fuente más moderna */
     box-shadow: inset 0 -1px 3px rgba(0,0,0,0.05); /* Sombra interna sutil */
     color: #555; /* Color de texto más suave */
-    font-size: 14px; /* Tamaño de fuente ajustado */
+    font-size: 16px; /* Tamaño de fuente ajustado */
     display: flex; /* Para alinear los elementos */
     align-items: center;
 }
@@ -397,7 +397,7 @@ body {
 
 
 .breadcrumbs span.sep { /* Si usas un <span> para el separador */
-    color: #505659;
+    color: #0056b3  ;
     margin: 0 8px;
     font-weight: normal;
 }
@@ -412,13 +412,13 @@ body {
 .breadcrumbs > span + a:before,
 .breadcrumbs > a + span:before {
     content: "›"; /* Utiliza el carácter de comilla angular */
-    color: #888; /* Color más sutil para el separador */
+    color: #080808; /* Color más sutil para el separador */
     padding: 0 8px; /* Espaciado alrededor del separador */
 }
 
 
 .breadcrumbs .current {
-    color: #333; /* Color más oscuro para el elemento actual */
+    color: #0056b3; /* Color más oscuro para el elemento actual */
     font-weight: 600; /* Más negrita para resaltarlo */
 }
 
@@ -601,7 +601,7 @@ body {
 /*boton eliminar--------------------------*/
 /* Estilos para el botón global de eliminar y ocultar acciones de Django */
 .button-delete-button-global {
-    background-color: #dc3545 !important; /* Rojo de Bootstrap para peligro/eliminar */
+    background-color: #f5182e !important; /* Rojo de Bootstrap para peligro/eliminar */
     color: white;
     border: none;
     /* Ajusta el padding para que sea similar al addlink si es necesario */

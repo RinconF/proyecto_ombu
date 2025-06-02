@@ -191,9 +191,12 @@ document.addEventListener("DOMContentLoaded", () => {
     // Agrega el evento de scroll al `main` en lugar de `window`
     main.addEventListener("scroll", handleScroll);
 });
+<<<<<<< HEAD
+=======
 
 
 
 // buscador
 
 
+>>>>>>> 461e5f94370d99c62f75f0956a7849eec044216a

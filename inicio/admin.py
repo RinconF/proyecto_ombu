@@ -175,7 +175,7 @@ class ProductoAdmin(admin.ModelAdmin):
 
     class Media:
         css = {
-            'all': ('admin_personalizado/css_panel/agregar_forms.css',) 
+            'all': ('admin_personalizado/css_panel/agregar_forms.css',)
         }
     
 @admin.register(GaleriaFoto, site= custom_admin_site)

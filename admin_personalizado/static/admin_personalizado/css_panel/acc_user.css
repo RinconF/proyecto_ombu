@@ -35,12 +35,12 @@
 
 /* Estilos para el botón de Eliminar */
 #result_list td.field-acciones .button.action-delete {
-    background-color: #dc3545; /* Rojo */
+    background-color: #ee1228; /* Rojo */
     color: white;
 }
 
 #result_list td.field-acciones .button.action-delete:hover {
-    background-color: #c82333;
+    background-color: #ee1228;
     transform: translateY(-1px);
 }
 

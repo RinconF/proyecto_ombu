@@ -1,11 +1,11 @@
 document.addEventListener("DOMContentLoaded", function() {
     const defaultOptions = {
-        buttonColor: '#40916c', // Verde medio para el botón
-        buttonIconColor: 'black', // Ícono blanco para buen contraste
-        highlightColor: '#52b788', // Verde vibrante para resaltar
-        menuBackgroundColor: '#1b4332', // Verde pastel suave para el fondo
-        menuTextColor: '#1b4332', // Verde oscuro para mejor lectura
-        customLabels: {}
+        buttonColor: '#2d6a4f',          // Verde bosque suave (botón principal)
+        buttonIconColor: '#ffffff',      // Blanco para buen contraste
+        highlightColor: '#74c69d',       // Verde claro agradable para hover
+        menuBackgroundColor: '#081c15',  // Verde muy oscuro (casi negro) para fondo
+        menuTextColor: '#d8f3dc',        // Verde menta claro para buena legibilidad
+        customLabels: {}    
     };
 
     const userOptions = window.siennaOptions || {};
@@ -118,11 +118,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 </div>
             </div>
             <div class="asw-menu-content">
-                <div class="asw-card" style="margin-top: 15px;">
+                <div class="asw-card" style="margin-top: 15px; color: #333333;">
                     <div class="asw-card-title">Ajustes</div>
                     <div class="asw-adjust-font">
                         <div class="label">
-                            <span class="material-icons" style="margin-right:8px;">format_size</span> Tamaño de Fuente
+                            <span class="material-icons" style="margin-right:8px; color: #333333;">format_size</span> Tamaño de Fuente
                         </div>
                         <div>
                             <div class="asw-minus" data-key="font-size" role="button" aria-pressed="false">
@@ -136,7 +136,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     </div>
                     <div class="asw-items">${i}</div>
                 </div>
-                <div class="asw-card" style="margin-top: 15px;">
+                <div class="asw-card" style="margin-top: 15px; color: grey;">
                     <div class="asw-card-title">Ajustes de Color</div>
                     <div class="asw-items">${o}</div>
                 </div>

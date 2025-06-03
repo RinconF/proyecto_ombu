@@ -34,7 +34,7 @@ from django.contrib.admin.models import LogEntry
 from django.utils.translation import gettext as _
 from django.conf import settings
 import subprocess
-
+import decimal
 
 # PRINCIPAL
 def index(request):
@@ -572,7 +572,7 @@ def index(request):
 #     return render(request, 'pages/Admin/mesas.html', context)
 
 # -----------------------------------------------------------PEDIDOS------------------------------------
-@require_POST # Asegura que solo se acepta el método POST
+@require_POST
 @csrf_exempt # Considera quitar esto en producción y usar el token CSRF apropiadamente
 def guardar_pedido(request):
     try:
@@ -580,7 +580,7 @@ def guardar_pedido(request):
         
         mesa_id = data.get('mesa_id')
         items = data.get('items')
-        total_recibido = data.get('total')
+        total_recibido = data.get('total') # Esto viene como float de JS
         medio_pago = data.get('medio_pago')
 
         if not mesa_id or not items:
@@ -599,23 +599,32 @@ def guardar_pedido(request):
             # Obtener el mesero actual si el usuario está autenticado y es un mesero
             mesero = None
             if request.user.is_authenticated and hasattr(request.user, 'rol') and request.user.rol == 'mesero':
-                mesero = request.user # Asume que request.user es una instancia de tu modelo Usuario
+                mesero = request.user 
+            # Si el campo mesero en Pedido NO permite nulos, y mesero puede ser None, esto causará un error.
+            # Asegúrate que el campo `mesero` en tu modelo `Pedido` tiene `null=True, blank=True`
+            # o que un mesero siempre esté autenticado.
+
+            # Convertir total_recibido a Decimal antes de crear el pedido
+            try:
+                total_recibido_decimal = decimal.Decimal(str(total_recibido))
+            except decimal.InvalidOperation:
+                return JsonResponse({'error': 'El total del pedido recibido no es un número válido.'}, status=400)
 
             # Crear el pedido principal
             pedido = Pedido.objects.create(
                 mesa=mesa,
-                total=total_recibido, # Usar el total calculado desde el frontend, se puede recalcular para validación
+                total=total_recibido_decimal, # ¡Usar la versión Decimal!
                 mesero=mesero,
                 medio_pago=medio_pago,
-                estado='finalizado' # Establecemos el estado a 'finalizado' directamente aquí
+                estado='finalizado'
             )
 
-            total_calculado_backend = 0
+            total_calculado_backend = decimal.Decimal('0.00') # Inicia con un Decimal
             # Crear los detalles del pedido
             for item_data in items:
                 producto_id = item_data.get('producto_id')
                 cantidad = item_data.get('cantidad')
-                precio_unitario_recibido = item_data.get('precio_unitario')
+                precio_unitario_recibido = item_data.get('precio_unitario') # Esto viene como float de JS
 
                 if not producto_id or not cantidad or cantidad <= 0:
                     raise ValueError(f"Datos de producto inválidos: {item_data}")
@@ -625,30 +634,36 @@ def guardar_pedido(request):
                 except Producto.DoesNotExist:
                     raise ValueError(f"Producto con ID {producto_id} no encontrado.")
                 
-                # Opcional: Validar que el precio_unitario recibido coincida con el del producto en BD
-                # Esto es importante para evitar manipulaciones de precios desde el cliente
-                if float(precio_unitario_recibido) != float(producto.precio):
-                    # Podrías decidir usar el precio de la BD o lanzar un error
-                    # Para este ejemplo, usaremos el de la BD para mayor seguridad
-                    precio_para_detalle = producto.precio
-                    # print(f"Advertencia: Precio de producto {producto.titulo} difiere. Usando precio de BD: {producto.precio}")
+                # Convertir precio_unitario_recibido a Decimal para la comparación
+                try:
+                    precio_unitario_recibido_decimal = decimal.Decimal(str(precio_unitario_recibido))
+                except decimal.InvalidOperation:
+                    raise ValueError(f"El precio unitario recibido para el producto ID {producto_id} no es válido.")
+                
+                # Validar que el precio_unitario recibido coincida con el del producto en BD
+                # Ahora comparamos Decimal con Decimal
+                if precio_unitario_recibido_decimal != producto.precio:
+                    precio_para_detalle = producto.precio # Siempre usar el precio de la BD
+                    # print(f"Advertencia: Precio de producto {producto.nombre} difiere. Usando precio de BD: {producto.precio}")
                 else:
-                    precio_para_detalle = precio_unitario_recibido
+                    precio_para_detalle = precio_unitario_recibido_decimal # Usar la versión Decimal recibida si coincide
 
                 PedidoDetalle.objects.create(
                     pedido=pedido,
                     producto=producto,
                     cantidad=cantidad,
-                    precio_unitario=precio_para_detalle
+                    precio_unitario=precio_para_detalle # Este ya es un Decimal
                 )
-                total_calculado_backend += (precio_para_detalle * cantidad)
-            
+                # Asegúrate de que cantidad sea un entero o Decimal para la multiplicación
+                total_calculado_backend += (precio_para_detalle * cantidad) # Operación con Decimal
+
             # Opcional: Validar que el total calculado en el backend coincida con el del frontend
-            # Puedes tener una pequeña tolerancia debido a problemas de precisión de flotantes
-            if abs(total_calculado_backend - float(total_recibido)) > 0.01:
-                print(f"Advertencia: Discrepancia en el total. Frontend: {total_recibido}, Backend: {total_calculado_backend}")
-                # return JsonResponse({'error': 'Discrepancia en el total del pedido.'}, status=400)
-                # O podrías simplemente actualizar el total del pedido con el calculado en backend
+            # Ahora comparamos Decimal con Decimal, con una pequeña tolerancia
+            # La tolerancia también debería ser un Decimal
+            tolerancia = decimal.Decimal('0.01') 
+            if abs(total_calculado_backend - total_recibido_decimal) > tolerancia:
+                print(f"Advertencia: Discrepancia en el total. Frontend: {total_recibido_decimal}, Backend: {total_calculado_backend}")
+                # Si decides usar el total calculado por el backend (más seguro):
                 pedido.total = total_calculado_backend
                 pedido.save()
 
@@ -669,6 +684,8 @@ def guardar_pedido(request):
     except Exception as e:
         # Esto capturará cualquier otro error inesperado
         print(f"Error inesperado al guardar pedido: {e}")
+        import traceback # Agrega esto para ver el traceback completo en la consola
+        traceback.print_exc()
         return JsonResponse({'error': 'Error interno del servidor al procesar el pedido.'}, status=500)
     
 

@@ -40,7 +40,7 @@ class UsuarioAdmin(BaseUserAdmin):
     fieldsets = (
         (None, {'fields': ('username',)}),
         ('Información Personal', {'fields': ('first_name', 'last_name', 'email')}),
-        ('Roles y Permisos', {'fields': ('rol', 'is_active', 'is_staff', 'is_superuser','groups', 'user_permissions')}),  
+        ('Roles y Permisos', {'fields': ('rol', 'is_active', )}),  
         ('Fechas Importantes', {'fields': ('last_login', 'date_joined')}),
     )
     readonly_fields = ('last_login', 'date_joined')

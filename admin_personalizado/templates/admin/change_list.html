@@ -97,11 +97,13 @@
                 {% if add_url %}<li class="addlink-container"><a href="{{ add_url }}" class="addlink button">{% blocktranslate with cl.opts.verbose_name as name %}Añadir {{ name }}{% endblocktranslate %}</a></li>{% endif %}
                 
                 {# TU NUEVO BOTÓN DE ELIMINAR GLOBAL #}
+                {% if cl.opts.model_name != 'pedido' %} {# <--- Agrega esta línea #}
                 <li>
                     <button type="submit" class="button button-delete-button-global" id="global-delete-button" disabled>
                         {% translate "Eliminar Seleccionados" %}
                     </button>
                 </li>
+                {% endif %} {# <--- Agrega esta línea #}
             </ul>
         </div>
         {# --- FIN DE TU NUEVA ESTRUCTURA --- #}
@@ -229,106 +231,136 @@
 document.addEventListener('DOMContentLoaded', function() {
     const globalDeleteButton = document.getElementById('global-delete-button');
     const changelistForm = document.getElementById('changelist-form');
+    // Selecciona todos los checkboxes de acción, incluyendo el de la cabecera si existe
     const checkboxes = changelistForm.querySelectorAll('input[name="_selected_action"]');
-    const selectAllCheckbox = changelistForm.querySelector('th input[type="checkbox 
+    // Corrección aquí: Selector de tipo de checkbox debe estar completo
+    const selectAllCheckbox = changelistForm.querySelector('th input[type="checkbox"]'); 
+    
     // Modal de eliminación elements
     const deleteModal = document.getElementById('delete-confirmation-modal');
     const closeModalDeleteButton = deleteModal ? deleteModal.querySelector('.close-button') : null;
     const confirmDeleteButton = document.getElementById('confirm-delete-button');
     const cancelDeleteButton = document.getElementById('cancel-delete-button');
-    const modalDeleteMessage = document.getElementById('modal-delete-messa  
-    // Modal de filtro elements (NUEVO)
+    // Corrección aquí: ID completo y correctamente cerrado
+    const modalDeleteMessage = document.getElementById('modal-delete-message'); 
+    
+    // Modal de filtro elements
     const openFilterModalButton = document.getElementById('openFilterModal');
     const filterModal = document.getElementById('filterModal');
+    // Asegúrate de que el botón de cerrar exista antes de intentar seleccionarlo
     const closeModalFilterButton = filterModal ? filterModal.querySelector('.close-button-filter') : null;
-  function updateDeleteButtonState() {
-    let anyChecked = false;
-    checkboxes.forEach(checkbox => {
-      if (checkbox.checked && checkbox.name === '_selected_action') {
-        anyChecked = true;
-      }
-    });
-    globalDeleteButton.disabled = !anyChecked;
-  }
-  checkboxes.forEach(checkbox => {
-    checkbox.addEventListener('change', updateDeleteButtonState);
-  });
-  if (selectAllCheckbox) {
-    selectAllCheckbox.addEventListener('change', function() {
-      checkboxes.forEach(checkbox => {
-        if (checkbox.name === '_selected_action') {
-          checkbox.checked = selectAllCheckbox.checked;
-        }
-      });
-      updateDeleteButtonState();
-    });
-  }
-  updateDeleteButtonState();
-    // Lógica para el botón global de eliminación
-    globalDeleteButton.addEventListener('click', function(event) {
-        event.preventDefault();
-        if (!this.disabled) {
-            if (deleteModal) {
-                deleteModal.style.display = 'flex';
-                deleteModal.classList.add('is-active');
-                modalDeleteMessage.textContent = `¿Estás seguro de que quieres eliminar los ${Array.from(checkboxes).filter(cb => cb.checked).length} elementos seleccionados?`;
-            }
-        }
-    });
-    // Cuando se confirma la eliminación
-    confirmDeleteButton.addEventListener('click', function() {
-        changelistForm.querySelector('input[name="action"]').value = 'delete_selected';
-        changelistForm.submit();
-        if (deleteModal) {
-            deleteModal.classList.remove('is-active');
-            deleteModal.style.display = 'none';
-        }
-    });
-    // Cuando se cancela la eliminación o se cierra el modal de eliminación
-    cancelDeleteButton.addEventListener('click', function() {
-        if (deleteModal) {
-            deleteModal.classList.remove('is-active');
-            deleteModal.style.display = 'none';
-        }
-    });
-    if (closeModalDeleteButton) {
-        closeModalDeleteButton.addEventListener('click', function() {
-            if (deleteModal) {
-                 deleteModal.classList.remove('is-active');
-                 deleteModal.style.display = 'none';
-            }
-        });
-    }
-    // Cerrar el modal de eliminación si se hace clic fuera de él
-    window.addEventListener('click', function(event) {
-        if (deleteModal && event.target == deleteModal) {
-             deleteModal.classList.remove('is-active');
-             deleteModal.style.display = 'none';
-       }
-     });
-//--------------------filtros-----------------------------
- // Lógica para el modal de filtros (NUEVO)
-  if (openFilterModalButton && filterModal) { // Asegúrate de que los elementos existan
-     openFilterModalButton.addEventListener('click', function() {
-     filterModal.style.display = 'flex';
-     filterModal.classList.add('is-active');
-     });
-     if (closeModalFilterButton) {
-          closeModalFilterButton.addEventListener('click', function() {
-            filterModal.classList.remove('is-active');
+
+    // Función para actualizar el estado del botón de eliminar
+    function updateDeleteButtonState() {
+        let anyChecked = false;
+        checkboxes.forEach(checkbox => {
+            // Solo considera los checkboxes de acción individuales
+            if (checkbox.checked && checkbox.name === '_selected_action') {
+                anyChecked = true;
+            }
         });
-            filterModal.style.display = 'none';
-     // Cerrar el modal de filtro si se hace clic fuera de él
-     }
-         if (event.target == filterModal) {
-     window.addEventListener('click', function(event) {
-      filterModal.style.display = 'none';
-             filterModal.classList.remove('is-active');
-                });
-         }
-  } // This curly brace closes the 'if (openFilterModalButton && filterModal)' block.
+        globalDeleteButton.disabled = !anyChecked;
+    }
 
-}); // <--- This is where the DOMContentLoaded listener should close.
+    // Añadir listeners a todos los checkboxes individuales
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateDeleteButtonState);
+    });
 
+    // Añadir listener al checkbox "Seleccionar todo"
+    if (selectAllCheckbox) {
+        selectAllCheckbox.addEventListener('change', function() {
+            checkboxes.forEach(checkbox => {
+                if (checkbox.name === '_selected_action') {
+                    checkbox.checked = selectAllCheckbox.checked;
+                }
+            });
+            updateDeleteButtonState(); // Actualiza el estado después de seleccionar/deseleccionar todo
+        });
+    }
+
+    // Inicializar el estado del botón al cargar la página
+    updateDeleteButtonState();
+
+    // Lógica para el botón global de eliminación
+    if (globalDeleteButton) { // Asegurarse de que el botón existe (condicionalmente renderizado)
+        globalDeleteButton.addEventListener('click', function(event) {
+            event.preventDefault(); // Previene el envío inmediato del formulario
+            if (!this.disabled) {
+                if (deleteModal) {
+                    deleteModal.style.display = 'flex';
+                    deleteModal.classList.add('is-active');
+                    const selectedCount = Array.from(checkboxes).filter(cb => cb.checked && cb.name === '_selected_action').length;
+                    modalDeleteMessage.textContent = `¿Estás seguro de que quieres eliminar los ${selectedCount} elementos seleccionados?`;
+                }
+            }
+        });
+    }
+
+    // Lógica para confirmar la eliminación
+    if (confirmDeleteButton) {
+        confirmDeleteButton.addEventListener('click', function() {
+            // Asegúrate de que el campo de acción esté establecido a 'delete_selected'
+            changelistForm.querySelector('input[name="action"]').value = 'delete_selected';
+            changelistForm.submit(); // Envía el formulario para ejecutar la acción
+            if (deleteModal) {
+                deleteModal.classList.remove('is-active');
+                deleteModal.style.display = 'none';
+            }
+        });
+    }
+
+    // Lógica para cancelar la eliminación
+    if (cancelDeleteButton) {
+        cancelDeleteButton.addEventListener('click', function() {
+            if (deleteModal) {
+                deleteModal.classList.remove('is-active');
+                deleteModal.style.display = 'none';
+            }
+        });
+    }
+
+    // Lógica para cerrar el modal de eliminación con el botón 'x'
+    if (closeModalDeleteButton) {
+        closeModalDeleteButton.addEventListener('click', function() {
+            if (deleteModal) {
+                deleteModal.classList.remove('is-active');
+                deleteModal.style.display = 'none';
+            }
+        });
+    }
+
+    // Cerrar el modal de eliminación si se hace clic fuera de él
+    window.addEventListener('click', function(event) {
+        if (deleteModal && event.target === deleteModal) {
+            deleteModal.classList.remove('is-active');
+            deleteModal.style.display = 'none';
+        }
+    });
+
+    // -------------------- Lógica para los filtros (Modal) -----------------------------
+    if (openFilterModalButton && filterModal) { // Asegúrate de que los elementos existan
+        openFilterModalButton.addEventListener('click', function() {
+            filterModal.style.display = 'flex';
+            filterModal.classList.add('is-active');
+        });
+
+        if (closeModalFilterButton) {
+            closeModalFilterButton.addEventListener('click', function() {
+                filterModal.classList.remove('is-active');
+                filterModal.style.display = 'none'; // Asegúrate de ocultarlo completamente
+            });
+        }
+
+        // Cerrar el modal de filtro si se hace clic fuera de él
+        window.addEventListener('click', function(event) {
+            if (filterModal && event.target === filterModal) {
+                filterModal.classList.remove('is-active');
+                filterModal.style.display = 'none';
+            }
+        });
+    }
+
+}); // Cierre correcto del DOMContentLoaded
 </script>
 {% endblock %}

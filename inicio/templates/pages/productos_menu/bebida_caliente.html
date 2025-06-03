@@ -7,6 +7,7 @@
     <title> OMBÚ | Bebidas Calientes 🍹 </title>
     <link rel="stylesheet" href="{% static '/css/Productos_Styles.css' %}" type="text/css" />
     <link rel="stylesheet" href="{% static '/css/index.css' %}">
+    <link rel="stylesheet" href="{% static '/css/index.css' %}">
     <link rel="stylesheet" href="{% static '/css/accesibilidad.css' %}">
     <link rel="stylesheet" href="{% static '/css/buscador.css' %}">
   </head>
@@ -41,7 +42,8 @@
             </svg>
           </button>
         </div>
-        
+
+
         <div class="menu" id="mainMenu">
 
           <a href="{% url 'index' %}" class="link">
@@ -123,7 +125,7 @@
               type="text" 
               id="product-search" 
               class="search-input" 
-              placeholder="Buscar Cervezas..." 
+              placeholder="Buscar bebidas calientes..." 
               aria-label="Buscar productos"
           >
           <button id="search-btn" class="search-button" aria-label="Buscar">
@@ -142,8 +144,7 @@
 
 
 
-          <!-- PRODUCTOS -->
-
+    {% comment %} Productos       {% endcomment %}
 
              {% for producto in productos %}
   <div class="card" data-title="{{ producto.titulo }}" data-image="{{ producto.foto.url }} " data-options='{{ producto.opciones|safe }}'>
@@ -161,6 +162,7 @@
       <button>ver mas</button>
     </div>
   </div>
+</div>
 {% empty %}
   <p>No hay productos disponibles en esta categoría.</p>
 {% endfor %}
@@ -190,8 +192,8 @@
       </section>
       
 
-
-
+      <script src="{% static '/js/menu_cliente.js' %}"></script>
+      
       <footer id="contacto">
         <div class="footer-container">
                 <div class="footer-logo">

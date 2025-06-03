@@ -70,13 +70,14 @@
                     <span class="link-title">OMBÚ</span>
                 </a>
 
-                <a href="{% url 'bebida_caliente' %}" class="link">
+                <!--<a href="{% url 'bebida_caliente' %}" class="link">-->
+                <a href="#productos" class="link">
                     <span class="link-icon">
                         <svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256px" height="256px" fill="#000000">
                             <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill="white" d="M128 352.576V352a288 288 0 0 1 491.072-204.224 192 192 0 0 1 274.24 204.48 64 64 0 0 1 57.216 74.24C921.6 600.512 850.048 710.656 736 756.992V800a96 96 0 0 1-96 96H384a96 96 0 0 1-96-96v-43.008c-114.048-46.336-185.6-156.48-214.528-330.496A64 64 0 0 1 128 352.64zm64-.576h64a160 160 0 0 1 320 0h64a224 224 0 0 0-448 0zm128 0h192a96 96 0 0 0-192 0zm439.424 0h68.544A128.256 128.256 0 0 0 704 192c-15.36 0-29.952 2.688-43.52 7.616 11.328 18.176 20.672 37.76 27.84 58.304A64.128 64.128 0 0 1 759.424 352zM672 768H352v32a32 32 0 0 0 32 32h256a32 32 0 0 0 32-32v-32zm-342.528-64h365.056c101.504-32.64 165.76-124.928 192.896-288H136.576c27.136 163.072 91.392 255.36 192.896 288z"></path></g></svg>
                         </svg>
                     </span>
-                    <span class="link-title">PRODUCTOS</span>
+                    <span class="link-title">CARTA</span>
                 </a>
 
                 <a href="#sobre-nosotros" class="link">
@@ -127,7 +128,7 @@
         </div>
 
     <!-- Sección Productos -->   
-    <section id="productos"></section>     
+    <!--<section id="productos"></section>  -->
     <section id="productos" class="section">
         <div class="container-p">
             <h2 class="subtitulo">Carta</h2>
@@ -137,37 +138,37 @@
                         </button>   
                     <div id="cursor">
                     <div class="card-item" data-url="{% url 'bebida_caliente' %}">
-                        <img src="{% static 'img/img_index/coffe_ombu.jfif' %}" alt="Bebidas Calientes">
+                        <img src="{% static 'img/imagenes_productos/bedidascalientes/capuchinoconlicor.png' %}" alt="Bebidas Calientes">
                         <div class="overlay">
                             <p>Bebidas Calientes</p>
                         </div>
                     </div>
                     <div class="card-item" data-url="{% url 'Bebida_fria' %}">
-                        <img src="{% static 'img/imagenes_productos/bebidas_frias.png' %}" alt="Bebidas Frías">
+                        <img src="{% static 'img/imagenes_productos/bebidasfrias/cafe_granizado.png' %}" alt="Bebidas Frías">
                         <div class="overlay">
                             <p>Bebidas Frías</p>
                         </div>
                     </div>
                     <div class="card-item" data-url="{% url 'cigarrillo' %}">
-                        <img src="{% static 'img/imagenes_productos/garros.jpg' %}" alt="Cigarros">
+                        <img src="{% static 'img/imagenes_productos/bebidasfrias/cigarros.png' %}" alt="Bebidas Frías">
                         <div class="overlay">
-                            <p>Cigarros</p>
+                            <p>Cigarrillos</p>
                         </div>
                     </div>
                     <div class="card-item" data-url="{% url 'cerveza' %}">
-                        <img src="{% static 'img/imagenes_productos/cerveza.jpg' %}" alt="Cerveza">
+                        <img src="{% static 'img/imagenes_productos/bebidasfrias/bbc.png'  %}" alt="Bebidas Frías">
                         <div class="overlay">
                             <p>Cerveza</p>
                         </div>
                     </div>
                     <div class="card-item" data-url="{% url 'coctel' %}">
-                        <img src="{% static 'img/imagenes_productos/cocteles.jpg' %}" alt="Cocteles">
+                        <img src="{% static 'img/imagenes_productos/extasis.png' %}" alt="Cocteles">
                         <div class="overlay">
                             <p>Cocteles</p>
                         </div>
                     </div>
                     <div class="card-item" data-url="{% url 'picar' %}">
-                        <img src="{% static 'img/imagenes_productos/papas.webp' %}" alt="Para Picar">
+                        <img src="{% static 'img/imagenes_productos/bebidasfrias/brownie.png' %}" alt="Para Picar">
                         <div class="overlay">
                             <p>Para Picar</p>
                         </div>

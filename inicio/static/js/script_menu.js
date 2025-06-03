@@ -231,14 +231,19 @@ document.addEventListener("DOMContentLoaded", () => {
     cartIcon.addEventListener('click', function() {
         cartContainer.classList.add('open');
         overlay.style.display = 'block';
+        cartIcon.style.display = 'none'; // Cierre del carrito 
         cartOpen = true;
     });
 
     closeCartBtn.addEventListener('click', closeCart);
     overlay.addEventListener('click', closeCart);
 
-
-    // === Lógica de agregar al carrito ===
+    function closeCart() {
+        cartContainer.classList.remove('open');
+        overlay.style.display = 'none';
+        cartIcon.style.display = 'block'; // ← NUEVA LÍNEA para que se cierre el carrito 
+        cartOpen = false;
+    }
 
     // Agregar al carrito desde las tarjetas (botón '+')
     document.querySelectorAll('.add-to-cart-btn').forEach((button) => {

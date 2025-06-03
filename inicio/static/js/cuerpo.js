@@ -21,7 +21,7 @@ const flavors = [
   {
     name: ["Zom", "bie"],
     color: "rgba(141, 68, 173, 0.2)",
-    image: "inicio/static/img/imagenes_productos/zombie.png",
+    image: "/images/zombie.png",
   }
 ];
 

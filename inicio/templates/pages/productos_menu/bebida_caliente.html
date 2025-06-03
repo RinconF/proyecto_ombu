@@ -6,44 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title> OMBÚ | Bebidas Calientes 🍹 </title>
     <link rel="stylesheet" href="{% static '/css/Productos_Styles.css' %}" type="text/css" />
-<<<<<<< HEAD
-    <script>
-      document.addEventListener("DOMContentLoaded", function() {
-        const inputBusqueda = document.getElementById('inputBusqueda');
-        const resultadoDiv = document.getElementById('resultado');
-  
-        // Se activa en cada cambio del input
-        inputBusqueda.addEventListener('input', function() {
-          const query = inputBusqueda.value.trim();
-  
-          fetch(`/productos/buscar-especifico/?q=${encodeURIComponent(query)}`)
-            .then(response => response.json())
-            .then(data => {
-              // Limpia el contenedor de resultados
-              resultadoDiv.innerHTML = '';
-  
-              if (data.producto) {
-                const producto = data.producto;
-                const divProducto = document.createElement('div');
-                divProducto.innerHTML = `<strong>${producto.nombre}</strong><br>${producto.descripcion}`;
-                resultadoDiv.appendChild(divProducto);
-              } else {
-                resultadoDiv.textContent = data.mensaje;
-              }
-            })
-            .catch(error => {
-              console.error('Error en la petición:', error);
-            });
-        });
-      });
-    </script>
-  
-=======
     <link rel="stylesheet" href="{% static '/css/index.css' %}">
     <link rel="stylesheet" href="{% static '/css/index.css' %}">
     <link rel="stylesheet" href="{% static '/css/accesibilidad.css' %}">
     <link rel="stylesheet" href="{% static '/css/buscador.css' %}">
->>>>>>> 461e5f94370d99c62f75f0956a7849eec044216a
   </head>
   <body>
     <header></header>

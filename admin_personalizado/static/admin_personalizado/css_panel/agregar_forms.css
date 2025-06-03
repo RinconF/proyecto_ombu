@@ -1,7 +1,7 @@
 /* Estilos para el formulario de agregar productos (y otros si se generaliza el selector) */
 body #content-main form#producto_form, /* Cambiado de #usuario_form a #producto_form */
 body #content-main form.change-form { /* Opcional: si quieres que afecte a todos los change-form */
-    background-color: #2d6a4f;
+    background-color: #fffaf0;
     border: 1px solid #dee2e6;
     border-radius: 0.25rem;
     padding: 20px;
@@ -82,8 +82,8 @@ body #content-main .submit-row {
 
 body #content-main .submit-row input[type="submit"],
 body #content-main .submit-row button {
-    background-color: #326b3a;
-    color: #f7f4f4;
+    background-color: #b2bdb5;
+    color: #000000;
     padding: 0.75rem 1.5rem;
     border: none;
     border-radius: 0.25rem;
@@ -154,31 +154,7 @@ ul.errorlist li {
 }
 
 
-/* Botón Editar */
-.button.action-edit {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 4px;
-}
 
-.button.action-edit:hover {
-    background-color: #218838;
-}
-
-/* Botón Eliminar */
-.button.custom-delete-button {
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 4px;
-}
-
-.button.custom-delete-button:hover {
-    background-color: #c82333;
-}
 
 /* --- Media Queries para responsividad en agregar_forms.css --- */
 

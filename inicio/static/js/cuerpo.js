@@ -1,28 +1,27 @@
 // Script animacion productos
 const flavors = [
   {
-    name: ["la", "tte"],
-    color: "rgba(74, 145, 226, 0.36)",
+    name: ["La", "tte"],
+    color: "rgba(74, 145, 226, 0.1)",
     image:
       "https://raw.githubusercontent.com/nidal1111/storage/master/assets/milkshake_banana.png",
   },
   {
-    name: ["Maple", "Peanut"],
-    color: "rgba(233, 75, 75, 0.24)",
+    name: ["Cafe Gra", "nizado"],
+    color: "rgba(233, 75, 75, 0.08)",
     image:
       "https://raw.githubusercontent.com/nidal1111/storage/master/assets/milkShake_caffe%CC%80.png",
   },
   {
-    name: ["Cacao", "Coconut"],
-    color: "rgba(244, 208, 63, 0.22)",
+    name: ["Capu", "ccino"],
+    color: "rgba(244, 208, 63, 0.07)",
     image:
       "https://raw.githubusercontent.com/nidal1111/storage/master/assets/milkShake_fragole.png",
   },
   {
-    name: ["Berry", "Blend"],
+    name: ["Zom", "bie"],
     color: "rgba(141, 68, 173, 0.2)",
-    image:
-      "https://raw.githubusercontent.com/nidal1111/storage/master/assets/milkshake_banana.png",
+    image: "inicio/static/img/imagenes_productos/zombie.png",
   }
 ];
 

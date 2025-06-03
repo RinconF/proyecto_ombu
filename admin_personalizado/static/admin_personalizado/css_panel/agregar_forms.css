@@ -153,6 +153,33 @@ ul.errorlist li {
     color: black;
 }
 
+
+/* Botón Editar */
+.button.action-edit {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+
+.button.action-edit:hover {
+    background-color: #218838;
+}
+
+/* Botón Eliminar */
+.button.custom-delete-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+
+.button.custom-delete-button:hover {
+    background-color: #c82333;
+}
+
 /* --- Media Queries para responsividad en agregar_forms.css --- */
 
 @media screen and (max-width: 768px) {

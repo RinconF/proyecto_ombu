@@ -175,7 +175,8 @@ class ProductoAdmin(admin.ModelAdmin):
 
     class Media:
         css = {
-            'all': ('admin_personalizado/css_panel/agregar_forms.css',)
+            'all': ('admin_personalizado/css_panel/agregar_forms.css','admin_personalizado/css_panel/acc_user.css')
+                  
         }
     
 @admin.register(GaleriaFoto, site= custom_admin_site)
@@ -290,14 +291,14 @@ class MesaAdmin(admin.ModelAdmin):
         app_label = obj._meta.app_label
         model_name = obj._meta.model_name
 
-        # Enlace para editar la MESA (ahora correctamente dirigido a la mesa)
+        # Enlace para editar la MESA
         edit_url = reverse(f'admin:{app_label}_{model_name}_change', args=[obj.pk])
         # Enlace para ver los pedidos de esa MESA
         pedidos_url = reverse('admin:%s_%s_changelist' % (obj._meta.app_label, 'pedido')) + f'?mesa__id__exact={obj.pk}'
 
         return format_html(
-            '<a class="button action-edit" href="{}"><i class="fa fa-pencil"></i> Editar Mesa</a>&nbsp;' # Botón para editar la mesa
-            '<a class="button" href="{}">Ver Pedidos</a>', # Botón para ver los pedidos de la mesa
+            '<a class="button action-edit" href="{}"><i class="fa fa-pencil"></i> Editar Mesa</a>&nbsp;'
+            '<a class="button action-view" href="{}"><i class="fa fa-eye"></i> Ver Pedidos</a>',
             edit_url,
             pedidos_url
         )
@@ -363,6 +364,11 @@ class MesaAdmin(admin.ModelAdmin):
     )
     def mostrar_estado_activo(self, obj):
         return obj.is_active
+    
+    class Media:
+        css = {
+            'all': ('admin_personalizado/css_panel/acc_user.css',)
+        }
 
 @admin.register(Pedido, site=custom_admin_site)
 class PedidoAdmin(admin.ModelAdmin):
@@ -371,6 +377,11 @@ class PedidoAdmin(admin.ModelAdmin):
     list_filter = ('estado', 'fecha', 'mesa') 
     search_fields = ('id', 'mesa__numero__icontains', 'mesero__username__icontains')
     ordering = ('-fecha',) # Ahora usa 'fecha'
+    
+    class Media:
+        css = {
+            'all': ('admin_personalizado/css_panel/acc_user.css',)
+        }
 
     def has_add_permission(self, request):
         return False
@@ -406,22 +417,20 @@ class PedidoAdmin(admin.ModelAdmin):
 
     # Método para la columna "Acciones"
     def acciones_pedido(self, obj):
-        # Enlace para ver el detalle del pedido (usa la vista de edición/cambio por defecto del admin)
-        # Esto te lleva a la página donde puedes ver/editar el pedido completo en el admin
+        # Enlace para ver el detalle del pedido
         view_url = reverse('admin:{}_{}_change'.format(obj._meta.app_label, obj._meta.model_name), args=[obj.pk])
         
         # Enlace para descargar el PDF
-        # Usa el nombre de la URL personalizada que definimos en get_urls()
         pdf_url = reverse('admin:{}_{}_download_pdf'.format(obj._meta.app_label, obj._meta.model_name), args=[obj.pk])
-
+    
         return format_html(
-            '<a class="button" href="{}">Ver Contenido</a>&nbsp;' # El '&nbsp;' es un espacio en HTML
-            '<a class="button" href="{}">Descargar PDF</a>',
+            '<a class="button action-view" href="{}"><i class="fa fa-eye"></i> Ver Contenido</a>&nbsp;'
+            '<a class="button action-download" href="{}"><i class="fa fa-download"></i> Descargar PDF</a>',
             view_url,
             pdf_url
         )
     acciones_pedido.short_description = 'Acciones' # Título de la columna en el panel
-
+    
     # La vista que genera el PDF (definida como un método de la clase PedidoAdmin)
     def download_pedido_pdf_view(self, request, pedido_id):
         pedido = get_object_or_404(Pedido, pk=pedido_id)
@@ -481,6 +490,8 @@ def render_to_pdf(template_src, context_dict={}):
     
     response_pdf = HttpResponse(response.getvalue(), content_type='application/pdf')
     return response_pdf
+
+
 
 
 # Registros

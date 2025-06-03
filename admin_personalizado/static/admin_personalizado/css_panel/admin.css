@@ -605,7 +605,7 @@ body {
     color: white;
     border: none;
     /* Ajusta el padding para que sea similar al addlink si es necesario */
-    padding: 8px 20px 8px 10px !important; /* Un poco menos de padding horizontal que addlink si addlink es 25px */
+    padding: 11px 18px 8px 10px !important; /* Un poco menos de padding horizontal que addlink si addlink es 25px */
     border-radius: 5px; /* Consistente con addlink */
     cursor: pointer;
     font-size: 14px; /* O puedes dejarlo igual que addlink si quieres */
@@ -617,7 +617,7 @@ body {
     align-items: center;
     justify-content: center;
     text-decoration: none;
-    margin-bottom: 10px;
+    margin-bottom: 1px;
 }
 
 .button.delete-button-global:hover:not(:disabled) {

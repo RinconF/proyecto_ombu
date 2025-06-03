@@ -257,12 +257,12 @@
 }
 
 /* Estilos adicionales para mejorar la apariencia general */
-#result_list td.field-acciones_pedido {
-    background-color: #f8f9fa; /* Fondo ligeramente gris */
+#result_list tr {
+    background-color: #f8f9fa; /* Fondo uniforme para toda la fila */
 }
 
-#result_list tr:hover td.field-acciones_pedido {
-    background-color: #e9ecef; /* Fondo más oscuro al hacer hover en la fila */
+#result_list tr:hover {
+    background-color: #d4edda !important; /* Verde claro tipo Bootstrap */
 }
 
 /* Animación sutil al cargar */

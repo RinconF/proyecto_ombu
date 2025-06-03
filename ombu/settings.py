@@ -158,8 +158,8 @@ LOGOUT_REDIRECT_URL = '/login/'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'giuseppeesteban101@gmail.com'
-EMAIL_HOST_PASSWORD = 'nxnp jmrf zvyc ffcq'
+EMAIL_HOST_USER = 'gastrobarombu@gmail.com'
+EMAIL_HOST_PASSWORD = 'ttwt wlrq qdsi buxj'
 EMAIL_USE_TLS = True
 
 MEDIA_URL = '/media/'

@@ -79,6 +79,11 @@
                           <li><a href="{% url 'admin:password_change' %}">{% translate 'Cambiar contraseña' %}</a></li>
                       {% endif %}
                       <li>
+                        <a class="dropdown-item" href="{% url 'backup' %}">
+                          <i class="fas fa-database"></i> Respaldar base de datos
+                        </a>
+                      </li>
+                      <li>
                           <form id="logout-form" method="post" action="{% url 'admin:logout' %}">
                               {% csrf_token %}
                               <button type="submit">{% translate 'Cerrar sesion' %}</button>

@@ -79,7 +79,7 @@
                           <li><a href="{% url 'admin:password_change' %}">{% translate 'Cambiar contraseña' %}</a></li>
                       {% endif %}
                       <li>
-                        <a class="dropdown-item" href="{% url 'backup' %}">
+                        <a href="{% url 'admin_panel:lista_backups' %}">
                           <i class="fas fa-database"></i> Respaldar base de datos
                         </a>
                       </li>

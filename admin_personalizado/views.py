@@ -4,6 +4,10 @@ from .forms import UsuarioForm, PerfilForm
 from django.contrib.admin.views.decorators import staff_member_required
 import os
 from django.http import FileResponse # <--- ¡IMPORTA FileResponse aquí!
+from django.http import HttpResponse
+from django.contrib import messages
+from django.conf import settings
+import datetime
 
 # Si el modelo 'Perfil' está en 'inicio/models.py', impórtalo así:
 from inicio.models import Perfil
@@ -38,6 +42,54 @@ def perfil_view(request):
         'perfil_form': perfil_form
     })
 
+
+
+
+BACKUP_DIR = os.path.join(settings.BASE_DIR, 'backups')
+os.makedirs(BACKUP_DIR, exist_ok=True)
+
+def lista_backups(request):
+    archivos = os.listdir(BACKUP_DIR)
+    archivos.sort(reverse=True)
+    return render(request, 'admin/backups.html', {'archivos': archivos})
+
+def crear_backup(request):
+    fecha = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+    filename = f"backup_{fecha}.sql"
+    filepath = os.path.join(BACKUP_DIR, filename)
+
+    os.system(
+        f'pg_dump -U {settings.DATABASES["default"]["USER"]} -h localhost -p 5432 '
+        f'{settings.DATABASES["default"]["NAME"]} > "{filepath}"'
+    )
+
+    messages.success(request, f'Copia de seguridad creada: {filename}')
+    return redirect('admin_panel:lista_backups')
+
+def restaurar_backup(request, nombre):
+    filepath = os.path.join(BACKUP_DIR, nombre)
+
+    if os.path.exists(filepath):
+        os.system(
+            f'psql -U {settings.DATABASES["default"]["USER"]} -h localhost -p 5432 '
+            f'{settings.DATABASES["default"]["NAME"]} < "{filepath}"'
+        )
+        messages.success(request, f'Backup {nombre} restaurado correctamente.')
+    else:
+        messages.error(request, 'El archivo no existe.')
+
+    return redirect('admin_panel:lista_backups')
+
+def eliminar_backup(request, nombre):
+    filepath = os.path.join(BACKUP_DIR, nombre)
+
+    if os.path.exists(filepath):
+        os.remove(filepath)
+        messages.success(request, f'Backup {nombre} eliminado.')
+    else:
+        messages.error(request, 'El archivo no existe.')
+
+    return redirect('admin_panel:lista_backups')
 
 # @never_cache
 # @group_required('ombu')

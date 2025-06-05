@@ -633,6 +633,12 @@ COPY public.django_admin_log (id, action_time, object_id, object_repr, action_fl
 14	2025-06-05 13:07:16.26901+00	2	tasa para la cuchis	1	[{"added": {}}]	9	2
 15	2025-06-05 13:07:46.018941+00	2	tasa para la cuchis	3		9	2
 16	2025-06-05 13:19:05.812896+00	3	asdas	1	[{"added": {}}]	9	2
+17	2025-06-05 13:36:20.938177+00	3	asdas	3		9	2
+18	2025-06-05 13:49:46.311856+00	4	MESERO mesero (mesero)	1	[{"added": {}}]	7	2
+19	2025-06-05 14:29:20.780779+00	3	asdas	3		9	2
+20	2025-06-05 14:29:55.226477+00	5	giuseppe quintero (giuseppe)	1	[{"added": {}}]	7	2
+21	2025-06-05 14:30:15.27739+00	5	giuseppe quintero (giuseppe)	3		7	2
+22	2025-06-05 14:54:06.619098+00	2	sfd	1	[{"added": {}}]	13	2
 \.
 
 
@@ -718,6 +724,7 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 
 COPY public.django_session (session_key, session_data, expire_date) FROM stdin;
 susnt38hj468x8pjwc71zibt6quuqr96	.eJxVjDEOwjAMRe-SGUVNncoJIztnqBzboQWUSE07Ie4OlTrA-t97_2VG2tZp3Jou4yzmbHpz-t0S8UPLDuRO5VYt17Iuc7K7Yg_a7LWKPi-H-3cwUZu-tWcE6bMfhB1EdhGzJoSu46gD9-gRBYMn9JwAY9bMRDBADoACwZn3B-UCN-s:1uNAAT:l3hpwGOaClVsiAWvQd56eQ3wEVt8Inm6jUKgyg16q_c	2025-06-19 12:58:01.783689+00
+cheyi2k0ysaikl1skcdma620mjst5hbu	.eJxVjDEOwjAMRe-SGUVNncoJIztnqBzboQWUSE07Ie4OlTrA-t97_2VG2tZp3Jou4yzmbHpz-t0S8UPLDuRO5VYt17Iuc7K7Yg_a7LWKPi-H-3cwUZu-tWcE6bMfhB1EdhGzJoSu46gD9-gRBYMn9JwAY9bMRDBADoACwZn3B-UCN-s:1uNBxF:Ib6Im4e2Sq9fXtGQSfQ5-W18tj6K5fJxZ1JduyBgWto	2025-06-19 14:52:29.189938+00
 \.
 
 
@@ -742,6 +749,7 @@ COPY public.inicio_configuraciongeneral (id, limite_mesas) FROM stdin;
 --
 
 COPY public.inicio_galeriafoto (id, titulo, imagen, descripcion, fecha_subida, uso) FROM stdin;
+2	sfd	galeria/istockphoto-1372582391-1024x1024.jpg	sdfdf	2025-06-05 14:54:06.614321+00	en_uso
 \.
 
 
@@ -802,7 +810,8 @@ COPY public.inicio_producto (id, descripcion, precio, estado, titulo, foto, cate
 --
 
 COPY public.inicio_usuario (id, password, last_login, is_superuser, is_staff, email, username, first_name, last_name, rol, is_active, date_joined, avatar, telefono) FROM stdin;
-2	pbkdf2_sha256$1000000$Fdj9OFhhNGdbU2qwlrHcBJ$MJxAl1dUWKveLy7pqpsdij23n51eZ1wIdFd6DdZLlNw=	2025-06-05 12:58:01.774744+00	t	t	giuseppeesteban101@gmail.com	ombu	giuseppe	quintero	Administrador	t	2025-06-04 23:56:41.859378+00		\N
+4	pbkdf2_sha256$1000000$56AE3XhU0BRo5c2kGbXWvZ$7b1n9UGLeKjr9xqOTJ4Odoi22cqc4DMGqfbODado0oE=	2025-06-05 14:34:00.147858+00	f	f	sin_email@ejemplo.com	mesero	MESERO	mesero	mesero	t	2025-06-05 13:49:45.661969+00		\N
+2	pbkdf2_sha256$1000000$Fdj9OFhhNGdbU2qwlrHcBJ$MJxAl1dUWKveLy7pqpsdij23n51eZ1wIdFd6DdZLlNw=	2025-06-05 14:52:29.184577+00	t	t	giuseppeesteban101@gmail.com	ombu	giuseppe	quintero	Administrador	t	2025-06-04 23:56:41.859378+00		\N
 \.
 
 
@@ -826,14 +835,14 @@ COPY public.inicio_usuario_user_permissions (id, usuario_id, permission_id) FROM
 -- Name: auth_group_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ombu
 --
 
-SELECT pg_catalog.setval('public.auth_group_id_seq', 1, false);
+SELECT pg_catalog.setval('public.auth_group_id_seq', 1, true);
 
 
 --
 -- Name: auth_group_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ombu
 --
 
-SELECT pg_catalog.setval('public.auth_group_permissions_id_seq', 1, false);
+SELECT pg_catalog.setval('public.auth_group_permissions_id_seq', 1, true);
 
 
 --
@@ -847,7 +856,7 @@ SELECT pg_catalog.setval('public.auth_permission_id_seq', 56, true);
 -- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ombu
 --
 
-SELECT pg_catalog.setval('public.django_admin_log_id_seq', 16, true);
+SELECT pg_catalog.setval('public.django_admin_log_id_seq', 22, true);
 
 
 --
@@ -868,21 +877,21 @@ SELECT pg_catalog.setval('public.django_migrations_id_seq', 46, true);
 -- Name: inicio_actividadreciente_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ombu
 --
 
-SELECT pg_catalog.setval('public.inicio_actividadreciente_id_seq', 1, false);
+SELECT pg_catalog.setval('public.inicio_actividadreciente_id_seq', 1, true);
 
 
 --
 -- Name: inicio_configuraciongeneral_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ombu
 --
 
-SELECT pg_catalog.setval('public.inicio_configuraciongeneral_id_seq', 1, false);
+SELECT pg_catalog.setval('public.inicio_configuraciongeneral_id_seq', 1, true);
 
 
 --
 -- Name: inicio_galeriafoto_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ombu
 --
 
-SELECT pg_catalog.setval('public.inicio_galeriafoto_id_seq', 1, false);
+SELECT pg_catalog.setval('public.inicio_galeriafoto_id_seq', 2, true);
 
 
 --
@@ -903,7 +912,7 @@ SELECT pg_catalog.setval('public.inicio_pedido_id_seq', 11, true);
 -- Name: inicio_pedidodetalle_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ombu
 --
 
-SELECT pg_catalog.setval('public.inicio_pedidodetalle_id_seq', 1, false);
+SELECT pg_catalog.setval('public.inicio_pedidodetalle_id_seq', 1, true);
 
 
 --
@@ -924,21 +933,21 @@ SELECT pg_catalog.setval('public.inicio_producto_id_seq', 3, true);
 -- Name: inicio_usuario_groups_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ombu
 --
 
-SELECT pg_catalog.setval('public.inicio_usuario_groups_id_seq', 1, false);
+SELECT pg_catalog.setval('public.inicio_usuario_groups_id_seq', 1, true);
 
 
 --
 -- Name: inicio_usuario_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ombu
 --
 
-SELECT pg_catalog.setval('public.inicio_usuario_id_seq', 2, true);
+SELECT pg_catalog.setval('public.inicio_usuario_id_seq', 5, true);
 
 
 --
 -- Name: inicio_usuario_user_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ombu
 --
 
-SELECT pg_catalog.setval('public.inicio_usuario_user_permissions_id_seq', 1, false);
+SELECT pg_catalog.setval('public.inicio_usuario_user_permissions_id_seq', 1, true);
 
 
 --

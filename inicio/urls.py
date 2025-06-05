@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
-from .views import usuarios_view,generar_backup
+from .views import usuarios_view
 from django.contrib import admin
 # from .views import dashboard
 from .forms import CustomPasswordResetForm
@@ -104,7 +104,6 @@ urlpatterns = [
 
     # BACKUP
 
-    path('backup/', views.generar_backup, name='backup')
 
 
 

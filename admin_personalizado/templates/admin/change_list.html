@@ -135,23 +135,7 @@
                             </ul>
                         </div>
 
-                        <div class="filter-group">
-                            <h3>Por es staff</h3>
-                            <ul>
-                                <li><a href="?is_staff__exact=1{% for key, value in cl.params.items %}{% if key != 'is_staff__exact' and key != 'q' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Sí</a></li>
-                                <li><a href="?is_staff__exact=0{% for key, value in cl.params.items %}{% if key != 'is_staff__exact' and key != 'q' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">No</a></li>
-                                <li><a href="?{% for key, value in cl.params.items %}{% if key != 'is_staff__exact' and key != 'q' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Todo</a></li>
-                            </ul>
-                        </div>
 
-                        <div class="filter-group">
-                            <h3>Por estado de superusuario</h3>
-                            <ul>
-                                <li><a href="?is_superuser__exact=1{% for key, value in cl.params.items %}{% if key != 'is_superuser__exact' and key != 'q' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Sí</a></li>
-                                <li><a href="?is_superuser__exact=0{% for key, value in cl.params.items %}{% if key != 'is_superuser__exact' and key != 'q' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">No</a></li>
-                                <li><a href="?{% for key, value in cl.params.items %}{% if key != 'is_superuser__exact' and key != 'q' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Todo</a></li>
-                            </ul>
-                        </div>
                     </div>
                 </div>
             </div>

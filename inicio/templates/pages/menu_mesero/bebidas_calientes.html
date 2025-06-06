@@ -150,116 +150,104 @@
 
 
 
-        <div class="cards-container" >
 
-<!-- SECCION AFFOGATO -->
+      <div class="cards-container">
+        {% for producto in productos %}
+          <div class="card {% if producto.cantidad_disponible <= 0 %}product-disabled{% endif %}" 
+               data-id="{{ producto.id }}" 
+               data-title="{{ producto.titulo }}" 
+               data-image="{{ producto.foto.url }}" 
+               data-options='{{ producto.opciones|safe }}'
+               data-price="{{ producto.precio }}"
+               data-cantidad-disponible="{{ producto.cantidad_disponible }}"> {# <-- AÑADIDO: Cantidad disponible #}
+            
+            <div class="img-container">
+              <img
+                src="{{ producto.foto.url }}"
+                alt="{{ producto.titulo }}"
+              />
+            </div>
 
+            <div class="main-card">
+              <span>{{ producto.titulo|upper }}</span>
+              <p class="truncated-text">
+                {{ producto.descripcion|truncatechars:250 }}
+              </p>
+            </div>
 
-
-         
-
-
-{% for producto in productos %}
-  <div class="card"  
-       data-id="{{ producto.id }}"  
-       data-title="{{ producto.titulo }}" 
-       data-price="{{ producto.precio }}"  
-       data-image="{{ producto.foto.url }}" 
-       data-options='{{ producto.opciones|safe }}'
-       data-id="1" 
-     data-title="Café" 
-     data-price="2500" 
-     data-image="cafe.jpg" 
-     data-options="sin azucar">
-       
-
-    <div class="img-container">
-      <img src="{{ producto.foto.url }}" alt="{{ producto.titulo }}" />
-    </div>
-
-    <div class="main-card">
-      <span>{{ producto.titulo|upper }}</span>
-      <p class="truncated-text">
-        {{ producto.descripcion|truncatechars:250 }}
-      </p>
-    </div>
-
-    <div class="footer-card">
-      <span> ${{ producto.precio|floatformat:0|intcomma }}</span>
-      <button onclick="agregarAlPedidoConMesaActiva(this)">ver más</button>  <!-- ✅ botón llama a la función JS -->
-    </div>
-
-  </div>
-{% empty %}
-  <p>No hay productos disponibles en esta categoría.</p>
-{% endfor %}
-
-
-
-
-
-
-  <div id="cart-container" class="cart-container">
-    <div class="cart-header">
-      <h2>Carrito de Compras</h2>
-      <button id="close-cart" class="close-cart">&times;</button>
-    </div>
-    <div id="cart-items" class="cart-items">
-  
-  
-    </div>
-    <div class="cart-footer">
-      <div class="cart-total">
-        <span>Total:</span>
-        <span id="cart-total-amount">$0</span>
+            <div class="footer-card">
+                <span> ${{ producto.precio|floatformat:0|intcomma }}</span>
+                <span class="product-available-quantity">
+                  {% if producto.cantidad_disponible > 0 %}
+                    Disponible: {{ producto.cantidad_disponible }}
+                  {% else %}
+                    No hay productos
+                  {% endif %}
+                </span>
+                {# Siempre muestra el botón "+" para agregar, o "No disponible" si la cantidad es 0 #}
+                {% if producto.cantidad_disponible > 0 %}
+                    <button class="add-to-cart-btn product-action-btn" data-id="{{ producto.id }}">
+                        <span class="button-text">+</span>
+                    </button>
+                {% else %}
+                    <button class="add-to-cart-btn product-disabled-btn" data-id="{{ producto.id }}" disabled>No disponible</button>
+                {% endif %}
+                {# ¡Elimina este div! Ya no lo necesitamos para el contador. #}
+                {# <div class="product-card-counter" style="display: none;"></div> #}
+            </div>
+          </div>
+        {% empty %}
+          <p>No hay productos disponibles en esta categoría.</p>
+        {% endfor %}
       </div>
-      <a href="{% url 'mesas' %}">
-        <button id="checkout-button" class="checkout-button"></button>
-      </a>
-      <button id="empty-cart" class="empty-cart-button">Vaciar Carrito</button>
-    </div>
-  </div>
-
-
-
-
-
-<div id="cart-icon-container" class="cart-icon-container">
-  <div class="cart-icon" id="cart-icon">
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="9" cy="21" r="1"></circle>
-      <circle cx="20" cy="21" r="1"></circle>
-      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-    </svg>
-    <span id="cart-count" class="cart-count">0</span>
-  </div>
-</div>
-
-        
+          
+      <div id="cart-container" class="cart-container">
+        <div class="cart-header">
+          <h2>Carrito de Compras</h2>
+          <button id="close-cart" class="close-cart">&times;</button>
         </div>
-          {% for producto in productos %}
-        <div id="modal" class="modal">
+        <div id="cart-items" class="cart-items"></div>
+        <div class="cart-footer">
+          <div class="cart-total">
+            <span>Total:</span>
+            <span id="cart-total-amount">$0</span>
+          </div>
+          <button id="checkout-button" class="checkout-button"></button>
+          <button id="empty-cart" class="empty-cart-button">Vaciar Carrito</button>
+        </div>
+      </div>
+
+      <div id="cart-icon-container" class="cart-icon-container">
+        <div class="cart-icon" id="cart-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+          </svg>
+          <span id="cart-count" class="cart-count">0</span>
+        </div>
+      </div>
+        
+      <div id="modal" class="modal">
           <div class="modal-content">
               <span class="close">&times;</span>
-              <img id="modal-image" src="" alt="Producto">
-              <div class="modal-info">
-                  <h2 id="modal-title"></h2>
-                  <p>{{ producto.descripcion }}</p>
-                  <h4 class="opcion">opciones</h4>
-                  <select id="modal-select"></select>
-                  <button id="modal-add-to-cart">Agregar al carrito</button>
+              <div class="modal-body">
+                  <img id="modal-image" src="" alt="Producto">
+                  <div class="modal-info">
+                      <h2 id="modal-title"></h2>
+                      <p id="modal-description"></p>
 
+                      <p id="modal-available-quantity" style="margin-top: 10px; font-style: italic;"></p> 
+
+                      <label for="modal-select">Selecciona una opción:</label>
+                      <select id="modal-select"></select>
+                      </div>
               </div>
           </div>
-
-          
       </div>
-  {% endfor %}
 
-
-      <script src="{% static '/js/script_menu.js' %}"></script>
-      <script src="{% static '/js/buscador.js' %}"></script>s
-      <footer id="contacto">
+    </main>
+    <footer id="contacto">
         <div class="footer-container">
           <div class="footer-logo">
             <img src="{% static 'img/logos_o_otros/logo_ombu.png' %}" alt="Imagen de pie de página">
@@ -288,10 +276,8 @@
               <p>&copy; 2025 Ombú - Todos los derechos reservados</p>
             </div>
           </footer>
-        </main>
+
+    <script src="{% static '/js/script_menu.js' %}"></script>
+    <script src="{% static '/js/buscador.js' %}"></script>
   </body>
 </html>
-
-
-
-

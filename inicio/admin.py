@@ -123,10 +123,12 @@ class UsuarioAdmin(BaseUserAdmin):
 @admin.register(Producto, site=custom_admin_site) 
 class ProductoAdmin(admin.ModelAdmin):
     # ¡AQUÍ DEFINES LAS COLUMNAS PARA LA TABLA DE PRODUCTOS!
-    list_display = ('titulo', 'precio', 'get_estado_display','get_categoria_display','acciones',)
+    list_display = ('titulo', 'precio','cantidad_disponible', 'get_estado_display','get_categoria_display','acciones',)
     list_filter = ('estado', 'categoria',)
     search_fields = ('titulo', 'descripcion','categoria')
     ordering = ('titulo',) 
+    
+    fields = ('titulo', 'descripcion', 'precio', 'cantidad_disponible', 'estado', 'foto', 'categoria', 'opciones')
 
     def get_estado_display(self, obj):
         display_value = obj.get_estado_display() 
@@ -159,10 +161,8 @@ class ProductoAdmin(admin.ModelAdmin):
     acciones.allow_tags = True 
     
     
-    # --- MÉTODO CORREGIDO PARA MOSTRAR LA CATEGORÍA ---
+
     def get_categoria_display(self, obj):
-        # Aquí estaba el error tipográfico: 'caregoria' debe ser 'categoria'
-        # obj.get_CAMPO_display() es la forma estándar de obtener el valor legible de un campo con choices.
         return obj.get_categoria_display()
     
     get_categoria_display.short_description = 'Categoría'

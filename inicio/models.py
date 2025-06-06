@@ -115,6 +115,7 @@ class Producto(models.Model):
     titulo = models.CharField(max_length=100)
     descripcion = models.TextField()
     precio = models.DecimalField(max_digits=8, decimal_places=2)
+    cantidad_disponible = models.IntegerField(default=0, help_text="Cantidad de productos disponibles")
     estado = models.CharField(max_length=20, choices=ESTADOS, default='disponible')
     foto = models.ImageField(upload_to='productos/')
     categoria = models.CharField(max_length=30, choices=CATEGORIAS)

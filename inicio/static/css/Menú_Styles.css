@@ -173,6 +173,10 @@ main {
   align-items: center;
   width: 100%;
   margin-top: auto;
+  /* Añadido para que el texto disponible se alinee verticalmente */
+  flex-wrap: wrap; 
+  align-items: baseline;
+  gap: 5px; /* Espacio entre los elementos del footer */
 }
 
 .footer-card > button {
@@ -196,6 +200,18 @@ main {
   font-size: 18px;
   font-weight: 800;
   color: #20AB47;
+}
+
+/*estilos para el disponible y no disponible*/
+.product-available-quantity {
+  font-size: 13px; /* Tamaño de fuente más pequeño */
+  color: #999999; /* Un color más suave para el texto */
+  font-weight: normal; /* No tan negrita como el precio */
+  margin-left: 10px; /* Un poco de margen a la izquierda para separarlo del precio */
+  /* Ajustes para que se adapte mejor en línea */
+  white-space: nowrap; /* Evita que el texto se rompa en varias líneas si es corto */
+  flex-grow: 1; /* Permite que ocupe espacio si es necesario */
+  text-align: right; /* Alinea el texto a la derecha dentro de su espacio */
 }
 
 
@@ -1081,6 +1097,21 @@ main {
                 font-size: 1.5rem;
             }
         }
+
+@media (max-width: 400px) {
+  .footer-card {
+    flex-direction: column; /* Apila los elementos en pantallas muy pequeñas */
+    align-items: center;
+    gap: 10px;
+  }
+  .product-available-quantity {
+    text-align: center; /* Centra el texto cuando está apilado */
+    margin-left: 0;
+  }
+  .footer-card > span { /* Ajusta el tamaño del precio si es necesario en móviles */
+    font-size: 16px;
+  }
+}
 
 
 

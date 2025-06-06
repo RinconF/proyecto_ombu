@@ -134,21 +134,38 @@ document.addEventListener("DOMContentLoaded", () => {
     modalPrice.style.color = '#20AB47';
 
 
-    // --- NUEVA FUNCIÓN: Actualizar el estado del botón de la tarjeta ---
+    // --- NUEVA FUNCIÓN: Actualizar el estado del botón de la tarjeta y la cantidad disponible ---
     function updateCardButtonState(card) {
         const addButton = card.querySelector('.add-to-cart-btn'); // Asume que este es tu botón principal de acción
+        // === CAMBIO: Referencia al span de la cantidad disponible en la tarjeta ===
+        const quantitySpan = card.querySelector('.product-available-quantity'); 
+    
         const productId = card.dataset.id;
         const initialAvailableQuantity = parseInt(card.dataset.cantidadDisponible);
-        const itemInCart = cart.find(item => item.id == productId && item.option === 'Regular'); // Buscar el ítem 'Regular' en el carrito
+    
+        // Asumiendo que solo la opción 'Regular' o la primera opción afecta la cantidad global en la tarjeta
+        // Si manejas stock por opción, esta lógica necesitará ser más compleja
+        const itemInCart = cart.find(item => item.id == productId && (item.option === 'Regular' || !item.option)); // Buscar el ítem 'Regular' o sin opción en el carrito
         const quantityInCart = itemInCart ? itemInCart.quantity : 0;
-
+    
         // === CAMBIO: Calcular la cantidad disponible para mostrar ===
         const remainingQuantity = initialAvailableQuantity - quantityInCart;
         card.dataset.cantidadDisponibleActual = remainingQuantity; // Guardar la cantidad actual en el dataset de la tarjeta
-        console.log(`Card ${productId} updated: initial=${initialAvailableQuantity}, inCart=${quantityInCart}, remaining=${remainingQuantity}`);
-
+        console.log(`Card <span class="math-inline">\{productId\} updated\: initial\=</span>{initialAvailableQuantity}, inCart=<span class="math-inline">\{quantityInCart\}, remaining\=</span>{remainingQuantity}`);
+    
+        // === CAMBIO: Actualizar el texto "Disponible: X" en la tarjeta ===
+        if (quantitySpan) {
+            if (remainingQuantity > 0) {
+                quantitySpan.textContent = `Disponible: ${remainingQuantity}`;
+                quantitySpan.style.color = ''; // Resetear color si estaba en rojo
+            } else {
+                quantitySpan.textContent = `No disponible`;
+                quantitySpan.style.color = '#e74c3c'; // O el color que prefieras para indicar agotado
+            }
+        }
+    
         if (!addButton) return; // Salir si el botón no existe (ej. es el botón "Ver más")
-
+    
         // Prioridad: Si no hay disponibilidad inicial, o si la cantidad en carrito es >= a la disponible
         if (remainingQuantity <= 0) { // Usamos remainingQuantity
             addButton.innerHTML = 'No disponible'; // O "Agotado" si prefieres

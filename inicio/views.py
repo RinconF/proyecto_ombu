@@ -14,12 +14,10 @@ from django.views.decorators.csrf import csrf_exempt
 from .decorators import role_required
 from .models import Mesa, Producto, Pedido, PedidoDetalle
 import json
-from .models import Usuario,Producto,GaleriaFoto
+from .models import Usuario,Producto,GaleriaFoto, ActividadReciente
 from .forms import CustomUserCreationForm, CustomUserChangeForm, PasswordChangeForm
 from django.contrib.auth.models import User
 from django.contrib.admin.views.decorators import staff_member_required
-from .models import ActividadReciente
-from .decorators import group_required
 from django.db.models import Sum, Count
 import datetime
 import calendar
@@ -544,14 +542,26 @@ def productos_cliente(request, categoria):
 def productos_mesero(request, categoria):
     productos = Producto.objects.filter(estado='disponible', categoria=categoria)
     template_path = template_map.get(categoria, {}).get('mesero')
+    cantidad_productos = productos.count()
     
     if template_path:
-        return render(request, template_path, {'productos': productos})
+        return render(request, template_path, {
+            'productos': productos,
+            'cantidad_productos' : cantidad_productos
+            })
+    
     
     return render(request, 'pages/productos_menu/no_encontrado.html', {
         'categoria': categoria,
         'tipo': 'mesero',
+        'cantidad_productos': 0,
     })
+    
+
+    
+    
+    
+    
 
 # Vista para manejar fotos de index
 def index(request):
@@ -620,6 +630,7 @@ def guardar_pedido(request):
             )
 
             total_calculado_backend = decimal.Decimal('0.00') # Inicia con un Decimal
+            updated_stock_info = []
             # Crear los detalles del pedido
             for item_data in items:
                 producto_id = item_data.get('producto_id')
@@ -633,6 +644,25 @@ def guardar_pedido(request):
                     producto = Producto.objects.get(id=producto_id)
                 except Producto.DoesNotExist:
                     raise ValueError(f"Producto con ID {producto_id} no encontrado.")
+                
+                # --- LÓGICA DE VALIDACIÓN Y RESTA DE INVENTARIO ---
+                if producto.cantidad_disponible < cantidad:
+                    # Si no hay suficiente stock, lanzar un error.
+                    # La transacción se revertirá automáticamente gracias a `with transaction.atomic()`.
+                    raise ValueError(
+                        f"Stock insuficiente para '{producto.titulo}'. Disponible: {producto.cantidad_disponible}, Pedido: {cantidad}"
+                    )
+
+                # Restar la cantidad del stock disponible
+                producto.cantidad_disponible -= cantidad
+                producto.save() # Guarda el cambio en la base de datos
+
+                # Añadir el producto y su nuevo stock a la lista para la respuesta del frontend
+                updated_stock_info.append({
+                    "product_id": producto.id,
+                    "new_available_quantity": producto.cantidad_disponible
+                })
+                # --- FIN LÓGICA DE INVENTARIO ---
                 
                 # Convertir precio_unitario_recibido a Decimal para la comparación
                 try:
@@ -675,7 +705,13 @@ def guardar_pedido(request):
                 accion=accion_log
             )
 
-            return JsonResponse({'message': f'Pedido #{pedido.id} finalizado y guardado correctamente.'}, status=200)
+            return JsonResponse({
+                'message': f'Pedido #{pedido.id} finalizado y guardado correctamente.',
+                'success': True,
+                'order_id': pedido.id,
+                'updated_stock': updated_stock_info # ¡Envía esto al frontend!
+            }, status=200)
+
 
     except json.JSONDecodeError:
         return JsonResponse({'error': 'Solicitud JSON inválida.'}, status=400)

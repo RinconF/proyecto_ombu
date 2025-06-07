@@ -22,9 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const modalImage = document.getElementById("modal-image");
     const modalSelect = document.getElementById("modal-select");
     const closeModal = document.querySelector(".close");
-    // === CAMBIO: Nueva referencia al elemento de cantidad disponible en el modal ===
     const modalAvailableQuantity = document.getElementById("modal-available-quantity");
-
 
     let modalAddToCartBtn = document.getElementById("modal-add-to-cart");
     if (!modalAddToCartBtn) {
@@ -33,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
         modalAddToCartBtn.textContent = 'Agregar al carrito';
         modalAddToCartBtn.style.marginTop = '15px';
         modalAddToCartBtn.style.width = '100%';
-        modalAddToCartBtn.classList.add('button'); // Asegúrate que esta clase exista o cámbiala
+        modalAddToCartBtn.classList.add('button');
     }
 
     const modalInfo = modal.querySelector('.modal-info');
@@ -43,8 +41,6 @@ document.addEventListener("DOMContentLoaded", () => {
             modalInfo.appendChild(modalAddToCartBtn);
         }
     }
-
-
 
     const cartIcon = document.getElementById('cart-icon');
     const cartContainer = document.getElementById('cart-container');
@@ -60,12 +56,11 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.appendChild(overlay);
 
     function updateModalAvailableQuantity() {
-        console.log("updateModalAvailableQuantity called"); // DEBUG: Para confirmar que se llama
+        console.log("updateModalAvailableQuantity called");
         if (currentProductData.card && modalAvailableQuantity) {
-            // Obtener la cantidad disponible actual desde el dataset de la tarjeta
             const quantity = parseInt(currentProductData.card.dataset.cantidadDisponibleActual);
-            console.log("Modal Product ID:", currentProductData.card.dataset.id); // DEBUG
-            console.log("Modal Current available quantity:", quantity); // DEBUG
+            console.log("Modal Product ID:", currentProductData.card.dataset.id);
+            console.log("Modal Current available quantity (from dataset.cantidadDisponibleActual):", quantity);
 
             let textToDisplay;
             if (quantity > 0) {
@@ -76,7 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 modalAddToCartBtn.disabled = true;
             }
             modalAvailableQuantity.textContent = textToDisplay;
-            console.log("Text applied to modal-available-quantity:", textToDisplay); // DEBUG
+            console.log("Text applied to modal-available-quantity:", textToDisplay);
         } else {
             console.log("updateModalAvailableQuantity: currentProductData.card or modalAvailableQuantity is null/undefined.");
             if (!currentProductData.card) console.log("currentProductData.card is null/undefined.");
@@ -84,17 +79,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-
-    // Actualizar el texto del botón de finalizar compra si hay una mesa activa
     if (checkoutButton && mesaNumeroActivo) {
         checkoutButton.textContent = "Finalizar compra en mesa " + mesaNumeroActivo;
     } else if (checkoutButton) {
-        checkoutButton.textContent = "Finalizar compra"; // O un texto predeterminado
+        checkoutButton.textContent = "Finalizar compra";
     }
 
-    // === Funciones de Utilidad ===
-
-    // Función para obtener un parámetro de la URL
     function getUrlParameter(name) {
         name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
         const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
@@ -102,20 +92,16 @@ document.addEventListener("DOMContentLoaded", () => {
         return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
     }
 
-    // Función para actualizar el carrito en localStorage
     function updateCartStorage() {
         localStorage.setItem('cart', JSON.stringify(cart));
     }
 
-    // Función para cerrar el carrito
     function closeCart() {
         cartContainer.classList.remove('open');
         overlay.style.display = 'none';
-        // cartIcon.style.display = 'block'; // ELIMINADA EN REVISIÓN ANTERIOR
         cartOpen = false;
     }
 
-    // === Inicialización de Navegación ===
     const menuLinks = document.querySelectorAll('.main-nav a');
     menuLinks.forEach(link => {
         const originalHref = link.getAttribute('href');
@@ -126,49 +112,40 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // === Gestión del Modal de Productos ===
     modalPrice.className = 'modal-price';
     modalPrice.style.fontWeight = 'bold';
     modalPrice.style.fontSize = '1.2rem';
     modalPrice.style.margin = '10px 0';
     modalPrice.style.color = '#20AB47';
 
-
-    // --- NUEVA FUNCIÓN: Actualizar el estado del botón de la tarjeta y la cantidad disponible ---
     function updateCardButtonState(card) {
-        const addButton = card.querySelector('.add-to-cart-btn'); // Asume que este es tu botón principal de acción
-        // === CAMBIO: Referencia al span de la cantidad disponible en la tarjeta ===
+        const addButton = card.querySelector('.add-to-cart-btn');
         const quantitySpan = card.querySelector('.product-available-quantity'); 
     
         const productId = card.dataset.id;
-        const initialAvailableQuantity = parseInt(card.dataset.cantidadDisponible);
+        const initialAvailableQuantityFromBackend = parseInt(card.dataset.cantidadDisponible); 
     
-        // Asumiendo que solo la opción 'Regular' o la primera opción afecta la cantidad global en la tarjeta
-        // Si manejas stock por opción, esta lógica necesitará ser más compleja
-        const itemInCart = cart.find(item => item.id == productId && (item.option === 'Regular' || !item.option)); // Buscar el ítem 'Regular' o sin opción en el carrito
+        const itemInCart = cart.find(item => item.id == productId && (item.option === 'Regular' || !item.option)); 
         const quantityInCart = itemInCart ? itemInCart.quantity : 0;
     
-        // === CAMBIO: Calcular la cantidad disponible para mostrar ===
-        const remainingQuantity = initialAvailableQuantity - quantityInCart;
-        card.dataset.cantidadDisponibleActual = remainingQuantity; // Guardar la cantidad actual en el dataset de la tarjeta
-        console.log(`Card <span class="math-inline">\{productId\} updated\: initial\=</span>{initialAvailableQuantity}, inCart=<span class="math-inline">\{quantityInCart\}, remaining\=</span>{remainingQuantity}`);
+        const remainingQuantity = initialAvailableQuantityFromBackend - quantityInCart;
+        card.dataset.cantidadDisponibleActual = remainingQuantity; 
+        console.log(`Card ${productId} updated: initial=${initialAvailableQuantityFromBackend}, inCart=${quantityInCart}, remaining=${remainingQuantity}`);
     
-        // === CAMBIO: Actualizar el texto "Disponible: X" en la tarjeta ===
         if (quantitySpan) {
             if (remainingQuantity > 0) {
                 quantitySpan.textContent = `Disponible: ${remainingQuantity}`;
-                quantitySpan.style.color = ''; // Resetear color si estaba en rojo
+                quantitySpan.style.color = ''; 
             } else {
                 quantitySpan.textContent = `No disponible`;
-                quantitySpan.style.color = '#e74c3c'; // O el color que prefieras para indicar agotado
+                quantitySpan.style.color = '#e74c3c'; 
             }
         }
     
-        if (!addButton) return; // Salir si el botón no existe (ej. es el botón "Ver más")
+        if (!addButton) return;
     
-        // Prioridad: Si no hay disponibilidad inicial, o si la cantidad en carrito es >= a la disponible
-        if (remainingQuantity <= 0) { // Usamos remainingQuantity
-            addButton.innerHTML = 'No disponible'; // O "Agotado" si prefieres
+        if (remainingQuantity <= 0) { 
+            addButton.innerHTML = 'No disponible';
             addButton.disabled = true;
             addButton.classList.add('product-disabled-btn');
             addButton.classList.remove('product-action-btn');
@@ -180,13 +157,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // --- NUEVA FUNCIÓN: Actualizar la cantidad disponible en el modal ---
     document.addEventListener('click', function(e) {
         if (e.target.closest('.add-to-cart-btn') && !e.target.closest('.add-to-cart-btn').disabled) {
             const button = e.target.closest('.add-to-cart-btn');
             const card = button.closest('.card');
 
-            if (card.id === 'modal-card') return; // Evitar el botón del modal si lo tienes
+            if (card.id === 'modal-card') return; 
 
             e.stopPropagation();
 
@@ -195,15 +171,14 @@ document.addEventListener("DOMContentLoaded", () => {
             const title = card.querySelector('.main-card > span').textContent;
             const priceElement = card.querySelector('.footer-card > span');
             const price = parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, '')) || 0;
-            const initialAvailableQuantity = parseInt(card.dataset.cantidadDisponible);
+            const currentAvailableQuantity = parseInt(card.dataset.cantidadDisponibleActual); 
 
-            // Importante: Considerar si el producto ya está en el carrito, y si lo está con qué opción
-            const existingItemIndex = cart.findIndex(item => item.id == productId && item.option === 'Regular'); // Asume 'Regular' si no hay opciones
+            const existingItemIndex = cart.findIndex(item => item.id == productId && item.option === 'Regular'); 
             const currentQuantityInCart = existingItemIndex !== -1 ? cart[existingItemIndex].quantity : 0;
 
-            if (currentQuantityInCart >= initialAvailableQuantity) {
+            if (currentQuantityInCart >= currentAvailableQuantity) { 
                 alert('No hay más unidades disponibles de este producto.');
-                updateCardButtonState(card); // Asegurar que el botón se actualice
+                updateCardButtonState(card);
                 return;
             }
 
@@ -217,21 +192,19 @@ document.addEventListener("DOMContentLoaded", () => {
                     price,
                     priceDisplay: priceElement.textContent,
                     quantity: 1,
-                    option: 'Regular' // Opción por defecto
+                    option: 'Regular' 
                 };
                 cart.push(cartItem);
             }
             updateCartDisplay();
 
-            // Si el modal está abierto para este producto, actualiza su cantidad disponible
             if (modal.style.display === "flex" && currentProductData.card && currentProductData.card.dataset.id == productId) {
-                console.log("Updating modal quantity after '+' button click"); // DEBUG
+                console.log("Updating modal quantity after '+' button click");
                 updateModalAvailableQuantity();
             }
         }
     });
 
-    // Funcionalidad del modal al hacer clic en la tarjeta
     cards.forEach(card => {
         card.addEventListener('click', (e) => {
             if (e.target.classList.contains('ver-mas-btn') || e.target.closest('.add-to-cart-btn')) {
@@ -250,7 +223,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 modalDescription.textContent = description;
             }
 
-            currentProductData.card = card; // Guarda la referencia a la tarjeta actual
+            currentProductData.card = card;
             currentProductData.basePrice = basePriceValue;
             currentProductData.currentPrice = basePriceValue;
             currentProductData.currentPriceDisplay = basePrice;
@@ -299,12 +272,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
             modal.style.display = "flex";
             console.log("Modal opened, calling updateModalAvailableQuantity()"); 
-            // === CAMBIO: Actualizar la cantidad disponible del modal al abrirlo ===
             updateModalAvailableQuantity();
         });
     });
 
-    // Evento de cambio de opción en el modal
     modalSelect.addEventListener('change', function() {
         const selectedOption = this.value;
         if (currentProductData.options && currentProductData.options[selectedOption]) {
@@ -314,7 +285,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Cerrar el modal
     closeModal.addEventListener('click', () => {
         modal.style.display = "none";
     });
@@ -325,23 +295,20 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // === Carrito de compras - Abrir y cerrar ===
     cartIcon.addEventListener('click', function() {
         cartContainer.classList.add('open');
         overlay.style.display = 'block';
-        // cartIcon.style.display = 'none'; // ELIMINADA EN REVISIÓN ANTERIOR
         cartOpen = true;
     });
 
     closeCartBtn.addEventListener('click', closeCart);
     overlay.addEventListener('click', closeCart);
 
-    // Agregar al carrito desde el modal (botón "Agregar al carrito")
     modalAddToCartBtn.addEventListener('click', function() {
         const title = modalTitle.textContent;
         const imgSrc = modalImage.src;
         const productId = currentProductData.card.dataset.id;
-        const initialAvailableQuantity = parseInt(currentProductData.card.dataset.cantidadDisponible); // Cantidad inicial del producto
+        const currentAvailableQuantity = parseInt(currentProductData.card.dataset.cantidadDisponibleActual); 
 
         let option = 'Regular';
         if (modalSelect && modalSelect.value) {
@@ -351,14 +318,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const price = currentProductData.currentPrice;
         const priceDisplay = currentProductData.currentPriceDisplay;
 
-        // Comprobación de disponibilidad antes de añadir
         const existingItemIndex = cart.findIndex(item => item.id == productId && item.option === option);
         const currentQuantityInCart = existingItemIndex !== -1 ? cart[existingItemIndex].quantity : 0;
 
-        if (currentQuantityInCart >= initialAvailableQuantity) {
+        if (currentQuantityInCart >= currentAvailableQuantity) { 
             alert('No hay más unidades disponibles de este producto.');
-            // Ya que el modal se cierra, la actualización de la tarjeta es la que importa.
-            // updateModalAvailableQuantity(); // Podrías querer esto si NO cierras el modal
             return;
         }
 
@@ -378,9 +342,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         updateCartDisplay();
-        modal.style.display = 'none'; // El modal se cierra aquí
+        modal.style.display = 'none'; 
 
-        // Animación del contador (si aún la quieres)
         cartCount.style.transform = 'scale(1.3)';
         setTimeout(() => {
             cartCount.style.transform = 'scale(1)';
@@ -388,14 +351,11 @@ document.addEventListener("DOMContentLoaded", () => {
             overlay.style.display = 'block';
             cartOpen = true;
         }, 300);
-
-        // Ya que el modal se cierra, la próxima vez que se abra, la cantidad disponible
-        // se actualizará por la llamada en el evento click de la tarjeta.
-        // Si el modal NO se cerrara, entonces sí llamarías a updateModalAvailableQuantity() aquí.
     });
 
     // === Finalizar compra ===
-    checkoutButton.addEventListener('click', function() {
+    // *** SECCIÓN MODIFICADA: Eliminado el prompt de medio de pago ***
+    checkoutButton.addEventListener('click', async function() {
         if (cart.length === 0) {
             alert('Su carrito está vacío');
             return;
@@ -406,43 +366,92 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        const clavePedidoMesa = `pedido_mesa_${mesaIdActiva}`;
-        const pedidosExistentes = JSON.parse(localStorage.getItem(clavePedidoMesa)) || [];
+        const totalCarrito = cart.reduce((sum, item) => sum + item.quantity * item.price, 0);
 
-        cart.forEach(newItem => {
-            const existingItem = pedidosExistentes.find(
-                p => p.id == newItem.id && p.option === newItem.option
-            );
-            if (existingItem) {
-                existingItem.quantity += newItem.quantity;
-            } else {
-                pedidosExistentes.push({ ...newItem });
+        // --- PREPARAR DATOS PARA ENVIAR AL SERVIDOR ---
+        // ¡IMPORTANTE! Si tu backend espera un `medio_pago` y no lo proporcionas aquí,
+        // asegúrate de que tenga un valor por defecto o que sea opcional.
+        // Por ahora, lo dejaré con un valor fijo 'No especificado' o puedes eliminarlo si no es necesario.
+        const orderData = {
+            mesa_id: mesaIdActiva,
+            mesa_numero: mesaNumeroActivo, 
+            total: totalCarrito, 
+            medio_pago: "No especificado", // O elimínalo si tu backend no lo requiere
+            items: cart.map(item => ({
+                producto_id: item.id, 
+                cantidad: item.quantity, 
+                precio_unitario: item.price,
+                option: item.option 
+            }))
+        };
+
+        try {
+            const response = await fetch('/guardar_pedido/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // 'X-CSRFToken': getCookie('csrftoken'), // Descomentar si usas CSRF
+                },
+                body: JSON.stringify(orderData)
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Error desconocido al procesar el pedido en el servidor.');
             }
-        });
 
-        localStorage.setItem(clavePedidoMesa, JSON.stringify(pedidosExistentes));
+            const result = await response.json();
+            console.log('Respuesta del servidor:', result);
 
-        alert(`Productos añadidos a la Mesa ${mesaNumeroActivo}.`);
+            if (result.updated_stock && Array.isArray(result.updated_stock)) {
+                result.updated_stock.forEach(stockUpdate => {
+                    const cardElement = document.querySelector(`.card[data-id="${stockUpdate.product_id}"]`);
+                    if (cardElement) {
+                        cardElement.dataset.cantidadDisponible = stockUpdate.new_available_quantity;
+                        updateCardButtonState(cardElement); 
+                    }
+                });
+            }
 
-        cart = [];
-        updateCartDisplay(); // Esto ahora también actualizará el estado de los botones de las tarjetas y la cantidad disponible en el modal (si estuviera abierto)
-        closeCart();
-        localStorage.removeItem('cart');
+            const clavePedidoMesa = `pedido_mesa_${mesaIdActiva}`;
+            const pedidosExistentes = JSON.parse(localStorage.getItem(clavePedidoMesa)) || [];
 
-        if (confirm('¿Desea volver a la página de mesas?')) {
-            window.location.href = `/mesas/?mesa_id=${mesaIdActiva}&mesa_numero=${mesaNumeroActivo}`;
+            cart.forEach(newItem => {
+                const existingItem = pedidosExistentes.find(
+                    p => p.id == newItem.id && p.option === newItem.option
+                );
+                if (existingItem) {
+                    existingItem.quantity += newItem.quantity;
+                } else {
+                    pedidosExistentes.push({ ...newItem });
+                }
+            });
+            localStorage.setItem(clavePedidoMesa, JSON.stringify(pedidosExistentes));
+
+            alert(`Pedido #${result.order_id} finalizado para la Mesa ${mesaNumeroActivo}.`);
+
+            cart = []; 
+            updateCartDisplay(); 
+            closeCart();
+            localStorage.removeItem('cart'); 
+
+            if (confirm('¿Desea volver a la página de mesas?')) {
+                window.location.href = `/mesas/?mesa_id=${mesaIdActiva}&mesa_numero=${mesaNumeroActivo}`;
+            }
+
+        } catch (error) {
+            console.error('Error al finalizar la compra:', error);
+            alert(`Hubo un error al procesar su pedido: ${error.message}`);
         }
     });
 
-    // Vaciar carrito
     emptyCartButton.addEventListener('click', function() {
         if (confirm('¿Está seguro que desea vaciar el carrito?')) {
             cart = [];
-            updateCartDisplay(); // Esto ahora también actualizará el estado de los botones de las tarjetas y la cantidad disponible en el modal (si estuviera abierto)
+            updateCartDisplay(); 
         }
     });
 
-    // === Actualizar la visualización del carrito ===
     function updateCartDisplay() {
         cartItems.innerHTML = '';
 
@@ -458,8 +467,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (cart.length === 0) {
             cartItems.innerHTML = '<div class="empty-cart-message" style="text-align: center; padding: 20px; color: #aaa;">Su carrito está vacío</div>';
             cartTotalAmount.textContent = '$0';
-            cards.forEach(card => updateCardButtonState(card)); // Asegurarse de actualizar todas las tarjetas
-            // === CAMBIO: Actualizar la cantidad disponible en el modal si está abierto y el producto actual es afectado ===
+            cards.forEach(card => updateCardButtonState(card)); 
             if (modal.style.display === "flex" && currentProductData.card) {
                 updateModalAvailableQuantity();
             }
@@ -496,19 +504,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
         updateCartStorage();
 
-        // === IMPORTANTE: Actualizar el estado de los botones de las tarjetas después de cualquier cambio en el carrito ===
         cards.forEach(card => {
             updateCardButtonState(card);
         });
 
-        // === CAMBIO: Actualizar la cantidad disponible en el modal si está abierto y el producto actual es afectado ===
         if (modal.style.display === "flex" && currentProductData.card) {
             console.log("Updating modal quantity from updateCartDisplay()");
             updateModalAvailableQuantity();
         }
 
-
-        // Delegación de eventos para botones de cantidad y eliminar (mejora de rendimiento)
         cartItems.querySelectorAll('.increase-quantity').forEach(button => {
             button.addEventListener('click', function() {
                 const id = this.getAttribute('data-id');
@@ -516,16 +520,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 const item = cart.find(i => i.id == id && i.option === option);
                 if (item) {
                     const card = document.querySelector(`.card[data-id="${id}"]`);
-                    const initialAvailableQuantity = parseInt(card.dataset.cantidadDisponible); // Usa la cantidad inicial
-                    if (item.quantity < initialAvailableQuantity) { // Verificar disponibilidad contra la cantidad inicial
+                    const backendAvailable = parseInt(card.dataset.cantidadDisponible); // Stock real del backend
+                    if (item.quantity < backendAvailable) {
                         item.quantity += 1;
                     } else {
                         alert('No hay más unidades disponibles de este producto.');
                     }
                     updateCartDisplay();
-                    // === CAMBIO: Actualizar la cantidad disponible en el modal si está abierto y el producto actual es afectado ===
                     if (modal.style.display === "flex" && currentProductData.card && currentProductData.card.dataset.id == id) {
-                        console.log("Updating modal quantity after decrease-quantity");
+                        console.log("Updating modal quantity after increase-quantity");
                         updateModalAvailableQuantity();
                     }
                 }
@@ -544,7 +547,6 @@ document.addEventListener("DOMContentLoaded", () => {
                         cart.splice(itemIndex, 1);
                     }
                     updateCartDisplay();
-                    // === CAMBIO: Actualizar la cantidad disponible en el modal si está abierto y el producto actual es afectado ===
                     if (modal.style.display === "flex" && currentProductData.card && currentProductData.card.dataset.id == id) {
                         updateModalAvailableQuantity();
                     }
@@ -560,7 +562,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (itemIndex !== -1) {
                     cart.splice(itemIndex, 1);
                     updateCartDisplay();
-                    // === CAMBIO: Actualizar la cantidad disponible en el modal si está abierto y el producto actual es afectado ===
                     if (modal.style.display === "flex" && currentProductData.card && currentProductData.card.dataset.id == id) {
                         console.log("Updating modal quantity after remove-item");
                         updateModalAvailableQuantity();
@@ -570,7 +571,22 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // === Funcionalidad del Menú Hamburguesa ===
+    // Comentado la función getCookie si no se va a usar CSRF aquí
+    // function getCookie(name) {
+    //     let cookieValue = null;
+    //     if (document.cookie && document.cookie !== '') {
+    //         const cookies = document.cookie.split(';');
+    //         for (let i = 0; i < cookies.length; i++) {
+    //             const cookie = cookies[i].trim();
+    //             if (cookie.startsWith(name + '=')) {
+    //                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+    //                 break;
+    //             }
+    //         }
+    //     }
+    //     return cookieValue;
+    // }
+
     const menuToggle = document.getElementById('menuToggle');
     const mainMenu = document.getElementById('mainMenu');
     const hamburgerBtn = document.querySelector('.hamburger-btn');
@@ -608,7 +624,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // === Scroll del Menú Desplegable en Escritorio ===
     const menuContainer = document.querySelector(".menu-container");
     const mainContentArea = document.querySelector("main");
 
@@ -642,6 +657,5 @@ document.addEventListener("DOMContentLoaded", () => {
         window.addEventListener("scroll", handleScroll);
     }
 
-    // === Inicializar visualización del carrito y el estado de los botones de las tarjetas al cargar la página ===
     updateCartDisplay();
 });

@@ -187,19 +187,19 @@
         {% endif %}
         {# --- FIN DEL MODAL DE FILTROS PARA PRODUCTOS -------------------------- #}
 
-        {# --- INICIO DEL MODAL DE CONFIRMACIÓN DE ELIMINACIÓN (FALTA EN TU HTML) --- #}
+        {% comment %} {# --- INICIO DEL MODAL DE CONFIRMACIÓN DE ELIMINACIÓN --- #}
         <div id="delete-confirmation-modal" class="modal">
             <div class="modal-content">
                 <span class="close-button">&times;</span>
                 <h2>Confirmar Eliminación</h2>
-                <p id="modal-delete-message">¿Estás seguro de que quieres eliminar este(s) elemento(s)?</p>
+                <p id="modal-delete-message">¿Estás seguro de que quieres eliminar <span id="object-name-to-delete">este elemento</span>?</p>
                 <div class="modal-footer">
                     <button type="button" class="button" id="cancel-delete-button">Cancelar</button>
                     <button type="button" class="button delete-button" id="confirm-delete-button">Eliminar</button>
                 </div>
             </div>
         </div>
-        {# --- FIN DEL MODAL DE CONFIRMACIÓN DE ELIMINACIÓN --- #}
+        {# --- FIN DEL MODAL DE CONFIRMACIÓN DE ELIMINACIÓN --- #} {% endcomment %}
 
 
         <form id="changelist-form" action="" method="post" {% if cl.formset.is_multipart %}enctype="multipart/form-data"{% endif %} novalidate>
@@ -221,48 +221,31 @@
     </div>
   </div>
 
-  {# JavaScript para habilitar/deshabilitar el botón de eliminar y la lógica de submit #}
+{# JavaScript para habilitar/deshabilitar el botón de eliminar y la lógica de submit #}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const globalDeleteButton = document.getElementById('global-delete-button');
     const changelistForm = document.getElementById('changelist-form');
-    // Selecciona todos los checkboxes de acción, incluyendo el de la cabecera si existe
     const checkboxes = changelistForm.querySelectorAll('input[name="_selected_action"]');
-    // Corrección aquí: Selector de tipo de checkbox debe estar completo
     const selectAllCheckbox = changelistForm.querySelector('th input[type="checkbox"]'); 
     
-    // Modal de eliminación elements
-    const deleteModal = document.getElementById('delete-confirmation-modal');
-    const closeModalDeleteButton = deleteModal ? deleteModal.querySelector('.close-button') : null;
-    const confirmDeleteButton = document.getElementById('confirm-delete-button');
-    const cancelDeleteButton = document.getElementById('cancel-delete-button');
-    // Corrección aquí: ID completo y correctamente cerrado
-    const modalDeleteMessage = document.getElementById('modal-delete-message'); 
-    
-    // Modal de filtro elements
-    const openFilterModalButton = document.getElementById('openFilterModal');
-    const filterModal = document.getElementById('filterModal');
-    // Asegúrate de que el botón de cerrar exista antes de intentar seleccionarlo
-    const closeModalFilterButton = filterModal ? filterModal.querySelector('.close-button-filter') : null;
-
-    // Función para actualizar el estado del botón de eliminar
+    // Función para actualizar el estado del botón de eliminar global
     function updateDeleteButtonState() {
         let anyChecked = false;
         checkboxes.forEach(checkbox => {
-            // Solo considera los checkboxes de acción individuales
             if (checkbox.checked && checkbox.name === '_selected_action') {
                 anyChecked = true;
             }
         });
-        globalDeleteButton.disabled = !anyChecked;
+        if (globalDeleteButton) {
+            globalDeleteButton.disabled = !anyChecked;
+        }
     }
 
-    // Añadir listeners a todos los checkboxes individuales
     checkboxes.forEach(checkbox => {
         checkbox.addEventListener('change', updateDeleteButtonState);
     });
 
-    // Añadir listener al checkbox "Seleccionar todo"
     if (selectAllCheckbox) {
         selectAllCheckbox.addEventListener('change', function() {
             checkboxes.forEach(checkbox => {
@@ -270,129 +253,81 @@ document.addEventListener('DOMContentLoaded', function() {
                     checkbox.checked = selectAllCheckbox.checked;
                 }
             });
-            updateDeleteButtonState(); // Actualiza el estado después de seleccionar/deseleccionar todo
+            updateDeleteButtonState();
         });
     }
 
-    // Inicializar el estado del botón al cargar la página
     updateDeleteButtonState();
 
-    // Lógica para el botón global de eliminación
-    if (globalDeleteButton) { // Asegurarse de que el botón existe (condicionalmente renderizado)
+    // Lógica para el botón global de eliminación (abre el modal de confirmación GLOBAL)
+    if (globalDeleteButton) {
         globalDeleteButton.addEventListener('click', function(event) {
-            event.preventDefault(); // Previene el envío inmediato del formulario
+            event.preventDefault(); 
             if (!this.disabled) {
-                if (deleteModal) {
-                    deleteModal.style.display = 'flex';
-                    deleteModal.classList.add('is-active');
-                    const selectedCount = Array.from(checkboxes).filter(cb => cb.checked && cb.name === '_selected_action').length;
-                    modalDeleteMessage.textContent = `¿Estás seguro de que quieres eliminar los ${selectedCount} elementos seleccionados?`;
+                const selectedCount = Array.from(checkboxes).filter(cb => cb.checked && cb.name === '_selected_action').length;
+                const message = `¿Estás seguro de que quieres eliminar los ${selectedCount} elementos seleccionados?`;
+                
+                // ¡IMPORTANTE! LLAMAR A LA FUNCIÓN openDeleteModal GLOBAL DE delete_forms.js
+                // Esta función SIEMPRE DEBE EXISTIR ahora porque delete_forms.js se carga primero en base_site.html
+                if (typeof window.openDeleteModal === 'function') { 
+                    window.openDeleteModal(message, null, true); // Pasar true para isGlobal
+                } else {
+                    console.error("La función global openDeleteModal no está disponible.");
+                    // Si, por alguna razón, no está disponible, puedes dejar un alert simple o simplemente no hacer nada.
+                    alert(message); // Fallback a un alert simple si el modal no se abre
                 }
             }
         });
     }
 
-    // Lógica para confirmar la eliminación
-    if (confirmDeleteButton) {
-        confirmDeleteButton.addEventListener('click', async function() { // Añadimos 'async' para poder usar 'await'
-            // Obtener el token CSRF
+    // ESCUCHAR EL EVENTO PERSONALIZADO DISPARADO POR delete_forms.js
+    // Este listener debe estar en el formulario para capturar el evento personalizado
+    if (changelistForm) {
+        changelistForm.addEventListener('confirmGlobalDelete', async function() {
+            console.log('Evento confirmGlobalDelete recibido. Procediendo con la eliminación global via fetch.');
             const csrfToken = changelistForm.querySelector('input[name="csrfmiddlewaretoken"]').value;
-    
-            // Obtener los IDs de los elementos seleccionados
             const selectedIds = Array.from(checkboxes)
-                                     .filter(cb => cb.checked && cb.name === '_selected_action')
-                                     .map(cb => cb.value); // Obtener el valor (PK) de cada checkbox
-    
-            // Si no hay IDs seleccionados, no hacer nada y cerrar el modal
+                                           .filter(cb => cb.checked && cb.name === '_selected_action')
+                                           .map(cb => cb.value);
+            
             if (selectedIds.length === 0) {
-                if (deleteModal) {
-                    deleteModal.classList.remove('is-active');
-                    deleteModal.style.display = 'none';
-                }
+                console.warn('No hay elementos seleccionados para la eliminación global.');
                 return;
             }
-        
-            // Crear un objeto FormData para enviar los datos de la misma manera que un formulario HTML
+            
             const formData = new FormData();
-            formData.append('action', 'delete_selected'); // La acción que Django espera
-            formData.append('select_across', '0'); // Importante para la acción de Django en casos de paginación
+            formData.append('action', 'delete_selected');
+            formData.append('select_across', '0');
             formData.append('csrfmiddlewaretoken', csrfToken);
             selectedIds.forEach(id => {
-                formData.append('_selected_action', id); // Añadir cada ID seleccionado
+                formData.append('_selected_action', id);
             });
-        
-            // Ocultar el modal de confirmación inmediatamente para dar feedback visual
-            if (deleteModal) {
-                deleteModal.classList.remove('is-active');
-                deleteModal.style.display = 'none';
-            }
-        
-            // Opcional: Mostrar un indicador de carga (puedes añadir un spinner aquí si lo deseas)
-            // document.body.classList.add('loading'); 
-        
+            
             try {
-                // Realizar la solicitud AJAX
-                // La URL vacía ('') enviará la solicitud al mismo URL actual,
-                // que es donde Django espera las acciones de changelist.
-                const response = await fetch('', {
+                const response = await fetch('', { // Envía al mismo URL actual
                     method: 'POST',
-                    body: formData, // FormData ya establece el Content-Type correctamente
-                    headers: {
-                        // 'X-CSRFToken': csrfToken // Esta línea es alternativa, FormData ya lo maneja si lo añades como campo
-                    },
+                    body: formData,
                 });
             
-                // Verificar si la solicitud fue exitosa
-                if (response.ok) { // response.ok es true si el estado es 200-299
-                    // La recarga de la página es la forma más sencilla de ver los cambios reflejados.
+                if (response.ok) {
                     window.location.reload(); 
-                
                 } else {
-                    // Si la respuesta no fue exitosa (ej. 403 Forbidden, 500 Internal Server Error)
-                    console.error('Error al eliminar elementos:', response.status, response.statusText);
-                    alert('Hubo un error al eliminar los elementos. Por favor, inténtalo de nuevo.');
+                    console.error('Error al eliminar elementos globalmente:', response.status, response.statusText);
+                    alert('Hubo un error al eliminar los elementos seleccionados. Por favor, inténtalo de nuevo.');
                 }
             } catch (error) {
-                // Manejar errores de red o cualquier otro error durante la solicitud fetch
-                console.error('Error en la solicitud de eliminación:', error);
-                alert('No se pudo conectar con el servidor para eliminar los elementos.');
-            } finally {
-                // Opcional: Ocultar el indicador de carga
-                // document.body.classList.remove('loading'); 
+                console.error('Error en la solicitud de eliminación global:', error);
+                alert('No se pudo conectar con el servidor para eliminar los elementos seleccionados.');
             }
         });
     }
 
-    // Lógica para cancelar la eliminación
-    if (cancelDeleteButton) {
-        cancelDeleteButton.addEventListener('click', function() {
-            if (deleteModal) {
-                deleteModal.classList.remove('is-active');
-                deleteModal.style.display = 'none';
-            }
-        });
-    }
+    // Lógica para el modal de FILTROS (se mantiene igual, no relacionado con delete_forms.js)
+    const openFilterModalButton = document.getElementById('openFilterModal');
+    const filterModal = document.getElementById('filterModal');
+    const closeModalFilterButton = filterModal ? filterModal.querySelector('.close-button-filter') : null;
 
-    // Lógica para cerrar el modal de eliminación con el botón 'x'
-    if (closeModalDeleteButton) {
-        closeModalDeleteButton.addEventListener('click', function() {
-            if (deleteModal) {
-                deleteModal.classList.remove('is-active');
-                deleteModal.style.display = 'none';
-            }
-        });
-    }
-
-    // Cerrar el modal de eliminación si se hace clic fuera de él
-    window.addEventListener('click', function(event) {
-        if (deleteModal && event.target === deleteModal) {
-            deleteModal.classList.remove('is-active');
-            deleteModal.style.display = 'none';
-        }
-    });
-
-    // -------------------- Lógica para los filtros (Modal) -----------------------------
-    if (openFilterModalButton && filterModal) { // Asegúrate de que los elementos existan
+    if (openFilterModalButton && filterModal) { 
         openFilterModalButton.addEventListener('click', function() {
             filterModal.style.display = 'flex';
             filterModal.classList.add('is-active');
@@ -401,11 +336,10 @@ document.addEventListener('DOMContentLoaded', function() {
         if (closeModalFilterButton) {
             closeModalFilterButton.addEventListener('click', function() {
                 filterModal.classList.remove('is-active');
-                filterModal.style.display = 'none'; // Asegúrate de ocultarlo completamente
+                filterModal.style.display = 'none';
             });
         }
 
-        // Cerrar el modal de filtro si se hace clic fuera de él
         window.addEventListener('click', function(event) {
             if (filterModal && event.target === filterModal) {
                 filterModal.classList.remove('is-active');
@@ -414,6 +348,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-}); // Cierre correcto del DOMContentLoaded
+});
 </script>
 {% endblock %}

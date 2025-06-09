@@ -1,35 +1,77 @@
+// admin_personalizado/static/admin_personalizado/js_panel/delete_forms.js
+
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('delete_forms.js cargado. (Versión con clase is-active)'); // Mensaje actualizado
+    console.log('delete_forms.js cargado. (Versión con clase is-active y manejo unificado)');
 
     const deleteModal = document.getElementById('delete-confirmation-modal');
-    
+
     if (!deleteModal) {
         console.warn('El modal de confirmación de eliminación (#delete-confirmation-modal) no se encontró en la página. El script no funcionará para este modal.');
         return;
     }
 
     const closeDeleteModalButton = deleteModal.querySelector('.close-button');
-    const confirmDeleteButton = deleteModal.querySelector('#confirm-delete-button');
-    const cancelDeleteButton = deleteModal.querySelector('#cancel-delete-button');
-    const objectNameToDeleteSpan = deleteModal.querySelector('#object-name-to-delete');
+    const confirmDeleteButton = document.getElementById('confirm-delete-button');
+    const cancelDeleteButton = document.getElementById('cancel-delete-button');
+    let objectNameToDeleteSpan = document.getElementById('object-name-to-delete'); // Let para poder re-obtener
+    let modalDeleteMessageParagraph = document.getElementById('modal-delete-message'); // Let para poder re-obtener
 
     let currentDeleteUrl = '';
+    let isGlobalDelete = false;
 
-    function openDeleteModal(objectName, deleteUrl) {
-        if (objectNameToDeleteSpan) {
-            objectNameToDeleteSpan.textContent = objectName;
-        }
+    // Función para abrir el modal
+    function openDeleteModal(objectName, deleteUrl, isGlobal = false) {
+        isGlobalDelete = isGlobal;
         currentDeleteUrl = deleteUrl;
-        deleteModal.classList.add('is-active'); // CAMBIO AQUÍ: Añade la clase 'is-active'
-        document.body.classList.add('modal-open');
+
+        // Siempre reinicia el HTML del párrafo para asegurar la estructura base
+        if (modalDeleteMessageParagraph) {
+            modalDeleteMessageParagraph.innerHTML = `¿Estás seguro de que quieres eliminar <strong id="object-name-to-delete"></strong>?`;
+            // Re-obtener la referencia al span después de cambiar innerHTML
+            objectNameToDeleteSpan = document.getElementById('object-name-to-delete'); 
+            if (objectNameToDeleteSpan) {
+                objectNameToDeleteSpan.style.display = 'inline'; // Por defecto visible
+            }
+        }
+
+
+        if (isGlobal) {
+            if (modalDeleteMessageParagraph) {
+                modalDeleteMessageParagraph.textContent = objectName; // El mensaje completo ya viene en objectName
+            }
+            if (objectNameToDeleteSpan) {
+                objectNameToDeleteSpan.style.display = 'none'; // Ocultar el span si es global
+            }
+        } else { // Es una eliminación individual
+            if (objectNameToDeleteSpan) {
+                objectNameToDeleteSpan.textContent = objectName; // Solo actualiza el nombre del objeto
+                objectNameToDeleteSpan.style.display = 'inline';
+            }
+        }
+
+        deleteModal.classList.add('is-active');
     }
 
+    // Exponer la función openDeleteModal globalmente
+    window.openDeleteModal = openDeleteModal;
+
+    // Función para cerrar el modal
     function closeDeleteModal() {
-        deleteModal.classList.remove('is-active'); // CAMBIO AQUÍ: Quita la clase 'is-active'
-        document.body.classList.remove('modal-open');
+        deleteModal.classList.remove('is-active');
         currentDeleteUrl = '';
+        isGlobalDelete = false;
+
+        // Reiniciar el mensaje a su estado por defecto
+        if (modalDeleteMessageParagraph) {
+            modalDeleteMessageParagraph.innerHTML = `¿Estás seguro de que quieres eliminar <strong id="object-name-to-delete">este elemento</strong>?`;
+            objectNameToDeleteSpan = document.getElementById('object-name-to-delete'); // Re-obtener la referencia
+            if (objectNameToDeleteSpan) {
+                objectNameToDeleteSpan.style.display = 'inline';
+            }
+        }
     }
 
+    // Asignar listeners de cierre
     if (closeDeleteModalButton) {
         closeDeleteModalButton.addEventListener('click', closeDeleteModal);
     }
@@ -42,31 +84,44 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // Lógica para confirmar la eliminación (AHORA UNIFICADA)
     if (confirmDeleteButton) {
-        confirmDeleteButton.addEventListener('click', function(event) {
+        confirmDeleteButton.addEventListener('click', async function(event) {
             event.preventDefault();
-            
-            if (currentDeleteUrl) {
+
+            if (isGlobalDelete) {
+                const changelistForm = document.getElementById('changelist-form');
+                if (changelistForm) {
+                    // Disparar un evento que indique que se debe enviar el formulario global
+                    const confirmGlobalDeleteEvent = new CustomEvent('confirmGlobalDelete');
+                    changelistForm.dispatchEvent(confirmGlobalDeleteEvent);
+                }
+                closeDeleteModal(); // Cierra el modal después de disparar el evento
+
+            } else if (currentDeleteUrl) {
+                // Lógica de eliminación individual (POST)
                 const csrftoken = getCookie('csrftoken');
 
                 const form = document.createElement('form');
                 form.method = 'POST';
                 form.action = currentDeleteUrl;
-                
+
                 const csrfInput = document.createElement('input');
                 csrfInput.type = 'hidden';
                 csrfInput.name = 'csrfmiddlewaretoken';
                 csrfInput.value = csrftoken;
                 form.appendChild(csrfInput);
 
+                // Django espera un campo 'post'='yes' para confirmar la eliminación
                 const postInput = document.createElement('input');
                 postInput.type = 'hidden';
-                postInput.name = 'post';
+                postInput.name = 'post'; 
                 postInput.value = 'yes';
                 form.appendChild(postInput);
 
                 document.body.appendChild(form);
-                form.submit();
+                form.submit(); // Envía el formulario para la eliminación individual
+                closeDeleteModal(); // Cierra el modal después de enviar
             } else {
                 console.error('No se pudo determinar la URL de eliminación.');
                 closeDeleteModal();
@@ -74,6 +129,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Listener para los botones de eliminación individuales (de la columna de acciones)
     document.querySelectorAll('a.action-delete, a.custom-delete-button').forEach(button => {
         button.addEventListener('click', function(event) {
             event.preventDefault();
@@ -95,10 +151,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 }
             }
-            openDeleteModal(objectName, deleteUrl);
+            openDeleteModal(objectName, deleteUrl, false); // Es una eliminación individual
         });
     });
 
+    // Función para obtener el token CSRF
     function getCookie(name) {
         let cookieValue = null;
         if (document.cookie && document.cookie !== '') {

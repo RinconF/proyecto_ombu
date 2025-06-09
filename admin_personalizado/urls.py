@@ -7,7 +7,14 @@ app_name = 'admin_panel'
 
 urlpatterns = [
     path('perfil/', views.perfil_view, name='perfil'),
+
     path('descargar-manual/', descargar_manual, name='descargar_manual'),
+
+    
+    path('backups/', views.lista_backups, name='lista_backups'),
+    path('backups/crear/', views.crear_backup, name='crear_backup'),
+    path('backups/restaurar/<str:nombre>/', views.restaurar_backup, name='restaurar_backup'),
+    path('backups/eliminar/<str:nombre>/', views.eliminar_backup, name='eliminar_backup'),
     
     
     # # URL del Dashboard

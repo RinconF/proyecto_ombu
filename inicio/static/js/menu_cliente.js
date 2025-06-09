@@ -128,36 +128,23 @@ document.addEventListener("DOMContentLoaded", () => {
 // JavaScript para el menú hamburguesa
 
 document.addEventListener('DOMContentLoaded', function() {
-    const menuToggle = document.getElementById('menuToggle');
-    const mainMenu = document.getElementById('mainMenu');
-    
-    // Toggle menu cuando se hace clic en el botón hamburguesa
-    menuToggle.addEventListener('click', function() {
-      mainMenu.classList.toggle('active');
-    console.log('mainMenu:', mainMenu);
+  const menuToggle = document.getElementById('menuToggle');
+  const mainMenu = document.getElementById('mainMenu');
 
-    });
-    
-    // Cerrar menú cuando se hace clic en un enlace
-    const menuLinks = document.querySelectorAll('.link');
-    menuLinks.forEach(link => {
-      link.addEventListener('click', function() {
-        if (window.innerWidth <= 600) {
-          mainMenu.classList.remove('active');
-        }
-      });
-    });
-    
-    // Cerrar menú si se hace clic fuera de él
-    document.addEventListener('click', function(event) {
-      const isClickInsideMenu = mainMenu.contains(event.target);
-      const isClickOnToggle = menuToggle.contains(event.target);
-      
-      if (!isClickInsideMenu && !isClickOnToggle && mainMenu.classList.contains('active')) {
+  menuToggle.addEventListener('click', function() {
+    mainMenu.classList.toggle('active');
+    console.log("Clase actual:", mainMenu.className);
+  });
+
+  const menuLinks = document.querySelectorAll('.link');
+  menuLinks.forEach(link => {
+    link.addEventListener('click', function() {
+      if (window.innerWidth <= 600) {
         mainMenu.classList.remove('active');
       }
     });
   });
+});
 
 
 // JavaScript para el menú desplegable en escritorio (para que aparezca y desaparezca al subir y bajar el scroll)

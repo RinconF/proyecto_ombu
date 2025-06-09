@@ -104,6 +104,17 @@
                     </button>
                 </li>
                 {% endif %} {# <--- Agrega esta línea #}
+
+
+                {# --- TU NUEVO BOTÓN PARA PRODUCTOS POR CATEGORÍA --- #}
+                {% if cl.opts.model_name == 'producto' and download_products_pdf_all %}
+                    <li>
+                        <a href="{{ download_products_pdf_all }}" class="addlink" style="background-color: #28a745; color: white; padding: 6px 12px; border-radius: 4px; text-decoration: none; display: inline-block;">
+                            <i class="fa fa-file-pdf"></i> Reporte por Categoría
+                        </a>
+                    </li>
+                {% endif %}
+                {# --- FIN DEL NUEVO BOTÓN --- #}
             </ul>
         </div>
         {# --- FIN DE TU NUEVA ESTRUCTURA --- #}
@@ -135,23 +146,7 @@
                             </ul>
                         </div>
 
-                        <div class="filter-group">
-                            <h3>Por es staff</h3>
-                            <ul>
-                                <li><a href="?is_staff__exact=1{% for key, value in cl.params.items %}{% if key != 'is_staff__exact' and key != 'q' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Sí</a></li>
-                                <li><a href="?is_staff__exact=0{% for key, value in cl.params.items %}{% if key != 'is_staff__exact' and key != 'q' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">No</a></li>
-                                <li><a href="?{% for key, value in cl.params.items %}{% if key != 'is_staff__exact' and key != 'q' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Todo</a></li>
-                            </ul>
-                        </div>
 
-                        <div class="filter-group">
-                            <h3>Por estado de superusuario</h3>
-                            <ul>
-                                <li><a href="?is_superuser__exact=1{% for key, value in cl.params.items %}{% if key != 'is_superuser__exact' and key != 'q' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Sí</a></li>
-                                <li><a href="?is_superuser__exact=0{% for key, value in cl.params.items %}{% if key != 'is_superuser__exact' and key != 'q' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">No</a></li>
-                                <li><a href="?{% for key, value in cl.params.items %}{% if key != 'is_superuser__exact' and key != 'q' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">Todo</a></li>
-                            </ul>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -299,13 +294,71 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Lógica para confirmar la eliminación
     if (confirmDeleteButton) {
-        confirmDeleteButton.addEventListener('click', function() {
-            // Asegúrate de que el campo de acción esté establecido a 'delete_selected'
-            changelistForm.querySelector('input[name="action"]').value = 'delete_selected';
-            changelistForm.submit(); // Envía el formulario para ejecutar la acción
+        confirmDeleteButton.addEventListener('click', async function() { // Añadimos 'async' para poder usar 'await'
+            // Obtener el token CSRF
+            const csrfToken = changelistForm.querySelector('input[name="csrfmiddlewaretoken"]').value;
+    
+            // Obtener los IDs de los elementos seleccionados
+            const selectedIds = Array.from(checkboxes)
+                                     .filter(cb => cb.checked && cb.name === '_selected_action')
+                                     .map(cb => cb.value); // Obtener el valor (PK) de cada checkbox
+    
+            // Si no hay IDs seleccionados, no hacer nada y cerrar el modal
+            if (selectedIds.length === 0) {
+                if (deleteModal) {
+                    deleteModal.classList.remove('is-active');
+                    deleteModal.style.display = 'none';
+                }
+                return;
+            }
+        
+            // Crear un objeto FormData para enviar los datos de la misma manera que un formulario HTML
+            const formData = new FormData();
+            formData.append('action', 'delete_selected'); // La acción que Django espera
+            formData.append('select_across', '0'); // Importante para la acción de Django en casos de paginación
+            formData.append('csrfmiddlewaretoken', csrfToken);
+            selectedIds.forEach(id => {
+                formData.append('_selected_action', id); // Añadir cada ID seleccionado
+            });
+        
+            // Ocultar el modal de confirmación inmediatamente para dar feedback visual
             if (deleteModal) {
                 deleteModal.classList.remove('is-active');
                 deleteModal.style.display = 'none';
+            }
+        
+            // Opcional: Mostrar un indicador de carga (puedes añadir un spinner aquí si lo deseas)
+            // document.body.classList.add('loading'); 
+        
+            try {
+                // Realizar la solicitud AJAX
+                // La URL vacía ('') enviará la solicitud al mismo URL actual,
+                // que es donde Django espera las acciones de changelist.
+                const response = await fetch('', {
+                    method: 'POST',
+                    body: formData, // FormData ya establece el Content-Type correctamente
+                    headers: {
+                        // 'X-CSRFToken': csrfToken // Esta línea es alternativa, FormData ya lo maneja si lo añades como campo
+                    },
+                });
+            
+                // Verificar si la solicitud fue exitosa
+                if (response.ok) { // response.ok es true si el estado es 200-299
+                    // La recarga de la página es la forma más sencilla de ver los cambios reflejados.
+                    window.location.reload(); 
+                
+                } else {
+                    // Si la respuesta no fue exitosa (ej. 403 Forbidden, 500 Internal Server Error)
+                    console.error('Error al eliminar elementos:', response.status, response.statusText);
+                    alert('Hubo un error al eliminar los elementos. Por favor, inténtalo de nuevo.');
+                }
+            } catch (error) {
+                // Manejar errores de red o cualquier otro error durante la solicitud fetch
+                console.error('Error en la solicitud de eliminación:', error);
+                alert('No se pudo conectar con el servidor para eliminar los elementos.');
+            } finally {
+                // Opcional: Ocultar el indicador de carga
+                // document.body.classList.remove('loading'); 
             }
         });
     }

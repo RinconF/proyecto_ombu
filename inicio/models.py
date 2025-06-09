@@ -112,7 +112,7 @@ class Producto(models.Model):
         # Agrega más según tu necesidad
     ]
 
-    titulo = models.CharField(max_length=100)
+    titulo = models.CharField(max_length=100, unique=True)
     descripcion = models.TextField()
     precio = models.DecimalField(max_digits=8, decimal_places=2)
     cantidad_disponible = models.IntegerField(default=0, help_text="Cantidad de productos disponibles")
@@ -273,7 +273,4 @@ class ConfiguracionGeneral(models.Model):
     #         return mark_safe(f'<img src="{self.imagen.url}" width="100" height="auto" />')
     #     return "No Image"
     # admin_thumbnail.short_description = 'Miniatura'
-    
-    
-    
     

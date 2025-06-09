@@ -18,6 +18,11 @@
     color: white;
 }
 
+#result_list td.field-acciones .button.action-download-pdf {
+    background:linear-gradient(135deg, #6f42c1 0%, #5a32a3 100%);
+    color: white;
+}
+
 #result_list td.field-acciones .button:last-child {
     margin-right: 0; /* Eliminar margen derecho del último botón en la fila */
 }

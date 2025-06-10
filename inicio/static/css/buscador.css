@@ -1,15 +1,17 @@
 /* Contenedor principal del buscador */
 .search-container {
+  margin-top:10px;
   width: 100%;
   padding: 1rem 0;
   background: rgba(0, 0, 0, 0.8); /* Fondo semitransparente más oscuro */
-  position: fixed; /* Cambiado de sticky a fixed para asegurar posición fija */
+  position: relative; /* Cambiado de sticky a fixed para asegurar posición fija */
   top: 0; /* Ajustado para que esté en la parte superior */
   left: 0; /* Aseguramos que se posicione desde el borde izquierdo */
-  z-index: 1000; /* Valor más alto para asegurar que esté por encima de otros elementos */
+  z-index: 10; /* Valor más alto para asegurar que esté por encima de otros elementos */
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); /* Sombra más pronunciada */
   backdrop-filter: blur(8px); /* Efecto de desenfoque mejorado */
   transition: all 0.3s ease; /* Transición suave para cualquier cambio */
+  margin-top: 15px;
 }
 
 /* Caja del buscador */
@@ -110,5 +112,101 @@
   
   .search-button {
     padding: 0 1.2rem;
+  }
+}
+
+/* Contenedor principal del buscador */
+.search-container {
+  /* Eliminamos margin-top, position: fixed, top, left, width: calc() y z-index */
+  width: 100%; /* Ajustado para que ocupe todo el ancho */
+  padding: 1rem 0;
+  background: rgba(0, 0, 0, 0.8);
+  position: sticky; /* Hacemos el buscador sticky */
+  top: 80px; /* Se pegará 80px debajo del tope de la ventana (la altura del menú fijo) */
+  z-index: 900; /* Un z-index menor que el menú pero mayor que el contenido */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+}
+
+/* Caja del buscador */
+.search-box {
+  width: 90%;
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  gap: 8px;
+}
+
+/* Input transparente con borde sutil */
+.search-input {
+  flex: 1;
+  padding: 0.8rem 1rem;
+  font-size: 1rem;
+  font-family: 'Work Sans', sans-serif;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 30px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.search-input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.search-input:focus {
+  border-color: #4CAF50;
+  background-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.3);
+}
+
+/* Botón de búsqueda visible */
+.search-button {
+  padding: 0 1.5rem;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-family: 'Work Sans', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.search-button:hover {
+  background-color: #45a049;
+  transform: scale(1.02);
+}
+
+.search-button svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Eliminamos .menu-container ya que el padding-top se aplica al body o main */
+/* Eliminamos animaciones si no se van a usar con el position: sticky */
+
+/* Adaptación para pantallas pequeñas */
+@media (max-width: 768px) {
+  .search-container {
+      padding: 0.8rem 0;
+  }
+  
+  .search-box {
+      width: 95%;
+  }
+  
+  .search-input {
+      font-size: 0.9rem;
+      padding: 0.6rem 0.8rem;
+  }
+  
+  .search-button {
+      padding: 0 1.2rem;
   }
 }

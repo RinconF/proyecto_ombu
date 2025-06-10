@@ -1,4 +1,4 @@
-{% load static %}
+{% comment %} {% load static %}
 {% load custom_tags %}
 <!DOCTYPE html>
 <html lang="es">
@@ -68,5 +68,309 @@
     </div>
 
     <script src="{% static 'js/mesero_principal.js' %}"></script> 
+</body>
+</html> {% endcomment %}
+
+
+
+{% load static %}
+{% load custom_tags %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mesero - Gastro Bar</title>
+    <link rel="stylesheet" href="{% static 'css/mesas_principal.css' %}" type="text/css" />
+    <style>
+        /* Estilos del menú superior */
+        .main-menu {
+            list-style-type: none;
+            margin: 0;
+            padding: 0 20px;
+            background-color: #000000;
+            overflow: visible;
+            position: fixed;
+            top: 0;
+            width: calc(100% - 40px);
+            z-index: 1000;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .menu-left {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .menu-left a {
+            color: #00FF00;
+            text-decoration: none;
+            font-size: 24px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .menu-center {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            flex-grow: 1;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .menu-center .admin-item {
+            margin: 0 10px;
+        }
+
+        .admin-item a {
+            color: #FFFFFF;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 10px 15px;
+            display: block;
+            transition: background-color 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .admin-item a:hover {
+            background-color: #333333;
+            border-radius: 4px;
+        }
+
+        /* Estilos del botón de perfil y menú desplegable */
+        .profile-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .profile-btn {
+            cursor: pointer;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            color: #FFFFFF;
+            background: none;
+            border: none;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .profile-btn:hover {
+            background-color: #333333;
+        }
+
+        .profile-btn svg {
+            width: 20px;
+            height: 20px;
+            margin-left: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .profile-btn.active svg {
+            transform: rotate(180deg);
+        }
+
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: #333333;
+            min-width: 180px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+            border-radius: 6px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            margin-top: 5px;
+        }
+
+        .dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown a {
+            color: #FFFFFF;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            transition: background-color 0.3s ease;
+            border-radius: 4px;
+            margin: 4px;
+        }
+
+        .dropdown a:hover {
+            background-color: #555555;
+        }
+
+        .dropdown a:first-child {
+            margin-top: 8px;
+        }
+
+        .dropdown a:last-child {
+            margin-bottom: 8px;
+            color: #ff6b6b;
+        }
+
+        .dropdown a:last-child:hover {
+            background-color: #ff6b6b;
+            color: #FFFFFF;
+        }
+
+        /* Separador en el dropdown */
+        .dropdown-separator {
+            height: 1px;
+            background-color: #555555;
+            margin: 4px 12px;
+        }
+
+        /* Ajuste para el contenido principal */
+        .main-content {
+            padding-top: 90px;
+        }
+
+        /* Overlay para cerrar el dropdown */
+        .dropdown-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 999;
+            display: none;
+        }
+
+        .dropdown-overlay.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Overlay para cerrar dropdown -->
+    <div id="dropdownOverlay" class="dropdown-overlay" onclick="closeDropdown()"></div>
+
+    <!-- Menú superior -->
+    <nav class="main-menu">
+        <div class="menu-left">
+            <a href="{% url 'mesero_principal' %}">ombú café</a>
+        </div>
+        
+        {% if user.is_authenticated %}
+        <ul class="menu-center">
+            <li class="admin-item"><a href="{% url 'mesero_principal' %}">Inicio</a></li>
+            <li class="admin-item"><a href="{% url 'bebidas_calientes' %}">Productos</a></li>
+            <li class="admin-item"><a href="{% url 'mesas' %}">Mesas</a></li>
+        </ul>
+        {% endif %}
+
+        <div class="profile-container">
+            <button class="profile-btn" id="profileBtn" onclick="toggleDropdown()">
+                Perfil
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6,9 12,15 18,9"></polyline>
+                </svg>
+            </button>
+            <div id="profileDropdown" class="dropdown">
+                <a href="#" onclick="verPerfil()">
+                    <svg style="width: 16px; height: 16px; margin-right: 8px; display: inline-block;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="6" r="4"></circle>
+                        <path d="M12 14c-3.3 0-6 2.7-6 6h12c0-3.3-2.7-6-6-6z"></path>
+                    </svg>
+                    Ver Perfil
+                </a>
+                <div class="dropdown-separator"></div>
+                <a href="{% url 'logout' %}">
+                    <svg style="width: 16px; height: 16px; margin-right: 8px; display: inline-block;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16,17 21,12 16,7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    Cerrar Sesión
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido principal -->
+    <div class="main-content">
+        <h1>Bienvenido, {{ user.first_name }}</h1>
+        <p>Aquí puedes gestionar productos y mesas.</p>
+    </div>
+
+    <!-- Script para manejar el menú desplegable -->
+    <script>
+        let dropdownOpen = false;
+
+        function toggleDropdown() {
+            const dropdown = document.getElementById("profileDropdown");
+            const profileBtn = document.getElementById("profileBtn");
+            const overlay = document.getElementById("dropdownOverlay");
+            
+            if (dropdownOpen) {
+                closeDropdown();
+            } else {
+                openDropdown();
+            }
+        }
+
+        function openDropdown() {
+            const dropdown = document.getElementById("profileDropdown");
+            const profileBtn = document.getElementById("profileBtn");
+            const overlay = document.getElementById("dropdownOverlay");
+            
+            dropdown.classList.add("show");
+            profileBtn.classList.add("active");
+            overlay.classList.add("show");
+            dropdownOpen = true;
+        }
+
+        function closeDropdown() {
+            const dropdown = document.getElementById("profileDropdown");
+            const profileBtn = document.getElementById("profileBtn");
+            const overlay = document.getElementById("dropdownOverlay");
+            
+            dropdown.classList.remove("show");
+            profileBtn.classList.remove("active");
+            overlay.classList.remove("show");
+            dropdownOpen = false;
+        }
+
+        function verPerfil() {
+            // Por ahora solo mostramos un alert, puedes cambiar esto después
+            alert('Función Ver Perfil - Aquí puedes agregar la lógica para mostrar el perfil');
+            closeDropdown();
+            
+            // Opciones para implementar después:
+            // 1. Redirigir a una página de perfil: window.location.href = "/perfil/";
+            // 2. Mostrar un modal con información del usuario
+            // 3. Redirigir a una URL específica que tengas configurada
+        }
+
+        // Cerrar dropdown con tecla Escape
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && dropdownOpen) {
+                closeDropdown();
+            }
+        });
+
+        // Prevenir que el dropdown se cierre al hacer clic dentro de él
+        document.getElementById("profileDropdown").addEventListener('click', function(event) {
+            event.stopPropagation();
+        });
+    </script>
+    <script src="{% static 'js/mesero_principal.js' %}"></script>
 </body>
 </html>

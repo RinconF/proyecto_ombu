@@ -55,6 +55,8 @@ document.addEventListener("DOMContentLoaded", () => {
     overlay.className = 'cart-overlay';
     document.body.appendChild(overlay);
 
+    const cartIconContainer = document.querySelector('.cart-icon-container');
+
     function updateModalAvailableQuantity() {
         console.log("updateModalAvailableQuantity called");
         if (currentProductData.card && modalAvailableQuantity) {
@@ -100,6 +102,10 @@ document.addEventListener("DOMContentLoaded", () => {
         cartContainer.classList.remove('open');
         overlay.style.display = 'none';
         cartOpen = false;
+        // MUESTRA EL ÍCONO DEL CARRITO cuando el menú se cierra
+        if (cartIconContainer) { // Asegura que el elemento exista antes de intentar modificarlo
+            cartIconContainer.classList.remove('cart-icon-hidden');
+        }
     }
 
     const menuLinks = document.querySelectorAll('.main-nav a');
@@ -299,6 +305,10 @@ document.addEventListener("DOMContentLoaded", () => {
         cartContainer.classList.add('open');
         overlay.style.display = 'block';
         cartOpen = true;
+        // OCULTA EL ÍCONO DEL CARRITO cuando el menú se abre
+        if (cartIconContainer) { // Asegura que el elemento exista antes de intentar modificarlo
+            cartIconContainer.classList.add('cart-icon-hidden');
+        }
     });
 
     closeCartBtn.addEventListener('click', closeCart);
@@ -350,6 +360,10 @@ document.addEventListener("DOMContentLoaded", () => {
             cartContainer.classList.add('open');
             overlay.style.display = 'block';
             cartOpen = true;
+            // OCULTA EL ÍCONO DEL CARRITO cuando el menú se abre al añadir desde el modal
+            if (cartIconContainer) {
+                cartIconContainer.classList.add('cart-icon-hidden');
+            }
         }, 300);
     });
 
@@ -370,13 +384,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // --- PREPARAR DATOS PARA ENVIAR AL SERVIDOR ---
         // ¡IMPORTANTE! Si tu backend espera un `medio_pago` y no lo proporcionas aquí,
-        // asegúrate de que tenga un valor por defecto o que sea opcional.
-        // Por ahora, lo dejaré con un valor fijo 'No especificado' o puedes eliminarlo si no es necesario.
         const orderData = {
             mesa_id: mesaIdActiva,
             mesa_numero: mesaNumeroActivo, 
             total: totalCarrito, 
-            medio_pago: "No especificado", // O elimínalo si tu backend no lo requiere
+            medio_pago: "No especificado", 
             items: cart.map(item => ({
                 producto_id: item.id, 
                 cantidad: item.quantity, 
@@ -390,7 +402,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    // 'X-CSRFToken': getCookie('csrftoken'), // Descomentar si usas CSRF
+                    // 'X-CSRFToken': getCookie('csrftoken'), 
                 },
                 body: JSON.stringify(orderData)
             });

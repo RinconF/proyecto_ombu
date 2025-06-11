@@ -1,39 +1,63 @@
-# from django.contrib import admin
+# admin_personalizado/admin.py
+
+# Importaciones existentes
 from django.contrib.admin import AdminSite
 from django.utils.translation import gettext_lazy as _
-from django.urls import path  # ¡NUEVA importación!
-# from inicio import views as inicio_views  
+from django.urls import path
 from django.contrib.admin.models import LogEntry
 from django.utils.html import format_html
 import json
-from django.shortcuts import render
+from django.shortcuts import render # Puede que no sea estrictamente necesario aquí si solo modificas el contexto
 from django.template.response import TemplateResponse
+
+# --- ¡NUEVAS IMPORTACIONES NECESARIAS! ---
+from django.contrib.auth import get_user_model # Para obtener el modelo de usuario activo
+from inicio.models import Producto, Usuario # Asegúrate de que esta ruta sea correcta para tus modelos
 
 class CustomAdminSite(AdminSite):
     site_header = _("OMBÜ Café")
     site_title = _("Administración de OMBÜ")
     index_title = _("Sitio administrativo")
-    # Asegúrate de que index_template NO esté definido aquí si quieres que use
-    # admin_personalizado/templates/admin/index.html (por el orden en INSTALLED_APPS)
-    # Si quieres forzarlo, podrías poner: index_template = 'admin/index.html'
 
     def each_context(self, request):
         context = super().each_context(request)
-        context['extra_css'] = 'admin_personalizado/admin.css' # Si lo necesitas
+        context['extra_css'] = 'admin_personalizado/admin.css'
         return context
 
     # MÉTODO INDEX REVISADO PARA MODIFICAR EL CONTEXTO CORRECTAMENTE
     def index(self, request, extra_context=None):
         # 1. Obtiene la TemplateResponse estándar del método index del padre.
-        #    Esta respuesta ya contendrá el contexto base del admin (app_list, user, etc.).
         response = super().index(request, extra_context)
 
-        # 2. Asegúrate de que la respuesta es una TemplateResponse (no un Redirect, por ejemplo).
+        # 2. Asegúrate de que la respuesta es una TemplateResponse.
         if not isinstance(response, TemplateResponse):
-            return response # Si no es TemplateResponse, devuelve la respuesta original.
+            return response
 
         # 3. Accede al diccionario de contexto de la respuesta para modificarlo.
         context_data = response.context_data
+
+        # --- ¡LÓGICA PARA OBTENER Y AÑADIR LOS CONTADORES! ---
+        # Cantidad de Productos
+        try:
+            cantidad_productos = Producto.objects.count()
+            print(f"DEBUG (AdminSite): Cantidad de Productos obtenidos: {cantidad_productos}")
+        except Exception as e:
+            cantidad_productos = f"Error al obtener productos: {e}"
+            print(f"ERROR (AdminSite - Productos): {cantidad_productos}") # Mensaje de error más claro
+
+        # Cantidad de Usuarios
+        User = get_user_model() # Obtiene el modelo de usuario configurado (inicio.Usuario en tu caso)
+        try:
+            cantidad_usuarios = User.objects.count()
+            print(f"DEBUG (AdminSite): Cantidad de Usuarios obtenidos: {cantidad_usuarios}")
+        except Exception as e:
+            cantidad_usuarios = f"Error al obtener usuarios: {e}"
+            print(f"ERROR (AdminSite - Usuarios): {cantidad_usuarios}") # Mensaje de error más claro
+
+        # Añade los contadores al contexto_data
+        context_data['cantidad_productos'] = cantidad_productos
+        context_data['cantidad_usuarios'] = cantidad_usuarios
+        # --- FIN DE LA LÓGICA DE CONTADORES ---
 
         # 4. Agrega tu lógica para obtener y formatear las actividades recientes (tal como la tenías).
         recent_activities = LogEntry.objects.order_by('-action_time')[:10]
@@ -101,7 +125,7 @@ class CustomAdminSite(AdminSite):
         # 5. Agrega las actividades formateadas y tu variable de prueba al contexto_data.
         context_data['actividades_recientes'] = formatted_activities
         context_data['variable_prueba_simple'] = "¡Hola desde AdminSite MODIFICADO y PASADO!"
-        context_data['title'] = 'Dashboard Administrativo OMBÚ' # Para el breadcrumbs
+        context_data['title'] = 'Dashboard-OMBÚ' # Para el breadcrumbs
 
         # 6. Tus impresiones de depuración en la consola.
         print(f"DEBUG en admin.py (context_data modificada): actividades_recientes = {context_data['actividades_recientes']}")
@@ -110,22 +134,6 @@ class CustomAdminSite(AdminSite):
         # 7. Devuelve la TemplateResponse con el contexto modificado.
         return response
 
-custom_admin_site = CustomAdminSite(name='sitio_admin_inicio')
-
-
-    # ¡NUEVO MÉTODO! Aquí es donde añades tus URLs personalizadas al admin.
-    # def get_urls(self):
-    #     urls = super().get_urls()  # Obtiene las URLs estándar del admin (para tus modelos registrados)
-    #     custom_urls = [
-
-    #         path('inicio/dashboard/', self.admin_view(inicio_views.dashboard), name='inicio_dashboard'),
-
-    #     ]
-    #     return custom_urls + urls  
-
-# registrarán los modelos con esta CustomAdminSite.
-# admin.site = CustomAdminSite()
-
-# admin.site.site_header = _("OMBÜ Café")
-# admin.site.site_title = _("Administración de OMBÜ")
-# admin.site.index_title = _("Sitio administrativo")
+# Instancia de tu AdminSite personalizada
+# Asegúrate de que este 'name' coincida con lo que usas en urls.py si lo has cambiado.
+custom_admin_site = CustomAdminSite(name='customadmin') # Cambié a 'customadmin' para mayor claridad, verifica si tu urls.py usa 'sitio_admin_inicio'

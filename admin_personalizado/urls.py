@@ -6,6 +6,7 @@ from .views import descargar_manual
 app_name = 'admin_panel'
 
 urlpatterns = [
+    path('', views.custom_admin_index, name='index'),
     path('perfil/', views.perfil_view, name='perfil'),
 
     path('descargar-manual/', descargar_manual, name='descargar_manual'),

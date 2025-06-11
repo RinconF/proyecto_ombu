@@ -1,6 +1,5 @@
 {# admin_personalizado/templates/admin/index.html #}
 {% extends "admin/base_site.html" %}
-<h1> HOLA SOY UN COMENTARIO </h1>
 {% load static i18n %}
 
 {% block extrastyle %}
@@ -34,9 +33,24 @@
     <div id="content-main">
         <div class="row-index">
             <div class="dashboard-main-area">
-                <h1 class="dashboard-title">Bienvenido al Panel de Administracion</h1>
+                <h4 class="dashboard-title">Bienvenido al Panel de Administracion</h4>
                 <p class="dashboard-intro-text">Aquí puedes ver un resumen de las operaciones administrativas recientes.</p>
 
+
+                {# ESTE ES EL CONTENEDOR PARA LAS ESTADÍSTICAS #}
+                <div class="dashboard-stats-container">
+                    <div class="stat-card">
+                        <h3>Cantidad de Productos</h3>
+                        <p>{{ cantidad_productos }}</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Cantidad de Usuarios</h3>
+                        <p>{{ cantidad_usuarios }}</p>
+                    </div>
+                </div>
+
+                
+                {# FIN DEL CONTENEDOR DE ESTADÍSTICAS #}
                 {# TU CÓDIGO DE PERSONALIZACIÓN DEL FONDO VA AQUÍ #}
                 {% comment %} <div class="module">
                     <h2>{% translate 'Personalización del Fondo' %}</h2>
@@ -82,7 +96,7 @@
 
             <div class="dashboard-sidebar">
                 <div class="dashboard-recent-actions">
-                    <h2 class="dashboard-sidebar-title">Actividad Reciente</h2>
+                    <h5 class="dashboard-sidebar-title">Actividad Reciente</h5>
                     <ul class="dashboard-actions-list">
                         {% for actividad in actividades_recientes %}
                         <li class="dashboard-action-item">

@@ -10,7 +10,9 @@ from django.conf import settings
 import datetime
 
 # Si el modelo 'Perfil' está en 'inicio/models.py', impórtalo así:
-from inicio.models import Perfil
+from inicio.models import Perfil, ActividadReciente, Producto
+from django.contrib.auth import get_user_model
+from django.contrib.admin.sites import AdminSite
 
 
 
@@ -146,3 +148,57 @@ def eliminar_backup(request, nombre):
         messages.error(request, f"Error al eliminar backup: {str(e)}")
     
     return redirect('admin_panel:lista_backups')
+
+
+
+
+
+
+
+
+def custom_admin_index(request, extra_context=None):
+    """
+    Vista personalizada para el índice del panel de administración.
+    Muestra la cantidad de productos, usuarios y actividades recientes.
+    """
+    # 1. Obtener conteo de productos
+    try:
+        cantidad_productos = Producto.objects.count()
+        print(f"DEBUG: Cantidad de Productos obtenidos: {cantidad_productos}") # <--- ¡Añade esta línea!
+    except Exception as e:
+        cantidad_productos = f"Error al obtener productos: {e}" # Mensaje de error más descriptivo
+        print(f"ERROR: {cantidad_productos}") # <--- ¡Añade esta línea para ver el error!
+
+    # 2. Obtener conteo de usuarios
+    User = get_user_model()
+    try:
+        cantidad_usuarios = User.objects.count()
+        print(f"DEBUG: Cantidad de Usuarios obtenidos: {cantidad_usuarios}") # <--- ¡Añade esta línea!
+    except Exception as e:
+        cantidad_usuarios = f"Error al obtener usuarios: {e}"
+        print(f"ERROR: {cantidad_usuarios}") # <--- ¡Añade esta línea para ver el error!
+
+    # 3. Obtener actividades recientes (esto ya funciona, según tu consola)
+    try:
+        actividades_recientes_db = ActividadReciente.objects.order_by('-fecha_hora')[:10]
+        actividades_recientes_template = [
+            {'accion': act.accion, 'fecha_hora': act.fecha_hora} for act in actividades_recientes_db
+        ]
+        print(f"DEBUG: Cantidad de Actividades Recientes obtenidas: {len(actividades_recientes_template)}") # <--- ¡Añade esta línea!
+    except Exception as e:
+        actividades_recientes_template = []
+        print(f"ERROR al cargar actividades recientes: {e}")
+
+    # Contexto para la plantilla
+    context = {
+        'cantidad_productos': cantidad_productos,
+        'cantidad_usuarios': cantidad_usuarios,
+        'actividades_recientes': actividades_recientes_template,
+    }
+
+    # Combina el contexto personalizado con cualquier contexto extra que Django pueda pasar
+    if extra_context:
+        context.update(extra_context)
+
+    # Renderiza tu template index.html personalizado
+    return render(request, 'admin/index.html', context)

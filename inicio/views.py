@@ -125,6 +125,19 @@ def mesero_principal(request):
     """Panel principal para usuarios con rol 'Mesero'"""
     return render(request, 'pages/menu_mesero/mesero_principal.html') # Renderiza el nuevo HTM
 
+# VISTA DE PERFIL PARA MESEROS (SOLO LECTURA)
+@login_required
+@user_passes_test(lambda u: u.rol == 'mesero') # SOLO permite a usuarios con rol 'mesero'
+def ver_perfil_mesero(request):
+    """Muestra el perfil del mesero logueado (solo lectura)."""
+    # El usuario logueado ya está disponible en request.user
+    context = {
+        'usuario': request.user, # Pasamos el objeto usuario directamente
+        'title': 'Mi Perfil de Mesero'
+    }
+    # Asegúrate de que esta ruta sea correcta para tu plantilla perfil_mesero.html
+    return render(request, 'pages/menu_mesero/perfil_mesero.html', context)
+
 def admin_login_page(request):
     return render(request, 'pages/Admin/login.html')
 

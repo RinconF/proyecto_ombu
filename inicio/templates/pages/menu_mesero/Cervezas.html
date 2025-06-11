@@ -50,7 +50,7 @@
                     </svg>
                 </button>
                 <div id="profileDropdown" class="dropdown">
-                    <a href="#" onclick="verPerfil()">
+                    <a href="{% url 'perfil_mesero' %}"> 
                         <svg style="width: 16px; height: 16px; margin-right: 8px; display: inline-block;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="6" r="4"></circle>
                             <path d="M12 14c-3.3 0-6 2.7-6 6h12c0-3.3-2.7-6-6-6z"></path>
@@ -219,6 +219,58 @@
               <p>&copy; 2025 Ombú - Todos los derechos reservados</p>
             </div>
           </footer>
+
+    <script>
+        let dropdownOpen = false;
+
+        function toggleDropdown() {
+            const dropdown = document.getElementById("profileDropdown");
+            const profileBtn = document.getElementById("profileBtn");
+            const overlay = document.getElementById("dropdownOverlay");
+            
+            if (dropdownOpen) {
+                closeDropdown();
+            } else {
+                openDropdown();
+            }
+        }
+
+        function openDropdown() {
+            const dropdown = document.getElementById("profileDropdown");
+            const profileBtn = document.getElementById("profileBtn");
+            const overlay = document.getElementById("dropdownOverlay");
+            
+            dropdown.classList.add("show");
+            profileBtn.classList.add("active");
+            overlay.classList.add("show");
+            dropdownOpen = true;
+        }
+
+        function closeDropdown() {
+            const dropdown = document.getElementById("profileDropdown");
+            const profileBtn = document.getElementById("profileBtn");
+            const overlay = document.getElementById("dropdownOverlay");
+            
+            dropdown.classList.remove("show");
+            profileBtn.classList.remove("active");
+            overlay.classList.remove("show");
+            dropdownOpen = false;
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && dropdownOpen) {
+                closeDropdown();
+            }
+        });
+
+        document.addEventListener('click', function(event) {
+            const profileContainer = document.querySelector('.profile-container');
+            if (dropdownOpen && !profileContainer.contains(event.target)) {
+                closeDropdown();
+            }
+        });
+
+    </script>
 
     <script src="{% static '/js/script_menu.js' %}"></script>
     <script src="{% static '/js/buscador.js' %}"></script>

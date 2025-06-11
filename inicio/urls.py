@@ -72,6 +72,7 @@ urlpatterns = [
     
     # NUEVA URL PARA EL PANEL DE MESEROS
     path('mesero_principal/', views.mesero_principal, name='mesero_principal'),
+    path('mesero/perfil/', views.ver_perfil_mesero, name='perfil_mesero'),
     
     
     # # RECUPERAR CONTRASEÑA

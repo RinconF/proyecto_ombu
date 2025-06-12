@@ -48,16 +48,6 @@ main {
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-.section {
-    width: 100%;
-    height: 100%;
-    padding-top: 20px;
-    background-color: rgba(0, 0, 0, 0.3);    
-    border-radius: 15px;
-    padding: 0.9rem;    
-
-}
-
  /* ESTILOS PARA EL CONTENEDOR DE LAS CARTAS  (DONDE VAN LOS PRODUCTOS ) */
 
 
@@ -173,6 +163,10 @@ main {
   align-items: center;
   width: 100%;
   margin-top: auto;
+  /* Añadido para que el texto disponible se alinee verticalmente */
+  flex-wrap: wrap; 
+  align-items: baseline;
+  gap: 5px; /* Espacio entre los elementos del footer */
 }
 
 .footer-card > button {
@@ -196,6 +190,18 @@ main {
   font-size: 18px;
   font-weight: 800;
   color: #20AB47;
+}
+
+/*estilos para el disponible y no disponible*/
+.product-available-quantity {
+  font-size: 13px; /* Tamaño de fuente más pequeño */
+  color: #999999; /* Un color más suave para el texto */
+  font-weight: normal; /* No tan negrita como el precio */
+  margin-left: 10px; /* Un poco de margen a la izquierda para separarlo del precio */
+  /* Ajustes para que se adapte mejor en línea */
+  white-space: nowrap; /* Evita que el texto se rompa en varias líneas si es corto */
+  flex-grow: 1; /* Permite que ocupe espacio si es necesario */
+  text-align: right; /* Alinea el texto a la derecha dentro de su espacio */
 }
 
 
@@ -648,7 +654,7 @@ main {
 }
 
 
-/* Menú desplegable */
+/* Menú desplegable 
 .menu-container {
   display: flex;
   justify-content: center;
@@ -657,7 +663,17 @@ main {
   transition: all 0.5s ease-in-out; 
 }
 
-/* Estilos  para escritorio */
+.section {
+    width: 100%;
+    height: 100%;
+    padding-top: 20px;
+    background-color: rgba(0, 0, 0, 0.3);    
+    border-radius: 15px;
+    padding: 0.9rem;    
+
+}
+
+/* Estilos  para escritorio 
 @media (min-width: 769px) {
   .menu-fixed {
       position: fixed;
@@ -675,7 +691,7 @@ main {
   }
 }
 
- /*estilos para mobil */
+ /*estilos para mobil 
  
 @media (max-width: 768px) {
   .menu-container {
@@ -689,7 +705,7 @@ main {
 
 
 
- /* Estilos menu desplegable */
+  /* Estilos menu desplegable  
 .menu {
   padding: 0.5rem;
   background-color: #000000;
@@ -702,7 +718,7 @@ main {
 }
 
 
-/* Estilos menú hamburguesa para mobil */
+Estilos menú hamburguesa para mobil 
 
 .hamburger-btn {
   display: none;
@@ -724,7 +740,7 @@ main {
   transform: scale(1.05); 
 }
 
- /* iconos dentro del menu hamburguesa (mobil */
+ iconos dentro del menu hamburguesa (mobil 
 
 .hamburger-btn svg {
   width: 30px;
@@ -734,7 +750,7 @@ main {
 
 
 
- /* Estilos menu desplegable ( despliegue caja ) */
+  Estilos menu desplegable ( despliegue caja ) 
 
 .link {
   display: inline-flex;
@@ -769,7 +785,7 @@ main {
   background-color: #f00000;
 }
 
-/* BORDE ALREDEDOR DE LAS CAJAS  (MENÚ DEPLEGABLE)*/
+ BORDE ALREDEDOR DE LAS CAJAS  (MENÚ DEPLEGABLE)
 
 .link:hover,
 .link:focus {
@@ -795,7 +811,7 @@ main {
 }
 
 
- /* ICONOS  DEL MENU DESPLEGABLE */
+  ICONOS  DEL MENU DESPLEGABLE 
 
 .link-icon {
   width: 28px;
@@ -808,7 +824,7 @@ main {
   z-index: 2;
 }
 
-  /* ESTILOS ICONOS VECTORIALES (MENU DESPLEGABLE) */
+   ESTILOS ICONOS VECTORIALES (MENU DESPLEGABLE) 
 
 .link-icon svg {
   width: 28px;
@@ -816,7 +832,7 @@ main {
   fill: #ffffff;
 }
 
-  /* TITULOS DE LOS MENUS DEPLEGABLES (CIGARRILLOS, BEBIDAS FRIAS ETC.. ) */
+   TITULOS DE LOS MENUS DEPLEGABLES (CIGARRILLOS, BEBIDAS FRIAS ETC.. ) 
 
 .link-title {
   transform: translateX(100%);
@@ -829,6 +845,497 @@ main {
   flex-direction: column;
   line-height: 1.2;
 }
+
+*/
+
+
+
+/* ===== BARRA DE NAVEGACIÓN SUPERIOR FIJA ===== */
+
+/* Estilos del menú superior */
+.main-menu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0 20px;
+    background-color: #000000;
+    overflow: visible;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    left: 0; 
+    right: 0;
+    z-index: 1000;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    
+}
+
+.menu-left {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.menu-left a {
+    color: #00FF00;
+    text-decoration: none;
+    font-size: 24px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.menu-center {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-grow: 1;
+    justify-content: left;
+    align-items: center;
+}
+
+.menu-center .admin-item {
+    margin: 0 10px;
+}
+
+.admin-item a {
+    color: #FFFFFF;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 10px 15px;
+    display: block;
+    transition: background-color 0.3s ease;
+    white-space: nowrap;
+}
+
+.admin-item a:hover {
+    background-color: #333333;
+    border-radius: 4px;
+}
+
+/* Estilos del botón de perfil y menú desplegable */
+.profile-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.profile-btn {
+    cursor: pointer;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    color: #FFFFFF;
+    background: none;
+    border: none;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    border-radius: 4px;
+}
+
+.profile-btn:hover {
+    background-color: #333333;
+}
+
+.profile-btn svg {
+    width: 20px;
+    height: 20px;
+    margin-left: 8px;
+    transition: transform 0.3s ease;
+}
+
+.profile-btn.active svg {
+    transform: rotate(180deg);
+}
+
+.dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #333333;
+    min-width: 180px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    z-index: 1001;
+    border-radius: 6px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    margin-top: 5px;
+}
+
+.dropdown.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown a {
+    color: #FFFFFF;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s ease;
+    border-radius: 4px;
+    margin: 4px;
+}
+
+.dropdown a:hover {
+    background-color: #555555;
+}
+
+.dropdown a:first-child {
+    margin-top: 8px;
+}
+
+.dropdown a:last-child {
+    margin-bottom: 8px;
+    color: #ff6b6b;
+}
+
+.dropdown a:last-child:hover {
+    background-color: #ff6b6b;
+    color: #FFFFFF;
+}
+
+/* Separador en el dropdown */
+.dropdown-separator {
+    height: 1px;
+    background-color: #555555;
+    margin: 4px 12px;
+}
+
+/* Overlay para cerrar el dropdown */
+.dropdown-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    display: none;
+}
+
+.dropdown-overlay.show {
+    display: block;
+}
+
+/* Ajuste para el contenido principal */
+.main-content {
+    padding-top: 90px;
+}
+
+/* ===== MENÚ DESPLEGABLE EXISTENTE ===== */
+
+/* Menú desplegable */
+.menu-container {
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  padding: 20px;
+  transition: all 0.5s ease-in-out;
+  position: relative;
+  z-index: 1000;
+}
+
+.section {
+    width: 100%;
+    height: 100%;
+    padding-top: 20px;
+    background-color: rgba(0, 0, 0, 0.3);    
+    border-radius: 15px;
+    padding: 0.9rem;    
+}
+
+/* Estilos para escritorio */
+@media (min-width: 769px) {
+  .menu-container {
+      position: fixed;
+      top: 100px; /* Ajustado para que aparezca debajo de la barra de navegación */
+      left: 50%;
+      transform: translateX(-50%);
+      width: fit-content;
+      transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+  }
+
+  .menu-container.menu-hidden {
+      opacity: 0;
+      transform: translateX(-50%) translateY(-20px);
+      pointer-events: none;
+  }
+}
+
+/* estilos para móvil */
+@media (max-width: 768px) {
+  .menu-container {
+      position: relative !important;
+      display: flex !important;
+      justify-content: center !important;
+      padding-top: 100px !important; /* Ajustado para que aparezca debajo de la barra de navegación en móvil */
+  }
+}
+
+/* Estilos menu desplegable */
+.menu {
+  padding: 0.5rem;
+  background-color: #000000;
+  display: flex;
+  justify-content: center;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px 0 rgba(255, 0, 0, 0.075);
+  width: fit-content;
+  max-width: 100%;
+}
+
+/* Estilos menú hamburguesa para móvil */
+.hamburger-btn {
+  display: none;
+  background: rgb(66, 167, 46);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px; 
+  cursor: pointer;
+  position: fixed;
+  top: 15px;
+  left: 5%;
+  z-index: 1100; 
+  transition: transform 0.2s ease; 
+}
+
+.hamburger-btn:hover,
+.hamburger-btn:focus {
+  transform: scale(1.05); 
+}
+
+/* iconos dentro del menu hamburguesa (móvil) */
+.hamburger-btn svg {
+  width: 30px;
+  height: 30px;
+}
+
+/* Estilos menu desplegable (despliegue caja) */
+.link {
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 70px;
+  height: 60px;
+  border-radius: 8px;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  transform-origin: center left;
+  transition: width 0.2s ease-in;
+  text-decoration: none;
+  color: #fff;
+  transition: all 0.2s ease-in-out; 
+  will-change: width; 
+}
+
+.link:before {
+  position: absolute;
+  z-index: -1;
+  content: "";
+  display: block;
+  border-radius: 8px;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  transform: translateX(100%);
+  transition: transform 0.1s ease-in;
+  transform-origin: center right;
+  background-color: #f00000;
+}
+
+/* BORDE ALREDEDOR DE LAS CAJAS (MENÚ DESPLEGABLE) */
+.link:hover,
+.link:focus {
+  outline: 2px solid #f00000;
+  width: 130px;
+  outline-offset: 2px;
+}
+
+@media (max-width: 600px) {
+  .link:hover,
+  .link:focus {
+    width: 100%;
+  }
+}
+
+.link:hover:before,
+.link:focus:before,
+.link:hover .link-title,
+.link:focus .link-title {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* ICONOS DEL MENU DESPLEGABLE */
+.link-icon {
+  width: 28px;
+  height: 28px;
+  display: block;
+  flex-shrink: 0;
+  left: 18px;
+  position: relative;
+  margin-right: 10px;
+  z-index: 2;
+}
+
+/* ESTILOS ICONOS VECTORIALES (MENU DESPLEGABLE) */
+.link-icon svg {
+  width: 28px;
+  height: 28px;
+  fill: #ffffff;
+}
+
+/* TITULOS DE LOS MENUS DESPLEGABLES (CIGARRILLOS, BEBIDAS FRIAS ETC..) */
+.link-title {
+  transform: translateX(100%);
+  opacity: 0;
+  transition: transform 0.2s ease-in, opacity 0.2s ease-in;
+  transform-origin: center right;
+  display: flex;
+  text-align: center;
+  width: 80%;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+/* ESTILOS PARA MÓVIL (MENU DESPLEGABLE) */
+@media (max-width: 600px) {
+    .hamburger-btn {
+        display: block;
+    }
+
+    .menu-container {
+        padding: 10px;
+        position: relative;
+    }
+
+    .menu {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        flex-direction: column;
+        width: 250px;
+        height: 100vh;
+        transition: left 0.4s ease;
+        border-radius: 0;
+        padding: 70px 15px 20px 10px;
+        justify-content: flex-start;
+        z-index: 999;
+        max-width: 90%;
+        margin: 0 auto;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
+    .menu.active {
+        left: 0;
+    }
+
+    .link {
+        width: 100%;
+        margin-bottom: 15px;
+        height: 50px;
+    }
+
+    .link-icon {
+        left: 15px;
+    }
+
+    .link-title {
+        transform: translateX(0);
+        opacity: 1;
+        text-indent: 35px;
+        text-align: left;
+    }
+}
+
+/* Clase para evitar el scroll del cuerpo cuando el menú móvil está abierto */
+body.no-scroll {
+    overflow: hidden;
+}
+
+/* Estilos para el menú desplegable de productos */
+.dropdown-parent {
+    position: relative;
+}
+
+.dropdown-trigger {
+    display: flex;
+    align-items: center;
+}
+
+.products-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #333333;
+    min-width: 200px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    z-index: 1001;
+    border-radius: 6px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    margin-top: 5px;
+    padding: 8px 0;
+}
+
+.dropdown-parent:hover .products-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.products-dropdown a {
+    color: #FFFFFF;
+    padding: 10px 20px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s ease;
+    font-size: 16px;
+    white-space: nowrap;
+}
+
+.products-dropdown a:hover {
+    background-color: #555555;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
  /* ESTILOS PARA MOBIL  ( MENU DESPLEGABLE ) */
 
@@ -1081,6 +1588,21 @@ main {
                 font-size: 1.5rem;
             }
         }
+
+@media (max-width: 400px) {
+  .footer-card {
+    flex-direction: column; /* Apila los elementos en pantallas muy pequeñas */
+    align-items: center;
+    gap: 10px;
+  }
+  .product-available-quantity {
+    text-align: center; /* Centra el texto cuando está apilado */
+    margin-left: 0;
+  }
+  .footer-card > span { /* Ajusta el tamaño del precio si es necesario en móviles */
+    font-size: 16px;
+  }
+}
 
 
 

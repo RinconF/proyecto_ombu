@@ -52,25 +52,51 @@ const pedidoBody = document.getElementById('pedido-body');
 const totalPedidoElement = document.getElementById('total-pedido');
 
 let mesaActivaId = localStorage.getItem('mesaActivaId') || null;
+let mesaActivaNumero = localStorage.getItem('mesaActivaNumero') || null;
+
+// Cuando el DOM esté completamente cargado, intenta restaurar el número de mesa
+document.addEventListener('DOMContentLoaded', () => {
+    if (mesaActivaNumero) {
+        mesaSeleccionadaText.textContent = mesaActivaNumero;
+        // Opcional: Si quieres que el panel de pedido se muestre automáticamente al recargar
+        // if (mesaActivaId) {
+        //     pedidoSection.style.display = 'block';
+        //     cargarPedido(mesaActivaId);
+        // }
+    }
+    actualizarEstadoMesas(); // Asegúrate de que las mesas tengan sus contadores y estilos
+});
 
 mesas.forEach(mesa => {
     mesa.addEventListener('click', function() {
-        const mesaId = mesa.getAttribute('data-mesa-id');  // Obtener ID de la mesa seleccionada
-        mesaActivaId = mesaId;
-        localStorage.setItem('mesaActivaId', mesaId); // Guardar el ID de la mesa activa
+        const mesaId = mesa.getAttribute('data-mesa-id'); // Obtener ID de la mesa seleccionada
+        const mesaNumero = mesa.getAttribute('data-numero-mesa'); // <-- OBTENER EL NÚMERO DE LA MESA
 
-        
-        // Si la mesa seleccionada ya está abierta, ocultar el pedido
-        if (pedidoSection.style.display === 'block' && mesaSeleccionadaText.textContent === mesaId) {
+        // Si la mesa clickeada es la MISMA que la activa actualmente Y el panel está abierto, entonces haz el "toggle" (cerrar)
+        if (mesaActivaId === mesaId && pedidoSection.style.display === 'block') {
+            // Es la misma mesa y el panel está abierto, así que lo cerramos
             pedidoSection.style.display = 'none';
+            mesaActivaId = null;
+            mesaActivaNumero = null;
+            localStorage.removeItem('mesaActivaId');
+            localStorage.removeItem('mesaActivaNumero');
+            mesaSeleccionadaText.textContent = '';
+            document.querySelectorAll('.mesa').forEach(m => m.classList.remove('active'));
         } else {
-           // Mostrar el pedido para la mesa seleccionada
-           mesaSeleccionadaText.textContent = mesaId;
-           pedidoSection.style.display = 'block';
-           cargarPedido(mesaId); // Actualizar la vista del pedido para la mesa actual
+            // Es una mesa diferente O la misma mesa y el panel está cerrado, así que lo abrimos/actualizamos
+            mesaActivaId = mesaId;
+            mesaActivaNumero = mesaNumero;
+            localStorage.setItem('mesaActivaId', mesaId);
+            localStorage.setItem('mesaActivaNumero', mesaNumero);
+
+            document.querySelectorAll('.mesa').forEach(m => m.classList.remove('active'));
+            mesa.classList.add('active');
+
+            mesaSeleccionadaText.textContent = mesaNumero;
+            pedidoSection.style.display = 'block'; // Asegura que el panel esté visible
+            cargarPedido(mesaId); // Cargar el pedido de la nueva mesa
         }
     });
-// Seleccionar una mesa
 });
 
 
@@ -120,7 +146,7 @@ if (agregarProductoBtn) {
 
     agregarProductoBtn.addEventListener('click', function() {
         if (mesaActivaId) {
-            window.location.href = `${bebidaCalienteUrl}?mesa=${mesaActivaId}`;
+            window.location.href = `${bebidaCalienteUrl}?mesa_id=${mesaActivaId}&mesa_numero=${mesaActivaNumero}`;
         } else {
             alert("Por favor, selecciona una mesa primero.");
         }
@@ -227,6 +253,15 @@ function finalizarPedido(mesaId, medioPago) {
         localStorage.removeItem(clavePedidoMesa);
         cargarPedido(mesaId);
         actualizarEstadoMesas();
+        // Cierra el panel de pedido después de finalizar
+        pedidoSection.style.display = 'none';
+        mesaActivaId = null;
+        mesaActivaNumero = null;
+        localStorage.removeItem('mesaActivaId');
+        localStorage.removeItem('mesaActivaNumero');
+        mesaSeleccionadaText.textContent = '';
+        document.querySelectorAll('.mesa').forEach(m => m.classList.remove('active'));
+
     })
     .catch(error => {
         console.error('Error al finalizar el pedido:', error);

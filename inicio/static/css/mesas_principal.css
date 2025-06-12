@@ -13,6 +13,181 @@ body {
     background-position: center center;
 }
 
+/* Estilos del menú superior */
+.main-menu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0 20px;
+    background-color: #000000;
+    overflow: visible;
+    position: fixed;
+    top: 0;
+    width: calc(100% - 40px);
+    z-index: 1000;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.menu-left {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.menu-left a {
+    color: #00FF00;
+    text-decoration: none;
+    font-size: 24px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.menu-center {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-grow: 1;
+    justify-content: left;
+    align-items: center;
+}
+
+.menu-center .admin-item {
+    margin: 0 10px;
+}
+
+.admin-item a {
+    color: #FFFFFF;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 10px 15px;
+    display: block;
+    transition: background-color 0.3s ease;
+    white-space: nowrap;
+}
+
+.admin-item a:hover {
+    background-color: #333333;
+    border-radius: 4px;
+}
+
+/* Estilos del botón de perfil y menú desplegable */
+.profile-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.profile-btn {
+    cursor: pointer;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    color: #FFFFFF;
+    background: none;
+    border: none;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    border-radius: 4px;
+}
+
+.profile-btn:hover {
+    background-color: #333333;
+}
+
+.profile-btn svg {
+    width: 20px;
+    height: 20px;
+    margin-left: 8px;
+    transition: transform 0.3s ease;
+}
+
+.profile-btn.active svg {
+    transform: rotate(180deg);
+}
+
+.dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #333333;
+    min-width: 180px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    z-index: 1001;
+    border-radius: 6px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    margin-top: 5px;
+}
+
+.dropdown.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown a {
+    color: #FFFFFF;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s ease;
+    border-radius: 4px;
+    margin: 4px;
+}
+
+.dropdown a:hover {
+    background-color: #555555;
+}
+
+.dropdown a:first-child {
+    margin-top: 8px;
+}
+
+.dropdown a:last-child {
+    margin-bottom: 8px;
+    color: #ff6b6b;
+}
+
+.dropdown a:last-child:hover {
+    background-color: #ff6b6b;
+    color: #FFFFFF;
+}
+
+/* Separador en el dropdown */
+.dropdown-separator {
+    height: 1px;
+    background-color: #555555;
+    margin: 4px 12px;
+}
+
+/* Ajuste para el contenido principal */
+/* Nota: Este estilo ya estaba en mesas_principal.css, se mantuvo para evitar duplicidad y mantener el ajuste de padding. */
+.main-content {
+    padding-top: 90px;
+}
+
+/* Overlay para cerrar el dropdown */
+.dropdown-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    display: none;
+}
+
+.dropdown-overlay.show {
+    display: block;
+}
+
 /* Menú fijo superior */
 /* BOTÓN "OMBÚ */
 .button {

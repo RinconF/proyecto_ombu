@@ -4,13 +4,13 @@
 
 /* Anular la clase colMS en #content y cualquier otra cosa que interfiera */
 #content {
-    background: none !important; /* Eliminar el fondo por defecto */
-    padding: 0 !important; /* Eliminar padding por defecto */
-    margin: 0 !important; /* Eliminar margen por defecto */
-    width: 100% !important; /* Asegurar que ocupe todo el ancho */
-    float: none !important; /* Desactivar cualquier flotación */
-    display: block !important; /* Asegurar que sea un bloque normal */
-    min-width: unset !important; /* Eliminar cualquier min-width de Django */
+    /* REMOVIDO: background: none !important; */
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    float: none !important;
+    display: block !important;
+    min-width: unset !important;
     box-sizing: border-box !important;
 }
 
@@ -22,153 +22,152 @@
     float: none !important;
     display: block !important;
     box-sizing: border-box !important;
+    /* REMOVIDO: background-color: #1A202C; */
+    min-height: 100vh;
+    padding: 30px;
 }
 
 /* --- GENERALES DEL CONTENIDO PRINCIPAL --- */
 
-/* Contenedor de la página que envuelve todo (centrado y con ancho máximo) */
-.dashboard-page-container {
-    padding: 30px;
-    max-width: 1600px;
-    margin: 0 auto; /* Centra el contenedor en la página */
-    /* NO display: flex; aquí. El flex container es .row-index */
-}
-
 /* EL CONTENEDOR FLEX PRINCIPAL: .row-index */
-/* Este es el elemento que debe tener display: flex para que sus hijos se coloquen en línea. */
-.row-index { /* ¡Selector CAMBIADO de .row a .row-index! */
-    display: flex !important; /* ¡FUERZA Flexbox! */
-    flex-wrap: wrap; /* Permite que los elementos se envuelvan en pantallas pequeñas */
-    gap: 30px; /* Espacio entre los contenedores */
-    align-items: flex-start; /* Alinea los elementos al inicio (parte superior) */
-    justify-content: center; /* Centra los elementos horizontalmente si hay espacio extra */
-    width: 100%; /* Asegura que el .row-index ocupe todo el ancho disponible */
-    box-sizing: border-box; /* Incluye padding y border en el ancho total */
+.row-index {
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: 30px;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 /* --- ESTILOS DE LAS COLUMNAS INDIVIDUALES --- */
 
 .dashboard-main-area {
-    /* Ajustes para que ocupe la mitad o un poco más */
-    flex: 1 1 55%; /* Proporción 1, se encoge, base del 55% */
-    min-width: 500px; /* Ancho mínimo razonable antes de envolverse */
-    max-width: calc(100% - 300px); /* Para dejar espacio al sidebar y al gap */
+    flex: 1 1 55%;
+    min-width: 500px;
+    max-width: calc(100% - 300px - 30px);
 
-    
-    background-color: #212B36;
-    color: #E0E0E0;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
-    background-image: none;
+    background-color: #2D3748; /* Fondo más suave, con tono azulado */
+    color: #E2E8F0; /* Texto claro */
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(69, 81, 102, 0.3);
     box-sizing: border-box;
 }
 
 .dashboard-sidebar {
-    flex: 1 1 300px; 
-    min-width: 300px; 
-    max-width: 40%; 
+    flex: 1 1 300px;
+    min-width: 300px;
+    max-width: 40%;
 
-    background-color: #1A222B;
+    background-color: #232B36; /* Fondo más oscuro para el sidebar */
     padding: 30px 25px;
-    border-radius: 10px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
-    height: fit-content; /* Se ajusta a su contenido */
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+    height: fit-content;
+    border: 1px solid rgba(49, 58, 71, 0.3);
     box-sizing: border-box;
 }
 
 /* --- TÍTULOS --- */
 .dashboard-title {
-    color: #63B3ED;
+    color: #66CCFF;
     font-family: 'Inter', sans-serif;
-    font-size: 2rem; /* REDUCIDO para que no sea tan grande */
-    font-weight: 700;
-    margin-bottom: 20px;
-    border-bottom: 2px solid rgba(99, 179, 237, 0.4);
-    padding-bottom: 15px;
-    letter-spacing: 0.5px;
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 25px;
+    border-bottom: 3px solid rgba(102, 204, 255, 0.3);
+    padding-bottom: 20px;
+    letter-spacing: 0.8px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
 }
 
 .dashboard-intro-text,
 .dashboard-card-body p {
-    font-size: 1.05rem; /* Ligeramente reducido */
-    line-height: 1.8;
-    color: #B0B9C2;
-    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #CBD5E0;
+    margin-bottom: 2rem;
 }
 
 .dashboard-sidebar-title {
-    color: #63B3ED;
+    background: linear-gradient(135deg, #3f51b5 0%, #63B3ED 100%);
+    color: #fbfbfb;
     font-family: 'Inter', sans-serif;
-    font-size: 1.6em; /* Reducido para que coincida con el principal */
-    font-weight: 600;
+    font-size: 1.5em;
+    font-weight: 700;
     text-align: center;
-    margin-bottom: 25px;
-    padding-bottom: 15px;
-    border-bottom: 2px solid rgba(99, 179, 237, 0.4);
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 3px solid rgba(102, 204, 255, 0.3);
+    border-radius: 10px;
 }
+
 
 
 /* --- Responsividad --- */
 @media (max-width: 992px) {
-    .row-index { /* ¡Selector CAMBIADO a .row-index! */
-        flex-direction: column !important; /* Apila los contenedores */
-        gap: 20px; /* Reduce el espacio entre ellos */
-        align-items: stretch; /* Estira los elementos para que ocupen todo el ancho */
-        padding: 0 20px; /* Añade un padding horizontal al contenedor principal */
+    #content-main {
+        padding: 20px;
+    }
+    .row-index {
+        flex-direction: column !important;
+        gap: 25px;
+        align-items: stretch;
+        padding: 0;
     }
 
     .dashboard-main-area,
     .dashboard-sidebar {
-        flex: 1 1 100% !important; /* Ocupan todo el ancho disponible */
-        max-width: 100% !important; /* Asegura que no haya desbordamiento */
-        min-width: unset !important; /* Elimina el min-width para móviles */
-        padding: 25px; /* Reducir padding en móviles */
+        flex: 1 1 100% !important;
+        max-width: 100% !important;
+        min-width: unset !important;
+        padding: 25px;
     }
 
     .dashboard-sidebar {
         border-left: none !important;
-        border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-top: 1px solid rgba(49, 58, 71, 0.3) !important;
     }
 
     .dashboard-title {
-        font-size: 1.8rem; /* Ajuste para pantallas más pequeñas */
+        font-size: 1.9rem;
     }
     .dashboard-sidebar-title {
-        font-size: 1.4em;
+        font-size: 1.6em;
     }
 }
 
-/* --- Resto de tus estilos (Tarjetas, lista de actividad, etc.) --- */
+/* --- Resto de tus estilos (Tarjetas de info, lista de actividad, etc.) --- */
 .dashboard-info-card {
-    background-color: #2D3748;
+    background-color: #374253;
     border: none;
-    border-radius: 10px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
     transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
-    margin-bottom: 25px;
+    margin-bottom: 30px;
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(69, 81, 102, 0.2);
 }
 
 .dashboard-info-card:hover {
-    transform: translateY(-7px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    transform: translateY(-8px);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
 }
 
 .dashboard-card-header {
-    background-color: #374253;
-    color: #63B3ED;
-    font-size: 1.4rem;
-    font-weight: 600;
-    padding: 1.5rem 25px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: #4A5568;
+    color: #66CCFF;
+    font-size: 1.5rem;
+    font-weight: 700;
+    padding: 1.8rem 30px;
+    border-bottom: 1px solid rgba(69, 81, 102, 0.4);
 }
 
 .dashboard-card-body {
-    padding: 25px;
-    color: #E0E0E0;
+    padding: 30px;
+    color: #E2E8F0;
 }
 
 .dashboard-recent-actions {
@@ -176,11 +175,32 @@
 }
 
 .dashboard-actions-list {
+    border-radius: 10px;
     list-style: none;
     padding: 0;
     margin: 0;
-    border-radius: 1%;
+    max-height: 380px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #66CCFF #2D3748;
+    background: linear-gradient(135deg, #3f51b5 0%, #63B3ED 100%);
 }
+
+.dashboard-actions-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.dashboard-actions-list::-webkit-scrollbar-track {
+    background: #2D3748;
+    border-radius: 10px;
+}
+
+.dashboard-actions-list::-webkit-scrollbar-thumb {
+    background-color: #66CCFF;
+    border-radius: 10px;
+    border: 2px solid #2D3748;
+}
+
 
 .dashboard-actions-list li{
     list-style: none;
@@ -188,91 +208,166 @@
 
 .dashboard-action-item {
     background: #2D3748;
-    margin-bottom: 15px;
-    padding: 18px;
-    border-radius: 8px;
-    transition: all 0.25s ease-out;
+    margin: 10px 10px;
+    padding: 10px;
+    border-radius: 10px;
+    transition: all 0.3s ease-out;
     cursor: pointer;
-    border-left: 5px solid #4CAF50;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    border-left: 6px solid;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.4);
     display: flex;
     flex-direction: column;
 }
 
-.dashboard-action-item .action-add { border-left-color: #4CAF50; }
-.dashboard-action-item .action-change { border-left-color: #FBC02D; }
-.dashboard-action-item .action-delete { border-left-color: #D32F2F; }
+.dashboard-action-item.action-add { border-left-color: #4CAF50; }
+.dashboard-action-item.action-change { border-left-color: #FFC107; }
+.dashboard-action-item.action-delete { border-left-color: #EF5350; }
 
 .dashboard-action-item:hover {
     background: #374253;
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.55);
 }
 
 .dashboard-action-content {
-    color: #E0E0E0;
-    font-size: 1em;
-    line-height: 1.6;
-    margin-bottom: 5px;
+    color: #E2E8F0;
+    font-size: 1.05em;
+    line-height: 1.7;
+    margin-bottom: 8px;
 }
 
 .dashboard-action-content a {
-    color: #63B3ED;
+    color: #66CCFF;
     text-decoration: none;
     font-weight: bold;
+    transition: color 0.2s ease-in-out;
 }
 
 .dashboard-action-content a:hover {
     text-decoration: underline;
+    color: #00BFFF;
 }
 
 .dashboard-action-timestamp {
     color: #A0AEC0;
-    font-size: 0.8em;
+    font-size: 0.85em;
     display: block;
     margin-top: 5px;
     font-style: italic;
     text-align: right;
-    opacity: 0.8;
+    opacity: 0.9;
 }
 
 .dashboard-action-item.no-activities {
     background: #2D3748;
-    border-left: 5px solid #7B68EE;
+    border-left: 6px solid #9C27B0;
     text-align: center;
-    padding: 20px;
+    padding: 25px;
     font-style: italic;
     color: #B0B9C2;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* Responsividad */
-@media (max-width: 992px) {
-    .dashboard-page-container {
-        flex-direction: column; /* Apila los contenedores en pantallas pequeñas */
-        gap: 25px; /* Reduce el espacio entre ellos */
-    }
-    .dashboard-main-area,
-    .dashboard-sidebar {
-        min-width: 100%; /* Ocupa todo el ancho disponible */
-        margin-bottom: 0; /* Eliminar márgenes inferiores si ya usamos gap */
-        padding: 25px; /* Reducir padding en móviles */
-    }
-    .dashboard-sidebar {
-        border-left: none;
-        border-top: 1px solid rgba(255, 255, 255, 0.08); /* Borde superior en lugar de izquierdo */
-    }
-    .dashboard-title {
-        font-size: 2rem; /* Ajuste de tamaño de fuente para móviles */
-    }
-    .dashboard-sidebar-title {
-        font-size: 1.5em;
-    }
-    .dashboard-page-container,
-    .row { /* Aplica esto también al .row si es tu contenedor flex */
-        flex-direction: column; /* Apila los contenedores en pantallas pequeñas */
-        gap: 20px; /* Reduce el espacio entre ellos cuando están apilados */
-        padding: 20px; /* Ajusta el padding general en pantallas pequeñas */
-    }
-    
+
+/* --- Estilos para Contadores/Estadísticas --- */
+
+.dashboard-stats-container {
+    display: flex;
+    justify-content: space-around;
+    gap: 30px;
+    margin-top: 30px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+    padding: 0 15px;
+}
+.stat-card {
+    background: linear-gradient(135deg, #3f51b5 0%, #63B3ED 100%);
+    color: white;
+    padding: 25px 30px;
+    border-radius: 12px;
+    text-align: center;
+    flex: 1;
+    min-width: 220px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.stat-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+.stat-card h3 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-size: 1.4em;
+    font-weight: 600;
+    opacity: 0.9;
+}
+.stat-card p {
+    font-size: 2.8em;
+    font-weight: bold;
+    margin: 0;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+}
+
+/* --- Estilos para el módulo general (si lo usas para la personalización de fondo) --- */
+.module {
+    background-color: #2D3748;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+    margin-bottom: 30px;
+    color: #E2E8F0;
+    border: 1px solid rgba(69, 81, 102, 0.3);
+}
+
+.module h2 {
+    color: #66CCFF;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    border-bottom: 2px solid rgba(102, 204, 255, 0.2);
+    padding-bottom: 15px;
+}
+
+.module .form-row label {
+    color: #CBD5E0;
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.module .form-row input[type="text"] {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid #4A5568;
+    background-color: #374253;
+    color: #E2E8F0;
+    font-size: 1rem;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.module .form-row input[type="text"]:focus {
+    border-color: #66CCFF;
+    box-shadow: 0 0 0 3px rgba(102, 204, 255, 0.3);
+    outline: none;
+}
+
+/* Ajustes para el fondo global del cuerpo */
+body, #content {
+    /* REMOVIDO: background-color: #1A202C !important; */
+    color: #E2E8F0; /* Color de texto predeterminado */
+    font-family: 'Inter', sans-serif; /* Fuente más moderna */
+    line-height: 1.6;
+}
+
+/* Pequeño ajuste para el sitio de Django admin por defecto, si es que queda algo */
+#container {
+    background-color: transparent !important;
 }

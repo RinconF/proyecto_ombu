@@ -7,7 +7,6 @@
     <title> OMBÚ | Bebidas Calientes 🍹 </title>
     <link rel="stylesheet" href="{% static '/css/Productos_Styles.css' %}" type="text/css" />
     <link rel="stylesheet" href="{% static '/css/index.css' %}">
-    <link rel="stylesheet" href="{% static '/css/index.css' %}">
     <link rel="stylesheet" href="{% static '/css/accesibilidad.css' %}">
     <link rel="stylesheet" href="{% static '/css/buscador.css' %}">
   </head>
@@ -22,7 +21,10 @@
     <main>
       <div class="menu-container">
 
+
+
         <div>
+        
           <section class="section">
             <a href="{% url 'index' %}">
             <button class="button" data-text="Awesome" data-title="{% url 'index' %}" >
@@ -112,7 +114,7 @@
           </a>
         </div>
       </div>
-      
+
 <!--BUSCADOR-->
     
     <!-- Contenedor del buscador -->
@@ -134,14 +136,16 @@
       </div>
     </div>
 
+{% comment %} <!-- -------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------- --> {% endcomment %}
 
-  <div class="cards-container" >
+        <div class="cards-container" >
 
 
 
     {% comment %} Productos       {% endcomment %}
 
-    {% for producto in productos %}
+             {% for producto in productos %}
   <div class="card" data-title="{{ producto.titulo }}" data-image="{{ producto.foto.url }} " data-options='{{ producto.opciones|safe }}'>
     <div class="img-container">
       <img src="{{ producto.foto.url }}" alt="{{ producto.titulo }}" />
@@ -162,8 +166,9 @@
   <p>No hay productos disponibles en esta categoría.</p>
 {% endfor %}
 
+</div>
 
-
+  
 
         <!-- modal -->
     {% for producto in productos %}
@@ -184,7 +189,7 @@
       </div>
     {% endfor %}  
       </section>
-
+      
 
       <script src="{% static '/js/menu_cliente.js' %}"></script>
       
@@ -208,28 +213,29 @@
           
           <div class="footer-contact">
             <h2>Contacto</h2>
-                <div class="social-icons">
-                    <a href="https://www.facebook.com" target="_blank" class="social-icon facebook">
-                        <img src="{% static 'img/icono_social/Facebook_Logo.png' %}" alt="Facebook">
-                      </a>
-                      <a href="https://www.twitter.com" target="_blank" class="social-icon twitter">
+            <div class="social-icons">
+              <a href="https://www.facebook.com" target="_blank" class="social-icon facebook">
+                <img src="{% static 'img/icono_social/Facebook_Logo.png' %}" alt="Facebook">
+                    </a>
+                    <a href="https://www.twitter.com" target="_blank" class="social-icon twitter">
                         <img src="{% static 'img/icono_social/twiter_log.png' %}" alt="Twitter">
-                      </a>
-                      <a href="https://www.instagram.com" target="_blank" class="social-icon instagram">
-                        <img src="{% static 'img/icono_social/instagram_log.png' %}" alt="Instagram">
-                      </a>
-                      <a href="https://wa.me/123456789" target="_blank" class="social-icon whatsapp">
+                    </a>
+                    <a href="https://www.instagram.com" target="_blank" class="social-icon instagram">
+                      <img src="{% static 'img/icono_social/instagram_log.png' %}" alt="Instagram">
+                    </a>
+                    <a href="https://wa.me/123456789" target="_blank" class="social-icon whatsapp">
                         <img src="{% static 'img/icono_social/whatsapp_icon.png' %}" alt="WhatsApp">
-                      </a>
+                    </a>
                 </div>
-              </div>
             </div>
-            
-            <div class="footer-bottom">
-              <p>&copy; 2025 Ombú - Todos los derechos reservados</p>
-            </div>
-          </footer>
-        </main>
+          </div>
+        
+          <div class="footer-bottom">
+            <p>&copy; 2025 Ombú - Todos los derechos reservados</p>
+          </div>
+        </footer>
+      </main>
+    <script src="{% static '/js/menu_cliente.js' %}"></script>
     <script src="{% static '/js/script_accesibilidad.js' %}"></script>
     <script src="{% static '/js/buscador.js' %}"></script>
   </body>

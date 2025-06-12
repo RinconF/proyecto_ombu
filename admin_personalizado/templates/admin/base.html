@@ -72,14 +72,14 @@
                           {% endif %}
                       {% endif %}
                       <li>
-                          <a href="{% static 'manual de usuario.docx' %}" target="_blank">
+                          <a href="{% static 'manual de usuario.pdf' %}" target="_blank">
                               Descargar manual PDF
                           </a>
                       {% if user.has_usable_password %}
                           <li><a href="{% url 'admin:password_change' %}">{% translate 'Cambiar contraseña' %}</a></li>
                       {% endif %}
                       <li>
-                        <a class="dropdown-item" href="{% url 'backup' %}">
+                        <a href="{% url 'admin_panel:lista_backups' %}">
                           <i class="fas fa-database"></i> Respaldar base de datos
                         </a>
                       </li>

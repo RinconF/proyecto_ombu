@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // Variables globales
-    inicializarNavegacionConMesa();
+    // === Variables globales (centralizadas) ===
     let cart = JSON.parse(localStorage.getItem('cart')) || []; // Recuperar carrito desde localStorage
     let cartOpen = false;
     let currentProductData = {
@@ -11,12 +10,37 @@ document.addEventListener("DOMContentLoaded", () => {
         basePrice: 0
     };
 
+    // Obtener el mesaId y mesaNumero de la URL al cargar la página
+    let mesaIdActiva = getUrlParameter('mesa_id') || localStorage.getItem('mesaActivaId');
+    let mesaNumeroActivo = getUrlParameter('mesa_numero') || localStorage.getItem('mesaActivaNumero');
+
+    // Referencias a elementos del DOM
+    const modalPrice = document.createElement('div');
     const cards = document.querySelectorAll(".card");
     const modal = document.getElementById("modal");
     const modalTitle = document.getElementById("modal-title");
     const modalImage = document.getElementById("modal-image");
     const modalSelect = document.getElementById("modal-select");
     const closeModal = document.querySelector(".close");
+    const modalAvailableQuantity = document.getElementById("modal-available-quantity");
+
+    let modalAddToCartBtn = document.getElementById("modal-add-to-cart");
+    if (!modalAddToCartBtn) {
+        modalAddToCartBtn = document.createElement('button');
+        modalAddToCartBtn.id = 'modal-add-to-cart';
+        modalAddToCartBtn.textContent = 'Agregar al carrito';
+        modalAddToCartBtn.style.marginTop = '15px';
+        modalAddToCartBtn.style.width = '100%';
+        modalAddToCartBtn.classList.add('button');
+    }
+
+    const modalInfo = modal.querySelector('.modal-info');
+    if (modalInfo && modalTitle) {
+        modalInfo.insertBefore(modalPrice, modalTitle.nextSibling);
+        if (!document.getElementById("modal-add-to-cart")) {
+            modalInfo.appendChild(modalAddToCartBtn);
+        }
+    }
 
     const cartIcon = document.getElementById('cart-icon');
     const cartContainer = document.getElementById('cart-container');
@@ -31,7 +55,38 @@ document.addEventListener("DOMContentLoaded", () => {
     overlay.className = 'cart-overlay';
     document.body.appendChild(overlay);
 
-    // Función para obtener un parámetro de la URL
+    const cartIconContainer = document.querySelector('.cart-icon-container');
+
+    function updateModalAvailableQuantity() {
+        console.log("updateModalAvailableQuantity called");
+        if (currentProductData.card && modalAvailableQuantity) {
+            const quantity = parseInt(currentProductData.card.dataset.cantidadDisponibleActual);
+            console.log("Modal Product ID:", currentProductData.card.dataset.id);
+            console.log("Modal Current available quantity (from dataset.cantidadDisponibleActual):", quantity);
+
+            let textToDisplay;
+            if (quantity > 0) {
+                textToDisplay = `Cantidad disponible: ${quantity}`;
+                modalAddToCartBtn.disabled = false;
+            } else {
+                textToDisplay = `No hay unidades disponibles.`;
+                modalAddToCartBtn.disabled = true;
+            }
+            modalAvailableQuantity.textContent = textToDisplay;
+            console.log("Text applied to modal-available-quantity:", textToDisplay);
+        } else {
+            console.log("updateModalAvailableQuantity: currentProductData.card or modalAvailableQuantity is null/undefined.");
+            if (!currentProductData.card) console.log("currentProductData.card is null/undefined.");
+            if (!modalAvailableQuantity) console.log("modalAvailableQuantity is null/undefined.");
+        }
+    }
+
+    if (checkoutButton && mesaNumeroActivo) {
+        checkoutButton.textContent = "Finalizar compra en mesa " + mesaNumeroActivo;
+    } else if (checkoutButton) {
+        checkoutButton.textContent = "Finalizar compra";
+    }
+
     function getUrlParameter(name) {
         name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
         const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
@@ -39,150 +94,146 @@ document.addEventListener("DOMContentLoaded", () => {
         return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
     }
 
-    // Obtener el mesaId de la URL
-    const mesaIdDesdeUrl = getUrlParameter('mesa'); // Se obtiene el mesaId de la URL al cargar la página
-    const idmesa = document.getElementById('checkout-button')
-    idmesa.textContent = "Finalizar compra en mesa "+ mesaIdDesdeUrl;
-
-
-    // Función para agregar a todas las páginas - poner en un archivo común
-    function inicializarNavegacionConMesa() {
-        // Obtener el ID de mesa de la URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const mesaId = urlParams.get('mesa');
-
-        if (mesaId) {
-            // Guardar en localStorage como referencia de respaldo
-            localStorage.setItem('mesaActivaId', mesaId);
-
-            // Actualizar todos los enlaces de navegación para incluir el ID de mesa
-            document.querySelectorAll('a').forEach(link => {
-                // No modificar enlaces externos o anclas
-                if (link.href.startsWith(window.location.origin) && !link.href.includes('#')) {
-                    const url = new URL(link.href);
-                    url.searchParams.set('mesa', mesaId);
-                    link.href = url.toString();
-                }
-            });
-
-            // Si existe un elemento para mostrar la mesa activa, actualizarlo
-            const mesaActivaElement = document.getElementById('mesa-activa');
-            if (mesaActivaElement) {
-                mesaActivaElement.textContent = `Mesa ${mesaId}`;
-            }
-
-            // Actualizar botón de finalizar compra si existe
-            const checkoutButton = document.getElementById('checkout-button');
-            if (checkoutButton) {
-                checkoutButton.textContent = `Finalizar compra en mesa ${mesaId}`;
-            }
-        } else {
-            // Si no hay mesa en URL pero sí en localStorage, redirigir con el parámetro
-            const mesaGuardada = localStorage.getItem('mesaActivaId');
-            if (mesaGuardada && !window.location.pathname.includes('mesas.html')) {
-                window.location.href = window.location.pathname + `?mesa=${mesaGuardada}`;
-                return;
-            }
-        }
-    }
-
-    // Función para regresar a la página de mesas manteniendo información
-    function volverAMesas() {
-        const mesaId = localStorage.getItem('mesaActivaId');
-        window.location.href = `/mesas/?mesa=${mesaId}`;
-    }
-
-    // Función para navegar a una categoría manteniendo la mesa
-    function navegarACategoria(categoria) {
-        const mesaId = localStorage.getItem('mesaActivaId');
-        if (!mesaId) {
-            alert('Por favor seleccione una mesa primero');
-            return;
-        }
-        window.location.href = `/pages/menu_mesero/${categoria}.html?mesa=${mesaId}`;
-    }
-
-
-    // Función para actualizar el carrito en localStorage
     function updateCartStorage() {
         localStorage.setItem('cart', JSON.stringify(cart));
     }
 
+    function closeCart() {
+        cartContainer.classList.remove('open');
+        overlay.style.display = 'none';
+        cartOpen = false;
+        // MUESTRA EL ÍCONO DEL CARRITO cuando el menú se cierra
+        if (cartIconContainer) { // Asegura que el elemento exista antes de intentar modificarlo
+            cartIconContainer.classList.remove('cart-icon-hidden');
+        }
+    }
 
+    const menuLinks = document.querySelectorAll('.main-nav a');
+    menuLinks.forEach(link => {
+        const originalHref = link.getAttribute('href');
+        if (originalHref && !originalHref.startsWith('#') && !originalHref.includes('?')) {
+            if (mesaIdActiva && mesaNumeroActivo) {
+                link.href = `${originalHref}?mesa_id=${mesaIdActiva}&mesa_numero=${mesaNumeroActivo}`;
+            }
+        }
+    });
 
-
-    
-    // Crear elemento para mostrar el precio en el modal
-    const modalPrice = document.createElement('div');
     modalPrice.className = 'modal-price';
     modalPrice.style.fontWeight = 'bold';
     modalPrice.style.fontSize = '1.2rem';
     modalPrice.style.margin = '10px 0';
     modalPrice.style.color = '#20AB47';
 
-    // Añadir el botón "Agregar al carrito" al modal
-    let modalAddToCartBtn = document.getElementById("modal-add-to-cart");
-    if (!modalAddToCartBtn) {
-        modalAddToCartBtn = document.createElement('button');
-        modalAddToCartBtn.id = 'modal-add-to-cart';
-        modalAddToCartBtn.textContent = 'Agregar al carrito';
-        modalAddToCartBtn.style.marginTop = '15px';
-        modalAddToCartBtn.style.width = '100%';
+    function updateCardButtonState(card) {
+        const addButton = card.querySelector('.add-to-cart-btn');
+        const quantitySpan = card.querySelector('.product-available-quantity'); 
+    
+        const productId = card.dataset.id;
+        const initialAvailableQuantityFromBackend = parseInt(card.dataset.cantidadDisponible); 
+    
+        const itemInCart = cart.find(item => item.id == productId && (item.option === 'Regular' || !item.option)); 
+        const quantityInCart = itemInCart ? itemInCart.quantity : 0;
+    
+        const remainingQuantity = initialAvailableQuantityFromBackend - quantityInCart;
+        card.dataset.cantidadDisponibleActual = remainingQuantity; 
+        console.log(`Card ${productId} updated: initial=${initialAvailableQuantityFromBackend}, inCart=${quantityInCart}, remaining=${remainingQuantity}`);
+    
+        if (quantitySpan) {
+            if (remainingQuantity > 0) {
+                quantitySpan.textContent = `Disponible: ${remainingQuantity}`;
+                quantitySpan.style.color = ''; 
+            } else {
+                quantitySpan.textContent = `No disponible`;
+                quantitySpan.style.color = '#e74c3c'; 
+            }
+        }
+    
+        if (!addButton) return;
+    
+        if (remainingQuantity <= 0) { 
+            addButton.innerHTML = 'No disponible';
+            addButton.disabled = true;
+            addButton.classList.add('product-disabled-btn');
+            addButton.classList.remove('product-action-btn');
+        } else {
+            addButton.innerHTML = '<span class="button-text">+</span>';
+            addButton.disabled = false;
+            addButton.classList.remove('product-disabled-btn');
+            addButton.classList.add('product-action-btn');
+        }
     }
 
-    // Añadir el elemento de precio al modal después del título
-    const modalInfo = modal.querySelector('.modal-info');
-    if (modalInfo) {
-        if (modalTitle) {
-            modalInfo.insertBefore(modalPrice, modalTitle.nextSibling);
-        }
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.add-to-cart-btn') && !e.target.closest('.add-to-cart-btn').disabled) {
+            const button = e.target.closest('.add-to-cart-btn');
+            const card = button.closest('.card');
 
-        // Asegurarse de que el botón de agregar al carrito esté al final
-        if (!document.getElementById("modal-add-to-cart")) {
-            modalInfo.appendChild(modalAddToCartBtn);
-        }
-    }
+            if (card.id === 'modal-card') return; 
 
-    // Añadir botones "Agregar al carrito" a todas las tarjetas
-    document.querySelectorAll('.footer-card').forEach(footer => {
-        if (!footer.querySelector('.add-to-cart-btn')) {
-            const addButton = document.createElement('button');
-            addButton.className = 'add-to-cart-btn';
-            addButton.innerHTML = '+';
-            footer.appendChild(addButton);
+            e.stopPropagation();
 
-            // Ajustar el estilo del botón "Ver más"
-            const verMasBtn = footer.querySelector('button:not(.add-to-cart-btn)');
-            if (verMasBtn) {
-                verMasBtn.style.marginRight = 'auto';
+            const productId = card.dataset.id;
+            const imgSrc = card.querySelector('img').src;
+            const title = card.querySelector('.main-card > span').textContent;
+            const priceElement = card.querySelector('.footer-card > span');
+            const price = parseFloat(priceElement.textContent.replace(/[^0-9.-]+/g, '')) || 0;
+            const currentAvailableQuantity = parseInt(card.dataset.cantidadDisponibleActual); 
+
+            const existingItemIndex = cart.findIndex(item => item.id == productId && item.option === 'Regular'); 
+            const currentQuantityInCart = existingItemIndex !== -1 ? cart[existingItemIndex].quantity : 0;
+
+            if (currentQuantityInCart >= currentAvailableQuantity) { 
+                alert('No hay más unidades disponibles de este producto.');
+                updateCardButtonState(card);
+                return;
+            }
+
+            if (existingItemIndex !== -1) {
+                cart[existingItemIndex].quantity += 1;
+            } else {
+                const cartItem = {
+                    id: productId,
+                    imgSrc,
+                    title,
+                    price,
+                    priceDisplay: priceElement.textContent,
+                    quantity: 1,
+                    option: 'Regular' 
+                };
+                cart.push(cartItem);
+            }
+            updateCartDisplay();
+
+            if (modal.style.display === "flex" && currentProductData.card && currentProductData.card.dataset.id == productId) {
+                console.log("Updating modal quantity after '+' button click");
+                updateModalAvailableQuantity();
             }
         }
     });
 
-    // Funcionalidad del modal
     cards.forEach(card => {
         card.addEventListener('click', (e) => {
-            // No abrir el modal si se hizo clic en el botón "Agregar al carrito"
-            if (e.target.classList.contains('add-to-cart-btn')) {
+            if (e.target.classList.contains('ver-mas-btn') || e.target.closest('.add-to-cart-btn')) {
                 return;
             }
 
-            // Obtener datos del producto
             const title = card.getAttribute('data-title') || card.querySelector('.main-card > span').textContent;
             const imgSrc = card.getAttribute('data-image') || card.querySelector('img').src;
-
-            // Obtener precio base de la tarjeta
+            const description = card.querySelector('.truncated-text').textContent;
             const priceElement = card.querySelector('.footer-card > span');
             const basePrice = priceElement ? priceElement.textContent : '$0';
-            const basePriceValue = parseInt(basePrice.replace(/\D/g, '')) || 0;
+            const basePriceValue = parseFloat(basePrice.replace(/[^0-9.-]+/g, '')) || 0;
 
-            // Guardar referencia a la tarjeta actual y precio base
+            const modalDescription = document.getElementById('modal-description');
+            if (modalDescription) {
+                modalDescription.textContent = description;
+            }
+
             currentProductData.card = card;
             currentProductData.basePrice = basePriceValue;
             currentProductData.currentPrice = basePriceValue;
             currentProductData.currentPriceDisplay = basePrice;
 
-            // Inicializar opciones con precio predeterminado
             currentProductData.options = {
                 'Regular': {
                     price: basePriceValue,
@@ -190,19 +241,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             };
 
-            // Actualizar el contenido del modal
             modalTitle.textContent = title;
             modalImage.src = imgSrc;
             modalImage.alt = title;
             modalPrice.textContent = basePrice;
 
-            // Manejar opciones de precios
             modalSelect.innerHTML = '';
-
-                try {
-                    // Verificar si hay opciones para este producto
-                  const options = card.getAttribute('data-options');
-                  if (options) {
+            try {
+                const options = card.getAttribute('data-options');
+                if (options) {
                     const optionsArray = options.split(',').map(opt => opt.trim()).filter(opt => opt.length > 0);
                     optionsArray.forEach(option => {
                         const optionElement = document.createElement('option');
@@ -210,46 +257,40 @@ document.addEventListener("DOMContentLoaded", () => {
                         optionElement.textContent = option;
                         modalSelect.appendChild(optionElement);
 
-                        // Establecer el mismo precio para todas las opciones
                         currentProductData.options[option] = {
                             price: basePriceValue,
                             priceDisplay: basePrice
                         };
                     });
-                
-                    } else {
-                        // Opción predeterminada si no hay data-options
-                        const optionElement = document.createElement('option');
-                        optionElement.value = "Regular";
-                        optionElement.textContent = "Regular";
-                        modalSelect.appendChild(optionElement);
-                    }
-                } catch (e) {
-                    console.error("Error al analizar opciones:", e);
-                    // Opción alternativa
+                } else {
                     const optionElement = document.createElement('option');
                     optionElement.value = "Regular";
                     optionElement.textContent = "Regular";
                     modalSelect.appendChild(optionElement);
                 }
-                
-                // Mostrar el modal
-                modal.style.display = "flex";
+            } catch (e) {
+                console.error("Error al analizar opciones:", e);
+                const optionElement = document.createElement('option');
+                optionElement.value = "Regular";
+                optionElement.textContent = "Regular";
+                modalSelect.appendChild(optionElement);
+            }
+
+            modal.style.display = "flex";
+            console.log("Modal opened, calling updateModalAvailableQuantity()"); 
+            updateModalAvailableQuantity();
         });
     });
 
-    // Evento de cambio de opción en el modal
     modalSelect.addEventListener('change', function() {
         const selectedOption = this.value;
         if (currentProductData.options && currentProductData.options[selectedOption]) {
-            // Actualizar el precio mostrado con el precio para esta opción
             modalPrice.textContent = currentProductData.options[selectedOption].priceDisplay;
             currentProductData.currentPrice = currentProductData.options[selectedOption].price;
             currentProductData.currentPriceDisplay = currentProductData.options[selectedOption].priceDisplay;
         }
     });
 
-    // Cerrar el modal
     closeModal.addEventListener('click', () => {
         modal.style.display = "none";
     });
@@ -260,183 +301,191 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Carrito de compras - Abrir y cerrar
     cartIcon.addEventListener('click', function() {
         cartContainer.classList.add('open');
         overlay.style.display = 'block';
-        cartIcon.style.display = 'none'; // Cierre del carrito 
         cartOpen = true;
+        // OCULTA EL ÍCONO DEL CARRITO cuando el menú se abre
+        if (cartIconContainer) { // Asegura que el elemento exista antes de intentar modificarlo
+            cartIconContainer.classList.add('cart-icon-hidden');
+        }
     });
 
     closeCartBtn.addEventListener('click', closeCart);
     overlay.addEventListener('click', closeCart);
 
-    function closeCart() {
-        cartContainer.classList.remove('open');
-        overlay.style.display = 'none';
-        cartIcon.style.display = 'block'; // ← NUEVA LÍNEA para que se cierre el carrito 
-        cartOpen = false;
-    }
-
-    // Agregar al carrito desde las tarjetas
-    document.querySelectorAll('.add-to-cart-btn').forEach((button, index) => {
-        button.addEventListener('click', function(e) {
-            e.stopPropagation(); // Evitar que se abra el modal
-
-            const card = this.closest('.card');
-            const imgSrc = card.querySelector('img').src;
-            const title = card.querySelector('.main-card > span').textContent;
-            const priceElement = card.querySelector('.footer-card > span');
-            const price = priceElement ? priceElement.textContent : '$0';
-            const priceValue = parseInt(price.replace(/\D/g, '')) || 0;
-            const productId = card.dataset.id;
-
-            // Verificar si el artículo ya está en el carrito
-            const existingItemIndex = cart.findIndex(item => item.title === title && item.option === 'Regular');
-
-            if (existingItemIndex !== -1) {
-                // Artículo ya en el carrito, aumentar cantidad
-                cart[existingItemIndex].quantity += 1;
-                updateCartDisplay();
-            } else {
-                // Nuevo artículo, agregar al carrito
-                const cartItem = {
-                    id: productId,
-                    imgSrc,
-                    title,
-                    price: priceValue,
-                    priceDisplay: price,
-                    quantity: 1,
-                    option: 'Regular' // Opción predeterminada
-                };
-
-                cart.push(cartItem);
-                updateCartDisplay();
-            }
-
-            // Animación para el icono del carrito
-            cartCount.style.transform = 'scale(1.3)';
-            setTimeout(() => {
-                cartCount.style.transform = 'scale(1)';
-            }, 300);
-        });
-    });
-
-    // Agregar al carrito desde el modal
     modalAddToCartBtn.addEventListener('click', function() {
         const title = modalTitle.textContent;
         const imgSrc = modalImage.src;
         const productId = currentProductData.card.dataset.id;
+        const currentAvailableQuantity = parseInt(currentProductData.card.dataset.cantidadDisponibleActual); 
 
-        // Obtener opción seleccionada del modal
         let option = 'Regular';
         if (modalSelect && modalSelect.value) {
             option = modalSelect.value;
         }
 
-        // Usar el precio actual del producto
         const price = currentProductData.currentPrice;
         const priceDisplay = currentProductData.currentPriceDisplay;
 
-        if (price > 0) {
-            // Verificar si el artículo con el mismo título y opción está en el carrito
-            const existingItemIndex = cart.findIndex(item =>
-                item.title === title && item.option === option
-            );
+        const existingItemIndex = cart.findIndex(item => item.id == productId && item.option === option);
+        const currentQuantityInCart = existingItemIndex !== -1 ? cart[existingItemIndex].quantity : 0;
 
-            if (existingItemIndex !== -1) {
-                cart[existingItemIndex].quantity += 1;
-            } else {
-                const cartItem = {
-                    id: productId,
-                    imgSrc,
-                    title,
-                    price: price,
-                    priceDisplay: priceDisplay,
-                    quantity: 1,
-                    option
-                };
-                cart.push(cartItem);
-            }
-
-            updateCartDisplay();
-
-            // Cerrar modal
-            modal.style.display = 'none';
-
-            // Animación y abrir carrito (opcional, puedes comentar si no quieres que se abra al agregar desde el modal)
-            cartCount.style.transform = 'scale(1.3)';
-            setTimeout(() => {
-                cartCount.style.transform = 'scale(1)';
-                cartContainer.classList.add('open');
-                overlay.style.display = 'block';
-                cartOpen = true;
-            }, 300);
+        if (currentQuantityInCart >= currentAvailableQuantity) { 
+            alert('No hay más unidades disponibles de este producto.');
+            return;
         }
+
+        if (existingItemIndex !== -1) {
+            cart[existingItemIndex].quantity += 1;
+        } else {
+            const cartItem = {
+                id: productId,
+                imgSrc,
+                title,
+                price: price,
+                priceDisplay: priceDisplay,
+                quantity: 1,
+                option
+            };
+            cart.push(cartItem);
+        }
+
+        updateCartDisplay();
+        modal.style.display = 'none'; 
+
+        cartCount.style.transform = 'scale(1.3)';
+        setTimeout(() => {
+            cartCount.style.transform = 'scale(1)';
+            cartContainer.classList.add('open');
+            overlay.style.display = 'block';
+            cartOpen = true;
+            // OCULTA EL ÍCONO DEL CARRITO cuando el menú se abre al añadir desde el modal
+            if (cartIconContainer) {
+                cartIconContainer.classList.add('cart-icon-hidden');
+            }
+        }, 300);
     });
 
-    // Finalizar compra (MODIFICADO PARA GUARDAR CON mesaId)
-    checkoutButton.addEventListener('click', function() {
+    // === Finalizar compra ===
+    // *** SECCIÓN MODIFICADA: Eliminado el prompt de medio de pago ***
+    checkoutButton.addEventListener('click', async function() {
         if (cart.length === 0) {
             alert('Su carrito está vacío');
             return;
         }
 
-        const mesaId = localStorage.getItem('mesaActivaId') || getUrlParameter('mesa');
-
-        if (mesaId) {
-            const clavePedidoMesa = `pedido_mesa_${mesaId}`;
-            
-            // Obtener pedidos existentes para esta mesa
-            const pedidosExistentes = JSON.parse(localStorage.getItem(clavePedidoMesa)) || [];
-            
-            // Combinar con los nuevos productos
-            const pedidoActualizado = [...pedidosExistentes, ...cart];
-            
-            // Guardar el pedido combinado
-            localStorage.setItem(clavePedidoMesa, JSON.stringify(pedidoActualizado));
-            
-            alert(`Productos añadidos a la Mesa ${mesaId}. Total actual: ${cartTotalAmount.textContent}`);
-            cart = []; // vaciar el carrito
-            updateCartDisplay();
-            closeCart();
-            
-            localStorage.removeItem('cart'); // limpiar carrito temporal
-            
-            // Opcional: ofrecer navegar de vuelta a la página de mesas
-            if (confirm('¿Desea volver a la página de mesas?')) {
-                volverAMesas();
-            }
-        } else {
-            alert('No se pudo identificar el ID de la mesa para guardar el pedido.');
+        if (!mesaIdActiva || !mesaNumeroActivo) {
+            alert('No se pudo identificar la mesa activa. Por favor, asegúrese de haber seleccionado una mesa.');
+            return;
         }
 
+        const totalCarrito = cart.reduce((sum, item) => sum + item.quantity * item.price, 0);
+
+        // --- PREPARAR DATOS PARA ENVIAR AL SERVIDOR ---
+        // ¡IMPORTANTE! Si tu backend espera un `medio_pago` y no lo proporcionas aquí,
+        const orderData = {
+            mesa_id: mesaIdActiva,
+            mesa_numero: mesaNumeroActivo, 
+            total: totalCarrito, 
+            medio_pago: "No especificado", 
+            items: cart.map(item => ({
+                producto_id: item.id, 
+                cantidad: item.quantity, 
+                precio_unitario: item.price,
+                option: item.option 
+            }))
+        };
+
+        try {
+            const response = await fetch('/guardar_pedido/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // 'X-CSRFToken': getCookie('csrftoken'), 
+                },
+                body: JSON.stringify(orderData)
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Error desconocido al procesar el pedido en el servidor.');
+            }
+
+            const result = await response.json();
+            console.log('Respuesta del servidor:', result);
+
+            if (result.updated_stock && Array.isArray(result.updated_stock)) {
+                result.updated_stock.forEach(stockUpdate => {
+                    const cardElement = document.querySelector(`.card[data-id="${stockUpdate.product_id}"]`);
+                    if (cardElement) {
+                        cardElement.dataset.cantidadDisponible = stockUpdate.new_available_quantity;
+                        updateCardButtonState(cardElement); 
+                    }
+                });
+            }
+
+            const clavePedidoMesa = `pedido_mesa_${mesaIdActiva}`;
+            const pedidosExistentes = JSON.parse(localStorage.getItem(clavePedidoMesa)) || [];
+
+            cart.forEach(newItem => {
+                const existingItem = pedidosExistentes.find(
+                    p => p.id == newItem.id && p.option === newItem.option
+                );
+                if (existingItem) {
+                    existingItem.quantity += newItem.quantity;
+                } else {
+                    pedidosExistentes.push({ ...newItem });
+                }
+            });
+            localStorage.setItem(clavePedidoMesa, JSON.stringify(pedidosExistentes));
+
+            alert(`Pedido #${result.order_id} finalizado para la Mesa ${mesaNumeroActivo}.`);
+
+            cart = []; 
+            updateCartDisplay(); 
+            closeCart();
+            localStorage.removeItem('cart'); 
+
+            if (confirm('¿Desea volver a la página de mesas?')) {
+                window.location.href = `/mesas/?mesa_id=${mesaIdActiva}&mesa_numero=${mesaNumeroActivo}`;
+            }
+
+        } catch (error) {
+            console.error('Error al finalizar la compra:', error);
+            alert(`Hubo un error al procesar su pedido: ${error.message}`);
+        }
     });
 
-    // Vaciar carrito
     emptyCartButton.addEventListener('click', function() {
         if (confirm('¿Está seguro que desea vaciar el carrito?')) {
             cart = [];
-            updateCartDisplay();
+            updateCartDisplay(); 
         }
     });
 
-    // Actualizar la visualización del carrito
     function updateCartDisplay() {
-        // Limpiar visualización actual
         cartItems.innerHTML = '';
 
-        // Actualizar contador de artículos
         const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
         cartCount.textContent = totalItems;
+
+        if (totalItems === 0) {
+            cartCount.classList.add('cart-icon-hidden');
+        } else {
+            cartCount.classList.remove('cart-icon-hidden');
+        }
 
         if (cart.length === 0) {
             cartItems.innerHTML = '<div class="empty-cart-message" style="text-align: center; padding: 20px; color: #aaa;">Su carrito está vacío</div>';
             cartTotalAmount.textContent = '$0';
+            cards.forEach(card => updateCardButtonState(card)); 
+            if (modal.style.display === "flex" && currentProductData.card) {
+                updateModalAvailableQuantity();
+            }
             return;
         }
 
-        // Agregar artículos a la visualización
         cart.forEach(item => {
             const cartItemElement = document.createElement('div');
             cartItemElement.className = 'cart-item';
@@ -447,45 +496,62 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="cart-item-details">
                     <div class="cart-item-title">${item.title}</div>
                     <div class="cart-item-option">${item.option}</div>
-                    <div class="cart-item-price">${item.priceDisplay}</div>
+                    <div class="cart-item-price">$${item.price.toFixed(2)}</div>
 
                     <div class="cart-item-controls">
                         <div class="cart-item-quantity-control">
-                            <button class="quantity-btn decrease-quantity" data-id="${item.id}">-</button>
+                            <button class="quantity-btn decrease-quantity" data-id="${item.id}" data-option="${item.option}">-</button>
                             <span class="cart-quantity">${item.quantity}</span>
-                            <button class="quantity-btn increase-quantity" data-id="${item.id}">+</button>
+                            <button class="quantity-btn increase-quantity" data-id="${item.id}" data-option="${item.option}">+</button>
                         </div>
-                        <button class="remove-item" data-id="${item.id}">Eliminar</button>
+                        <button class="remove-item" data-id="${item.id}" data-option="${item.option}">Eliminar</button>
                     </div>
                 </div>
             `;
-
             cartItems.appendChild(cartItemElement);
         });
 
-        // Calcular y actualizar el total
         const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        cartTotalAmount.textContent = `$${total.toLocaleString()}`;
+        cartTotalAmount.textContent = `$${total.toFixed(2)}`;
 
-        // Guardamos el carrito en localStorage
         updateCartStorage();
 
-        // Agregar eventos a los botones de cantidad
-        document.querySelectorAll('.increase-quantity').forEach(button => {
+        cards.forEach(card => {
+            updateCardButtonState(card);
+        });
+
+        if (modal.style.display === "flex" && currentProductData.card) {
+            console.log("Updating modal quantity from updateCartDisplay()");
+            updateModalAvailableQuantity();
+        }
+
+        cartItems.querySelectorAll('.increase-quantity').forEach(button => {
             button.addEventListener('click', function() {
                 const id = this.getAttribute('data-id');
-                const item = cart.find(item => item.id == id);
+                const option = this.getAttribute('data-option');
+                const item = cart.find(i => i.id == id && i.option === option);
                 if (item) {
-                    item.quantity += 1;
+                    const card = document.querySelector(`.card[data-id="${id}"]`);
+                    const backendAvailable = parseInt(card.dataset.cantidadDisponible); // Stock real del backend
+                    if (item.quantity < backendAvailable) {
+                        item.quantity += 1;
+                    } else {
+                        alert('No hay más unidades disponibles de este producto.');
+                    }
                     updateCartDisplay();
+                    if (modal.style.display === "flex" && currentProductData.card && currentProductData.card.dataset.id == id) {
+                        console.log("Updating modal quantity after increase-quantity");
+                        updateModalAvailableQuantity();
+                    }
                 }
             });
         });
 
-        document.querySelectorAll('.decrease-quantity').forEach(button => {
+        cartItems.querySelectorAll('.decrease-quantity').forEach(button => {
             button.addEventListener('click', function() {
                 const id = this.getAttribute('data-id');
-                const itemIndex = cart.findIndex(item => item.id == id);
+                const option = this.getAttribute('data-option');
+                const itemIndex = cart.findIndex(i => i.id == id && i.option === option);
                 if (itemIndex !== -1) {
                     if (cart[itemIndex].quantity > 1) {
                         cart[itemIndex].quantity -= 1;
@@ -493,115 +559,115 @@ document.addEventListener("DOMContentLoaded", () => {
                         cart.splice(itemIndex, 1);
                     }
                     updateCartDisplay();
+                    if (modal.style.display === "flex" && currentProductData.card && currentProductData.card.dataset.id == id) {
+                        updateModalAvailableQuantity();
+                    }
                 }
             });
         });
 
-        document.querySelectorAll('.remove-item').forEach(button => {
+        cartItems.querySelectorAll('.remove-item').forEach(button => {
             button.addEventListener('click', function() {
                 const id = this.getAttribute('data-id');
-                const itemIndex = cart.findIndex(item => item.id == id);
+                const option = this.getAttribute('data-option');
+                const itemIndex = cart.findIndex(i => i.id == id && i.option === option);
                 if (itemIndex !== -1) {
                     cart.splice(itemIndex, 1);
                     updateCartDisplay();
+                    if (modal.style.display === "flex" && currentProductData.card && currentProductData.card.dataset.id == id) {
+                        console.log("Updating modal quantity after remove-item");
+                        updateModalAvailableQuantity();
+                    }
                 }
             });
         });
     }
 
-    // Inicializar visualización del carrito
-    updateCartDisplay();
-});
+    // Comentado la función getCookie si no se va a usar CSRF aquí
+    // function getCookie(name) {
+    //     let cookieValue = null;
+    //     if (document.cookie && document.cookie !== '') {
+    //         const cookies = document.cookie.split(';');
+    //         for (let i = 0; i < cookies.length; i++) {
+    //             const cookie = cookies[i].trim();
+    //             if (cookie.startsWith(name + '=')) {
+    //                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+    //                 break;
+    //             }
+    //         }
+    //     }
+    //     return cookieValue;
+    // }
 
-
-
-document.addEventListener('DOMContentLoaded', function() {
-    const hamburger = document.querySelector('.hamburger');
-    const navMenu = document.querySelector('.navbar-menu');
-    
-    if (hamburger && navMenu) {
-      hamburger.addEventListener('click', function() {
-        hamburger.classList.toggle('active');
-        navMenu.classList.toggle('active');
-      });
-      
-      document.querySelectorAll('.navbar-link').forEach(link => {
-        link.addEventListener('click', function() {
-          hamburger.classList.remove('active');
-          navMenu.classList.remove('active');
-        });
-      });
-    }
-  });
-
-
-  
-
-
-  // JavaScript para el menú hamburguesa
-  document.addEventListener('DOMContentLoaded', function() {
     const menuToggle = document.getElementById('menuToggle');
     const mainMenu = document.getElementById('mainMenu');
-    
-    // Toggle menu cuando se hace clic en el botón hamburguesa
-    menuToggle.addEventListener('click', function() {
-      mainMenu.classList.toggle('active');
-    });
-    
-    // Cerrar menú cuando se hace clic en un enlace
-    const menuLinks = document.querySelectorAll('.link');
-    menuLinks.forEach(link => {
-      link.addEventListener('click', function() {
-        if (window.innerWidth <= 600) {
-          mainMenu.classList.remove('active');
-        }
-      });
-    });
-    
-    // Cerrar menú si se hace clic fuera de él
-    document.addEventListener('click', function(event) {
-      const isClickInsideMenu = mainMenu.contains(event.target);
-      const isClickOnToggle = menuToggle.contains(event.target);
-      
-      if (!isClickInsideMenu && !isClickOnToggle && mainMenu.classList.contains('active')) {
-        mainMenu.classList.remove('active');
-      }
-    });
-  });
+    const hamburgerBtn = document.querySelector('.hamburger-btn');
 
+    if (menuToggle && mainMenu) {
+        menuToggle.addEventListener('click', function() {
+            mainMenu.classList.toggle('active');
+            if (hamburgerBtn) {
+                hamburgerBtn.classList.toggle('active');
+            }
+        });
 
+        document.querySelectorAll('.link').forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth <= 600) {
+                    mainMenu.classList.remove('active');
+                    if (hamburgerBtn) {
+                        hamburgerBtn.classList.remove('active');
+                    }
+                }
+            });
+        });
 
-    //    SCRIPT PARA EL   MENU DESPLEGABLE EN ESCRITORIO  (OARA QUE APAREZCA Y DESAPAREZCA AL SUBIR  Y BAJAR) SCROLL
+        document.addEventListener('click', function(event) {
+            const isClickInsideMenu = mainMenu.contains(event.target);
+            const isClickOnToggle = menuToggle.contains(event.target);
+            const isClickOnHamburgerBtn = hamburgerBtn && hamburgerBtn.contains(event.target);
 
-  document.addEventListener("DOMContentLoaded", () => {
-    const menuContainer = document.querySelector(".menu-container");
-    const main = document.querySelector("main");
-    let lastScrollTop = 0;
-
-    function handleScroll() {
-        // Verifica el ancho de la pantalla para aplicar solo en escritorio
-        if (window.innerWidth <= 767) {
-            menuContainer.classList.remove("menu-fixed", "menu-hidden");
-            return;
-        }
-
-        let currentScrollTop = main.scrollTop || document.documentElement.scrollTop;
-
-        if (currentScrollTop > 350) {
-            menuContainer.classList.add("menu-fixed");
-        } else {
-            menuContainer.classList.remove("menu-fixed");
-        }
-
-        if (currentScrollTop > lastScrollTop) {
-            menuContainer.classList.add("menu-hidden"); // Oculta al bajar
-        } else {
-            menuContainer.classList.remove("menu-hidden"); // Muestra al subir
-        }
-
-        lastScrollTop = currentScrollTop;
+            if (!isClickInsideMenu && !isClickOnToggle && !isClickOnHamburgerBtn && mainMenu.classList.contains('active')) {
+                mainMenu.classList.remove('active');
+                if (hamburgerBtn) {
+                    hamburgerBtn.classList.remove('active');
+                }
+            }
+        });
     }
 
-    // Agrega el evento de scroll al `main` en lugar de `window`
-    main.addEventListener("scroll", handleScroll);
+    const menuContainer = document.querySelector(".menu-container");
+    const mainContentArea = document.querySelector("main");
+
+    if (menuContainer && mainContentArea) {
+        let lastScrollTop = 0;
+
+        function handleScroll() {
+            if (window.innerWidth <= 767) {
+                menuContainer.classList.remove("menu-fixed", "menu-hidden");
+                return;
+            }
+
+            let currentScrollTop = mainContentArea.scrollTop || document.documentElement.scrollTop;
+
+            if (currentScrollTop > 350) {
+                menuContainer.classList.add("menu-fixed");
+            } else {
+                menuContainer.classList.remove("menu-fixed");
+            }
+
+            if (currentScrollTop > lastScrollTop) {
+                menuContainer.classList.add("menu-hidden");
+            } else {
+                menuContainer.classList.remove("menu-hidden");
+            }
+
+            lastScrollTop = currentScrollTop;
+        }
+
+        mainContentArea.addEventListener("scroll", handleScroll);
+        window.addEventListener("scroll", handleScroll);
+    }
+
+    updateCartDisplay();
 });

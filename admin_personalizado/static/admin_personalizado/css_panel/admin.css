@@ -129,7 +129,7 @@
 
 
 #content-main .form-row{
-    color: white;
+    color: rgb(0, 0, 0);
 }
 
 #content-start #content .colM{
@@ -412,7 +412,7 @@ body {
 .breadcrumbs > span + a:before,
 .breadcrumbs > a + span:before {
     content: "›"; /* Utiliza el carácter de comilla angular */
-    color: #080808; /* Color más sutil para el separador */
+    color: #b8262600; /* Color más sutil para el separador */
     padding: 0 8px; /* Espaciado alrededor del separador */
 }
 
@@ -605,7 +605,7 @@ body {
     color: white;
     border: none;
     /* Ajusta el padding para que sea similar al addlink si es necesario */
-    padding: 8px 20px 8px 10px !important; /* Un poco menos de padding horizontal que addlink si addlink es 25px */
+    padding: 11px 18px 8px 10px !important; /* Un poco menos de padding horizontal que addlink si addlink es 25px */
     border-radius: 5px; /* Consistente con addlink */
     cursor: pointer;
     font-size: 14px; /* O puedes dejarlo igual que addlink si quieres */
@@ -617,7 +617,7 @@ body {
     align-items: center;
     justify-content: center;
     text-decoration: none;
-    margin-bottom: 10px;
+    margin-bottom: 1px;
 }
 
 .button.delete-button-global:hover:not(:disabled) {
@@ -641,56 +641,102 @@ ul.object-tools:has(> .action-form-container) {
 }
 
 
-/* ESTILOS PARA LA BARRA DE BUSQUEDA GLOBAL DEL PANEL - VERSIÓN SIMPLIFICADA */
+body.popup #changelist-search {
+    /* Ajustes generales para el contenedor del buscador dentro del popup */
+    padding: 0; /* Eliminar padding extra del contenedor principal del buscador */
+    margin-bottom: 8px; /* Espacio debajo del buscador y la tabla */
+    background-color: transparent; /* Fondo transparente si el modal ya tiene color */
+    border: none; /* Sin borde para una apariencia más limpia en el modal */
+    box-shadow: none; /* Sin sombra para el contenedor del buscador en el modal */
+}
 
-#changelist-search {
+body.popup #changelist-search #toolbar {
+    /* El div #toolbar que contiene el formulario del buscador */
+    padding: 0; /* Quitar padding interno si lo tiene */
+    margin: 0; /* Quitar márgenes */
+}
+
+body.popup #changelist-search form#changelist-search {
+    /* El formulario de búsqueda en sí */
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 8px;
-    background-color: #f8f9fa;
-    border: 1px solid #e1e5e9;
-    border-radius: 6px;
-    margin-bottom: 16px;
+    gap: 5px; /* Espacio más compacto entre los elementos */
+    background-color: #e9ecef; /* Un fondo gris claro para que se note más del blanco */
+    padding: 8px; /* Pequeño padding dentro del formulario */
+    border-radius: 4px; /* Bordes redondeados */
+    border: 1px solid #ced4da; /* Un borde ligeramente más oscuro */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15); /* Sombra más pronunciada para profundidad */
 }
 
-#changelist-search input[type="text"] {
+body.popup #changelist-search label img {
+    /* Estilo para el icono de lupa. Lo hacemos un poco más pequeño y visible. */
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+    margin-right: 3px; /* Espacio entre el icono y el input */
+    filter: brightness(0) saturate(100%) invert(26%) sepia(8%) saturate(735%) hue-rotate(170deg) brightness(98%) contrast(93%); /* Color oscuro */
+}
+
+body.popup #changelist-search input[type="text"] {
+    /* Input de texto más pequeño y ajustado para el modal */
     flex-grow: 1;
-    padding: 8px 12px;
-    border: none;
-    border-radius: 4px;
-    background-color: transparent;
-    color: #495057;
-    font-size: 14px;
-    outline: none;
-    transition: background-color 0.2s ease;
+    max-width: 180px; /* Ancho máximo para el input en el modal, hazlo más pequeño */
+    padding: 5px 8px; /* Padding más compacto */
+    font-size: 13px; /* Fuente más pequeña */
+    height: 28px; /* Altura más pequeña */
+    border: 1px solid #c8c8c8;
+    border-radius: 3px;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.05);
+    background-color: white; /* Mantener el input blanco para contraste */
+    color: #333;
+    transition: all 0.2s ease;
 }
 
-#changelist-search input[type="text"]::placeholder {
-    color: #6c757d;
-}
-
-#changelist-search input[type="text"]:focus {
-    background-color: #fff;
+body.popup #changelist-search input[type="text"]:focus {
+    border-color: #007bff;
     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+    background-color: white;
 }
 
-#changelist-search input[type="submit"] {
-    padding: 8px 16px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
+body.popup #changelist-search input[type="submit"] {
+    /* Botón de búsqueda más pequeño y compacto para el modal */
+    padding: 5px 12px; /* Padding reducido para el botón */
+    font-size: 13px; /* Fuente más pequeña */
+    height: 28px; /* Misma altura que el input para alineación */
+    border-radius: 3px;
+    background-color: #28a745; /* Un verde más agradable */
+    color: white; /* Color de texto blanco para el botón */
     font-weight: 500;
     transition: background-color 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    white-space: nowrap; /* Evita que el texto del botón se divida */
 }
 
-#changelist-search input[type="submit"]:hover {
-    background-color: #0056b3;
+body.popup #changelist-search input[type="submit"]:hover {
+    background-color: #218838; /* Verde más oscuro al hover */
 }
 
-#changelist-search input[type="submit"]:active {
-    background-color: #004085;
+body.popup #changelist-search input[type="submit"]:active {
+    background-color: #1e7e34;
+    transform: translateY(1px);
+    box-shadow: none;
+}
+
+body.popup #changelist-search form#changelist-search > div {
+    display: flex;
+    align-items: center; /* Alinea los ítems verticalmente al centro */
+    gap: 5px; /* Espacio entre la lupa, el input y el botón */
+    width: 100%; /* Asegura que este div ocupe todo el ancho disponible */
+}
+
+body.popup #changelist-search label {
+    display: flex; /* Usar flex para alinear la imagen */
+    align-items: center; /* Centrar la imagen verticalmente */
+    height: 28px; /* Misma altura que el input/botón para alineación visual */
+}
+
+body.popup #changelist-search input[type="text"] {
+    flex-grow: 1;
+    max-width: 180px; /* Mantén el ancho deseado */
+    height: 28px; /* Asegura la altura */
 }

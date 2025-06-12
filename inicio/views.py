@@ -14,12 +14,10 @@ from django.views.decorators.csrf import csrf_exempt
 from .decorators import role_required
 from .models import Mesa, Producto, Pedido, PedidoDetalle
 import json
-from .models import Usuario,Producto,GaleriaFoto
+from .models import Usuario,Producto,GaleriaFoto, ActividadReciente
 from .forms import CustomUserCreationForm, CustomUserChangeForm, PasswordChangeForm
 from django.contrib.auth.models import User
 from django.contrib.admin.views.decorators import staff_member_required
-from .models import ActividadReciente
-from .decorators import group_required
 from django.db.models import Sum, Count
 import datetime
 import calendar
@@ -34,7 +32,7 @@ from django.contrib.admin.models import LogEntry
 from django.utils.translation import gettext as _
 from django.conf import settings
 import subprocess
-
+import decimal
 
 # PRINCIPAL
 def index(request):
@@ -126,6 +124,19 @@ def admin_principal(request):
 def mesero_principal(request):
     """Panel principal para usuarios con rol 'Mesero'"""
     return render(request, 'pages/menu_mesero/mesero_principal.html') # Renderiza el nuevo HTM
+
+# VISTA DE PERFIL PARA MESEROS (SOLO LECTURA)
+@login_required
+@user_passes_test(lambda u: u.rol == 'mesero') # SOLO permite a usuarios con rol 'mesero'
+def ver_perfil_mesero(request):
+    """Muestra el perfil del mesero logueado (solo lectura)."""
+    # El usuario logueado ya está disponible en request.user
+    context = {
+        'usuario': request.user, # Pasamos el objeto usuario directamente
+        'title': 'Mi Perfil de Mesero'
+    }
+    # Asegúrate de que esta ruta sea correcta para tu plantilla perfil_mesero.html
+    return render(request, 'pages/menu_mesero/perfil_mesero.html', context)
 
 def admin_login_page(request):
     return render(request, 'pages/Admin/login.html')
@@ -544,14 +555,26 @@ def productos_cliente(request, categoria):
 def productos_mesero(request, categoria):
     productos = Producto.objects.filter(estado='disponible', categoria=categoria)
     template_path = template_map.get(categoria, {}).get('mesero')
+    cantidad_productos = productos.count()
     
     if template_path:
-        return render(request, template_path, {'productos': productos})
+        return render(request, template_path, {
+            'productos': productos,
+            'cantidad_productos' : cantidad_productos
+            })
+    
     
     return render(request, 'pages/productos_menu/no_encontrado.html', {
         'categoria': categoria,
         'tipo': 'mesero',
+        'cantidad_productos': 0,
     })
+    
+
+    
+    
+    
+    
 
 # Vista para manejar fotos de index
 def index(request):
@@ -572,7 +595,7 @@ def index(request):
 #     return render(request, 'pages/Admin/mesas.html', context)
 
 # -----------------------------------------------------------PEDIDOS------------------------------------
-@require_POST # Asegura que solo se acepta el método POST
+@require_POST
 @csrf_exempt # Considera quitar esto en producción y usar el token CSRF apropiadamente
 def guardar_pedido(request):
     try:
@@ -580,7 +603,7 @@ def guardar_pedido(request):
         
         mesa_id = data.get('mesa_id')
         items = data.get('items')
-        total_recibido = data.get('total')
+        total_recibido = data.get('total') # Esto viene como float de JS
         medio_pago = data.get('medio_pago')
 
         if not mesa_id or not items:
@@ -599,23 +622,33 @@ def guardar_pedido(request):
             # Obtener el mesero actual si el usuario está autenticado y es un mesero
             mesero = None
             if request.user.is_authenticated and hasattr(request.user, 'rol') and request.user.rol == 'mesero':
-                mesero = request.user # Asume que request.user es una instancia de tu modelo Usuario
+                mesero = request.user 
+            # Si el campo mesero en Pedido NO permite nulos, y mesero puede ser None, esto causará un error.
+            # Asegúrate que el campo `mesero` en tu modelo `Pedido` tiene `null=True, blank=True`
+            # o que un mesero siempre esté autenticado.
+
+            # Convertir total_recibido a Decimal antes de crear el pedido
+            try:
+                total_recibido_decimal = decimal.Decimal(str(total_recibido))
+            except decimal.InvalidOperation:
+                return JsonResponse({'error': 'El total del pedido recibido no es un número válido.'}, status=400)
 
             # Crear el pedido principal
             pedido = Pedido.objects.create(
                 mesa=mesa,
-                total=total_recibido, # Usar el total calculado desde el frontend, se puede recalcular para validación
+                total=total_recibido_decimal, # ¡Usar la versión Decimal!
                 mesero=mesero,
                 medio_pago=medio_pago,
-                estado='finalizado' # Establecemos el estado a 'finalizado' directamente aquí
+                estado='finalizado'
             )
 
-            total_calculado_backend = 0
+            total_calculado_backend = decimal.Decimal('0.00') # Inicia con un Decimal
+            updated_stock_info = []
             # Crear los detalles del pedido
             for item_data in items:
                 producto_id = item_data.get('producto_id')
                 cantidad = item_data.get('cantidad')
-                precio_unitario_recibido = item_data.get('precio_unitario')
+                precio_unitario_recibido = item_data.get('precio_unitario') # Esto viene como float de JS
 
                 if not producto_id or not cantidad or cantidad <= 0:
                     raise ValueError(f"Datos de producto inválidos: {item_data}")
@@ -625,30 +658,55 @@ def guardar_pedido(request):
                 except Producto.DoesNotExist:
                     raise ValueError(f"Producto con ID {producto_id} no encontrado.")
                 
-                # Opcional: Validar que el precio_unitario recibido coincida con el del producto en BD
-                # Esto es importante para evitar manipulaciones de precios desde el cliente
-                if float(precio_unitario_recibido) != float(producto.precio):
-                    # Podrías decidir usar el precio de la BD o lanzar un error
-                    # Para este ejemplo, usaremos el de la BD para mayor seguridad
-                    precio_para_detalle = producto.precio
-                    # print(f"Advertencia: Precio de producto {producto.titulo} difiere. Usando precio de BD: {producto.precio}")
+                # --- LÓGICA DE VALIDACIÓN Y RESTA DE INVENTARIO ---
+                if producto.cantidad_disponible < cantidad:
+                    # Si no hay suficiente stock, lanzar un error.
+                    # La transacción se revertirá automáticamente gracias a `with transaction.atomic()`.
+                    raise ValueError(
+                        f"Stock insuficiente para '{producto.titulo}'. Disponible: {producto.cantidad_disponible}, Pedido: {cantidad}"
+                    )
+
+                # Restar la cantidad del stock disponible
+                producto.cantidad_disponible -= cantidad
+                producto.save() # Guarda el cambio en la base de datos
+
+                # Añadir el producto y su nuevo stock a la lista para la respuesta del frontend
+                updated_stock_info.append({
+                    "product_id": producto.id,
+                    "new_available_quantity": producto.cantidad_disponible
+                })
+                # --- FIN LÓGICA DE INVENTARIO ---
+                
+                # Convertir precio_unitario_recibido a Decimal para la comparación
+                try:
+                    precio_unitario_recibido_decimal = decimal.Decimal(str(precio_unitario_recibido))
+                except decimal.InvalidOperation:
+                    raise ValueError(f"El precio unitario recibido para el producto ID {producto_id} no es válido.")
+                
+                # Validar que el precio_unitario recibido coincida con el del producto en BD
+                # Ahora comparamos Decimal con Decimal
+                if precio_unitario_recibido_decimal != producto.precio:
+                    precio_para_detalle = producto.precio # Siempre usar el precio de la BD
+                    # print(f"Advertencia: Precio de producto {producto.nombre} difiere. Usando precio de BD: {producto.precio}")
                 else:
-                    precio_para_detalle = precio_unitario_recibido
+                    precio_para_detalle = precio_unitario_recibido_decimal # Usar la versión Decimal recibida si coincide
 
                 PedidoDetalle.objects.create(
                     pedido=pedido,
                     producto=producto,
                     cantidad=cantidad,
-                    precio_unitario=precio_para_detalle
+                    precio_unitario=precio_para_detalle # Este ya es un Decimal
                 )
-                total_calculado_backend += (precio_para_detalle * cantidad)
-            
+                # Asegúrate de que cantidad sea un entero o Decimal para la multiplicación
+                total_calculado_backend += (precio_para_detalle * cantidad) # Operación con Decimal
+
             # Opcional: Validar que el total calculado en el backend coincida con el del frontend
-            # Puedes tener una pequeña tolerancia debido a problemas de precisión de flotantes
-            if abs(total_calculado_backend - float(total_recibido)) > 0.01:
-                print(f"Advertencia: Discrepancia en el total. Frontend: {total_recibido}, Backend: {total_calculado_backend}")
-                # return JsonResponse({'error': 'Discrepancia en el total del pedido.'}, status=400)
-                # O podrías simplemente actualizar el total del pedido con el calculado en backend
+            # Ahora comparamos Decimal con Decimal, con una pequeña tolerancia
+            # La tolerancia también debería ser un Decimal
+            tolerancia = decimal.Decimal('0.01') 
+            if abs(total_calculado_backend - total_recibido_decimal) > tolerancia:
+                print(f"Advertencia: Discrepancia en el total. Frontend: {total_recibido_decimal}, Backend: {total_calculado_backend}")
+                # Si decides usar el total calculado por el backend (más seguro):
                 pedido.total = total_calculado_backend
                 pedido.save()
 
@@ -660,7 +718,13 @@ def guardar_pedido(request):
                 accion=accion_log
             )
 
-            return JsonResponse({'message': f'Pedido #{pedido.id} finalizado y guardado correctamente.'}, status=200)
+            return JsonResponse({
+                'message': f'Pedido #{pedido.id} finalizado y guardado correctamente.',
+                'success': True,
+                'order_id': pedido.id,
+                'updated_stock': updated_stock_info # ¡Envía esto al frontend!
+            }, status=200)
+
 
     except json.JSONDecodeError:
         return JsonResponse({'error': 'Solicitud JSON inválida.'}, status=400)
@@ -669,45 +733,9 @@ def guardar_pedido(request):
     except Exception as e:
         # Esto capturará cualquier otro error inesperado
         print(f"Error inesperado al guardar pedido: {e}")
+        import traceback # Agrega esto para ver el traceback completo en la consola
+        traceback.print_exc()
         return JsonResponse({'error': 'Error interno del servidor al procesar el pedido.'}, status=500)
     
 
 
-
-def generar_backup(request):
-    fecha = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
-    filename = f"backup_{fecha}.sql"
-    
-    response = HttpResponse(content_type='application/sql')
-    response['Content-Disposition'] = f'attachment; filename="{filename}"'
-
-    db_name = settings.DATABASES['default']['NAME']
-    db_user = settings.DATABASES['default']['USER']
-    db_password = settings.DATABASES['default']['PASSWORD']
-    db_host = settings.DATABASES['default'].get('HOST', 'localhost')
-    db_port = settings.DATABASES['default'].get('PORT', '5432')
-
-    # Solo para PostgreSQL
-    command = [
-        'pg_dump',
-        '-h', db_host,
-        '-p', db_port,
-        '-U', db_user,
-        '-d', db_name
-    ]
-
-    env = {
-        **dict(**subprocess.os.environ),
-        'PGPASSWORD': db_password,
-    }
-
-    try:
-        result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env)
-        if result.returncode != 0:
-            response.write("Error al generar el backup:\n" + result.stderr.decode())
-        else:
-            response.write(result.stdout.decode())
-    except Exception as e:
-        response.write(f"Error ejecutando el comando: {e}")
-
-    return response

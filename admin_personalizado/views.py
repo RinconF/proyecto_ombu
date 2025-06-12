@@ -4,9 +4,15 @@ from .forms import UsuarioForm, PerfilForm
 from django.contrib.admin.views.decorators import staff_member_required
 import os
 from django.http import FileResponse # <--- ¡IMPORTA FileResponse aquí!
+from django.http import HttpResponse
+from django.contrib import messages
+from django.conf import settings
+import datetime
 
 # Si el modelo 'Perfil' está en 'inicio/models.py', impórtalo así:
-from inicio.models import Perfil
+from inicio.models import Perfil, ActividadReciente, Producto
+from django.contrib.auth import get_user_model
+from django.contrib.admin.sites import AdminSite
 
 
 
@@ -37,77 +43,162 @@ def perfil_view(request):
         'user_form': user_form,
         'perfil_form': perfil_form
     })
+import os
+import subprocess
+from django.conf import settings
+from django.shortcuts import redirect, render
+from django.utils import timezone
+from django.contrib import messages
+
+# Constantes reutilizables
+BACKUP_DIR = os.path.join(settings.BASE_DIR, 'backups')
+POSTGRES_CONTAINER = 'postgres_ombu'
+DB_NAME = 'ombu'
+DB_USER = 'ombu'
+
+# Asegurar que el directorio existe
+os.makedirs(BACKUP_DIR, exist_ok=True)
+
+def crear_backup(request):
+    timestamp = timezone.now().strftime('%Y%m%d_%H%M%S')
+    filename = f"backup_{timestamp}.sql"
+    filepath = os.path.join(BACKUP_DIR, filename)
+
+    try:
+        with open(filepath, 'w') as f:
+            subprocess.run([
+                'docker', 'exec', POSTGRES_CONTAINER,
+                'pg_dump', '-U', DB_USER, '-d', DB_NAME
+            ], stdout=f, check=True)
+        messages.success(request, f"Backup creado: {filename}")
+    except Exception as e:
+        messages.error(request, f"Error al crear backup: {str(e)}")
+
+    return redirect('admin_panel:lista_backups')
 
 
-# @never_cache
-# @group_required('ombu')
-# def dashboard(request):
-# # --- NO SE REALIZA NINGÚN CÁLCULO RELACIONADO CON PEDIDOS AQUÍ ---
-#     # Elimina todas las líneas que hacían consultas o agregaciones sobre el modelo Pedido.
-#     # Por ejemplo, las variables como total_ventas_hoy, num_pedidos_hoy,
-#     # ventas_semanales_data_qs, top_mesas, etc.
+def restaurar_backup(request, nombre):
+    filepath = os.path.join(BACKUP_DIR, nombre)
 
-#     # Obtener las 10 últimas actividades de TU modelo ActividadReciente
-#     actividades_recientes = ActividadReciente.objects.order_by('-fecha_hora')[:10]
+    if not nombre.endswith('.sql') or not os.path.exists(filepath):
+        messages.error(request, "Archivo de backup no válido.")
+        return redirect('admin_panel:lista_backups')
 
-#     context = {
-#         # --- Solo pasamos la actividad reciente y cualquier otra variable NO relacionada con Pedidos ---
-#         'actividades_recientes': actividades_recientes,
-#         # Si tienes otras métricas o datos que NO provienen de Pedidos y quieres mostrar, agrégalas aquí.
-#         # Por ejemplo: 'total_usuarios': Usuario.objects.count(),
-#         # 'total_productos': Producto.objects.count(),
-#     }
+    try:
+        with open(filepath, 'rb') as f:
+            subprocess.run([
+                'docker', 'exec', '-i', POSTGRES_CONTAINER,
+                'psql', '-U', DB_USER, '-d', DB_NAME
+            ], stdin=f, check=True)
 
-#     # Esta vista renderiza la plantilla que está en admin_personalizado/templates/
-#     return render(request, 'admin/dashboard.html', context)    
+        # Reiniciar secuencias después de la restauración
+        comando_reset = """
+        DO $$
+        DECLARE
+            r RECORD;
+        BEGIN
+            FOR r IN
+                SELECT c.oid::regclass AS seqname,
+                       (pg_get_serial_sequence(t.relname, a.attname)) AS fullseq,
+                       t.relname AS tablename,
+                       a.attname AS colname
+                FROM pg_class c
+                JOIN pg_depend d ON d.objid = c.oid
+                JOIN pg_class t ON d.refobjid = t.oid
+                JOIN pg_attribute a ON a.attrelid = t.oid AND a.attnum = d.refobjsubid
+                WHERE c.relkind = 'S'
+            LOOP
+                EXECUTE 'SELECT setval(''' || r.fullseq || ''', COALESCE((SELECT MAX(' || r.colname || ') FROM ' || r.tablename || '), 1), true)';
+            END LOOP;
+        END;
+        $$;
+        """
+
+        subprocess.run([
+            'docker', 'exec', '-i', POSTGRES_CONTAINER,
+            'psql', '-U', DB_USER, '-d', DB_NAME
+        ], input=comando_reset.encode(), check=True)
+
+        messages.success(request, f"Backup restaurado: {nombre}")
+    except Exception as e:
+        messages.error(request, f"Error al restaurar backup: {str(e)}")
     
+    return redirect('admin_panel:lista_backups')
+
+
+def lista_backups(request):
+    archivos = sorted(
+        [f for f in os.listdir(BACKUP_DIR) if f.endswith('.sql')],
+        reverse=True
+    )
+    return render(request, 'admin/backups.html', {'archivos': archivos})
+
+
+def eliminar_backup(request, nombre):
+    filepath = os.path.join(BACKUP_DIR, nombre)
+
+    if not os.path.exists(filepath):
+        messages.error(request, "Archivo no encontrado.")
+        return redirect('admin_panel:lista_backups')
+
+    try:
+        os.remove(filepath)
+        messages.success(request, f"Backup eliminado: {nombre}")
+    except Exception as e:
+        messages.error(request, f"Error al eliminar backup: {str(e)}")
     
-    
-    
-#     # # Ventas por mes
-#     # hoy = datetime.date.today()
-#     # ventas_mensuales = []
-#     # ventas_mensuales_labels = []
-#     # ventas_mensuales_data = []
+    return redirect('admin_panel:lista_backups')
 
-#     # for i in range(1, 13):
-#     #     total = Pedido.objects.filter(fecha__month=i).aggregate(Sum('total'))['total__sum'] or 0
-#     #     ventas_mensuales.append({'month': calendar.month_name[i], 'total': float(total)})
-#     #     ventas_mensuales_labels.append(calendar.month_name[i])
-#     #     ventas_mensuales_data.append(float(total))
 
-#     # # Top mesas más usadas
-#     # mesas_usadas = (
-#     #     Pedido.objects.values('mesa__numero')
-#     #     .annotate(total=Count('id'))
-#     #     .order_by('-total')[:5]
-#     # )
 
-#     # # Top productos más vendidos
-#     # productos_vendidos = (
-#     #     Producto.objects.annotate(total=Count('pedido'))
-#     #     .order_by('-total')[:5]
-#     # )
 
-#     # # Cálculos simples para los 4 recuadros:
-#     # ventas_totales = Pedido.objects.aggregate(Sum('total'))['total__sum'] or 0
-#     # hoy = datetime.date.today()
-#     # ventas_dia = Pedido.objects.filter(fecha__date=hoy).aggregate(Sum('total'))['total__sum'] or 0
-#     # ventas_mes = Pedido.objects.filter(fecha__month=hoy.month).aggregate(Sum('total'))['total__sum'] or 0
-#     # ventas_anio = Pedido.objects.filter(fecha__year=hoy.year).aggregate(Sum('total'))['total__sum'] or 0
 
-#     # return render(request, 'dashboard.html', {
-#     #     'ventas_mensuales_labels': ventas_mensuales_labels,
-#     #     'ventas_mensuales_data': ventas_mensuales_data,
-#     #     'mesas_usadas': mesas_usadas,
-#     #     'productos_vendidos': productos_vendidos,
-#     #     'ventas_totales': ventas_totales,
-#     #     'ventas_dia': ventas_dia,
-#     #     'ventas_mes': ventas_mes,
-#     #     'productos_top': productos_top,
-#     #     'mesas_top': mesas_top,
-#     #     'ventas_labels': ventas_labels,
-#     #     'ventas_data': ventas_data,
-#     # })
 
-#     # return render(request, 'pages/Admin/dashboard.html', context)
+
+
+def custom_admin_index(request, extra_context=None):
+    """
+    Vista personalizada para el índice del panel de administración.
+    Muestra la cantidad de productos, usuarios y actividades recientes.
+    """
+    # 1. Obtener conteo de productos
+    try:
+        cantidad_productos = Producto.objects.count()
+        print(f"DEBUG: Cantidad de Productos obtenidos: {cantidad_productos}") # <--- ¡Añade esta línea!
+    except Exception as e:
+        cantidad_productos = f"Error al obtener productos: {e}" # Mensaje de error más descriptivo
+        print(f"ERROR: {cantidad_productos}") # <--- ¡Añade esta línea para ver el error!
+
+    # 2. Obtener conteo de usuarios
+    User = get_user_model()
+    try:
+        cantidad_usuarios = User.objects.count()
+        print(f"DEBUG: Cantidad de Usuarios obtenidos: {cantidad_usuarios}") # <--- ¡Añade esta línea!
+    except Exception as e:
+        cantidad_usuarios = f"Error al obtener usuarios: {e}"
+        print(f"ERROR: {cantidad_usuarios}") # <--- ¡Añade esta línea para ver el error!
+
+    # 3. Obtener actividades recientes (esto ya funciona, según tu consola)
+    try:
+        actividades_recientes_db = ActividadReciente.objects.order_by('-fecha_hora')[:10]
+        actividades_recientes_template = [
+            {'accion': act.accion, 'fecha_hora': act.fecha_hora} for act in actividades_recientes_db
+        ]
+        print(f"DEBUG: Cantidad de Actividades Recientes obtenidas: {len(actividades_recientes_template)}") # <--- ¡Añade esta línea!
+    except Exception as e:
+        actividades_recientes_template = []
+        print(f"ERROR al cargar actividades recientes: {e}")
+
+    # Contexto para la plantilla
+    context = {
+        'cantidad_productos': cantidad_productos,
+        'cantidad_usuarios': cantidad_usuarios,
+        'actividades_recientes': actividades_recientes_template,
+    }
+
+    # Combina el contexto personalizado con cualquier contexto extra que Django pueda pasar
+    if extra_context:
+        context.update(extra_context)
+
+    # Renderiza tu template index.html personalizado
+    return render(request, 'admin/index.html', context)

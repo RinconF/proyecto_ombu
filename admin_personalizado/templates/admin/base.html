@@ -46,8 +46,8 @@
           <div id="user-tools">
               <div class="user-menu-container">
                   <button class="user-menu-toggle">
-                      <span class="name_admin-span" style="display: flex; align-items: center; color:rgb(255, 255, 255); font-size: 20px; ">
-                          <span>{% firstof user.get_short_name user.get_username %}</span>
+                      <span class="name_admi7n-span" style="display: flex; align-items: center; color:rgb(255, 255, 255); font-size: 20px; ">
+                          <span> Administrador, {% firstof user.get_short_name user.get_username %}</span>
                           {% if request.user.is_authenticated and request.user.perfil and request.user.perfil.avatar %}
                               <img src="{{ request.user.perfil.avatar.url }}"
                                     alt="Avatar"
